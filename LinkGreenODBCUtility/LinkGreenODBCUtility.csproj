@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C107EDF-7949-456C-B09E-1C4E807D9AA6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>LinkGreenODBCUtility</RootNamespace>
+    <AssemblyName>LinkGreenODBCUtility</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>LinkGreenODBCUtility.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>assemblies\Common.dll</HintPath>
+    </Reference>
+    <Reference Include="DataTransfer.AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>assemblies\DataTransfer.AccessDatabase.dll</HintPath>
+    </Reference>
+    <Reference Include="LinkGreen.Applications.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>assemblies\LinkGreen.Applications.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Batch.cs" />
+    <Compile Include="Categories.cs" />
+    <Compile Include="Customers.cs" />
+    <Compile Include="EventLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EventLog.Designer.cs">
+      <DependentUpon>EventLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IOdbcTransfer.cs" />
+    <Compile Include="ListItem.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LoggerModel.cs" />
+    <Compile Include="Mapping.cs" />
+    <Compile Include="MappingField.cs" />
+    <Compile Include="MappingPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MappingPreview.Designer.cs">
+      <DependentUpon>MappingPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OdbcWrapper.cs" />
+    <Compile Include="PriceLevelPrices.cs" />
+    <Compile Include="PriceLevels.cs" />
+    <Compile Include="Products.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="TaskManager.cs" />
+    <Compile Include="UtilityDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UtilityDashboard.Designer.cs">
+      <DependentUpon>UtilityDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="utilityMappings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="utilityMappings.Designer.cs">
+      <DependentUpon>utilityMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilitySettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UtilitySettings.Designer.cs">
+      <DependentUpon>UtilitySettings.cs</DependentUpon>
+    </Compile>
+    <None Include="assembly\Common.dll.config" />
+    <None Include="assembly\LinkGreenODBCUtility.exe.config" />
+    <None Include="Resources\logo-transparent.png" />
+    <None Include="Resources\gear.png" />
+    <None Include="Resources\debug-log.png" />
+    <EmbeddedResource Include="EventLog.resx">
+      <DependentUpon>EventLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MappingPreview.resx">
+      <DependentUpon>MappingPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UtilityDashboard.resx">
+      <DependentUpon>UtilityDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="utilityMappings.resx">
+      <DependentUpon>utilityMappings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="UtilitySettings.resx">
+      <DependentUpon>UtilitySettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assembly\Bdev.Net.Dns.dll" />
+    <Content Include="assembly\Common.dll" />
+    <Content Include="assembly\Common.pdb" />
+    <Content Include="assembly\DataTransfer.AccessDatabase.dll" />
+    <Content Include="assembly\DataTransfer.AccessDatabase.pdb" />
+    <Content Include="assembly\Elmah.dll" />
+    <Content Include="assembly\LinkGreen.Applications.Common.dll" />
+    <Content Include="assembly\LinkGreen.Applications.Common.pdb" />
+    <Content Include="assembly\LinkGreenDataTransfer.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assembly\LinkGreenODBCUtility.exe" />
+    <Content Include="assembly\LinkGreenODBCUtility.pdb" />
+    <Content Include="assembly\log4net.dll" />
+    <Content Include="assembly\log4net.xml" />
+    <Content Include="assembly\Microsoft.AI.Agent.Intercept.dll" />
+    <Content Include="assembly\Microsoft.AI.DependencyCollector.dll" />
+    <Content Include="assembly\Microsoft.AI.DependencyCollector.xml" />
+    <Content Include="assembly\Microsoft.AI.PerfCounterCollector.dll" />
+    <Content Include="assembly\Microsoft.AI.ServerTelemetryChannel.dll" />
+    <Content Include="assembly\Microsoft.AI.ServerTelemetryChannel.xml" />
+    <Content Include="assembly\Microsoft.AI.WindowsServer.dll" />
+    <Content Include="assembly\Microsoft.AI.WindowsServer.xml" />
+    <Content Include="assembly\Microsoft.ApplicationInsights.dll" />
+    <Content Include="assembly\Microsoft.ApplicationInsights.xml" />
+    <Content Include="assembly\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="assembly\Newtonsoft.Json.dll" />
+    <Content Include="assembly\Newtonsoft.Json.xml" />
+    <Content Include="assembly\RestSharp.dll" />
+    <Content Include="assembly\RestSharp.xml" />
+    <Content Include="assembly\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="assembly\System.Diagnostics.DiagnosticSource.xml" />
+    <Content Include="assembly\System.Web.Mvc.dll" />
+    <Content Include="assembly\System.Web.Mvc.xml" />
+    <Content Include="assembly\System.Web.Razor.dll" />
+    <Content Include="assembly\System.Web.Razor.xml" />
+    <Content Include="assembly\System.Web.WebPages.Deployment.dll" />
+    <Content Include="assembly\System.Web.WebPages.Deployment.xml" />
+    <Content Include="assembly\System.Web.WebPages.dll" />
+    <Content Include="assembly\System.Web.WebPages.Razor.dll" />
+    <Content Include="assembly\System.Web.WebPages.Razor.xml" />
+    <Content Include="assembly\System.Web.WebPages.xml" />
+    <Content Include="favicon.ico" />
+    <None Include="Resources\mapping1.png" />
+    <None Include="Resources\mapping.png" />
+    <None Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ContentWithTargetPath Include="assembly\LinkGreenDataTransfer.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>LinkGreenDataTransfer.mdb</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+</Project>
