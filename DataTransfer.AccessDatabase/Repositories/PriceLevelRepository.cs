@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Objects;
 using System.Data.Odbc;
-using System.Data.SqlClient;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 
@@ -16,8 +14,8 @@ namespace DataTransfer.AccessDatabase
 
         #region Private Consts
 
-        private const string TableName = "Territory";
-        private const string TableKey = "Territory";
+        private const string TableName = "PriceLevels";
+        private const string TableKey = "Id";
 
         #endregion
 
@@ -35,6 +33,22 @@ namespace DataTransfer.AccessDatabase
 
         #endregion
 
+        public void ClearAll()
+        {
+            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
+        public override void SaveFieldMapping(string fieldName, string mappingName)
+        {
+            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
         protected override PriceLevel PopulateRecord(dynamic reader)
         {
@@ -42,7 +56,10 @@ namespace DataTransfer.AccessDatabase
             {
                 return new PriceLevel
                 {
-                    Name = reader.Territory
+                    Name = reader.Name,
+                    ExternalReference = reader.ExternalReference,
+                    EffectiveDate = reader.EffectiveDate,
+                    EndDate = reader.EndDate
                 };
             }
             catch (RuntimeBinderException exception)

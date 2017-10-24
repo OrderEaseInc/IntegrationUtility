@@ -56,14 +56,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataTransfer.AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>assemblies\DataTransfer.AccessDatabase.dll</HintPath>
-    </Reference>
-    <Reference Include="LinkGreen.Applications.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>assemblies\LinkGreen.Applications.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -220,5 +212,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>LinkGreenDataTransfer.mdb</TargetPath>
     </ContentWithTargetPath>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj">
+      <Project>{592db8e5-cdb3-413d-969f-3488cb9df1a3}</Project>
+      <Name>DataTransfer.OdbcSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
+      <Project>{a7519764-b219-44e4-9535-211b7fca3b11}</Project>
+      <Name>LinkGreen.Applications.Common</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

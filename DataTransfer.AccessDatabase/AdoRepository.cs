@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
@@ -18,6 +19,23 @@ namespace DataTransfer.AccessDatabase
         protected virtual T PopulateRecord(dynamic reader)
         {
             return null;
+        }
+
+        public virtual void SaveTableMapping(string dsnName, string tableName, string linkGreenTableName)
+        {
+            using (var command = new OdbcCommand($"DELETE * FROM `TableMappings` WHERE `TableName` = '{linkGreenTableName}'"))
+            {
+                ExecuteCommand(command);
+            }
+            using (var command = new OdbcCommand($"INSERT INTO `TableMappings` (`DsnName`, `TableName`, `MappingName`) VALUES ('{dsnName}', '{linkGreenTableName}', '{tableName}')"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
+        public virtual void SaveFieldMapping(string fieldName, string mappingName)
+        {
+            throw new NotImplementedException();
         }
 
         protected IEnumerable<T> GetRecords(OdbcCommand command)
@@ -57,7 +75,7 @@ namespace DataTransfer.AccessDatabase
             {
                 //var reader = command.ExecuteReader();
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
-
+                
                 try
                 {
                     while (reader.Read())

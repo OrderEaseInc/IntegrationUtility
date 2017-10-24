@@ -57,6 +57,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{B077D49E-9653-4680-A2F3-694787E4AB29}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
       <Project>{A7519764-B219-44E4-9535-211B7FCA3B11}</Project>
       <Name>LinkGreen.Applications.Common</Name>

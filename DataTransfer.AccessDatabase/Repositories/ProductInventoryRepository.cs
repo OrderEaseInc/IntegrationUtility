@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Objects;
 using System.Data.Odbc;
-using System.Data.SqlClient;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 
@@ -16,8 +15,8 @@ namespace DataTransfer.AccessDatabase
 
         #region Private Consts
 
-        private const string TableName = "Product";
-        private const string TableKey = "IDNumber";
+        private const string TableName = "Products";
+        private const string TableKey = "Id";
 
         #endregion
 
@@ -45,6 +44,22 @@ namespace DataTransfer.AccessDatabase
 
         #endregion
 
+        public void ClearAll()
+        {
+            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
+        public override void SaveFieldMapping(string fieldName, string mappingName)
+        {
+            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
         protected override ProductInventory PopulateRecord(dynamic reader)
         {
@@ -52,19 +67,26 @@ namespace DataTransfer.AccessDatabase
             {
                 return new ProductInventory
                 {
-                    Id = reader.IDNumber.ToString(),
-                    Group = reader.Group,
-                    Category = reader.Category,
-                    Description1 = reader.Description1,
-                    Description2 = reader.Description2,
-                    Description3 = reader.Description3,
-                    Color = reader.Color,
-                    FullCaseQty = (int)reader.CaseSellUICapacity,
-                    HalfCaseQty = (int)reader.HalfCaseSellUICapacity,
-                    Sell = reader.SellUI,
-                    Active = (bool)reader.Active,
-                    CaseBoxName = reader.CaseBoxName ?? string.Empty,
-                    HalfCaseBoxName = reader.HalfCaseBoxName ?? string.Empty
+                    Id = reader.PrivateSKU.ToString(),
+                    Active = reader.Active != null && (reader.Active.Equals(true) || Convert.ToString(reader.Active).ToLower() == "true" || Convert.ToString(reader.Active).ToLower() == "1"),
+                    Category = reader.Category ?? "",
+                    Description = reader.Description ?? "",
+                    Comments = reader.Comments ?? "",
+                    DirectDeliveryCode = reader.DirectDeliveryCode ?? "",
+                    DirectDeliveryMinQuantity = reader.DirectDeliveryMinQuantity,
+                    FreightFactor = reader.FreightFactor ?? "",
+                    IsDirectDelivery = reader.IsDirectDelivery != null && (reader.IsDirectDelivery.Equals(true) || Convert.ToString(reader.IsDirectDelivery).ToLower() == "true" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "1"),
+                    MasterQuantityDescription = reader.MasterQuantityDescription ?? "",
+                    MinOrderSpring = reader.MinOrderSpring,
+                    MinOrderSummer = reader.MinOrderSummer,
+                    NetPrice = reader.NetPrice != null ? (decimal)reader.NetPrice : 0,
+                    OpenSizeDescription = reader.OpenSizeDescription ?? "",
+                    PrivateSKU = reader.PrivateSKU.ToString(),
+                    QuantityAvailable = reader.QuantityAvailable,
+                    SlaveQuantityDescription = reader.SlaveQuantityDescription ?? "",
+                    SlaveQuantityPerMaster = reader.SlaveQuantityPerMaster,
+                    SuggestedRetailPrice = reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
+                    UPC = reader.UPC
                 };
             }
             catch (RuntimeBinderException exception)

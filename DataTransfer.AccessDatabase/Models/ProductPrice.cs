@@ -12,17 +12,15 @@ namespace DataTransfer.AccessDatabase
     /// </summary>
     public class ProductPrice : OdbcDataTransferObjectBase
     {
-        public string IDNumber { get; set; }
+        public string Id { get; set; }
         public string Group { get; set; }
-        public string Territory { get; set; }
-        public decimal? CaseSellPrice { get; set; }
-        public decimal? HalfCaseSellPrice { get; set; }
-        public decimal? SingleSellPrice { get; set; }
+        public string PriceLevel { get; set; }
+        public decimal? Price { get; set; }
+        public int MinimumPurchase { get; set; }
     }
 
     public class ProductCategory : OdbcDataTransferObjectBase
     {
-        public string Group { get; set; }
         public string Category { get; set; }
     }
 

@@ -13,19 +13,25 @@ namespace DataTransfer.AccessDatabase
     public class ProductInventory
     {
         public string Id { get; set; }
-        public string Group { get; set; }
         public string Category { get; set; }
-        public string Description1 { get; set; }
-        public string Description2 { get; set; }
-        public string Description3 { get; set; }
-        public string Color { get; set; }
-        public int HalfCaseQty { get; set; }
-        public int FullCaseQty { get; set; }
-        public string Sell { get; set; }
+        public string Description { get; set; }
+        public string Comments { get; set; }
         public decimal NetPrice { get; set; }
         public bool Active { get; set; }
-        public string CaseBoxName { get; set; }
-        public string HalfCaseBoxName { get; set; }
+        public string PrivateSKU { get; set; }
+        public string UPC { get; set; }
+        public int MinOrderSpring { get; set; }
+        public int MinOrderSummer { get; set; }
+        public decimal FreightFactor { get; set; }
+        public int QuantityAvailable { get; set; }
+        public decimal SuggestedRetailPrice { get; set; }
+        public string OpenSizeDescription { get; set; }
+        public int DirectDeliveryMinQuantity { get; set; }
+        public int SlaveQuantityPerMaster { get; set; }
+        public string SlaveQuantityDescription { get; set; }
+        public string MasterQuantityDescription { get; set; }
+        public string DirectDeliveryCode { get; set; }
+        public bool IsDirectDelivery { get; set; }
     }
 
 }

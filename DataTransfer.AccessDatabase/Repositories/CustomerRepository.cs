@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Objects;
 using System.Data.Odbc;
-using System.Data.SqlClient;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
+using LinkGreen.Applications.Common.Model;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class CustomerRepository : AdoRepository<Customer>
+    public class CustomerRepository : AdoRepository<CompanyAndRelationshipResult>
     {
         public CustomerRepository(string connectionString) : base(connectionString)
         {
@@ -23,17 +22,33 @@ namespace DataTransfer.AccessDatabase
 
         #region Get
 
-        public IEnumerable<Customer> GetAll()
+        public IEnumerable<CompanyAndRelationshipResult> GetAll()
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName} WHERE Active = True AND OnHold = False AND Whilma = True"))
+            using (var command = new OdbcCommand($"SELECT * FROM {TableName} WHERE Active = True"))
             {
                 return GetRecords(command);
             }
         }
 
         #endregion
+
+        public void ClearAll()
+        {
+            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
+            {
+                ExecuteCommand(command);
+            }
+        }
+
+        public override void SaveFieldMapping(string fieldName, string mappingName)
+        {
+            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
+                ExecuteCommand(command);
+            }
+        }
 
         private string CleanProvince(string province)
         {
@@ -114,35 +129,35 @@ namespace DataTransfer.AccessDatabase
         }
 
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
-        protected override Customer PopulateRecord(dynamic reader)
+        protected override CompanyAndRelationshipResult PopulateRecord(dynamic reader)
         {
             try
             {
-                return new Customer
+                return new CompanyAndRelationshipResult
                 {
-                    CompanyName = reader.CompanyName ?? string.Empty,
-                    CompanyNumber = reader.CustomerID == null ? string.Empty : reader.CustomerID.ToString(),
-                    ContactFirst = reader.ContactFirstName ?? string.Empty,
-                    ContactLast = reader.ContactLastName ?? string.Empty,
-
-                    BillAddress = reader.Address ?? string.Empty,
-                    BillCity = reader.City ?? string.Empty,
-                    BillProvState = CleanProvince(reader.Province ?? string.Empty),
-                    BillCountry = reader.Country == null ? "Canada" : reader.Country.ToString().ToUpper() == "US" ? "US" : "Canada",
-                    BillPostalCode = reader.PostalCode ?? string.Empty,
-
-                    Phone = reader.ShipPhoneNumber ?? string.Empty,
-                    ContactPhone = reader.WorkPhone ?? string.Empty,
-                    Email = reader.EmailAddress ?? string.Empty,
-                    BuyerGroup = reader.Territory,
-                    BillToNumber = reader.BillingID == null ? string.Empty : reader.BillingID.ToString(),
-
-
-                    Address = reader.ShipAddress ?? string.Empty,
-                    City = reader.ShipCity ?? string.Empty,
-                    ProvState = CleanProvince(reader.ShipProvince ?? string.Empty),
-                    Country = reader.ShipCountry == null ? "Canada" : reader.ShipCountry.ToString().ToUpper() == "US" ? "US" : "Canada",
-                    PostalCode = reader.ShipPostalCode ?? string.Empty
+                    //RelationshipId = reader.RelationshipId ?? null,
+                    //CompanyId = reader.CompanyId ?? null,
+                    ContactName = reader.ContactName ?? string.Empty,
+                    ContactPhone = reader.ContactPhone ?? string.Empty,
+                    ContactEmail = reader.ContactEmail ?? string.Empty,
+                    OurCompanyNumber = reader.OurCompanyNumber ?? string.Empty,
+                    OurBillToNumber = reader.OurBillToNumber ?? string.Empty,
+                    SerializedTaxInfo = reader.SerializedTaxInfo ?? string.Empty,
+                    Name = reader.Name ?? string.Empty,
+                    Address1 = reader.Address1 ?? string.Empty,
+                    Address2 = reader.Address2 ?? string.Empty,
+                    City = reader.City ?? string.Empty,
+                    ProvState = reader.ProvState ?? string.Empty,
+                    PostalCode = reader.PostalCode ?? string.Empty,
+                    Country = reader.Country ?? string.Empty,
+                    FormattedPhone1 = reader.FormattedPhone1 ?? string.Empty,
+                    FormattedPhone2 = reader.FormattedPhone2 ?? string.Empty,
+                    Email1 = reader.Email1 ?? string.Empty,
+                    Email2 = reader.Email2 ?? string.Empty,
+                    Contact1 = reader.Contact1 ?? string.Empty,
+                    Contact2 = reader.Contact2 ?? string.Empty,
+                    Web = reader.Web ?? string.Empty,
+                    BuyerGroup = reader.BuyerGroup ?? string.Empty 
                 };
             }
             catch (RuntimeBinderException exception)
