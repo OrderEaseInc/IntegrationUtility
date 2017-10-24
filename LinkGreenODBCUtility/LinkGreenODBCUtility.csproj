@@ -168,6 +168,10 @@
       <DependentUpon>UtilitySettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -183,12 +187,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{b077d49e-9653-4680-a2f3-694787e4ab29}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj">
+      <Project>{592db8e5-cdb3-413d-969f-3488cb9df1a3}</Project>
+      <Name>DataTransfer.OdbcSource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
+      <Project>{a7519764-b219-44e4-9535-211b7fca3b11}</Project>
+      <Name>LinkGreen.Applications.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assembly\LinkGreenDataTransfer.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="favicon.ico" />
     <None Include="Resources\mapping1.png" />
     <None Include="Resources\mapping.png" />
@@ -207,20 +222,4 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ContentWithTargetPath Include="assembly\LinkGreenDataTransfer.mdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>LinkGreenDataTransfer.mdb</TargetPath>
-    </ContentWithTargetPath>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj">
-      <Project>{592db8e5-cdb3-413d-969f-3488cb9df1a3}</Project>
-      <Name>DataTransfer.OdbcSource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
-      <Project>{a7519764-b219-44e4-9535-211b7fca3b11}</Project>
-      <Name>LinkGreen.Applications.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

@@ -113,20 +113,20 @@ namespace LinkGreenODBCUtility
         private void SendLog(SeverityLevel level, string text)
         {
             string formattedLogText = FormattedLog(level, text);
-            
+
             // Send Log to Azure application insights
-//            tc.TrackTrace(
-//                formattedLogText,
-//                level,
-//                new Dictionary<string, string>
-//                {
-//                    {"ApiKey", _loggerModel.ApiKey ?? "Unknown"},
-//                    {"InstallationId", _loggerModel.InstallationId ?? "Unknown"},
-//                    {"Name", _loggerModel.UserName ?? "Unknown"},
-//                    {"Email", _loggerModel.EmailAddress ?? "Unknown"},
-//                    {"Phone", _loggerModel.PhoneNumber ?? "Unknown"}
-//                }
-//            );
+            tc.TrackTrace(
+                formattedLogText,
+                level,
+                new Dictionary<string, string>
+                {
+                    {"ApiKey", _loggerModel.ApiKey ?? "Unknown"},
+                    {"InstallationId", _loggerModel.InstallationId ?? "Unknown"},
+                    {"Name", _loggerModel.UserName ?? "Unknown"},
+                    {"Email", _loggerModel.EmailAddress ?? "Unknown"},
+                    {"Phone", _loggerModel.PhoneNumber ?? "Unknown"}
+                }
+            );
         }
 
         private void SaveLog(SeverityLevel level, string text)

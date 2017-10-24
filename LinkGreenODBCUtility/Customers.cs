@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Windows.Forms;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 
@@ -88,6 +89,7 @@ namespace LinkGreenODBCUtility
                 if (numOfPublishedCustomers == 0)
                 {
                     Logger.Instance.Warning("No customers were found to import.");
+                    MessageBox.Show("No customers were published.", "No Customers published.");
                 }
 
                 Logger.Instance.Info($"{numOfPublishedCustomers} Customers published.");

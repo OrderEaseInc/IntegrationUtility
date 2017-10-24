@@ -29,6 +29,12 @@ namespace LinkGreenODBCUtility
             {
                 debugMode.Checked = true;
             }
+
+            updateCategories.Checked = true;
+            if (!Settings.GetUpdateCategories())
+            {
+                updateCategories.Checked = false;
+            }
         }
 
         private void cancel_Click(object sender, EventArgs e)
@@ -39,9 +45,10 @@ namespace LinkGreenODBCUtility
         private void saveSettings_Click(object sender, EventArgs e)
         {
             Settings.SaveApiKey(apiKey.Text);
+            Settings.SaveUpdateCategories(updateCategories.Checked ? "1" : "0");
             Settings.DebugMode = debugMode.Checked;
             ActiveForm.Close();
-            Logger.Instance.Debug($"Settings saved: (ApiKey: '{apiKey.Text}', DebugMode: {debugMode.Checked})");
+            Logger.Instance.Debug($"Settings saved: (ApiKey: '{apiKey.Text}', DebugMode: {debugMode.Checked}, UpdateCategories: {updateCategories.Checked})");
         }
 
         private void apiKeyDetailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

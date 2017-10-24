@@ -116,15 +116,19 @@ namespace LinkGreenODBCUtility
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
+                string installationId = null;
                 while (reader.Read())
                 {
-                    return reader[0].ToString();
+                    installationId = reader[0].ToString();
                 }
 
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                string installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
-                    ? config.AppSettings.Settings["InstallationId"].Value
-                    : null;
+                if (string.IsNullOrEmpty(installationId))
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
+                        ? config.AppSettings.Settings["InstallationId"].Value
+                        : null;
+                }
 
                 return installationId;
             }
@@ -165,6 +169,76 @@ namespace LinkGreenODBCUtility
             catch (Exception e)
             {
                 Logger.Instance.Error($"An error occured while creating the InstallationId: {e.Message}");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public static bool GetUpdateCategories()
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = "DSN=" + DsnName;
+            var command = new OdbcCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
+            _connection.Open();
+            OdbcDataReader reader = command.ExecuteReader();
+            try
+            {
+                bool? updateCategories = null;
+                while (reader.Read())
+                {
+                    bool result;
+                    bool.TryParse(reader[0].ToString(), out result);
+                    updateCategories = result;
+                }
+
+                if (updateCategories == null)
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    bool result;
+                    bool.TryParse(config.AppSettings.Settings["UpdateCategories"].Value, out result);
+                    updateCategories = result; 
+                }
+
+                return updateCategories ?? true;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occurred while retrieving the setting UpdateCategories: {e.Message}");
+            }
+            finally
+            {
+                reader.Close();
+                _connection.Close();
+            }
+
+            return true;
+        }
+
+        public static void SaveUpdateCategories(string updateCategories)
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = "DSN=" + DsnName;
+            var command = new OdbcCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
+            {
+                Connection = _connection
+            };
+
+            _connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["UpdateCategories"].Value = updateCategories;
+                config.Save(ConfigurationSaveMode.Modified);
+
+                Logger.Instance.Debug($"Setting UpdateCategories saved: '{updateCategories}'");
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while updating the setting UpdateCategories.");
             }
             finally
             {

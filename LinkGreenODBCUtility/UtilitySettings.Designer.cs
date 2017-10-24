@@ -36,6 +36,7 @@
             this.apiKeyDescriptionLabel = new System.Windows.Forms.Label();
             this.apiKeyDetailLink = new System.Windows.Forms.LinkLabel();
             this.debugMode = new System.Windows.Forms.CheckBox();
+            this.updateCategories = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // apiKey
@@ -59,7 +60,7 @@
             // 
             // saveSettings
             // 
-            this.saveSettings.Location = new System.Drawing.Point(268, 141);
+            this.saveSettings.Location = new System.Drawing.Point(268, 181);
             this.saveSettings.Name = "saveSettings";
             this.saveSettings.Size = new System.Drawing.Size(75, 23);
             this.saveSettings.TabIndex = 2;
@@ -69,7 +70,7 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(187, 141);
+            this.cancel.Location = new System.Drawing.Point(187, 181);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 3;
@@ -108,11 +109,24 @@
             this.debugMode.Text = "Debug Mode";
             this.debugMode.UseVisualStyleBackColor = true;
             // 
+            // updateCategories
+            // 
+            this.updateCategories.AutoSize = true;
+            this.updateCategories.Checked = true;
+            this.updateCategories.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.updateCategories.Location = new System.Drawing.Point(12, 141);
+            this.updateCategories.Name = "updateCategories";
+            this.updateCategories.Size = new System.Drawing.Size(192, 17);
+            this.updateCategories.TabIndex = 8;
+            this.updateCategories.Text = "Update Categories (Product Import)";
+            this.updateCategories.UseVisualStyleBackColor = true;
+            // 
             // UtilitySettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 176);
+            this.ClientSize = new System.Drawing.Size(359, 216);
+            this.Controls.Add(this.updateCategories);
             this.Controls.Add(this.debugMode);
             this.Controls.Add(this.apiKeyDetailLink);
             this.Controls.Add(this.apiKeyDescriptionLabel);
@@ -122,7 +136,7 @@
             this.Controls.Add(this.apiKey);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(375, 215);
+            this.MaximumSize = new System.Drawing.Size(375, 255);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(375, 215);
             this.Name = "UtilitySettings";
@@ -143,5 +157,6 @@
         private System.Windows.Forms.Label apiKeyDescriptionLabel;
         private System.Windows.Forms.LinkLabel apiKeyDetailLink;
         private System.Windows.Forms.CheckBox debugMode;
+        private System.Windows.Forms.CheckBox updateCategories;
     }
 }
