@@ -139,6 +139,10 @@
     <Compile Include="UtilitySettings.Designer.cs">
       <DependentUpon>UtilitySettings.cs</DependentUpon>
     </Compile>
+    <Content Include="ApplicationInsights.sample.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />
