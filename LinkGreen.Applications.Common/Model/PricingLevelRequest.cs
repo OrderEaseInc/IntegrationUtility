@@ -9,6 +9,8 @@ namespace LinkGreen.Applications.Common.Model
     {
         public string Name { get; set; }
 
+        public string ExternalReference { get; set; }
+
         public IList<PricingLevelItemRequest> InventoryItems { get; set; }
 
         public DateTime? EffectiveDate { get; set; }

@@ -237,10 +237,15 @@ namespace LinkGreen.Applications.Common
         public static bool PushPricingLevelPrice(PricingLevelItemRequest item)
         {
             var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevelPrice/{Key}";
-
             var request = new RestRequest(requestUrl, Method.POST);
+            request.RequestFormat = DataFormat.Json;
 
-            request.AddJsonBody(item);
+            request.AddHeader("Content-Type", "application/json");
+
+            var settings = new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat };
+            var json = JsonConvert.SerializeObject(item, settings);
+
+            request.AddParameter("application/json", json, null, ParameterType.RequestBody);
 
             var response = Client.Execute(request);
 
