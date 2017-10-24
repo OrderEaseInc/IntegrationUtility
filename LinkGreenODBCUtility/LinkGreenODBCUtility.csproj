@@ -187,10 +187,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{b077d49e-9653-4680-a2f3-694787e4ab29}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj">
       <Project>{592db8e5-cdb3-413d-969f-3488cb9df1a3}</Project>
       <Name>DataTransfer.OdbcSource</Name>
@@ -204,9 +200,6 @@
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\LinkGreenDataTransfer.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="favicon.ico" />
     <None Include="Resources\mapping1.png" />
     <None Include="Resources\mapping.png" />
