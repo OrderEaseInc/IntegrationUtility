@@ -172,10 +172,6 @@
       <DependentUpon>UtilitySettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
