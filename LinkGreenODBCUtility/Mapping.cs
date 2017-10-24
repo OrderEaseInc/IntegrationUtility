@@ -383,7 +383,7 @@ namespace LinkGreenODBCUtility
             return new List<string>();
         }
 
-        public bool MigrateData(string tableName, bool nuke = true)
+        public bool MigrateData(string tableName, bool nuke = true, string delimiter = "`")
         {
             if (ValidateRequiredFields(tableName))
             {
@@ -399,14 +399,14 @@ namespace LinkGreenODBCUtility
                     fromColumnNames.Add(fromColumn.MappingName);
                 }
 
-                string chainedToColumnNames = "`" + string.Join("`,`", toColumnNames) + "`";
+                string chainedToColumnNames = string.Join(",", toColumnNames.Select(c => $"{delimiter}{c}{delimiter}"));
 
-                string chainedFromColumnNames = "`" + string.Join("`,`", fromColumnNames) + "`";
+                string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{delimiter}{c}{delimiter}"));
 
                 var _connection = new OdbcConnection();
                 _connection.ConnectionString = "DSN=" + DsnName;
 
-                string sql = $"SELECT {chainedFromColumnNames} FROM `{tableMappingName}`";
+                string sql = $"SELECT {chainedFromColumnNames} FROM {delimiter}{tableMappingName}{delimiter}";
                 var command = new OdbcCommand(sql)
                 {
                     Connection = _connection
@@ -436,7 +436,7 @@ namespace LinkGreenODBCUtility
 
                     var _conn = new OdbcConnection();
                     _conn.ConnectionString = "DSN=" + TransferDsnName;
-                    var nukeCommand = new OdbcCommand($"DELETE * FROM `{tableName}`")
+                    var nukeCommand = new OdbcCommand($"DELETE * FROM {delimiter}{tableName}{delimiter}")
                     {
                         Connection = _conn
                     };
@@ -472,7 +472,7 @@ namespace LinkGreenODBCUtility
                                 readerColumns.Add(text);
                             }
                             string readerColumnValues = "'" + string.Join("','", readerColumns) + "'";
-                            string stmt = $"INSERT INTO `{tableName}` ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+                            string stmt = $"INSERT INTO {delimiter}{tableName}{delimiter} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
                             var comm = new OdbcCommand(stmt)
                             {

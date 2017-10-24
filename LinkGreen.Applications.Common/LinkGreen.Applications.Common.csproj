@@ -61,8 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ApiResult.cs" />
-    <Compile Include="Model\Buyer.cs" />
-    <Compile Include="Model\BuyerContact.cs" />
+    <Compile Include="Model\Supplier.cs" />
+    <Compile Include="Model\SupplierContact.cs" />
     <Compile Include="Model\CompanyAndRelationshipResult.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\InventoryItemRequest.cs" />

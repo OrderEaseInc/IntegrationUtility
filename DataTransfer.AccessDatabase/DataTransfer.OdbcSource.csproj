@@ -47,7 +47,7 @@
     <Compile Include="Models\PriceLevel.cs" />
     <Compile Include="OdbcDataTransferObjectBase.cs" />
     <Compile Include="Models\ProductInventory.cs" />
-    <Compile Include="Repositories\BuyerRepository.cs" />
+    <Compile Include="Repositories\SupplierRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\ProductCategoryRepository.cs" />
     <Compile Include="Repositories\ProductPriceRepository.cs" />

@@ -17,7 +17,7 @@ namespace DataTransfer.AccessDatabase
 
         public void DownloadSupplierInventory()
         {
-            var buyers = WebServiceHelper.GetAllBuyers();
+            var buyers = WebServiceHelper.GetAllSuppliers();
             
             var querier = GetQuerier();
             foreach (var buyer in buyers) {

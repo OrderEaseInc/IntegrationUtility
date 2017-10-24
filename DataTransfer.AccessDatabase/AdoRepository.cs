@@ -16,6 +16,8 @@ namespace DataTransfer.AccessDatabase
             _connection = new OdbcConnection(connectionString);
         }
 
+        protected static OdbcConnection Connection => _connection;
+
         protected virtual T PopulateRecord(dynamic reader)
         {
             return null;

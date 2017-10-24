@@ -193,11 +193,11 @@ namespace LinkGreen.Applications.Common
             return cats;
         }
 
-        public static List<Buyer> GetAllBuyers()
+        public static List<Supplier> GetAllSuppliers()
         {
             var requestUrl = $"buyersupplierservice/rest/listsuppliers/{Key}";
             var request = new RestRequest(requestUrl, Method.GET);
-            var response = Client.Execute<ApiResult<List<Buyer>>>(request);
+            var response = Client.Execute<ApiResult<List<Supplier>>>(request);
 
             if (response.Data.Result == null) return null;
 
@@ -217,7 +217,7 @@ namespace LinkGreen.Applications.Common
             return inventory;
         }
 
-        public static void UpdateBuyerWithReference(int buyerId, string buyerReference)
+        public static void UpdateSupplierContactInfo(int buyerId, string buyerReference)
         {
             // TODO: Not implemented yet
         }

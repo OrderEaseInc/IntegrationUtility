@@ -1,9 +1,9 @@
 ﻿namespace LinkGreen.Applications.Common.Model
 {
-    public class Buyer
+    public class Supplier
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public BuyerContact OurContactInfo { get; set; }
+        public SupplierContact OurContactInfo { get; set; }
     }
 }
