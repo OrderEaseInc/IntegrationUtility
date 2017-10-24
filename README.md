@@ -8,6 +8,11 @@ A tool used to integrate data with LinkGreen
 4. Build solution
 5. Start
 
+## Setup Application Insights
+1. Optionally add "ApplicationInsights.config" to the solution's .git/info/exclude so that it's local changes won't be tracked
+2. Replace {YOUR-KEY-HERE} in ApplicationInsights.config with your InstrumentationKey
+3. Set App.config "ApplicationInsights" setting to "1" (true)
+
 ## Installation Wizard
 1. Open solution
 2. Set LinkGreenODBCUtility project to "Release"
