@@ -47,20 +47,18 @@
     <Compile Include="Models\PriceLevel.cs" />
     <Compile Include="OdbcDataTransferObjectBase.cs" />
     <Compile Include="Models\ProductInventory.cs" />
+    <Compile Include="Repositories\BuyerRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />
     <Compile Include="Repositories\ProductCategoryRepository.cs" />
     <Compile Include="Repositories\ProductPriceRepository.cs" />
     <Compile Include="Repositories\PriceLevelRepository.cs" />
     <Compile Include="Repositories\ProductInventoryRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\SupplierInventoryRepository.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{B077D49E-9653-4680-A2F3-694787E4AB29}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
       <Project>{A7519764-B219-44E4-9535-211B7FCA3B11}</Project>
       <Name>LinkGreen.Applications.Common</Name>

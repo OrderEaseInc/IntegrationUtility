@@ -193,6 +193,35 @@ namespace LinkGreen.Applications.Common
             return cats;
         }
 
+        public static List<Buyer> GetAllBuyers()
+        {
+            var requestUrl = $"buyersupplierservice/rest/listsuppliers/{Key}";
+            var request = new RestRequest(requestUrl, Method.GET);
+            var response = Client.Execute<ApiResult<List<Buyer>>>(request);
+
+            if (response.Data.Result == null) return null;
+
+            var buyers = response.Data.Item;
+            return buyers;
+        }
+
+        public static List<SupplierInventory> GetSupplierInventory(int supplierId)
+        {
+            var requestUrl = $"buyersupplierservice/rest/supplierinventory/{Key}/{supplierId}";
+            var request = new RestRequest(requestUrl, Method.GET);
+            var response = Client.Execute<ApiResult<List<SupplierInventory>>>(request);
+
+            if (response.Data.Result == null) return null;
+
+            var inventory = response.Data.Item;
+            return inventory;
+        }
+
+        public static void UpdateBuyerWithReference(int buyerId, string buyerReference)
+        {
+            // TODO: Not implemented yet
+        }
+
         public static void UpdateInventoryItemQuantity(string sku, int newQty)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantity/{Key}/{sku}/{newQty}";
