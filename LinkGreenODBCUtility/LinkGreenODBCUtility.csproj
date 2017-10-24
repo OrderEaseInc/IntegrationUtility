@@ -139,7 +139,7 @@
     <Compile Include="UtilitySettings.Designer.cs">
       <DependentUpon>UtilitySettings.cs</DependentUpon>
     </Compile>
-    <Content Include="ApplicationInsights.sample.config">
+    <Content Include="ApplicationInsights.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
