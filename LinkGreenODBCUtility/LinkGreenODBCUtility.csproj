@@ -56,10 +56,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>assemblies\Common.dll</HintPath>
-    </Reference>
     <Reference Include="DataTransfer.AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>assemblies\DataTransfer.AccessDatabase.dll</HintPath>
@@ -151,8 +147,6 @@
     <Compile Include="UtilitySettings.Designer.cs">
       <DependentUpon>UtilitySettings.cs</DependentUpon>
     </Compile>
-    <None Include="assembly\Common.dll.config" />
-    <None Include="assembly\LinkGreenODBCUtility.exe.config" />
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />
@@ -200,48 +194,9 @@
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assembly\Bdev.Net.Dns.dll" />
-    <Content Include="assembly\Common.dll" />
-    <Content Include="assembly\Common.pdb" />
-    <Content Include="assembly\DataTransfer.AccessDatabase.dll" />
-    <Content Include="assembly\DataTransfer.AccessDatabase.pdb" />
-    <Content Include="assembly\Elmah.dll" />
-    <Content Include="assembly\LinkGreen.Applications.Common.dll" />
-    <Content Include="assembly\LinkGreen.Applications.Common.pdb" />
     <Content Include="assembly\LinkGreenDataTransfer.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="assembly\LinkGreenODBCUtility.exe" />
-    <Content Include="assembly\LinkGreenODBCUtility.pdb" />
-    <Content Include="assembly\log4net.dll" />
-    <Content Include="assembly\log4net.xml" />
-    <Content Include="assembly\Microsoft.AI.Agent.Intercept.dll" />
-    <Content Include="assembly\Microsoft.AI.DependencyCollector.dll" />
-    <Content Include="assembly\Microsoft.AI.DependencyCollector.xml" />
-    <Content Include="assembly\Microsoft.AI.PerfCounterCollector.dll" />
-    <Content Include="assembly\Microsoft.AI.ServerTelemetryChannel.dll" />
-    <Content Include="assembly\Microsoft.AI.ServerTelemetryChannel.xml" />
-    <Content Include="assembly\Microsoft.AI.WindowsServer.dll" />
-    <Content Include="assembly\Microsoft.AI.WindowsServer.xml" />
-    <Content Include="assembly\Microsoft.ApplicationInsights.dll" />
-    <Content Include="assembly\Microsoft.ApplicationInsights.xml" />
-    <Content Include="assembly\Microsoft.Web.Infrastructure.dll" />
-    <Content Include="assembly\Newtonsoft.Json.dll" />
-    <Content Include="assembly\Newtonsoft.Json.xml" />
-    <Content Include="assembly\RestSharp.dll" />
-    <Content Include="assembly\RestSharp.xml" />
-    <Content Include="assembly\System.Diagnostics.DiagnosticSource.dll" />
-    <Content Include="assembly\System.Diagnostics.DiagnosticSource.xml" />
-    <Content Include="assembly\System.Web.Mvc.dll" />
-    <Content Include="assembly\System.Web.Mvc.xml" />
-    <Content Include="assembly\System.Web.Razor.dll" />
-    <Content Include="assembly\System.Web.Razor.xml" />
-    <Content Include="assembly\System.Web.WebPages.Deployment.dll" />
-    <Content Include="assembly\System.Web.WebPages.Deployment.xml" />
-    <Content Include="assembly\System.Web.WebPages.dll" />
-    <Content Include="assembly\System.Web.WebPages.Razor.dll" />
-    <Content Include="assembly\System.Web.WebPages.Razor.xml" />
-    <Content Include="assembly\System.Web.WebPages.xml" />
     <Content Include="favicon.ico" />
     <None Include="Resources\mapping1.png" />
     <None Include="Resources\mapping.png" />
