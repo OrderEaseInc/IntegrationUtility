@@ -115,18 +115,24 @@ namespace LinkGreenODBCUtility
             string formattedLogText = FormattedLog(level, text);
 
             // Send Log to Azure application insights
-            tc.TrackTrace(
-                formattedLogText,
-                level,
-                new Dictionary<string, string>
-                {
-                    {"ApiKey", _loggerModel.ApiKey ?? "Unknown"},
-                    {"InstallationId", _loggerModel.InstallationId ?? "Unknown"},
-                    {"Name", _loggerModel.UserName ?? "Unknown"},
-                    {"Email", _loggerModel.EmailAddress ?? "Unknown"},
-                    {"Phone", _loggerModel.PhoneNumber ?? "Unknown"}
-                }
-            );
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            bool ApplicationInsights = Convert.ToInt32(config.AppSettings.Settings["ApplicationInsights"].Value) == 1;
+
+            if (ApplicationInsights)
+            {
+                tc.TrackTrace(
+                    formattedLogText,
+                    level,
+                    new Dictionary<string, string>
+                    {
+                        {"ApiKey", _loggerModel.ApiKey ?? "Unknown"},
+                        {"InstallationId", _loggerModel.InstallationId ?? "Unknown"},
+                        {"Name", _loggerModel.UserName ?? "Unknown"},
+                        {"Email", _loggerModel.EmailAddress ?? "Unknown"},
+                        {"Phone", _loggerModel.PhoneNumber ?? "Unknown"}
+                    }
+                );
+            }
         }
 
         private void SaveLog(SeverityLevel level, string text)
