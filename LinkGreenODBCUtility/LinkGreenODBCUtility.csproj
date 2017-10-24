@@ -204,6 +204,9 @@
     <None Include="Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Database\LinkGreenDataTransfer.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="favicon.ico" />
     <None Include="Resources\mapping1.png" />
     <None Include="Resources\mapping.png" />
@@ -222,4 +225,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ContentWithTargetPath Include="Database\LinkGreenDataTransfer.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>LinkGreenDataTransfer.mdb</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
 </Project>
