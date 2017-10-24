@@ -29,12 +29,8 @@ namespace LinkGreenODBCUtility
             {
                 debugMode.Checked = true;
             }
-
-            updateCategories.Checked = true;
-            if (!Settings.GetUpdateCategories())
-            {
-                updateCategories.Checked = false;
-            }
+            
+            updateCategories.Checked = Settings.GetUpdateCategories();
         }
 
         private void cancel_Click(object sender, EventArgs e)

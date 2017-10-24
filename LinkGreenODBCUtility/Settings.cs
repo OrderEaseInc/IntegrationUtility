@@ -188,9 +188,7 @@ namespace LinkGreenODBCUtility
                 bool? updateCategories = null;
                 while (reader.Read())
                 {
-                    bool result;
-                    bool.TryParse(reader[0].ToString(), out result);
-                    updateCategories = result;
+                    updateCategories = Convert.ToInt32(reader[0].ToString()) == 1;
                 }
 
                 if (updateCategories == null)

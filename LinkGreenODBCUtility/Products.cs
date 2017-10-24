@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -87,13 +88,17 @@ namespace LinkGreenODBCUtility
                         existingCategories.Add(existingCategory);
                     }
 
-                    int existingCategoryId = 0;
-                    if (existingCategory != null)
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    bool updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
+                    if (existingCategory != null && updateCategories)
                     {
-                        existingCategoryId = existingCategory.Id;
+                        request.CategoryId = existingCategory.Id;
                     }
-
-                    request.CategoryId = existingCategoryId;
+                    else
+                    {
+                        request.CategoryId = null;
+                    }
+                    
                     request.NetPrice = product.NetPrice;
                     request.OpenSizeDescription = product.OpenSizeDescription ?? "";
                     request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
