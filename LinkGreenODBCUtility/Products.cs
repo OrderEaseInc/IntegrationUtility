@@ -80,23 +80,39 @@ namespace LinkGreenODBCUtility
                         Inactive = !product.Active,
                         QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
                     };
-
+                    
+                    bool updateCategories = Settings.GetUpdateCategories();
+                    //lets check if this item already exists, if so just update qty, else
+                    var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
                     var existingCategory = existingCategories.FirstOrDefault(s => s.Name == product.Category);
-                    if (existingCategory == null)
-                    {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                        existingCategories.Add(existingCategory);
-                    }
 
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    bool updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
-                    if (existingCategory != null && updateCategories)
+                    // Add
+                    if (existing == null)
                     {
-                        request.CategoryId = existingCategory.Id;
+                        if (existingCategory == null)
+                        {
+                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                            existingCategories.Add(existingCategory);
+                        }
                     }
+                    // Update
                     else
                     {
-                        request.CategoryId = null;
+                        if (existingCategory == null && updateCategories)
+                        {
+                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                            existingCategories.Add(existingCategory);
+                        }
+                    }
+
+                    
+                    if (existingCategory != null && (updateCategories || existing == null))
+                    {
+                         request.CategoryId = existingCategory.Id;
+                    }
+                    else if (existing != null)
+                    {
+                        request.CategoryId = existing.CategoryId;
                     }
                     
                     request.NetPrice = product.NetPrice;
@@ -113,9 +129,6 @@ namespace LinkGreenODBCUtility
                     request.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
                     request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
                     request.SuggestedRetailPrice = product.SuggestedRetailPrice;
-
-                    //lets check if this item already exists, if so just update qty, else
-                    var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
 
                     if (existing != null)
                     {
