@@ -469,6 +469,12 @@ namespace LinkGreenODBCUtility
                             {
                                 string text = reader[columnIndexes[col]].ToString();
                                 text = text.Replace("'", "''").Replace("\"", "\\\"");
+                                // The column name contains case insensitive "phone"
+                                if (col.IndexOf("phone", 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                                {
+                                    text = Tools.CleanStringOfNonDigits(text);
+                                }
+                                text = Tools.CleanString(text);
                                 readerColumns.Add(text);
                             }
                             string readerColumnValues = "'" + string.Join("','", readerColumns) + "'";

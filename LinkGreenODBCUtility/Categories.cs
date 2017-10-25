@@ -69,7 +69,7 @@ namespace LinkGreenODBCUtility
                 int numOfPublishedCategories = 0;
                 foreach (var category in categoriesToImport)
                 {
-                    var existingCategory = existingCategories.FirstOrDefault(s => s.Name == category.Category);
+                    var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == category.Category);
 
                     if (existingCategory == null)
                     {

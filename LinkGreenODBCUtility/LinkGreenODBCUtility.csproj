@@ -119,6 +119,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="TaskManager.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="UtilityDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
