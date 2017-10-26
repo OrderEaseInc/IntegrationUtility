@@ -196,9 +196,7 @@ namespace LinkGreenODBCUtility
                 if (updateCategories == null)
                 {
                     var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    bool result;
-                    bool.TryParse(config.AppSettings.Settings["UpdateCategories"].Value, out result);
-                    updateCategories = result; 
+                    updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
                 }
 
                 return updateCategories ?? true;

@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Odbc;
+using System.IO;
+using System.Linq;
+using LinkGreen.Applications.Common;
+using LinkGreen.Applications.Common.Model;
+using Microsoft.CSharp.RuntimeBinder;
+
+namespace DataTransfer.AccessDatabase
+{
+    public class SupplierRepository : AdoRepository<Supplier>
+    {
+        private const string TableName = "Suppliers";
+        private const string TableKey = "SupplierId";
+
+        public SupplierRepository(string connectionString) : base(connectionString) { }
+
+        public int DownloadAllSuppliers()
+        {
+            var suppliers = GetAll();
+            foreach (var supplier in suppliers) {
+                Insert(supplier);
+            }
+            return suppliers.Count();
+        }
+
+        public int SyncAllSuppliers()
+        {
+            var count = 0;
+            var command = new OdbcCommand($"SELECT * FROM {TableName}");
+            var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
+            var updatedSuppliers = GetRecords(command);
+            foreach (var supplier in updatedSuppliers.Where(s => lgSuppliers.ContainsKey(s.Id))) {
+                var lgSupplier = lgSuppliers[supplier.Id];
+                WebServiceHelper.UpdateSupplierContactInfo(lgSupplier, supplier.OurContactInfo.OurSupplierNumber);
+                count++;
+            }
+
+            return count;
+        }
+
+        public override void SaveFieldMapping(string fieldName, string mappingName)
+        {
+            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+                ExecuteCommand(command);
+            }
+        }
+
+        public void ClearAll()
+        {
+            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
+                ExecuteCommand(command);
+            }
+        }
+
+        private IEnumerable<Supplier> GetAll()
+        {
+            var suppliers = WebServiceHelper.GetAllSuppliers();
+            return suppliers;
+        }
+        
+        private void Insert(Supplier supplier)
+        {
+            var sql =
+                $"INSERT INTO {TableName} (SupplierId, SupplierName, ContactName, Email, Phone, OurBillToNumber, OurSupplierNumber) " +
+                $"Values ({supplier.Id}, {StringOrNull(supplier.Name)}, {StringOrNull(supplier.OurContactInfo?.ContactName)}, " +
+                $"{StringOrNull(supplier.OurContactInfo?.Email)}, {StringOrNull(supplier.OurContactInfo?.Phone)}, " +
+                $"{StringOrNull(supplier.OurContactInfo?.OurBillToNumber)}, {StringOrNull(supplier.OurContactInfo?.OurSupplierNumber)})";
+            using (var command = new OdbcCommand(sql)) {
+                ExecuteCommand(command);
+            }
+        }
+
+        private static string StringOrNull(string value) => string.IsNullOrEmpty(value) ? "null" : $"'{value.Replace("'", "''").Replace("\"", "\\\"")}'";
+
+        protected override Supplier PopulateRecord(dynamic reader)
+        {
+            try {
+
+                return new Supplier {
+                    Id = reader.SupplierId,
+                    Name = reader.SupplierName,
+                    OurContactInfo = new SupplierContact {
+                        Id = reader.SupplierId,
+                        OurSupplierNumber = reader.OurSupplierNumber
+                    }
+                };
+
+            } catch (RuntimeBinderException exception) {
+                Console.WriteLine(exception);
+                throw new InvalidDataException("One of the fields in the source ODBC database has an invalid column type or value", exception);
+            }
+        }
+    }
+
+    public enum SupplierSyncStates
+    {
+        Added,
+        Unchanged,
+        MappingRequired,
+        Mapped
+    }
+}
