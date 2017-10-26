@@ -1820,7 +1820,7 @@
             this.downloadSuppliers.TabIndex = 28;
             this.downloadSuppliers.Text = "Publish to LinkGreen";
             this.downloadSuppliers.UseVisualStyleBackColor = true;
-            this.downloadSuppliers.Click += new System.EventHandler(this.publishSuppliers_Click);
+            this.downloadSuppliers.Click += new System.EventHandler(this.syncSuppliers_Click);
             // 
             // emptySuppliersTransferTable
             // 

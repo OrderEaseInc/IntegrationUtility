@@ -8,5 +8,10 @@
         public string Phone { get; set; }
         public string OurBillToNumber { get; set; }
         public string OurSupplierNumber { get; set; }
+
+        public SupplierContact Clone()
+        {
+            return (SupplierContact) MemberwiseClone();
+        }
     }
 }

@@ -25,21 +25,19 @@ namespace DataTransfer.AccessDatabase
             return suppliers.Count();
         }
 
-        public Dictionary<SupplierSyncStates, int> SyncAllSuppliers()
+        public int SyncAllSuppliers()
         {
-            var result = new Dictionary<SupplierSyncStates, int> {
-                { SupplierSyncStates.Added, 0 },
-                { SupplierSyncStates.Unchanged, 0 },
-                { SupplierSyncStates.Mapped, 0 },
-                { SupplierSyncStates.MappingRequired, 0 }
-            };
-            var suppliers = GetAll();
-            foreach (var supplier in suppliers) {
-                var state = Sync(supplier);
-                result[state]++;
+            var count = 0;
+            var command = new OdbcCommand($"SELECT * FROM {TableName}");
+            var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
+            var updatedSuppliers = GetRecords(command);
+            foreach (var supplier in updatedSuppliers.Where(s => lgSuppliers.ContainsKey(s.Id))) {
+                var lgSupplier = lgSuppliers[supplier.Id];
+                WebServiceHelper.UpdateSupplierContactInfo(lgSupplier, supplier.OurContactInfo.OurSupplierNumber);
+                count++;
             }
 
-            return result;
+            return count;
         }
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
@@ -62,25 +60,6 @@ namespace DataTransfer.AccessDatabase
             return suppliers;
         }
         
-        private SupplierSyncStates Sync(Supplier supplier)
-        {
-            var supplierNumber = supplier.OurContactInfo?.OurSupplierNumber;
-            var state = SupplierSyncStates.Unchanged;
-            var existingSupplier = GetRecord(new OdbcCommand($"SELECT * FROM {TableName} Where {TableKey} = {supplier.Id}"));
-            var existingSupplierNumber = existingSupplier?.OurContactInfo?.OurSupplierNumber;
-            if (existingSupplier == null) {
-                Insert(supplier);
-                state = SupplierSyncStates.Added;
-            } else if (string.IsNullOrWhiteSpace(supplierNumber) && string.IsNullOrWhiteSpace(existingSupplierNumber)) {                
-                state = SupplierSyncStates.MappingRequired;
-            } else if (string.IsNullOrWhiteSpace(supplierNumber) && !string.IsNullOrWhiteSpace(existingSupplierNumber)) {
-                WebServiceHelper.UpdateSupplierContactInfo(supplier.Id, existingSupplierNumber);
-                state = SupplierSyncStates.Mapped;
-            }
-
-            return state;
-        }
-
         private void Insert(Supplier supplier)
         {
             var sql =
@@ -100,15 +79,11 @@ namespace DataTransfer.AccessDatabase
             try {
 
                 return new Supplier {
-                    Id = reader.Id,
-                    Name = reader.Name,
+                    Id = reader.SupplierId,
+                    Name = reader.SupplierName,
                     OurContactInfo = new SupplierContact {
-                        Id = reader.Id,
-                        ContactName = reader.OurContactInfo?.ContactName,
-                        Phone = reader.OurContactInfo?.Phone,
-                        Email = reader.OurContactInfo?.Email,
-                        OurBillToNumber = reader.OurContactInfo?.OurBillToNumber,
-                        OurSupplierNumber = reader.OurContactInfo?.OurSupplierNumber
+                        Id = reader.SupplierId,
+                        OurSupplierNumber = reader.OurSupplierNumber
                     }
                 };
 

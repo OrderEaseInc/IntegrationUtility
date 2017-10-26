@@ -39,12 +39,23 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public bool Publish()
+        public bool Sync()
         {
+            Empty();
+            // Download from LinkGreen to Access
+            Download();
+            // Push any missing records to the Production database
+            var mappedDsnName = new Mapping().GetDsnName("Suppliers");
+            var newMapping = new Mapping(mappedDsnName);
+            newMapping.PushData("Suppliers", "SupplierId");
+
+            // Update the Access database with the latest info from the production db
+            newMapping.UpdateData("Suppliers", "SupplierId");
+
+            // Send it up to LinkGreen
             var result = _supplierRepository.SyncAllSuppliers();
-            foreach (var pair in result) {
-                Logger.Instance.Debug($"{TableName} Sync: {pair.Value} was {pair.Key}");
-            }
+            Logger.Instance.Debug($"{TableName} {result} suppliers contact info updated in LinkGreen");
+
             return true;
         }
     }

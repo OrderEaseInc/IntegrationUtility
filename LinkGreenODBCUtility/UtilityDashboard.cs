@@ -49,7 +49,7 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("Categories");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Categories") && categories.Publish())
+            if (newMapping.MigrateData("Categories") && categories.Sync())
             {
                 MessageBox.Show("Categories Synced", "Success");
                 Logger.Instance.Info("Categories synced.");
@@ -81,7 +81,7 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("Customers");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Customers") && customers.Publish())
+            if (newMapping.MigrateData("Customers") && customers.Sync())
             {
                 MessageBox.Show("Customers Synced", "Success");
                 Logger.Instance.Info("Customers synced.");
@@ -121,7 +121,7 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("PriceLevels");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("PriceLevels") && priceLevels.Publish())
+            if (newMapping.MigrateData("PriceLevels") && priceLevels.Sync())
             {
                 MessageBox.Show("Price Levels Synced", "Success");
                 Logger.Instance.Info("Price Levels synced.");
@@ -141,7 +141,7 @@ namespace LinkGreenODBCUtility
 
             string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("PriceLevelPrices") && priceLevelPrices.Publish())
+            if (newMapping.MigrateData("PriceLevelPrices") && priceLevelPrices.Sync())
             {
                 MessageBox.Show("Pricing Synced", "Success");
                 Logger.Instance.Info("Pricing synced.");

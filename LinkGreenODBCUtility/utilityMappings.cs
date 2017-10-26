@@ -675,7 +675,7 @@ namespace LinkGreenODBCUtility
         private void PublishCategories_Click(object sender, EventArgs e)
         {
             var categories = new Categories();
-            if (categories.Publish())
+            if (categories.Sync())
             {
                 MessageBox.Show("Categories Published", "Success");
             }
@@ -1017,7 +1017,7 @@ namespace LinkGreenODBCUtility
         private void publishCustomers_Click(object sender, EventArgs e)
         {
             var customers = new Customers();
-            if (customers.Publish())
+            if (customers.Sync())
             {
                 MessageBox.Show("Customers Published", "Success");
             }
@@ -1027,14 +1027,14 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void publishSuppliers_Click(object sender, EventArgs e)
+        private void syncSuppliers_Click(object sender, EventArgs e)
         {
             var suppliers = new Suppliers();
-            var result = suppliers.Publish();
+            var result = suppliers.Sync();
             if(result) {
-                MessageBox.Show("Suppliers Published", "Success");
+                MessageBox.Show("Suppliers Synced", "Success");
             } else {
-                MessageBox.Show("Suppliers failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show("Suppliers failed to sync. No API Key was found", "Sync Failure");
             }
         }
 
@@ -1282,7 +1282,7 @@ namespace LinkGreenODBCUtility
         private void publishPricing_Click_1(object sender, EventArgs e)
         {
             var pricing = new PriceLevelPrices();
-            if (pricing.Publish())
+            if (pricing.Sync())
             {
                 MessageBox.Show("Pricing Published", "Success");
             }
@@ -1403,7 +1403,7 @@ namespace LinkGreenODBCUtility
         private void publishPriceLevels_Click(object sender, EventArgs e)
         {
             var priceLevels = new PriceLevels();
-            if (priceLevels.Publish())
+            if (priceLevels.Sync())
             {
                 MessageBox.Show("Price Levels Published", "Success");
             }

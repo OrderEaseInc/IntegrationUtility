@@ -55,7 +55,7 @@ namespace LinkGreenODBCUtility
                 Batch.Exec(cmd);
             }
         }
-        public bool Publish()
+        public bool Sync()
         {
             string apiKey = ConfigurationManager.AppSettings["ApiKey"];
 

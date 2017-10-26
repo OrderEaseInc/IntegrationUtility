@@ -28,7 +28,7 @@ namespace LinkGreenODBCUtility
             Logger.Instance.Debug($"Supplier Inventory field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
-        public bool Publish()
+        public bool Sync()
         {
             repository.DownloadSupplierInventory();
             return true;

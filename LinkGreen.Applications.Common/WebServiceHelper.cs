@@ -217,9 +217,19 @@ namespace LinkGreen.Applications.Common
             return inventory;
         }
 
-        public static void UpdateSupplierContactInfo(int buyerId, string buyerReference)
+        public static void UpdateSupplierContactInfo(Supplier supplier, string supplierNumber)
         {
-            // TODO: Not implemented yet
+            var requestUrl = $"buyersupplierservice/rest/updatesuppliercontactinfo/{Key}";
+            supplier.OurContactInfo.OurSupplierNumber = supplierNumber;
+            var request = new RestRequest(requestUrl, Method.POST);
+            var body = supplier.OurContactInfo.Clone();
+            body.OurSupplierNumber = supplierNumber;
+            request.AddJsonBody(body);
+            var response = Client.Execute<ApiResult<SupplierContact>>(request);
+
+            if (response.StatusCode != HttpStatusCode.OK) {
+                throw new Exception("Error updating Supplier contact info");
+            }
         }
 
         public static void UpdateInventoryItemQuantity(string sku, int newQty)

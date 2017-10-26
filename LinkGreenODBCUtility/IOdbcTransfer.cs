@@ -12,6 +12,6 @@ namespace LinkGreenODBCUtility
 
         void SaveTableMapping(string dsnName, string tableName);
 
-        bool Publish();
+        bool Sync();
     }
 }
