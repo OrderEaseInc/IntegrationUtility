@@ -16,7 +16,10 @@ namespace LinkGreenODBCUtility
             foreach (char c in dirtyString)
                 if (!removeChars.Contains(c)) // prevent dirty chars
                     result.Append(c);
-            return result.ToString();
+
+            // Remove unwanted ascii chars
+            string resultString = Regex.Replace(result.ToString(), @"[^\u0020-\u007F]+", string.Empty);
+            return resultString;
         }
 
         public static string CleanStringOfNonDigits(string s)
