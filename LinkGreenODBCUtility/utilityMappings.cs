@@ -1045,7 +1045,7 @@ namespace LinkGreenODBCUtility
         {
             string mappedDsnName = Mapping.GetDsnName("Suppliers");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Suppliers", true, "")) {
+            if (newMapping.MigrateData("Suppliers")) {
                 MessageBox.Show("Suppliers migrated successfully.", "Suppliers Migrated");
                 Logger.Instance.Debug($"Suppliers migrated using DSN: {mappedDsnName}");
             } else {

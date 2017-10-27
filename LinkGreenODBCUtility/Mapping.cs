@@ -384,7 +384,7 @@ namespace LinkGreenODBCUtility
             return new List<string>();
         }
 
-        public bool MigrateData(string tableName, bool nuke = true, string delimiter = "`")
+        public bool MigrateData(string tableName, bool nuke = true)
         {
             if (ValidateRequiredFields(tableName))
             {
@@ -400,14 +400,14 @@ namespace LinkGreenODBCUtility
                     fromColumnNames.Add(fromColumn.MappingName);
                 }
 
-                string chainedToColumnNames = string.Join(",", toColumnNames.Select(c => $"{delimiter}{c}{delimiter}"));
+                string chainedToColumnNames = string.Join(",", toColumnNames);
 
-                string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{delimiter}{c}{delimiter}"));
+                string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 var _connection = new OdbcConnection();
                 _connection.ConnectionString = "DSN=" + DsnName;
 
-                string sql = $"SELECT {chainedFromColumnNames} FROM {delimiter}{tableMappingName}{delimiter}";
+                string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
                 var command = new OdbcCommand(sql)
                 {
                     Connection = _connection
@@ -437,7 +437,7 @@ namespace LinkGreenODBCUtility
 
                     var _conn = new OdbcConnection();
                     _conn.ConnectionString = "DSN=" + TransferDsnName;
-                    var nukeCommand = new OdbcCommand($"DELETE * FROM {delimiter}{tableName}{delimiter}")
+                    var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
                     {
                         Connection = _conn
                     };
@@ -473,7 +473,7 @@ namespace LinkGreenODBCUtility
                                 readerColumns.Add(text);
                             }
                             string readerColumnValues = "'" + string.Join("','", readerColumns) + "'";
-                            string stmt = $"INSERT INTO {delimiter}{tableName}{delimiter} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+                            string stmt = $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
                             var comm = new OdbcCommand(stmt)
                             {
@@ -757,7 +757,7 @@ namespace LinkGreenODBCUtility
         private static string ValueOrNull(string value, string fieldType = "Short Text")
         {
             var delimiter = (fieldType == "Number" || fieldType == "Decimal") ? "" : "'";
-            return string.IsNullOrEmpty(value) ? "null" : $"{delimiter}{value.Replace("'", "''").Replace("\"", "\\\"")}{delimiter}";
+            return string.IsNullOrEmpty(value) ? "null" : $"{value.Replace("'", "''").Replace("\"", "\\\"")}";
         }
 
         private bool ValidateRequiredFields(string tableName)
