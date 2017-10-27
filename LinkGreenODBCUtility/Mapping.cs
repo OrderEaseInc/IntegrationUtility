@@ -525,8 +525,9 @@ namespace LinkGreenODBCUtility
         /// </summary>
         /// <param name="tableName">Name of the Access table to push</param>
         /// <param name="tableKey">Name of the Field Name that maps to the primary key of the mapped table</param>
+        /// <param name="clearProduction">Whether to clear out the production table before populating it.</param>
         /// <returns>True if successful</returns>
-        public bool PushData(string tableName, string tableKey)
+        public bool PushData(string tableName, string tableKey, bool clearProduction = false)
         {
             if (ValidateRequiredFields(tableName)) {
                 string tableMappingName = GetTableMapping(tableName);
@@ -543,6 +544,23 @@ namespace LinkGreenODBCUtility
                 string chainedToColumnNames = string.Join(",", toColumnNames.Select(c => $"{c}"));
 
                 string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
+
+                if (clearProduction) {
+                    var _conn = new OdbcConnection($"DSN={DsnName}");
+                    var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}") {
+                        Connection = _conn
+                    };
+
+                    _conn.Open();
+                    try {
+                            clearCommand.ExecuteNonQuery();
+                            Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
+                    } finally {
+                        _conn.Close();
+                    }
+                }
 
                 var _connection = new OdbcConnection();
                 _connection.ConnectionString = "DSN=" + TransferDsnName;
@@ -563,9 +581,9 @@ namespace LinkGreenODBCUtility
                     }
 
                     if (columnIndexes.Count > 0) {
-                        Logger.Instance.Debug($"Column indexes created for migrating data to {TransferDsnName}.{tableMappingName}.");
+                        Logger.Instance.Debug($"Column indexes created for migrating data to {DsnName}.{tableMappingName}.");
                     } else {
-                        Logger.Instance.Warning($"No column indexes were created for migrating data to {TransferDsnName}.{tableMappingName}.");
+                        Logger.Instance.Warning($"No column indexes were created for migrating data to {DsnName}.{tableMappingName}.");
                     }
 
                     var _conn = new OdbcConnection();

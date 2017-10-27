@@ -6,6 +6,7 @@ namespace LinkGreenODBCUtility
     {
         private readonly SupplierRepository _supplierRepository;
         private const string TableName = "Suppliers";
+        private const string TableKey = "SupplierId";
 
         public Suppliers()
         {
@@ -45,12 +46,12 @@ namespace LinkGreenODBCUtility
             // Download from LinkGreen to Access
             Download();
             // Push any missing records to the Production database
-            var mappedDsnName = new Mapping().GetDsnName("Suppliers");
+            var mappedDsnName = new Mapping().GetDsnName(TableName);
             var newMapping = new Mapping(mappedDsnName);
-            newMapping.PushData("Suppliers", "SupplierId");
+            newMapping.PushData(TableName, TableKey);
 
             // Update the Access database with the latest info from the production db
-            newMapping.UpdateData("Suppliers", "SupplierId");
+            newMapping.UpdateData(TableName, TableKey);
 
             // Send it up to LinkGreen
             var result = _supplierRepository.SyncAllSuppliers();

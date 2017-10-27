@@ -16,8 +16,6 @@ namespace DataTransfer.AccessDatabase
             _connection = new OdbcConnection(connectionString);
         }
 
-        protected static OdbcConnection Connection => _connection;
-
         protected virtual T PopulateRecord(dynamic reader)
         {
             return null;
@@ -144,5 +142,10 @@ namespace DataTransfer.AccessDatabase
                 _connection.Close();
             }
         }
+
+        public static string NullableString(string value) => value == null ? "null" : $"'{value.Replace("'", "''").Replace("\"", "\\\"")}'";
+        public static string NullableInt(int? value) => value.HasValue ? value.ToString() : "null";
+        public static string NullableDecimal(decimal? value) => value.HasValue ? value.ToString() : "null";
+
     }
 }

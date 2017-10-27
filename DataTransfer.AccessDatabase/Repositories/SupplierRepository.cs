@@ -64,15 +64,13 @@ namespace DataTransfer.AccessDatabase
         {
             var sql =
                 $"INSERT INTO {TableName} (SupplierId, SupplierName, ContactName, Email, Phone, OurBillToNumber, OurSupplierNumber) " +
-                $"Values ({supplier.Id}, {StringOrNull(supplier.Name)}, {StringOrNull(supplier.OurContactInfo?.ContactName)}, " +
-                $"{StringOrNull(supplier.OurContactInfo?.Email)}, {StringOrNull(supplier.OurContactInfo?.Phone)}, " +
-                $"{StringOrNull(supplier.OurContactInfo?.OurBillToNumber)}, {StringOrNull(supplier.OurContactInfo?.OurSupplierNumber)})";
+                $"Values ({supplier.Id}, {NullableString(supplier.Name)}, {NullableString(supplier.OurContactInfo?.ContactName)}, " +
+                $"{NullableString(supplier.OurContactInfo?.Email)}, {NullableString(supplier.OurContactInfo?.Phone)}, " +
+                $"{NullableString(supplier.OurContactInfo?.OurBillToNumber)}, {NullableString(supplier.OurContactInfo?.OurSupplierNumber)})";
             using (var command = new OdbcCommand(sql)) {
                 ExecuteCommand(command);
             }
         }
-
-        private static string StringOrNull(string value) => string.IsNullOrEmpty(value) ? "null" : $"'{value.Replace("'", "''").Replace("\"", "\\\"")}'";
 
         protected override Supplier PopulateRecord(dynamic reader)
         {
@@ -92,13 +90,5 @@ namespace DataTransfer.AccessDatabase
                 throw new InvalidDataException("One of the fields in the source ODBC database has an invalid column type or value", exception);
             }
         }
-    }
-
-    public enum SupplierSyncStates
-    {
-        Added,
-        Unchanged,
-        MappingRequired,
-        Mapped
     }
 }
