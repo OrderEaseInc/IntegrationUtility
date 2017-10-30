@@ -21,5 +21,7 @@ namespace LinkGreenODBCUtility
         public string DataType { get; set; }
         
         public bool Required { get; set; }
+
+        public bool Updatable { get; set; }
     }
 }

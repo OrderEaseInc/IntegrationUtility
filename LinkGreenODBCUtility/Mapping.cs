@@ -288,7 +288,7 @@ namespace LinkGreenODBCUtility
         {
             var _connection = new OdbcConnection();
             _connection.ConnectionString = "DSN=" + TransferDsnName;
-            var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` " +
+            var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
                                           $"AND `MappingName` IS NOT NULL", _connection);
@@ -326,6 +326,7 @@ namespace LinkGreenODBCUtility
                     row.Description = reader[columnIndexes["Description"]].ToString();
                     row.DataType = reader[columnIndexes["DataType"]].ToString();
                     row.Required = (bool)reader[columnIndexes["Required"]];
+                    row.Updatable = (bool)reader[columnIndexes["Updatable"]];
                     rows.Add(row);
                 }
 
@@ -400,14 +401,14 @@ namespace LinkGreenODBCUtility
                     fromColumnNames.Add(fromColumn.MappingName);
                 }
 
-                string chainedToColumnNames = "`" + string.Join("`,`", toColumnNames) + "`";
+                string chainedToColumnNames = string.Join(",", toColumnNames);
 
-                string chainedFromColumnNames = "`" + string.Join("`,`", fromColumnNames) + "`";
+                string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 var _connection = new OdbcConnection();
                 _connection.ConnectionString = "DSN=" + DsnName;
 
-                string sql = $"SELECT {chainedFromColumnNames} FROM `{tableMappingName}`";
+                string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
                 var command = new OdbcCommand(sql)
                 {
                     Connection = _connection
@@ -437,7 +438,7 @@ namespace LinkGreenODBCUtility
 
                     var _conn = new OdbcConnection();
                     _conn.ConnectionString = "DSN=" + TransferDsnName;
-                    var nukeCommand = new OdbcCommand($"DELETE * FROM `{tableName}`")
+                    var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
                     {
                         Connection = _conn
                     };
@@ -573,6 +574,246 @@ namespace LinkGreenODBCUtility
             }
 
             return text;
+        }
+
+        /// <summary>
+        /// Pushes data from the Access database into 
+        /// </summary>
+        /// <param name="tableName">Name of the Access table to push</param>
+        /// <param name="tableKey">Name of the Field Name that maps to the primary key of the mapped table</param>
+        /// <param name="clearProduction">Whether to clear out the production table before populating it.</param>
+        /// <returns>True if successful</returns>
+        public bool PushData(string tableName, string tableKey, bool clearProduction = false)
+        {
+            if (ValidateRequiredFields(tableName)) {
+                string tableMappingName = GetTableMapping(tableName);
+
+                List<MappingField> fromColumns = GetMappedFields(tableName);
+                List<string> toColumnNames = new List<string>();
+                List<string> fromColumnNames = new List<string>();
+
+                foreach (MappingField fromColumn in fromColumns) {
+                    toColumnNames.Add(fromColumn.MappingName);
+                    fromColumnNames.Add(fromColumn.FieldName);
+                }
+
+                string chainedToColumnNames = string.Join(",", toColumnNames.Select(c => $"{c}"));
+
+                string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
+
+                if (clearProduction) {
+                    var _conn = new OdbcConnection($"DSN={DsnName}");
+                    var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}") {
+                        Connection = _conn
+                    };
+
+                    _conn.Open();
+                    try {
+                            clearCommand.ExecuteNonQuery();
+                            Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
+                    } finally {
+                        _conn.Close();
+                    }
+                }
+
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = "DSN=" + TransferDsnName;
+
+                string sql = $"SELECT {chainedFromColumnNames} FROM {tableName}";
+                var command = new OdbcCommand(sql) {
+                    Connection = _connection
+                };
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                try {
+                    for (int x = 0; x < reader.FieldCount; x++) {
+                        string fieldName = GetFieldMapping(tableName, reader.GetName(x));
+                        if (!string.IsNullOrEmpty(fieldName)) {
+                            columnIndexes.Add(fieldName, x);
+                        }
+                    }
+
+                    if (columnIndexes.Count > 0) {
+                        Logger.Instance.Debug($"Column indexes created for migrating data to {DsnName}.{tableMappingName}.");
+                    } else {
+                        Logger.Instance.Warning($"No column indexes were created for migrating data to {DsnName}.{tableMappingName}.");
+                    }
+
+                    var _conn = new OdbcConnection();
+                    _conn.ConnectionString = "DSN=" + DsnName;
+
+                    // we need to ensure that this record doesn't exist in the production db already
+                    var mappedKey = GetFieldMapping(tableName, tableKey);
+                    string existsSql = null;
+
+                    var rowCount = 0;
+                    while (reader.Read()) {
+                        if (columnIndexes.Count == toColumnNames.Count) {                            
+                            List<string> readerColumns = new List<string>();
+                            foreach (string col in toColumnNames) {                                
+                                string text = ValueOrNull(reader[columnIndexes[col]].ToString());
+                                readerColumns.Add(text);
+                                if (col == mappedKey) {
+                                    existsSql = $"SELECT * FROM {tableMappingName} WHERE {mappedKey} = {text}";
+                                }
+                            }
+                            string readerColumnValues = string.Join(",", readerColumns);
+                            string stmt = $"INSERT INTO {tableMappingName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+
+                            var comm = new OdbcCommand(stmt) {
+                                Connection = _conn
+                            };
+
+                            _conn.Open();
+
+                            if (!string.IsNullOrEmpty(existsSql)) {
+                                var existsCommand = new OdbcCommand(existsSql, _conn);
+                                var existsReader = existsCommand.ExecuteReader();
+                                if (existsReader.Read()) {
+                                    // there's already a record with this key. move along...
+                                    _conn.Close();
+                                    continue;
+                                }
+                            }
+                            try {
+                                comm.ExecuteNonQuery();
+                                rowCount++;
+                            } catch (OdbcException e) {
+                                Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                            } finally {
+                                _conn.Close();
+                            }
+
+                        }
+                    }
+
+                    if (rowCount > 0) {
+                        Logger.Instance.Debug($"{rowCount} records inserted into {DsnName}.{tableMappingName}.");
+                    } else {
+                        Logger.Instance.Warning($"No records inserted into {DsnName}.{tableMappingName}.");
+                    }
+
+                    return true;
+                } finally {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+            return false;
+        }
+
+        /// <summary>
+        /// Updates updatable fields in the Access database from the production data
+        /// </summary>
+        /// <param name="tableName">Name of the Access table to push</param>
+        /// <param name="tableKey">Name of the Field Name that maps to the primary key of the mapped table</param>
+        /// <returns>True if successful</returns>
+        public bool UpdateData(string tableName, string tableKey)
+        {
+            if (ValidateRequiredFields(tableName)) {
+                var tableMappingName = GetTableMapping(tableName);
+                var keyMappingName = GetFieldMapping(tableName, tableKey);
+
+                var updatableColumns = GetMappedFields(tableName).Where(c => c.Updatable).ToList();
+                var fromColumnNames = new List<string>();
+
+                foreach (var fromColumn in updatableColumns) {
+                    fromColumnNames.Add(fromColumn.MappingName);
+                }
+
+                string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
+
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = "DSN=" + DsnName;
+
+                string sql = $"SELECT {keyMappingName}, {chainedFromColumnNames} FROM {tableMappingName}";
+                var command = new OdbcCommand(sql) {
+                    Connection = _connection
+                };
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                try {
+                    for (int x = 0; x < reader.FieldCount; x++) {
+                        string fieldName = GetMappingField(tableName, reader.GetName(x));
+                        if (!string.IsNullOrEmpty(fieldName)) {
+                            columnIndexes.Add(fieldName, x);
+                        }
+                    }
+
+                    if (columnIndexes.Count > 0) {
+                        Logger.Instance.Debug($"Column indexes created for migrating data to {TransferDsnName}.{tableName}.");
+                    } else {
+                        Logger.Instance.Warning($"No column indexes were created for migrating data to {TransferDsnName}.{tableName}.");
+                    }
+
+                    var _conn = new OdbcConnection();
+                    _conn.ConnectionString = "DSN=" + TransferDsnName;
+                    
+                    var rowCount = 0;
+                    while (reader.Read()) {
+                        if (columnIndexes.Count == updatableColumns.Count + 1) {
+                            List<string> readerColumns = new List<string>();
+                            foreach (var col in updatableColumns) {
+                                var colName = col.FieldName;
+                                string value = ValueOrNull(reader[columnIndexes[colName]].ToString(), col.DataType);
+                                if (value != "null") {
+                                    readerColumns.Add($"{colName} = {value}");
+                                }
+                            }
+                            if (!readerColumns.Any()) {
+                                _conn.Close();
+                                continue;
+                            }
+
+                            var keyValue = ValueOrNull(reader[columnIndexes[tableKey]].ToString(), "Number");
+                            string readerColumnValues = string.Join(",", readerColumns);
+                            string stmt = $"UPDATE {tableName} SET {readerColumnValues} WHERE {tableKey} = {keyValue}";
+
+                            var comm = new OdbcCommand(stmt) {
+                                Connection = _conn
+                            };
+
+                            _conn.Open();
+
+                            try {
+                                comm.ExecuteNonQuery();
+                                rowCount++;
+                            } catch (OdbcException e) {
+                                Logger.Instance.Error($"Failed to update record in {DsnName}.{tableMappingName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                            } finally {
+                                _conn.Close();
+                            }
+
+                        }
+                    }
+
+                    if (rowCount > 0) {
+                        Logger.Instance.Debug($"{rowCount} records updated in {TransferDsnName}.{tableName}.");
+                    } else {
+                        Logger.Instance.Warning($"No records updated in {TransferDsnName}.{tableName}.");
+                    }
+
+                    return true;
+                } finally {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+            return false;
+        }
+
+        private static string ValueOrNull(string value, string fieldType = "Short Text")
+        {
+            var delimiter = (fieldType == "Number" || fieldType == "Decimal") ? "" : "'";
+            return string.IsNullOrEmpty(value) ? "null" : $"{value.Replace("'", "''").Replace("\"", "\\\"")}";
         }
 
         private bool ValidateRequiredFields(string tableName)

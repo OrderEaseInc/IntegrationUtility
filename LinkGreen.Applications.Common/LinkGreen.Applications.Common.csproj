@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ApiResult.cs" />
+    <Compile Include="Model\Supplier.cs" />
+    <Compile Include="Model\SupplierContact.cs" />
     <Compile Include="Model\CompanyAndRelationshipResult.cs" />
     <Compile Include="Model\Company.cs" />
     <Compile Include="Model\InventoryItemRequest.cs" />
@@ -72,7 +74,9 @@
     <Compile Include="Model\PricingLevelItemRequest.cs" />
     <Compile Include="Model\PricingLevelRequest.cs" />
     <Compile Include="Model\PrivateCategory.cs" />
+    <Compile Include="Model\QuantityPricingBreak.cs" />
     <Compile Include="Model\Relationship.cs" />
+    <Compile Include="Model\SupplierInventory.cs" />
     <Compile Include="Model\UserAndCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebServiceHelper.cs" />
