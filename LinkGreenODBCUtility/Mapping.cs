@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -469,7 +470,12 @@ namespace LinkGreenODBCUtility
                             {
                                 string text = reader[columnIndexes[col]].ToString();
                                 text = text.Replace("'", "''").Replace("\"", "\\\"");
+                                string original = text;
                                 text = SanitizeField(tableName, col, text);
+                                if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
+                                {
+                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{col} [{original} -> {text}] {Environment.NewLine}");
+                                }
                                 if (string.IsNullOrEmpty(text))
                                 {
                                     text = "null";
