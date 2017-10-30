@@ -117,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8894A51DAF9149349C7BD56A86C4EDFC"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9DA165068FC60466395832685F512EB2"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
         "MsmSig" = "8:_UNDEFINED"
@@ -149,6 +143,12 @@
         {
         "MsmKey" = "8:_9DA165068FC60466395832685F512EB2"
         "OwnerKey" = "8:_E2DA2259B97C928648F227C0EE9F9B1A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9EC1CECA03ED4422A6FBDEC79A00C39C"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -648,26 +648,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8894A51DAF9149349C7BD56A86C4EDFC"
-            {
-            "SourcePath" = "8:..\\LinkGreenODBCUtility\\Database\\LinkGreenDataTransfer.mdb"
-            "TargetName" = "8:LinkGreenDataTransfer.mdb"
-            "Tag" = "8:"
-            "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9DA165068FC60466395832685F512EB2"
             {
             "AssemblyRegister" = "3:1"
@@ -697,6 +677,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EC1CECA03ED4422A6FBDEC79A00C39C"
+            {
+            "SourcePath" = "8:..\\LinkGreenODBCUtility\\Database\\LinkGreenDataTransfer.mdb"
+            "TargetName" = "8:LinkGreenDataTransfer.mdb"
+            "Tag" = "8:"
+            "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1306A6C6C05C28F3235A209AD7DC78C"
@@ -889,7 +889,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LinkGreen Integration Utility"
         "ProductCode" = "8:{2676D1BB-7830-4D89-A973-52809B2B0A52}"
-        "PackageCode" = "8:{FCB57B31-E4FD-49C0-918C-9B73DB8E9BFF}"
+        "PackageCode" = "8:{713EC02D-0233-4A25-A58F-8AE64078E888}"
         "UpgradeCode" = "8:{703C7E33-305C-43F6-9722-0A36FA6C7187}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
