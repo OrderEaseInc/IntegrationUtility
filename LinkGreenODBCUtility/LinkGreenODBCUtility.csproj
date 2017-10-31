@@ -122,6 +122,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="SupplierInventories.cs" />
     <Compile Include="TaskManager.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="UtilityDashboard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +147,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Log\log-sanitized.txt" />
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />

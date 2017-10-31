@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -470,10 +471,24 @@ namespace LinkGreenODBCUtility
                             {
                                 string text = reader[columnIndexes[col]].ToString();
                                 text = text.Replace("'", "''").Replace("\"", "\\\"");
-                                readerColumns.Add(text);
+                                string original = text;
+                                text = SanitizeField(tableName, col, text);
+                                if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
+                                {
+                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{col} [{original} -> {text}] {Environment.NewLine}");
+                                }
+                                if (string.IsNullOrEmpty(text))
+                                {
+                                    text = "null";
+                                    readerColumns.Add(text);
+                                }
+                                else
+                                {
+                                    readerColumns.Add("'" + text + "'");
+                                }
                             }
-                            string readerColumnValues = "'" + string.Join("','", readerColumns) + "'";
-                            string stmt = $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+                            string readerColumnValues = string.Join(",", readerColumns);
+                            string stmt = $"INSERT INTO `{tableName}` ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
                             var comm = new OdbcCommand(stmt)
                             {
@@ -758,6 +773,47 @@ namespace LinkGreenODBCUtility
         {
             var delimiter = (fieldType == "Number" || fieldType == "Decimal") ? "" : "'";
             return string.IsNullOrEmpty(value) ? "null" : $"{value.Replace("'", "''").Replace("\"", "\\\"")}";
+        }
+
+        private string SanitizeField(string tableName, string field, string text)
+        {
+            string sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly");
+            string sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail");
+            string sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice");
+            string sanitizeAlphanumeric = GetFieldProperty(tableName, field, "SanitizeAlphaNumeric");
+            string sanitizeUniqueId = GetFieldProperty(tableName, field, "SanitizeUniqueId");
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                if (Convert.ToBoolean(sanitizeNumbersOnly))
+                {
+                    text = Tools.CleanStringOfNonDigits(text);
+                }
+                
+                if (Convert.ToBoolean(sanitizeEmail))
+                {
+                    text = Tools.CleanEmail(text);
+                }
+                
+                if (Convert.ToBoolean(sanitizePrice))
+                {
+                    text = Tools.FormatDecimal(text);
+                }
+                
+                if (Convert.ToBoolean(sanitizeAlphanumeric))
+                {
+                    text = Tools.CleanAlphanumeric(text);
+                }
+                
+                if (Convert.ToBoolean(sanitizeUniqueId))
+                {
+                    text = Tools.CleanUniqueId(text);
+                }
+
+                return !string.IsNullOrEmpty(text) ? Tools.CleanStringForSql(text) : "";
+            }
+
+            return text;
         }
 
         private bool ValidateRequiredFields(string tableName)

@@ -188,9 +188,7 @@ namespace LinkGreenODBCUtility
                 bool? updateCategories = null;
                 while (reader.Read())
                 {
-                    bool result;
-                    bool.TryParse(reader[0].ToString(), out result);
-                    updateCategories = result;
+                    updateCategories = Convert.ToInt32(reader[0].ToString()) == 1;
                 }
 
                 if (updateCategories == null)
@@ -242,6 +240,42 @@ namespace LinkGreenODBCUtility
             {
                 _connection.Close();
             }
+        }
+
+        public static bool GetSanitizeLog()
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = "DSN=" + DsnName;
+            var command = new OdbcCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
+            _connection.Open();
+            OdbcDataReader reader = command.ExecuteReader();
+            try
+            {
+                bool? sanitizeLog = null;
+                while (reader.Read())
+                {
+                    sanitizeLog = Convert.ToInt32(reader[0].ToString()) == 1;
+                }
+
+                if (sanitizeLog == null)
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    sanitizeLog = Convert.ToInt32(config.AppSettings.Settings["SanitizeLog"].Value) == 1;
+                }
+
+                return sanitizeLog ?? false;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occurred while retrieving the setting SanitizeLog: {e.Message}");
+            }
+            finally
+            {
+                reader.Close();
+                _connection.Close();
+            }
+
+            return false;
         }
 
         public static void SetupAppConfig(string apiKey)

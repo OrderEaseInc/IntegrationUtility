@@ -57,19 +57,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_26CD367B9F3B0A15598134796E9A048D"
+        "MsmKey" = "8:_31AE3381BE38238FA99C33BAF2916E51"
+        "OwnerKey" = "8:_EA261AB456790999E8C9A9E8046F47EA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_31AE3381BE38238FA99C33BAF2916E51"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E2574F3E54EF8CD866550485E207FDD"
-        "OwnerKey" = "8:_89A36537D3136E7C7846D17F526C8105"
+        "MsmKey" = "8:_3BA57E9167B8F76F331AA37B6FD21975"
+        "OwnerKey" = "8:_31AE3381BE38238FA99C33BAF2916E51"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2E2574F3E54EF8CD866550485E207FDD"
+        "MsmKey" = "8:_3BA57E9167B8F76F331AA37B6FD21975"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -111,18 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_89A36537D3136E7C7846D17F526C8105"
-        "OwnerKey" = "8:_26CD367B9F3B0A15598134796E9A048D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_89A36537D3136E7C7846D17F526C8105"
-        "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9DA165068FC60466395832685F512EB2"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
         "MsmSig" = "8:_UNDEFINED"
@@ -153,20 +147,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BA2BB336F12941B086339671B180DE6A"
+        "MsmKey" = "8:_9EC1CECA03ED4422A6FBDEC79A00C39C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BADB37D35E07672CF0354DC18563C047"
-        "OwnerKey" = "8:_89A36537D3136E7C7846D17F526C8105"
+        "MsmKey" = "8:_B1306A6C6C05C28F3235A209AD7DC78C"
+        "OwnerKey" = "8:_31AE3381BE38238FA99C33BAF2916E51"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_BADB37D35E07672CF0354DC18563C047"
+        "MsmKey" = "8:_B1306A6C6C05C28F3235A209AD7DC78C"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B6D27C016F474D4E975309805F772F53"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -179,6 +179,36 @@
         {
         "MsmKey" = "8:_E2DA2259B97C928648F227C0EE9F9B1A"
         "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EA261AB456790999E8C9A9E8046F47EA"
+        "OwnerKey" = "8:_4CD7E1D5CF4D45F19F9B99910CFBBB0A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_0BF3B8C650F61118D004ECD76D2C7097"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EA261AB456790999E8C9A9E8046F47EA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_31AE3381BE38238FA99C33BAF2916E51"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B1306A6C6C05C28F3235A209AD7DC78C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -232,31 +262,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_26CD367B9F3B0A15598134796E9A048D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_89A36537D3136E7C7846D17F526C8105"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2E2574F3E54EF8CD866550485E207FDD"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BADB37D35E07672CF0354DC18563C047"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0BF3B8C650F61118D004ECD76D2C7097"
+        "OwnerKey" = "8:_3BA57E9167B8F76F331AA37B6FD21975"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -478,20 +484,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_26CD367B9F3B0A15598134796E9A048D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_31AE3381BE38238FA99C33BAF2916E51"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DataTransfer.AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:LinkGreen.Applications.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_26CD367B9F3B0A15598134796E9A048D"
+                    "_31AE3381BE38238FA99C33BAF2916E51"
                     {
-                    "Name" = "8:DataTransfer.AccessDatabase.dll"
+                    "Name" = "8:LinkGreen.Applications.Common.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:DataTransfer.AccessDatabase.dll"
+            "SourcePath" = "8:LinkGreen.Applications.Common.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
@@ -509,20 +515,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2E2574F3E54EF8CD866550485E207FDD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3BA57E9167B8F76F331AA37B6FD21975"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_2E2574F3E54EF8CD866550485E207FDD"
+                    "_3BA57E9167B8F76F331AA37B6FD21975"
                     {
-                    "Name" = "8:RestSharp.dll"
+                    "Name" = "8:Newtonsoft.Json.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:RestSharp.dll"
+            "SourcePath" = "8:Newtonsoft.Json.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
@@ -642,37 +648,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_89A36537D3136E7C7846D17F526C8105"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:LinkGreen.Applications.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_89A36537D3136E7C7846D17F526C8105"
-                    {
-                    "Name" = "8:LinkGreen.Applications.Common.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:LinkGreen.Applications.Common.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9DA165068FC60466395832685F512EB2"
             {
             "AssemblyRegister" = "3:1"
@@ -704,9 +679,9 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA2BB336F12941B086339671B180DE6A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EC1CECA03ED4422A6FBDEC79A00C39C"
             {
-            "SourcePath" = "8:C:\\Shared\\LinkGreenDataTransfer.mdb"
+            "SourcePath" = "8:..\\LinkGreenODBCUtility\\Database\\LinkGreenDataTransfer.mdb"
             "TargetName" = "8:LinkGreenDataTransfer.mdb"
             "Tag" = "8:"
             "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
@@ -724,20 +699,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BADB37D35E07672CF0354DC18563C047"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B1306A6C6C05C28F3235A209AD7DC78C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_BADB37D35E07672CF0354DC18563C047"
+                    "_B1306A6C6C05C28F3235A209AD7DC78C"
                     {
-                    "Name" = "8:Newtonsoft.Json.dll"
+                    "Name" = "8:RestSharp.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
+            "SourcePath" = "8:RestSharp.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
@@ -753,6 +728,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B6D27C016F474D4E975309805F772F53"
+            {
+            "SourcePath" = "8:..\\LinkGreenODBCUtility\\Log\\log-sanitized.txt"
+            "TargetName" = "8:log-sanitized.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C8D373B8025843F4954CDDD53395A8AE"
@@ -789,6 +784,37 @@
                     }
                 }
             "SourcePath" = "8:Microsoft.AI.DependencyCollector.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EA261AB456790999E8C9A9E8046F47EA"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:DataTransfer.AccessDatabase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EA261AB456790999E8C9A9E8046F47EA"
+                    {
+                    "Name" = "8:DataTransfer.AccessDatabase.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:DataTransfer.AccessDatabase.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BB5E8BE26A464368A3437EFB2224A2EF"
@@ -863,7 +889,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:LinkGreen Integration Utility"
         "ProductCode" = "8:{2676D1BB-7830-4D89-A973-52809B2B0A52}"
-        "PackageCode" = "8:{311214FB-3DA3-4014-A385-7736D0D264CD}"
+        "PackageCode" = "8:{713EC02D-0233-4A25-A58F-8AE64078E888}"
         "UpgradeCode" = "8:{703C7E33-305C-43F6-9722-0A36FA6C7187}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

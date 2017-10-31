@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -79,21 +80,41 @@ namespace LinkGreenODBCUtility
                         Inactive = !product.Active,
                         QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
                     };
-
+                    
+                    bool updateCategories = Settings.GetUpdateCategories();
+                    //lets check if this item already exists, if so just update qty, else
+                    var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
                     var existingCategory = existingCategories.FirstOrDefault(s => s.Name == product.Category);
-                    if (existingCategory == null)
+
+                    // Add
+                    if (existing == null)
                     {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                        existingCategories.Add(existingCategory);
+                        if (existingCategory == null)
+                        {
+                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                            existingCategories.Add(existingCategory);
+                        }
+                    }
+                    // Update
+                    else
+                    {
+                        if (existingCategory == null && updateCategories)
+                        {
+                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                            existingCategories.Add(existingCategory);
+                        }
                     }
 
-                    int existingCategoryId = 0;
-                    if (existingCategory != null)
+                    
+                    if (existingCategory != null && (updateCategories || existing == null))
                     {
-                        existingCategoryId = existingCategory.Id;
+                         request.CategoryId = existingCategory.Id;
                     }
-
-                    request.CategoryId = existingCategoryId;
+                    else if (existing != null)
+                    {
+                        request.CategoryId = existing.CategoryId;
+                    }
+                    
                     request.NetPrice = product.NetPrice;
                     request.OpenSizeDescription = product.OpenSizeDescription ?? "";
                     request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
@@ -108,9 +129,6 @@ namespace LinkGreenODBCUtility
                     request.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
                     request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
                     request.SuggestedRetailPrice = product.SuggestedRetailPrice;
-
-                    //lets check if this item already exists, if so just update qty, else
-                    var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
 
                     if (existing != null)
                     {
