@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Odbc;
+using System.IO;
 using LinkGreen.Applications.Common.Model;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
     public class BuyerInventoryRepository : AdoRepository<BuyerInventory>
     {
-        private const string TableName = "SupplierInventory";
+        private const string TableName = "BuyerInventories";
 
         public BuyerInventoryRepository(string connectionString) : base(connectionString) { }
 
@@ -28,6 +31,41 @@ namespace DataTransfer.AccessDatabase
         {
             using (var command = new OdbcCommand($"SELECT * FROM {TableName}")) {
                 return GetRecords(command);
+            }
+        }
+
+        protected override BuyerInventory PopulateRecord(dynamic reader)
+        {
+            try {
+                return new BuyerInventory {
+                    Id = reader.Id,
+                    Category = reader.Category,
+                    Description = reader.Description,
+                    PrivateSku = reader.PrivateSku,
+                    Location = reader.Location,
+                    UPC = reader.UPC,
+                    MinOrderSpring = reader.MinOrderSpring,
+                    MinOrderSummer = reader.MinOrderSummer,
+                    FreightFactor = reader.FreightFactor,
+                    QuantityAvailable = reader.QuantityAvailable,
+                    Comments = reader.Comments,
+                    SuggestedRetailPrice = reader.SuggestedRetailPrice,
+                    OpenSizeDescription = reader.OpenSizeDescription,
+                    NetPrice = reader.NetPrice,
+                    SlaveQuantityPerMaster = reader.SlaveQuantityPerMaster,
+                    SlaveQuantityDescription = reader.SlaveQuantityDescription,
+                    MasterQuantityDescription = reader.MasterQuantityDescription,
+                    Inactive = reader.Inactive,
+                    RetailPrice = reader.RetailPrice,
+                    RetailOrderLevel = reader.RetailOrderLevel,
+                    AmazonSell = reader.AmazonSell,
+                    OnlineSell = reader.OnlineSell,
+                    SupplierId = reader.SupplierId,
+                    SupplierSku = reader.SupplierSku
+                };
+            } catch (RuntimeBinderException exception) {
+                Console.WriteLine(exception);
+                throw new InvalidDataException("One of the fields in the source ODBC database has an invalid column type or value", exception);
             }
         }
     }

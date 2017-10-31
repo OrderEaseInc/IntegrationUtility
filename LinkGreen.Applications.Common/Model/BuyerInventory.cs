@@ -3,11 +3,14 @@
     public class BuyerInventory
     {
         public int? Id { get; set; }
-        public int? CategoryId { get; set; }
+        // Note: this isn't in the Transfer table
+        public int CategoryId { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
         public string PrivateSku { get; set; }
+        // Note: this isn't in the Transfer table
         public int? LocationId { get; set; }
+        public string Location { get; set; }
         public string UPC { get; set; }
         public int? MinOrderSpring { get; set; }
         public int? MinOrderSummer { get; set; }

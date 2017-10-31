@@ -303,7 +303,7 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static bool PushBuyerInventory(BuyerInventory item)
+        public static bool PushBuyerInventory(dynamic item)
         {
             var requestUrl = $"/BuyerInventoryService/rest/AddOrUpdateItem/{Key}";
 

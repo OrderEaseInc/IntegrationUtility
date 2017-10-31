@@ -548,17 +548,17 @@ namespace LinkGreenODBCUtility
                 string tableMappingName = GetTableMapping(tableName);
 
                 List<MappingField> fromColumns = GetMappedFields(tableName);
-                List<string> toColumnNames = new List<string>();
+                List<MappingField> toColumns = new List<MappingField>();
                 List<string> fromColumnNames = new List<string>();
 
                 foreach (MappingField fromColumn in fromColumns) {
-                    toColumnNames.Add(fromColumn.MappingName);
+                    toColumns.Add(fromColumn);
                     fromColumnNames.Add(fromColumn.FieldName);
                 }
 
-                string chainedToColumnNames = string.Join(",", toColumnNames.Select(c => $"{c}"));
+                string chainedToColumnNames = string.Join(",", toColumns.Select(c => c.MappingName));
 
-                string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
+                string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 if (clearProduction) {
                     var _conn = new OdbcConnection($"DSN={DsnName}");
@@ -610,12 +610,12 @@ namespace LinkGreenODBCUtility
 
                     var rowCount = 0;
                     while (reader.Read()) {
-                        if (columnIndexes.Count == toColumnNames.Count) {                            
-                            List<string> readerColumns = new List<string>();
-                            foreach (string col in toColumnNames) {                                
-                                string text = ValueOrNull(reader[columnIndexes[col]].ToString());
+                        if (columnIndexes.Count == toColumns.Count) {                            
+                            var readerColumns = new List<string>();
+                            foreach (var col in toColumns) {                                
+                                var text = ValueOrNull(reader[columnIndexes[col.MappingName]].ToString(), col.DataType);
                                 readerColumns.Add(text);
-                                if (col == mappedKey) {
+                                if (col.MappingName == mappedKey) {
                                     existsSql = $"SELECT * FROM {tableMappingName} WHERE {mappedKey} = {text}";
                                 }
                             }
@@ -772,7 +772,7 @@ namespace LinkGreenODBCUtility
         private static string ValueOrNull(string value, string fieldType = "Short Text")
         {
             var delimiter = (fieldType == "Number" || fieldType == "Decimal") ? "" : "'";
-            return string.IsNullOrEmpty(value) ? "null" : $"{value.Replace("'", "''").Replace("\"", "\\\"")}";
+            return string.IsNullOrEmpty(value) ? "null" : $"{delimiter}{value.Replace("'", "''").Replace("\"", "\\\"")}{delimiter}";
         }
 
         private string SanitizeField(string tableName, string field, string text)

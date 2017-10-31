@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
@@ -43,6 +44,16 @@ namespace LinkGreenODBCUtility
 
         public bool Publish()
         {
+            Empty();
+
+            var mappedDsnName = new Mapping().GetDsnName("BuyerInventories");
+            var newMapping = new Mapping(mappedDsnName);
+            if (newMapping.MigrateData("BuyerInventories")) {
+                Logger.Instance.Debug($"Buyer Inventory migrated using DSN: {mappedDsnName}");
+            } else {
+                Logger.Instance.Warning("Failed to migrate Buyer Inventory.");
+            }
+
             string apiKey = ConfigurationManager.AppSettings["ApiKey"];
 
             if (string.IsNullOrEmpty(apiKey)) {
@@ -64,35 +75,79 @@ namespace LinkGreenODBCUtility
                     existingCategories.Add(existingCategory);
                 }
 
-                var request = new BuyerInventory {
-                    PrivateSku = product.PrivateSku,
-                    Description = product.Description ?? string.Empty,
-                    Inactive =  product.Inactive,
-                    CategoryId = (existingCategory?.Id).GetValueOrDefault(),
-                    LocationId = product.LocationId,
-                    UPC = product.UPC ?? string.Empty,
-                    MinOrderSpring = product.MinOrderSpring,
-                    MinOrderSummer = product.MinOrderSummer,
-                    FreightFactor = product.FreightFactor,
-                    QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1,
-                    Comments = product.Comments ?? string.Empty,
-                    SuggestedRetailPrice = product.SuggestedRetailPrice,
-                    OpenSizeDescription = product.OpenSizeDescription ?? string.Empty,
-                    NetPrice = product.NetPrice,
-                    SlaveQuantityPerMaster = product.SlaveQuantityPerMaster,
-                    SlaveQuantityDescription = product.SlaveQuantityDescription ?? string.Empty,
-                    MasterQuantityDescription = product.MasterQuantityDescription ?? string.Empty,
-                    RetailPrice = product.RetailPrice,
-                    RetailOrderLevel = product.RetailOrderLevel,
-                    AmazonSell = product.AmazonSell,
-                    OnlineSell = product.OnlineSell,
-                    SupplierId = product.SupplierId,
-                    SupplierSku = product.SupplierSku ?? string.Empty
-                };
-
                 var existingProduct = existingInventory.FirstOrDefault(i => i.PrivateSKU == product.PrivateSku);
+
+                dynamic request = new ExpandoObject();
+                // NOTE: This is case-sensitive!?
+                request.PrivateSKU = product.PrivateSku;
+                request.CategoryId = (existingCategory?.Id).GetValueOrDefault();
+                request.Description = product.Description ?? string.Empty;
+
                 if (existingProduct != null) {
                     request.Id = existingProduct.Id;
+                }
+                if (product.Inactive.HasValue) {
+                    request.Inactive = product.Inactive.Value;
+                }
+
+                //TODO: Get the location first
+                if (product.LocationId.HasValue) {
+                    request.LocationId = product.LocationId.Value;
+                }
+                if (!string.IsNullOrEmpty(product.UPC)) {
+                    request.UPC = product.UPC;
+                }
+
+                if (product.MinOrderSpring.HasValue) {
+                    request.MinOrderSpring = product.MinOrderSpring.Value;
+                }
+                if (product.MinOrderSummer.HasValue) {
+                    request.MinOrderSummer = product.MinOrderSummer.Value;
+                }
+                if (product.FreightFactor.HasValue) {
+                    request.FreightFactor = product.FreightFactor.Value;
+                }
+                if (product.QuantityAvailable.HasValue) {
+                    request.QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1;
+                }
+                if (!string.IsNullOrEmpty(product.Comments)) {
+                    request.Comments = product.Comments;
+                }
+                if (product.SuggestedRetailPrice.HasValue) {
+                    request.SuggestedRetailPrice = product.SuggestedRetailPrice.Value;
+                }
+                if (!string.IsNullOrEmpty(product.OpenSizeDescription)) {
+                    request.OpenSizeDescription = product.OpenSizeDescription;
+                }
+                if (product.NetPrice.HasValue) {
+                    request.NetPrice = product.NetPrice;
+                }
+                if (product.SlaveQuantityPerMaster.HasValue) {
+                    request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
+                }
+                if (!string.IsNullOrEmpty(product.SlaveQuantityDescription)) {
+                    request.SlaveQuantityDescription = product.SlaveQuantityDescription;
+                }
+                if (!string.IsNullOrEmpty(product.MasterQuantityDescription)) {
+                    request.MasterQuantityDescription = product.MasterQuantityDescription;
+                }
+                if (product.RetailPrice.HasValue) {
+                    request.RetailPrice = product.RetailPrice;
+                }
+                if (product.RetailOrderLevel.HasValue) {
+                    request.RetailOrderLevel = product.RetailOrderLevel;
+                }
+                if (product.AmazonSell.HasValue) {
+                    request.AmazonSell = product.AmazonSell;
+                }
+                if (product.OnlineSell.HasValue) {
+                    request.OnlineSell = product.OnlineSell;
+                }
+                if (product.SupplierId.HasValue) {
+                    request.SupplierId = product.SupplierId;
+                }
+                if (!string.IsNullOrEmpty(product.SupplierSku)) {
+                    request.SupplierSku = product.SupplierSku;
                 }
 
                 WebServiceHelper.PushBuyerInventory(request);
