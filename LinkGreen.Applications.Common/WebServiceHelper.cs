@@ -303,6 +303,19 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
+        public static bool PushBuyerInventory(dynamic item)
+        {
+            var requestUrl = $"/BuyerInventoryService/rest/AddOrUpdateItem/{Key}";
+
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            request.AddJsonBody(item);
+
+            var response = Client.Execute(request);
+
+            return response.StatusCode == HttpStatusCode.OK;
+        }
+
         public static void InviteBuyers(List<CompanyAndRelationshipResult> buyers)
         {
             var requestUrl = $"/RelationshipService/rest/Import/{Key}";

@@ -192,6 +192,28 @@
             this.supplierInventoryDataSource = new System.Windows.Forms.ListBox();
             this.syncSupplierInventory = new System.Windows.Forms.Button();
             this.emptySupplierInventoryTransferTable = new System.Windows.Forms.Button();
+            this.buyerInventory = new System.Windows.Forms.TabPage();
+            this.previewBuyerInventoryMappingOutput = new System.Windows.Forms.Button();
+            this.buyerInventoryFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.migrateBuyerInventory = new System.Windows.Forms.Button();
+            this.activeBuyerInventoryFieldMappingValue = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.mapBuyerInventoryFields = new System.Windows.Forms.Button();
+            this.mappingBuyerInventoryFields = new System.Windows.Forms.ListBox();
+            this.requiredBuyerInventoryFields = new System.Windows.Forms.ListBox();
+            this.mappedBuyerInventoryTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.label51 = new System.Windows.Forms.Label();
+            this.activeBuyerInventoryTableMappingValue = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.buyerInventoryTableName = new System.Windows.Forms.ListBox();
+            this.buyerInventoryDataSource = new System.Windows.Forms.ListBox();
+            this.publishBuyerInventory = new System.Windows.Forms.Button();
+            this.emptyBuyerInventoryTransferTable = new System.Windows.Forms.Button();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
@@ -200,6 +222,7 @@
             this.pricing.SuspendLayout();
             this.suppliers.SuspendLayout();
             this.supplierInventory.SuspendLayout();
+            this.buyerInventory.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tables
@@ -211,6 +234,7 @@
             this.Tables.Controls.Add(this.pricing);
             this.Tables.Controls.Add(this.suppliers);
             this.Tables.Controls.Add(this.supplierInventory);
+            this.Tables.Controls.Add(this.buyerInventory);
             this.Tables.Location = new System.Drawing.Point(13, 12);
             this.Tables.Name = "Tables";
             this.Tables.SelectedIndex = 0;
@@ -1936,6 +1960,237 @@
             this.emptySupplierInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptySupplierInventoryTransferTable.Click += new System.EventHandler(this.emptySupplierInventoriesTransferTable_Click);
             // 
+            // buyerInventory
+            // 
+            this.buyerInventory.Controls.Add(this.previewBuyerInventoryMappingOutput);
+            this.buyerInventory.Controls.Add(this.buyerInventoryFieldDescriptionValue);
+            this.buyerInventory.Controls.Add(this.label7);
+            this.buyerInventory.Controls.Add(this.migrateBuyerInventory);
+            this.buyerInventory.Controls.Add(this.activeBuyerInventoryFieldMappingValue);
+            this.buyerInventory.Controls.Add(this.label36);
+            this.buyerInventory.Controls.Add(this.mapBuyerInventoryFields);
+            this.buyerInventory.Controls.Add(this.mappingBuyerInventoryFields);
+            this.buyerInventory.Controls.Add(this.requiredBuyerInventoryFields);
+            this.buyerInventory.Controls.Add(this.mappedBuyerInventoryTableFieldsLabel);
+            this.buyerInventory.Controls.Add(this.label50);
+            this.buyerInventory.Controls.Add(this.label51);
+            this.buyerInventory.Controls.Add(this.activeBuyerInventoryTableMappingValue);
+            this.buyerInventory.Controls.Add(this.label53);
+            this.buyerInventory.Controls.Add(this.label54);
+            this.buyerInventory.Controls.Add(this.label55);
+            this.buyerInventory.Controls.Add(this.label56);
+            this.buyerInventory.Controls.Add(this.buyerInventoryTableName);
+            this.buyerInventory.Controls.Add(this.buyerInventoryDataSource);
+            this.buyerInventory.Controls.Add(this.publishBuyerInventory);
+            this.buyerInventory.Controls.Add(this.emptyBuyerInventoryTransferTable);
+            this.buyerInventory.Location = new System.Drawing.Point(4, 22);
+            this.buyerInventory.Name = "buyerInventory";
+            this.buyerInventory.Size = new System.Drawing.Size(410, 532);
+            this.buyerInventory.TabIndex = 7;
+            this.buyerInventory.Text = "Buyer Inventory";
+            this.buyerInventory.UseVisualStyleBackColor = true;
+            // 
+            // previewBuyerInventoryMappingOutput
+            // 
+            this.previewBuyerInventoryMappingOutput.Location = new System.Drawing.Point(217, 423);
+            this.previewBuyerInventoryMappingOutput.Name = "previewBuyerInventoryMappingOutput";
+            this.previewBuyerInventoryMappingOutput.Size = new System.Drawing.Size(75, 23);
+            this.previewBuyerInventoryMappingOutput.TabIndex = 87;
+            this.previewBuyerInventoryMappingOutput.Text = "Preview";
+            this.previewBuyerInventoryMappingOutput.UseVisualStyleBackColor = true;
+            this.previewBuyerInventoryMappingOutput.Click += new System.EventHandler(this.previewBuyerInventoryMappingOutput_Click);
+            // 
+            // buyerInventoryFieldDescriptionValue
+            // 
+            this.buyerInventoryFieldDescriptionValue.AutoSize = true;
+            this.buyerInventoryFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buyerInventoryFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
+            this.buyerInventoryFieldDescriptionValue.Name = "buyerInventoryFieldDescriptionValue";
+            this.buyerInventoryFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.buyerInventoryFieldDescriptionValue.TabIndex = 86;
+            this.buyerInventoryFieldDescriptionValue.Text = "N/A";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(25, 445);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(63, 13);
+            this.label7.TabIndex = 85;
+            this.label7.Text = "Description:";
+            // 
+            // migrateBuyerInventory
+            // 
+            this.migrateBuyerInventory.Location = new System.Drawing.Point(164, 494);
+            this.migrateBuyerInventory.Name = "migrateBuyerInventory";
+            this.migrateBuyerInventory.Size = new System.Drawing.Size(88, 23);
+            this.migrateBuyerInventory.TabIndex = 84;
+            this.migrateBuyerInventory.Text = "Migrate Data";
+            this.migrateBuyerInventory.UseVisualStyleBackColor = true;
+            this.migrateBuyerInventory.Click += new System.EventHandler(this.migrateBuyerInventoryData_Click);
+            // 
+            // activeBuyerInventoryFieldMappingValue
+            // 
+            this.activeBuyerInventoryFieldMappingValue.AutoSize = true;
+            this.activeBuyerInventoryFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeBuyerInventoryFieldMappingValue.Location = new System.Drawing.Point(140, 428);
+            this.activeBuyerInventoryFieldMappingValue.Name = "activeBuyerInventoryFieldMappingValue";
+            this.activeBuyerInventoryFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeBuyerInventoryFieldMappingValue.TabIndex = 83;
+            this.activeBuyerInventoryFieldMappingValue.Text = "N/A";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(25, 428);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(109, 13);
+            this.label36.TabIndex = 82;
+            this.label36.Text = "Active Field Mapping:";
+            // 
+            // mapBuyerInventoryFields
+            // 
+            this.mapBuyerInventoryFields.Location = new System.Drawing.Point(298, 423);
+            this.mapBuyerInventoryFields.Name = "mapBuyerInventoryFields";
+            this.mapBuyerInventoryFields.Size = new System.Drawing.Size(87, 23);
+            this.mapBuyerInventoryFields.TabIndex = 81;
+            this.mapBuyerInventoryFields.Text = "Map Selected";
+            this.mapBuyerInventoryFields.UseVisualStyleBackColor = true;
+            this.mapBuyerInventoryFields.Click += new System.EventHandler(this.mapBuyerInventoryFields_Click);
+            // 
+            // mappingBuyerInventoryFields
+            // 
+            this.mappingBuyerInventoryFields.FormattingEnabled = true;
+            this.mappingBuyerInventoryFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingBuyerInventoryFields.Name = "mappingBuyerInventoryFields";
+            this.mappingBuyerInventoryFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingBuyerInventoryFields.TabIndex = 80;
+            // 
+            // requiredBuyerInventoryFields
+            // 
+            this.requiredBuyerInventoryFields.FormattingEnabled = true;
+            this.requiredBuyerInventoryFields.Location = new System.Drawing.Point(26, 282);
+            this.requiredBuyerInventoryFields.Name = "requiredBuyerInventoryFields";
+            this.requiredBuyerInventoryFields.Size = new System.Drawing.Size(174, 134);
+            this.requiredBuyerInventoryFields.TabIndex = 79;
+            // 
+            // mappedBuyerInventoryTableFieldsLabel
+            // 
+            this.mappedBuyerInventoryTableFieldsLabel.AutoSize = true;
+            this.mappedBuyerInventoryTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedBuyerInventoryTableFieldsLabel.Name = "mappedBuyerInventoryTableFieldsLabel";
+            this.mappedBuyerInventoryTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedBuyerInventoryTableFieldsLabel.TabIndex = 78;
+            this.mappedBuyerInventoryTableFieldsLabel.Text = "N/A:";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(28, 265);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(37, 13);
+            this.label50.TabIndex = 77;
+            this.label50.Text = "Fields:";
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label51.Location = new System.Drawing.Point(31, 237);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(96, 13);
+            this.label51.TabIndex = 76;
+            this.label51.Text = "Field Mappings:";
+            // 
+            // activeBuyerInventoryTableMappingValue
+            // 
+            this.activeBuyerInventoryTableMappingValue.AutoSize = true;
+            this.activeBuyerInventoryTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeBuyerInventoryTableMappingValue.Location = new System.Drawing.Point(145, 205);
+            this.activeBuyerInventoryTableMappingValue.Name = "activeBuyerInventoryTableMappingValue";
+            this.activeBuyerInventoryTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeBuyerInventoryTableMappingValue.TabIndex = 75;
+            this.activeBuyerInventoryTableMappingValue.Text = "N/A";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(25, 205);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(114, 13);
+            this.label53.TabIndex = 74;
+            this.label53.Text = "Active Table Mapping:";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(203, 44);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(68, 13);
+            this.label54.TabIndex = 73;
+            this.label54.Text = "Table Name:";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(28, 44);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(64, 13);
+            this.label55.TabIndex = 71;
+            this.label55.Text = "DSN Name:";
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label56.Location = new System.Drawing.Point(28, 16);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(95, 13);
+            this.label56.TabIndex = 70;
+            this.label56.Text = "Table Mapping:";
+            // 
+            // buyerInventoryTableName
+            // 
+            this.buyerInventoryTableName.FormattingEnabled = true;
+            this.buyerInventoryTableName.HorizontalScrollbar = true;
+            this.buyerInventoryTableName.Location = new System.Drawing.Point(206, 60);
+            this.buyerInventoryTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.buyerInventoryTableName.Name = "buyerInventoryTableName";
+            this.buyerInventoryTableName.Size = new System.Drawing.Size(180, 134);
+            this.buyerInventoryTableName.TabIndex = 68;
+            this.buyerInventoryTableName.SelectedIndexChanged += new System.EventHandler(this.buyerInventoryTableName_SelectedIndexChanged);
+            // 
+            // buyerInventoryDataSource
+            // 
+            this.buyerInventoryDataSource.FormattingEnabled = true;
+            this.buyerInventoryDataSource.HorizontalScrollbar = true;
+            this.buyerInventoryDataSource.Location = new System.Drawing.Point(28, 60);
+            this.buyerInventoryDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.buyerInventoryDataSource.Name = "buyerInventoryDataSource";
+            this.buyerInventoryDataSource.Size = new System.Drawing.Size(172, 134);
+            this.buyerInventoryDataSource.TabIndex = 67;
+            this.buyerInventoryDataSource.SelectedIndexChanged += new System.EventHandler(this.buyerInventoryDataSource_SelectedIndexChanged);
+            // 
+            // publishBuyerInventory
+            // 
+            this.publishBuyerInventory.Location = new System.Drawing.Point(258, 494);
+            this.publishBuyerInventory.Name = "publishBuyerInventory";
+            this.publishBuyerInventory.Size = new System.Drawing.Size(126, 23);
+            this.publishBuyerInventory.TabIndex = 72;
+            this.publishBuyerInventory.Text = "Publish To LinkGreen";
+            this.publishBuyerInventory.UseVisualStyleBackColor = true;
+            this.publishBuyerInventory.Click += new System.EventHandler(this.publishBuyerInventories_Click);
+            // 
+            // emptyBuyerInventoryTransferTable
+            // 
+            this.emptyBuyerInventoryTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyBuyerInventoryTransferTable.Name = "emptyBuyerInventoryTransferTable";
+            this.emptyBuyerInventoryTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyBuyerInventoryTransferTable.TabIndex = 69;
+            this.emptyBuyerInventoryTransferTable.Text = "Empty Transfer Table";
+            this.emptyBuyerInventoryTransferTable.UseVisualStyleBackColor = true;
+            this.emptyBuyerInventoryTransferTable.Click += new System.EventHandler(this.emptyBuyerInventoriesTransferTable_Click);
+            // 
             // UtilityMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1968,6 +2223,8 @@
             this.suppliers.PerformLayout();
             this.supplierInventory.ResumeLayout(false);
             this.supplierInventory.PerformLayout();
+            this.buyerInventory.ResumeLayout(false);
+            this.buyerInventory.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2137,6 +2394,28 @@
         private System.Windows.Forms.Button syncSupplierInventory;
         private System.Windows.Forms.Button emptySupplierInventoryTransferTable;
         private System.Windows.Forms.Button pullSuppliersFromLinkGreen;
+        private System.Windows.Forms.TabPage buyerInventory;
+        private System.Windows.Forms.Button previewBuyerInventoryMappingOutput;
+        private System.Windows.Forms.Label buyerInventoryFieldDescriptionValue;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button migrateBuyerInventory;
+        private System.Windows.Forms.Label activeBuyerInventoryFieldMappingValue;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Button mapBuyerInventoryFields;
+        private System.Windows.Forms.ListBox mappingBuyerInventoryFields;
+        private System.Windows.Forms.ListBox requiredBuyerInventoryFields;
+        private System.Windows.Forms.Label mappedBuyerInventoryTableFieldsLabel;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.Label activeBuyerInventoryTableMappingValue;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.ListBox buyerInventoryTableName;
+        private System.Windows.Forms.ListBox buyerInventoryDataSource;
+        private System.Windows.Forms.Button publishBuyerInventory;
+        private System.Windows.Forms.Button emptyBuyerInventoryTransferTable;
     }
 }
 
