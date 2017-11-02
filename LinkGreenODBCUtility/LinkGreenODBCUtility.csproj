@@ -93,7 +93,16 @@
   <ItemGroup>
     <Compile Include="Batch.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="Credentials.cs" />
     <Compile Include="Customers.cs" />
+    <Compile Include="DsnCredentials.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DsnCredentials.Designer.cs">
+      <DependentUpon>DsnCredentials.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DsnCreds.cs" />
+    <Compile Include="Encryption.cs" />
     <Compile Include="EventLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,9 +154,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Log\log-sanitized.txt" />
+    <None Include="Resources\key.png" />
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />
+    <EmbeddedResource Include="DsnCredentials.resx">
+      <DependentUpon>DsnCredentials.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EventLog.resx">
       <DependentUpon>EventLog.cs</DependentUpon>
     </EmbeddedResource>

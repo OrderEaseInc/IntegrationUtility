@@ -58,6 +58,15 @@ namespace LinkGreenODBCUtility
 
             switch (Tables.SelectedIndex)
             {
+                case 0:
+                    string mappedCategoriesDsnName = mapping.GetDsnName("Categories");
+                    cusIdx = customersDataSource.FindString(mappedCategoriesDsnName);
+                    if (cusIdx != -1)
+                    {
+                        categoriesDataSource.SetSelected(cusIdx, true);
+                    }
+                    DisplayActiveTableMapping();
+                    break;
                 case 1:
                     string mappedCustomerDsnName = mapping.GetDsnName("Customers");
                     cusIdx = customersDataSource.FindString(mappedCustomerDsnName);
@@ -541,6 +550,7 @@ namespace LinkGreenODBCUtility
                 string dsnName = categoriesDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
+                tableNames = tableNames ?? new List<string>();
 
                 categoriesTableName.Items.Clear();
                 foreach (string tableName in tableNames)
@@ -628,11 +638,12 @@ namespace LinkGreenODBCUtility
 
         private void customersDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (categoriesDataSource.SelectedItem != null)
+            if (customersDataSource.SelectedItem != null)
             {
                 string dsnName = customersDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
+                tableNames = tableNames ?? new List<string>();
 
                 customersTableName.Items.Clear();
                 foreach (string tableName in tableNames)
@@ -751,6 +762,7 @@ namespace LinkGreenODBCUtility
                 string dsnName = productsDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
+                tableNames = tableNames ?? new List<string>();
 
                 productsTableName.Items.Clear();
                 foreach (string tableName in tableNames)
@@ -873,6 +885,7 @@ namespace LinkGreenODBCUtility
                 string dsnName = pricingDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
+                tableNames = tableNames ?? new List<string>();
 
                 pricingTableName.Items.Clear();
                 foreach (string tableName in tableNames)
@@ -994,6 +1007,7 @@ namespace LinkGreenODBCUtility
                 string dsnName = priceLevelsDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
+                tableNames = tableNames ?? new List<string>();
 
                 priceLevelsTableName.Items.Clear();
                 foreach (string tableName in tableNames)
@@ -1105,6 +1119,71 @@ namespace LinkGreenODBCUtility
             else
             {
                 MessageBox.Show("Price levels failed to publish. No API Key was found", "Publish Failure");
+            }
+        }
+
+        private void setCategoriesUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (categoriesDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(categoriesDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setCustomersUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (customersDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(customersDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setProductsUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (productsDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(productsDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setPriceLevelsUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (priceLevelsDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(priceLevelsDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setPricingUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (pricingDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(pricingDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
             }
         }
     }

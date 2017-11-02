@@ -76,29 +76,6 @@
             this.customersDataSource = new System.Windows.Forms.ListBox();
             this.publishCustomers = new System.Windows.Forms.Button();
             this.emptyCustomersTransferTable = new System.Windows.Forms.Button();
-            this.pricing = new System.Windows.Forms.TabPage();
-            this.previewPricingMappingOutput = new System.Windows.Forms.Button();
-            this.pricingFieldDescriptionValue = new System.Windows.Forms.Label();
-            this.pricingFieldDescriptionLabel = new System.Windows.Forms.Label();
-            this.migratePricingData = new System.Windows.Forms.Button();
-            this.activePricingFieldMappingValue = new System.Windows.Forms.Label();
-            this.activePricingFieldMappingLabel = new System.Windows.Forms.Label();
-            this.mapPricingFields = new System.Windows.Forms.Button();
-            this.mappingPricingFields = new System.Windows.Forms.ListBox();
-            this.pricingFields = new System.Windows.Forms.ListBox();
-            this.mappedPricingTableFieldsLabel = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.activePricingTableMappingValue = new System.Windows.Forms.Label();
-            this.activePricingTableMappingLabel = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.pricingTableName = new System.Windows.Forms.ListBox();
-            this.pricingDataSource = new System.Windows.Forms.ListBox();
-            this.publishPricing = new System.Windows.Forms.Button();
-            this.emptyPricingTransferTable = new System.Windows.Forms.Button();
             this.productsTab = new System.Windows.Forms.TabPage();
             this.previewProductsMappingOutput = new System.Windows.Forms.Button();
             this.productFieldDescriptionValue = new System.Windows.Forms.Label();
@@ -145,12 +122,40 @@
             this.priceLevelsDataSource = new System.Windows.Forms.ListBox();
             this.publishPriceLevels = new System.Windows.Forms.Button();
             this.emptyPriceLevelsTransferTable = new System.Windows.Forms.Button();
+            this.pricing = new System.Windows.Forms.TabPage();
+            this.previewPricingMappingOutput = new System.Windows.Forms.Button();
+            this.pricingFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.pricingFieldDescriptionLabel = new System.Windows.Forms.Label();
+            this.migratePricingData = new System.Windows.Forms.Button();
+            this.activePricingFieldMappingValue = new System.Windows.Forms.Label();
+            this.activePricingFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapPricingFields = new System.Windows.Forms.Button();
+            this.mappingPricingFields = new System.Windows.Forms.ListBox();
+            this.pricingFields = new System.Windows.Forms.ListBox();
+            this.mappedPricingTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.activePricingTableMappingValue = new System.Windows.Forms.Label();
+            this.activePricingTableMappingLabel = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.pricingTableName = new System.Windows.Forms.ListBox();
+            this.pricingDataSource = new System.Windows.Forms.ListBox();
+            this.publishPricing = new System.Windows.Forms.Button();
+            this.emptyPricingTransferTable = new System.Windows.Forms.Button();
+            this.setCategoriesUsernamePW = new System.Windows.Forms.Button();
+            this.setCustomersUsernamePW = new System.Windows.Forms.Button();
+            this.setProductsUsernamePW = new System.Windows.Forms.Button();
+            this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
+            this.setPricingUsernamePW = new System.Windows.Forms.Button();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
-            this.pricing.SuspendLayout();
             this.productsTab.SuspendLayout();
             this.priceLevelsTab.SuspendLayout();
+            this.pricing.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tables
@@ -169,6 +174,7 @@
             // 
             // categories
             // 
+            this.categories.Controls.Add(this.setCategoriesUsernamePW);
             this.categories.Controls.Add(this.previewMappingOutput);
             this.categories.Controls.Add(this.fieldDescription);
             this.categories.Controls.Add(this.fieldDescriptionLabel);
@@ -413,6 +419,7 @@
             // 
             // customers
             // 
+            this.customers.Controls.Add(this.setCustomersUsernamePW);
             this.customers.Controls.Add(this.previewCustomerMappingOutput);
             this.customers.Controls.Add(this.customerFieldDescription);
             this.customers.Controls.Add(this.label4);
@@ -655,252 +662,9 @@
             this.emptyCustomersTransferTable.UseVisualStyleBackColor = true;
             this.emptyCustomersTransferTable.Click += new System.EventHandler(this.emptyCustomersTransferTable_Click);
             // 
-            // pricing
-            // 
-            this.pricing.Controls.Add(this.previewPricingMappingOutput);
-            this.pricing.Controls.Add(this.pricingFieldDescriptionValue);
-            this.pricing.Controls.Add(this.pricingFieldDescriptionLabel);
-            this.pricing.Controls.Add(this.migratePricingData);
-            this.pricing.Controls.Add(this.activePricingFieldMappingValue);
-            this.pricing.Controls.Add(this.activePricingFieldMappingLabel);
-            this.pricing.Controls.Add(this.mapPricingFields);
-            this.pricing.Controls.Add(this.mappingPricingFields);
-            this.pricing.Controls.Add(this.pricingFields);
-            this.pricing.Controls.Add(this.mappedPricingTableFieldsLabel);
-            this.pricing.Controls.Add(this.label18);
-            this.pricing.Controls.Add(this.label19);
-            this.pricing.Controls.Add(this.activePricingTableMappingValue);
-            this.pricing.Controls.Add(this.activePricingTableMappingLabel);
-            this.pricing.Controls.Add(this.label26);
-            this.pricing.Controls.Add(this.label27);
-            this.pricing.Controls.Add(this.label28);
-            this.pricing.Controls.Add(this.label29);
-            this.pricing.Controls.Add(this.pricingTableName);
-            this.pricing.Controls.Add(this.pricingDataSource);
-            this.pricing.Controls.Add(this.publishPricing);
-            this.pricing.Controls.Add(this.emptyPricingTransferTable);
-            this.pricing.Location = new System.Drawing.Point(4, 22);
-            this.pricing.Name = "pricing";
-            this.pricing.Padding = new System.Windows.Forms.Padding(3);
-            this.pricing.Size = new System.Drawing.Size(410, 532);
-            this.pricing.TabIndex = 2;
-            this.pricing.Text = "Pricing";
-            this.pricing.UseVisualStyleBackColor = true;
-            // 
-            // previewPricingMappingOutput
-            // 
-            this.previewPricingMappingOutput.Location = new System.Drawing.Point(217, 423);
-            this.previewPricingMappingOutput.Name = "previewPricingMappingOutput";
-            this.previewPricingMappingOutput.Size = new System.Drawing.Size(75, 23);
-            this.previewPricingMappingOutput.TabIndex = 88;
-            this.previewPricingMappingOutput.Text = "Preview";
-            this.previewPricingMappingOutput.UseVisualStyleBackColor = true;
-            this.previewPricingMappingOutput.Click += new System.EventHandler(this.previewPricingMappingOutput_Click);
-            // 
-            // pricingFieldDescriptionValue
-            // 
-            this.pricingFieldDescriptionValue.AutoSize = true;
-            this.pricingFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pricingFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
-            this.pricingFieldDescriptionValue.Name = "pricingFieldDescriptionValue";
-            this.pricingFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
-            this.pricingFieldDescriptionValue.TabIndex = 87;
-            this.pricingFieldDescriptionValue.Text = "N/A";
-            // 
-            // pricingFieldDescriptionLabel
-            // 
-            this.pricingFieldDescriptionLabel.AutoSize = true;
-            this.pricingFieldDescriptionLabel.Location = new System.Drawing.Point(25, 445);
-            this.pricingFieldDescriptionLabel.Name = "pricingFieldDescriptionLabel";
-            this.pricingFieldDescriptionLabel.Size = new System.Drawing.Size(63, 13);
-            this.pricingFieldDescriptionLabel.TabIndex = 86;
-            this.pricingFieldDescriptionLabel.Text = "Description:";
-            // 
-            // migratePricingData
-            // 
-            this.migratePricingData.Location = new System.Drawing.Point(164, 494);
-            this.migratePricingData.Name = "migratePricingData";
-            this.migratePricingData.Size = new System.Drawing.Size(88, 23);
-            this.migratePricingData.TabIndex = 85;
-            this.migratePricingData.Text = "Migrate Data";
-            this.migratePricingData.UseVisualStyleBackColor = true;
-            this.migratePricingData.Click += new System.EventHandler(this.migratePricingData_Click);
-            // 
-            // activePricingFieldMappingValue
-            // 
-            this.activePricingFieldMappingValue.AutoSize = true;
-            this.activePricingFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.activePricingFieldMappingValue.Location = new System.Drawing.Point(140, 428);
-            this.activePricingFieldMappingValue.Name = "activePricingFieldMappingValue";
-            this.activePricingFieldMappingValue.Size = new System.Drawing.Size(27, 13);
-            this.activePricingFieldMappingValue.TabIndex = 84;
-            this.activePricingFieldMappingValue.Text = "N/A";
-            // 
-            // activePricingFieldMappingLabel
-            // 
-            this.activePricingFieldMappingLabel.AutoSize = true;
-            this.activePricingFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
-            this.activePricingFieldMappingLabel.Name = "activePricingFieldMappingLabel";
-            this.activePricingFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
-            this.activePricingFieldMappingLabel.TabIndex = 83;
-            this.activePricingFieldMappingLabel.Text = "Active Field Mapping:";
-            // 
-            // mapPricingFields
-            // 
-            this.mapPricingFields.Location = new System.Drawing.Point(298, 423);
-            this.mapPricingFields.Name = "mapPricingFields";
-            this.mapPricingFields.Size = new System.Drawing.Size(87, 23);
-            this.mapPricingFields.TabIndex = 82;
-            this.mapPricingFields.Text = "Map Selected";
-            this.mapPricingFields.UseVisualStyleBackColor = true;
-            this.mapPricingFields.Click += new System.EventHandler(this.mapPricingFields_Click);
-            // 
-            // mappingPricingFields
-            // 
-            this.mappingPricingFields.FormattingEnabled = true;
-            this.mappingPricingFields.Location = new System.Drawing.Point(206, 282);
-            this.mappingPricingFields.Name = "mappingPricingFields";
-            this.mappingPricingFields.Size = new System.Drawing.Size(180, 134);
-            this.mappingPricingFields.TabIndex = 81;
-            // 
-            // pricingFields
-            // 
-            this.pricingFields.FormattingEnabled = true;
-            this.pricingFields.Location = new System.Drawing.Point(26, 282);
-            this.pricingFields.Name = "pricingFields";
-            this.pricingFields.Size = new System.Drawing.Size(174, 134);
-            this.pricingFields.TabIndex = 80;
-            this.pricingFields.SelectedIndexChanged += new System.EventHandler(this.pricingFields_SelectedIndexChanged);
-            // 
-            // mappedPricingTableFieldsLabel
-            // 
-            this.mappedPricingTableFieldsLabel.AutoSize = true;
-            this.mappedPricingTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
-            this.mappedPricingTableFieldsLabel.Name = "mappedPricingTableFieldsLabel";
-            this.mappedPricingTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
-            this.mappedPricingTableFieldsLabel.TabIndex = 79;
-            this.mappedPricingTableFieldsLabel.Text = "N/A:";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(28, 265);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(37, 13);
-            this.label18.TabIndex = 78;
-            this.label18.Text = "Fields:";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(31, 237);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(96, 13);
-            this.label19.TabIndex = 77;
-            this.label19.Text = "Field Mappings:";
-            // 
-            // activePricingTableMappingValue
-            // 
-            this.activePricingTableMappingValue.AutoSize = true;
-            this.activePricingTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.activePricingTableMappingValue.Location = new System.Drawing.Point(145, 205);
-            this.activePricingTableMappingValue.Name = "activePricingTableMappingValue";
-            this.activePricingTableMappingValue.Size = new System.Drawing.Size(27, 13);
-            this.activePricingTableMappingValue.TabIndex = 76;
-            this.activePricingTableMappingValue.Text = "N/A";
-            // 
-            // activePricingTableMappingLabel
-            // 
-            this.activePricingTableMappingLabel.AutoSize = true;
-            this.activePricingTableMappingLabel.Location = new System.Drawing.Point(25, 205);
-            this.activePricingTableMappingLabel.Name = "activePricingTableMappingLabel";
-            this.activePricingTableMappingLabel.Size = new System.Drawing.Size(114, 13);
-            this.activePricingTableMappingLabel.TabIndex = 75;
-            this.activePricingTableMappingLabel.Text = "Active Table Mapping:";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label26.Location = new System.Drawing.Point(28, 468);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(53, 13);
-            this.label26.TabIndex = 74;
-            this.label26.Text = "Actions:";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(203, 44);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(68, 13);
-            this.label27.TabIndex = 73;
-            this.label27.Text = "Table Name:";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(28, 44);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(64, 13);
-            this.label28.TabIndex = 71;
-            this.label28.Text = "DSN Name:";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(28, 16);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(95, 13);
-            this.label29.TabIndex = 70;
-            this.label29.Text = "Table Mapping:";
-            // 
-            // pricingTableName
-            // 
-            this.pricingTableName.FormattingEnabled = true;
-            this.pricingTableName.HorizontalScrollbar = true;
-            this.pricingTableName.Location = new System.Drawing.Point(206, 60);
-            this.pricingTableName.Margin = new System.Windows.Forms.Padding(5);
-            this.pricingTableName.Name = "pricingTableName";
-            this.pricingTableName.Size = new System.Drawing.Size(180, 134);
-            this.pricingTableName.TabIndex = 68;
-            this.pricingTableName.SelectedIndexChanged += new System.EventHandler(this.pricingTableName_SelectedIndexChanged);
-            // 
-            // pricingDataSource
-            // 
-            this.pricingDataSource.FormattingEnabled = true;
-            this.pricingDataSource.HorizontalScrollbar = true;
-            this.pricingDataSource.Location = new System.Drawing.Point(28, 60);
-            this.pricingDataSource.Margin = new System.Windows.Forms.Padding(5);
-            this.pricingDataSource.Name = "pricingDataSource";
-            this.pricingDataSource.Size = new System.Drawing.Size(172, 134);
-            this.pricingDataSource.TabIndex = 67;
-            this.pricingDataSource.SelectedIndexChanged += new System.EventHandler(this.pricingDataSource_SelectedIndexChanged);
-            // 
-            // publishPricing
-            // 
-            this.publishPricing.Location = new System.Drawing.Point(258, 494);
-            this.publishPricing.Name = "publishPricing";
-            this.publishPricing.Size = new System.Drawing.Size(126, 23);
-            this.publishPricing.TabIndex = 72;
-            this.publishPricing.Text = "Publish To LinkGreen";
-            this.publishPricing.UseVisualStyleBackColor = true;
-            this.publishPricing.Click += new System.EventHandler(this.publishPricing_Click_1);
-            // 
-            // emptyPricingTransferTable
-            // 
-            this.emptyPricingTransferTable.Location = new System.Drawing.Point(31, 494);
-            this.emptyPricingTransferTable.Name = "emptyPricingTransferTable";
-            this.emptyPricingTransferTable.Size = new System.Drawing.Size(126, 23);
-            this.emptyPricingTransferTable.TabIndex = 69;
-            this.emptyPricingTransferTable.Text = "Empty Transfer Table";
-            this.emptyPricingTransferTable.UseVisualStyleBackColor = true;
-            this.emptyPricingTransferTable.Click += new System.EventHandler(this.emptyPricingTransferTable_Click);
-            // 
             // productsTab
             // 
+            this.productsTab.Controls.Add(this.setProductsUsernamePW);
             this.productsTab.Controls.Add(this.previewProductsMappingOutput);
             this.productsTab.Controls.Add(this.productFieldDescriptionValue);
             this.productsTab.Controls.Add(this.productFieldDescriptionLabel);
@@ -1145,6 +909,7 @@
             // 
             // priceLevelsTab
             // 
+            this.priceLevelsTab.Controls.Add(this.setPriceLevelsUsernamePW);
             this.priceLevelsTab.Controls.Add(this.previewPriceLevelsMappingOutput);
             this.priceLevelsTab.Controls.Add(this.priceLevelsFieldDescriptionValue);
             this.priceLevelsTab.Controls.Add(this.priceLevelsFieldDescriptionLabel);
@@ -1387,6 +1152,306 @@
             this.emptyPriceLevelsTransferTable.UseVisualStyleBackColor = true;
             this.emptyPriceLevelsTransferTable.Click += new System.EventHandler(this.emptyPriceLevelsTransferTable_Click);
             // 
+            // pricing
+            // 
+            this.pricing.Controls.Add(this.setPricingUsernamePW);
+            this.pricing.Controls.Add(this.previewPricingMappingOutput);
+            this.pricing.Controls.Add(this.pricingFieldDescriptionValue);
+            this.pricing.Controls.Add(this.pricingFieldDescriptionLabel);
+            this.pricing.Controls.Add(this.migratePricingData);
+            this.pricing.Controls.Add(this.activePricingFieldMappingValue);
+            this.pricing.Controls.Add(this.activePricingFieldMappingLabel);
+            this.pricing.Controls.Add(this.mapPricingFields);
+            this.pricing.Controls.Add(this.mappingPricingFields);
+            this.pricing.Controls.Add(this.pricingFields);
+            this.pricing.Controls.Add(this.mappedPricingTableFieldsLabel);
+            this.pricing.Controls.Add(this.label18);
+            this.pricing.Controls.Add(this.label19);
+            this.pricing.Controls.Add(this.activePricingTableMappingValue);
+            this.pricing.Controls.Add(this.activePricingTableMappingLabel);
+            this.pricing.Controls.Add(this.label26);
+            this.pricing.Controls.Add(this.label27);
+            this.pricing.Controls.Add(this.label28);
+            this.pricing.Controls.Add(this.label29);
+            this.pricing.Controls.Add(this.pricingTableName);
+            this.pricing.Controls.Add(this.pricingDataSource);
+            this.pricing.Controls.Add(this.publishPricing);
+            this.pricing.Controls.Add(this.emptyPricingTransferTable);
+            this.pricing.Location = new System.Drawing.Point(4, 22);
+            this.pricing.Name = "pricing";
+            this.pricing.Padding = new System.Windows.Forms.Padding(3);
+            this.pricing.Size = new System.Drawing.Size(410, 532);
+            this.pricing.TabIndex = 2;
+            this.pricing.Text = "Pricing";
+            this.pricing.UseVisualStyleBackColor = true;
+            // 
+            // previewPricingMappingOutput
+            // 
+            this.previewPricingMappingOutput.Location = new System.Drawing.Point(217, 423);
+            this.previewPricingMappingOutput.Name = "previewPricingMappingOutput";
+            this.previewPricingMappingOutput.Size = new System.Drawing.Size(75, 23);
+            this.previewPricingMappingOutput.TabIndex = 88;
+            this.previewPricingMappingOutput.Text = "Preview";
+            this.previewPricingMappingOutput.UseVisualStyleBackColor = true;
+            this.previewPricingMappingOutput.Click += new System.EventHandler(this.previewPricingMappingOutput_Click);
+            // 
+            // pricingFieldDescriptionValue
+            // 
+            this.pricingFieldDescriptionValue.AutoSize = true;
+            this.pricingFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pricingFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
+            this.pricingFieldDescriptionValue.Name = "pricingFieldDescriptionValue";
+            this.pricingFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.pricingFieldDescriptionValue.TabIndex = 87;
+            this.pricingFieldDescriptionValue.Text = "N/A";
+            // 
+            // pricingFieldDescriptionLabel
+            // 
+            this.pricingFieldDescriptionLabel.AutoSize = true;
+            this.pricingFieldDescriptionLabel.Location = new System.Drawing.Point(25, 445);
+            this.pricingFieldDescriptionLabel.Name = "pricingFieldDescriptionLabel";
+            this.pricingFieldDescriptionLabel.Size = new System.Drawing.Size(63, 13);
+            this.pricingFieldDescriptionLabel.TabIndex = 86;
+            this.pricingFieldDescriptionLabel.Text = "Description:";
+            // 
+            // migratePricingData
+            // 
+            this.migratePricingData.Location = new System.Drawing.Point(164, 494);
+            this.migratePricingData.Name = "migratePricingData";
+            this.migratePricingData.Size = new System.Drawing.Size(88, 23);
+            this.migratePricingData.TabIndex = 85;
+            this.migratePricingData.Text = "Migrate Data";
+            this.migratePricingData.UseVisualStyleBackColor = true;
+            this.migratePricingData.Click += new System.EventHandler(this.migratePricingData_Click);
+            // 
+            // activePricingFieldMappingValue
+            // 
+            this.activePricingFieldMappingValue.AutoSize = true;
+            this.activePricingFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activePricingFieldMappingValue.Location = new System.Drawing.Point(140, 428);
+            this.activePricingFieldMappingValue.Name = "activePricingFieldMappingValue";
+            this.activePricingFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activePricingFieldMappingValue.TabIndex = 84;
+            this.activePricingFieldMappingValue.Text = "N/A";
+            // 
+            // activePricingFieldMappingLabel
+            // 
+            this.activePricingFieldMappingLabel.AutoSize = true;
+            this.activePricingFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
+            this.activePricingFieldMappingLabel.Name = "activePricingFieldMappingLabel";
+            this.activePricingFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activePricingFieldMappingLabel.TabIndex = 83;
+            this.activePricingFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapPricingFields
+            // 
+            this.mapPricingFields.Location = new System.Drawing.Point(298, 423);
+            this.mapPricingFields.Name = "mapPricingFields";
+            this.mapPricingFields.Size = new System.Drawing.Size(87, 23);
+            this.mapPricingFields.TabIndex = 82;
+            this.mapPricingFields.Text = "Map Selected";
+            this.mapPricingFields.UseVisualStyleBackColor = true;
+            this.mapPricingFields.Click += new System.EventHandler(this.mapPricingFields_Click);
+            // 
+            // mappingPricingFields
+            // 
+            this.mappingPricingFields.FormattingEnabled = true;
+            this.mappingPricingFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingPricingFields.Name = "mappingPricingFields";
+            this.mappingPricingFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingPricingFields.TabIndex = 81;
+            // 
+            // pricingFields
+            // 
+            this.pricingFields.FormattingEnabled = true;
+            this.pricingFields.Location = new System.Drawing.Point(26, 282);
+            this.pricingFields.Name = "pricingFields";
+            this.pricingFields.Size = new System.Drawing.Size(174, 134);
+            this.pricingFields.TabIndex = 80;
+            this.pricingFields.SelectedIndexChanged += new System.EventHandler(this.pricingFields_SelectedIndexChanged);
+            // 
+            // mappedPricingTableFieldsLabel
+            // 
+            this.mappedPricingTableFieldsLabel.AutoSize = true;
+            this.mappedPricingTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedPricingTableFieldsLabel.Name = "mappedPricingTableFieldsLabel";
+            this.mappedPricingTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedPricingTableFieldsLabel.TabIndex = 79;
+            this.mappedPricingTableFieldsLabel.Text = "N/A:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(28, 265);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(37, 13);
+            this.label18.TabIndex = 78;
+            this.label18.Text = "Fields:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(31, 237);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(96, 13);
+            this.label19.TabIndex = 77;
+            this.label19.Text = "Field Mappings:";
+            // 
+            // activePricingTableMappingValue
+            // 
+            this.activePricingTableMappingValue.AutoSize = true;
+            this.activePricingTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activePricingTableMappingValue.Location = new System.Drawing.Point(145, 205);
+            this.activePricingTableMappingValue.Name = "activePricingTableMappingValue";
+            this.activePricingTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activePricingTableMappingValue.TabIndex = 76;
+            this.activePricingTableMappingValue.Text = "N/A";
+            // 
+            // activePricingTableMappingLabel
+            // 
+            this.activePricingTableMappingLabel.AutoSize = true;
+            this.activePricingTableMappingLabel.Location = new System.Drawing.Point(25, 205);
+            this.activePricingTableMappingLabel.Name = "activePricingTableMappingLabel";
+            this.activePricingTableMappingLabel.Size = new System.Drawing.Size(114, 13);
+            this.activePricingTableMappingLabel.TabIndex = 75;
+            this.activePricingTableMappingLabel.Text = "Active Table Mapping:";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(28, 468);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(53, 13);
+            this.label26.TabIndex = 74;
+            this.label26.Text = "Actions:";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(203, 44);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(68, 13);
+            this.label27.TabIndex = 73;
+            this.label27.Text = "Table Name:";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(28, 44);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(64, 13);
+            this.label28.TabIndex = 71;
+            this.label28.Text = "DSN Name:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(28, 16);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(95, 13);
+            this.label29.TabIndex = 70;
+            this.label29.Text = "Table Mapping:";
+            // 
+            // pricingTableName
+            // 
+            this.pricingTableName.FormattingEnabled = true;
+            this.pricingTableName.HorizontalScrollbar = true;
+            this.pricingTableName.Location = new System.Drawing.Point(206, 60);
+            this.pricingTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.pricingTableName.Name = "pricingTableName";
+            this.pricingTableName.Size = new System.Drawing.Size(180, 134);
+            this.pricingTableName.TabIndex = 68;
+            this.pricingTableName.SelectedIndexChanged += new System.EventHandler(this.pricingTableName_SelectedIndexChanged);
+            // 
+            // pricingDataSource
+            // 
+            this.pricingDataSource.FormattingEnabled = true;
+            this.pricingDataSource.HorizontalScrollbar = true;
+            this.pricingDataSource.Location = new System.Drawing.Point(28, 60);
+            this.pricingDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.pricingDataSource.Name = "pricingDataSource";
+            this.pricingDataSource.Size = new System.Drawing.Size(172, 134);
+            this.pricingDataSource.TabIndex = 67;
+            this.pricingDataSource.SelectedIndexChanged += new System.EventHandler(this.pricingDataSource_SelectedIndexChanged);
+            // 
+            // publishPricing
+            // 
+            this.publishPricing.Location = new System.Drawing.Point(258, 494);
+            this.publishPricing.Name = "publishPricing";
+            this.publishPricing.Size = new System.Drawing.Size(126, 23);
+            this.publishPricing.TabIndex = 72;
+            this.publishPricing.Text = "Publish To LinkGreen";
+            this.publishPricing.UseVisualStyleBackColor = true;
+            this.publishPricing.Click += new System.EventHandler(this.publishPricing_Click_1);
+            // 
+            // emptyPricingTransferTable
+            // 
+            this.emptyPricingTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyPricingTransferTable.Name = "emptyPricingTransferTable";
+            this.emptyPricingTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyPricingTransferTable.TabIndex = 69;
+            this.emptyPricingTransferTable.Text = "Empty Transfer Table";
+            this.emptyPricingTransferTable.UseVisualStyleBackColor = true;
+            this.emptyPricingTransferTable.Click += new System.EventHandler(this.emptyPricingTransferTable_Click);
+            // 
+            // setCategoriesUsernamePW
+            // 
+            this.setCategoriesUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setCategoriesUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(161, 34);
+            this.setCategoriesUsernamePW.Name = "setCategoriesUsernamePW";
+            this.setCategoriesUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setCategoriesUsernamePW.TabIndex = 23;
+            this.setCategoriesUsernamePW.UseVisualStyleBackColor = true;
+            this.setCategoriesUsernamePW.Click += new System.EventHandler(this.setCategoriesUsernamePW_Click);
+            // 
+            // setCustomersUsernamePW
+            // 
+            this.setCustomersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setCustomersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.setCustomersUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setCustomersUsernamePW.Name = "setCustomersUsernamePW";
+            this.setCustomersUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setCustomersUsernamePW.TabIndex = 45;
+            this.setCustomersUsernamePW.UseVisualStyleBackColor = true;
+            this.setCustomersUsernamePW.Click += new System.EventHandler(this.setCustomersUsernamePW_Click);
+            // 
+            // setProductsUsernamePW
+            // 
+            this.setProductsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setProductsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.setProductsUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setProductsUsernamePW.Name = "setProductsUsernamePW";
+            this.setProductsUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setProductsUsernamePW.TabIndex = 67;
+            this.setProductsUsernamePW.UseVisualStyleBackColor = true;
+            this.setProductsUsernamePW.Click += new System.EventHandler(this.setProductsUsernamePW_Click);
+            // 
+            // setPriceLevelsUsernamePW
+            // 
+            this.setPriceLevelsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setPriceLevelsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setPriceLevelsUsernamePW.Name = "setPriceLevelsUsernamePW";
+            this.setPriceLevelsUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setPriceLevelsUsernamePW.TabIndex = 111;
+            this.setPriceLevelsUsernamePW.UseVisualStyleBackColor = true;
+            this.setPriceLevelsUsernamePW.Click += new System.EventHandler(this.setPriceLevelsUsernamePW_Click);
+            // 
+            // setPricingUsernamePW
+            // 
+            this.setPricingUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setPricingUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.setPricingUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setPricingUsernamePW.Name = "setPricingUsernamePW";
+            this.setPricingUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setPricingUsernamePW.TabIndex = 112;
+            this.setPricingUsernamePW.UseVisualStyleBackColor = true;
+            this.setPricingUsernamePW.Click += new System.EventHandler(this.setPricingUsernamePW_Click);
+            // 
             // UtilityMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1409,12 +1474,12 @@
             this.categories.PerformLayout();
             this.customers.ResumeLayout(false);
             this.customers.PerformLayout();
-            this.pricing.ResumeLayout(false);
-            this.pricing.PerformLayout();
             this.productsTab.ResumeLayout(false);
             this.productsTab.PerformLayout();
             this.priceLevelsTab.ResumeLayout(false);
             this.priceLevelsTab.PerformLayout();
+            this.pricing.ResumeLayout(false);
+            this.pricing.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1537,6 +1602,11 @@
         private System.Windows.Forms.ListBox priceLevelsDataSource;
         private System.Windows.Forms.Button publishPriceLevels;
         private System.Windows.Forms.Button emptyPriceLevelsTransferTable;
+        private System.Windows.Forms.Button setCategoriesUsernamePW;
+        private System.Windows.Forms.Button setCustomersUsernamePW;
+        private System.Windows.Forms.Button setProductsUsernamePW;
+        private System.Windows.Forms.Button setPriceLevelsUsernamePW;
+        private System.Windows.Forms.Button setPricingUsernamePW;
     }
 }
 
