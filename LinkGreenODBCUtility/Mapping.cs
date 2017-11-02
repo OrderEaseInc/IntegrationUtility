@@ -414,7 +414,7 @@ namespace LinkGreenODBCUtility
                 };
                 _connection.Open();
                 OdbcDataReader reader = command.ExecuteReader();
-                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                var columnIndexes = new List<KeyValuePair<string, int>>();
                 try
                 {
                     for (int x = 0; x < reader.FieldCount; x++)
@@ -422,7 +422,8 @@ namespace LinkGreenODBCUtility
                         string fieldName = GetMappingField(tableName, reader.GetName(x));
                         if (!string.IsNullOrEmpty(fieldName))
                         {
-                            columnIndexes.Add(fieldName, x);
+                            var columnIndex = new KeyValuePair<string, int>(fieldName, x);
+                            columnIndexes.Add(columnIndex);
                         }
                     }
 
@@ -466,15 +467,16 @@ namespace LinkGreenODBCUtility
                         if (columnIndexes.Count == toColumnNames.Count)
                         {
                             List<string> readerColumns = new List<string>();
-                            foreach (string col in toColumnNames)
+
+                            foreach (KeyValuePair<string, int> colIndex in columnIndexes)
                             {
-                                string text = reader[columnIndexes[col]].ToString();
+                                string text = reader[colIndex.Value].ToString();
                                 text = text.Replace("'", "''").Replace("\"", "\\\"");
                                 string original = text;
-                                text = SanitizeField(tableName, col, text);
+                                text = SanitizeField(tableName, colIndex.Key, text);
                                 if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
                                 {
-                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{col} [{original} -> {text}] {Environment.NewLine}");
+                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
                                 }
                                 if (string.IsNullOrEmpty(text))
                                 {
@@ -486,6 +488,7 @@ namespace LinkGreenODBCUtility
                                     readerColumns.Add("'" + text + "'");
                                 }
                             }
+
                             string readerColumnValues = string.Join(",", readerColumns);
                             string stmt = $"INSERT INTO `{tableName}` ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
