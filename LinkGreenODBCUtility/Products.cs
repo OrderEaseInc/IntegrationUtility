@@ -9,7 +9,7 @@ using LinkGreen.Applications.Common.Model;
 
 namespace LinkGreenODBCUtility
 {
-    class Products
+    class Products : IOdbcTransfer
     {
         public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;

@@ -93,7 +93,6 @@
   <ItemGroup>
     <Compile Include="Batch.cs" />
     <Compile Include="BuyerInventories.cs" />
-    <Compile Include="Suppliers.cs" />
     <Compile Include="Categories.cs" />
     <Compile Include="Credentials.cs" />
     <Compile Include="Customers.cs" />
@@ -130,6 +129,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="SupplierInventories.cs" />
+    <Compile Include="Suppliers.cs" />
     <Compile Include="TaskManager.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UtilityDashboard.cs">
