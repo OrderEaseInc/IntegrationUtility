@@ -77,7 +77,7 @@ namespace LinkGreenODBCUtility
                     {
                         Description = product.Description ?? "",
                         PrivateSKU = product.Id,
-                        Inactive = !product.Active,
+                        Inactive = product.Inactive,
                         QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
                     };
                     

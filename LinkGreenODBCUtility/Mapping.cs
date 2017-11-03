@@ -31,8 +31,27 @@ namespace LinkGreenODBCUtility
         public List<string> GetTableNames()
         {
             var _connection = new OdbcConnection();
+            Credentials creds = DsnCreds.GetDsnCreds(DsnName);
             _connection.ConnectionString = $"DSN={DsnName}";
-            _connection.Open();
+            if (creds != null)
+            {
+                if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                {
+                    _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                }
+            }
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                MessageBox.Show($"Failed to connect to DSN {DsnName}. Are your credentials set?", "Failed to Connect");
+                return new List<string>();
+            }
+
             try
             {
                 var tables = _connection.GetSchema("Tables");
@@ -54,9 +73,19 @@ namespace LinkGreenODBCUtility
         public string GetDsnName(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `DsnName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return null;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -77,9 +106,19 @@ namespace LinkGreenODBCUtility
         public string GetTableMapping(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
-            var command = new OdbcCommand($"SELECT `MappingName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection); 
-            _connection.Open();
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var command = new OdbcCommand($"SELECT `MappingName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return null;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -100,9 +139,19 @@ namespace LinkGreenODBCUtility
         public string GetFieldMapping(string tableName, string fieldName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
-            var command = new OdbcCommand($"SELECT `MappingName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `FieldName` = '{fieldName}'", _connection); 
-            _connection.Open();
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var command = new OdbcCommand($"SELECT `MappingName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `FieldName` = '{fieldName}'", _connection);
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return null;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -123,9 +172,19 @@ namespace LinkGreenODBCUtility
         public string GetMappingField(string tableName, string mappingName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `FieldName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `MappingName` = '{mappingName}'", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return null;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -146,9 +205,19 @@ namespace LinkGreenODBCUtility
         public string GetFieldProperty(string tableName, string fieldName, string property)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `{property}` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND (`FieldName` = '{fieldName}' OR `MappingName` = '{fieldName}')", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return null;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -169,9 +238,19 @@ namespace LinkGreenODBCUtility
         public List<MappingField> GetTableFields(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` FROM `FieldMappings` WHERE `TableName` = '{tableName}'", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return new List<MappingField>();
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
 
@@ -231,12 +310,21 @@ namespace LinkGreenODBCUtility
         public List<MappingField> GetUnmappedFields(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
                                             $"AND (`MappingName` = '' OR `MappingName` IS NULL)", _connection);
-            _connection.Open();
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return new List<MappingField>();
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
 
@@ -287,12 +375,22 @@ namespace LinkGreenODBCUtility
         public List<MappingField> GetMappedFields(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
                                           $"AND `MappingName` IS NOT NULL", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return new List<MappingField>();
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
 
@@ -348,8 +446,26 @@ namespace LinkGreenODBCUtility
                 dsnName = Settings.DsnName;
             }
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + dsnName;
-            _connection.Open();
+            Credentials creds = DsnCreds.GetDsnCreds(dsnName);
+            _connection.ConnectionString = $"DSN={dsnName}";
+            if (creds != null)
+            {
+                if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                {
+                    _connection.ConnectionString = $"DSN={dsnName};Uid={creds.Username};Pwd={creds.Password}";
+                }
+            }
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return new List<string>();
+            }
+
             try
             {
                 var columns = _connection.GetSchema("Columns");
@@ -406,16 +522,34 @@ namespace LinkGreenODBCUtility
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 var _connection = new OdbcConnection();
-                _connection.ConnectionString = "DSN=" + DsnName;
+                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                _connection.ConnectionString = $"DSN={DsnName}";
+                if (creds != null)
+                {
+                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                    {
+                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                    }
+                }
 
                 string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
                 var command = new OdbcCommand(sql)
                 {
                     Connection = _connection
                 };
-                _connection.Open();
+
+                try
+                {
+                    _connection.Open();
+                }
+                catch (OdbcException e)
+                {
+                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                    return false;
+                }
+
                 OdbcDataReader reader = command.ExecuteReader();
-                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                var columnIndexes = new List<KeyValuePair<string, int>>();
                 try
                 {
                     for (int x = 0; x < reader.FieldCount; x++)
@@ -423,7 +557,8 @@ namespace LinkGreenODBCUtility
                         string fieldName = GetMappingField(tableName, reader.GetName(x));
                         if (!string.IsNullOrEmpty(fieldName))
                         {
-                            columnIndexes.Add(fieldName, x);
+                            var columnIndex = new KeyValuePair<string, int>(fieldName, x);
+                            columnIndexes.Add(columnIndex);
                         }
                     }
 
@@ -467,15 +602,16 @@ namespace LinkGreenODBCUtility
                         if (columnIndexes.Count == toColumnNames.Count)
                         {
                             List<string> readerColumns = new List<string>();
-                            foreach (string col in toColumnNames)
+
+                            foreach (KeyValuePair<string, int> colIndex in columnIndexes)
                             {
-                                string text = reader[columnIndexes[col]].ToString();
+                                string text = reader[colIndex.Value].ToString();
                                 text = text.Replace("'", "''").Replace("\"", "\\\"");
                                 string original = text;
-                                text = SanitizeField(tableName, col, text);
+                                text = SanitizeField(tableName, colIndex.Key, text);
                                 if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
                                 {
-                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{col} [{original} -> {text}] {Environment.NewLine}");
+                                    File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
                                 }
                                 if (string.IsNullOrEmpty(text))
                                 {
@@ -487,6 +623,7 @@ namespace LinkGreenODBCUtility
                                     readerColumns.Add("'" + text + "'");
                                 }
                             }
+
                             string readerColumnValues = string.Join(",", readerColumns);
                             string stmt = $"INSERT INTO `{tableName}` ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
@@ -819,12 +956,22 @@ namespace LinkGreenODBCUtility
         private bool ValidateRequiredFields(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            _connection.ConnectionString = $"DSN={TransferDsnName}";
             var command = new OdbcCommand($"SELECT * FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
                                           $"AND (`MappingName` = '' OR `MappingName` IS NULL)" +
                                           $"AND `Required` = TRUE", _connection);
-            _connection.Open();
+
+            try
+            {
+                _connection.Open();
+            }
+            catch (OdbcException e)
+            {
+                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                return false;
+            }
+
             OdbcDataReader reader = command.ExecuteReader();
             try
             {
@@ -864,14 +1011,32 @@ namespace LinkGreenODBCUtility
             if (mappingColumns.Count > 0)
             {
                 var _connection = new OdbcConnection();
-                _connection.ConnectionString = "DSN=" + DsnName;
+                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                _connection.ConnectionString = $"DSN={DsnName}";
+                if (creds != null)
+                {
+                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                    {
+                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                    }
+                }
 
                 string query = $"SELECT {columnNames} FROM `{tableMappingName}`";
                 var command = new OdbcCommand(query)
                 {
                     Connection = _connection
                 };
-                _connection.Open();
+
+                try
+                {
+                    _connection.Open();
+                }
+                catch (OdbcException e)
+                {
+                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                    return new DataTable();
+                }
+
                 OdbcDataAdapter adapter = new OdbcDataAdapter(query, _connection);
                 DataTable table = new DataTable();
 

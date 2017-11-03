@@ -283,6 +283,18 @@ namespace LinkGreenODBCUtility
             try
             {
                 var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
+                if (string.IsNullOrEmpty(encryptionKey))
+                {
+                    Guid g = Guid.NewGuid();
+                    string GuidString = Convert.ToBase64String(g.ToByteArray());
+                    GuidString = GuidString.Replace("=", "");
+                    GuidString = GuidString.Replace("+", "");
+
+                    config.AppSettings.Settings["EncryptionKey"].Value = GuidString;
+                    config.Save(ConfigurationSaveMode.Modified);
+                }
+                
                 UserAndCompany user = WebServiceHelper.GetUserInfoByApiKey(apiKey);
 
                 if (user != null)
