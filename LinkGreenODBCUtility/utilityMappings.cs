@@ -1699,5 +1699,44 @@ namespace LinkGreenODBCUtility
                 MessageBox.Show("No data source is selected", "No Data Source");
             }
         }
+
+        private void setSuppliersUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (suppliersDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(suppliersDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setSupplierInventoryUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (supplierInventoryDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(supplierInventoryDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
+
+        private void setBuyerInventoryUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (buyerInventoryDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(buyerInventoryDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("No data source is selected", "No Data Source");
+            }
+        }
     }
 }
