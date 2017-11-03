@@ -68,14 +68,14 @@ namespace DataTransfer.AccessDatabase
                 return new ProductInventory
                 {
                     Id = reader.PrivateSKU.ToString(),
-                    Active = reader.Active != null && (reader.Active.Equals(true) || Convert.ToString(reader.Active).ToLower() == "true" || Convert.ToString(reader.Active).ToLower() == "1" || Convert.ToString(reader.Active).ToLower() == "y" || Convert.ToString(reader.Active).ToLower() == "yes"),
+                    Inactive = reader.Inactive != null && (reader.Inactive.Equals(true) || Convert.ToString(reader.Inactive).ToLower() == "true" || Convert.ToString(reader.Inactive).ToLower() == "1" || Convert.ToString(reader.Inactive).ToLower() == "y" || Convert.ToString(reader.Inactive).ToLower() == "yes"),
                     Category = reader.Category ?? "",
                     Description = reader.Description ?? "",
                     Comments = reader.Comments ?? "",
                     DirectDeliveryCode = reader.DirectDeliveryCode ?? "",
                     DirectDeliveryMinQuantity = reader.DirectDeliveryMinQuantity ?? 0,
                     FreightFactor = reader.FreightFactor ?? 0,
-                    IsDirectDelivery = reader.IsDirectDelivery != null && (reader.IsDirectDelivery.Equals(true) || Convert.ToString(reader.IsDirectDelivery).ToLower() == "true" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "1"),
+                    IsDirectDelivery = reader.IsDirectDelivery != null && (reader.IsDirectDelivery.Equals(true) || Convert.ToString(reader.IsDirectDelivery).ToLower() == "true" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "1" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "y" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "yes"),
                     MasterQuantityDescription = reader.MasterQuantityDescription ?? "",
                     MinOrderSpring = reader.MinOrderSpring ?? 0,
                     MinOrderSummer = reader.MinOrderSummer ?? 0,

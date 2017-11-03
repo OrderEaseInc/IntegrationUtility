@@ -17,7 +17,7 @@ namespace DataTransfer.AccessDatabase
         public string Description { get; set; }
         public string Comments { get; set; }
         public decimal NetPrice { get; set; }
-        public bool Active { get; set; }
+        public bool Inactive { get; set; }
         public string PrivateSKU { get; set; }
         public string UPC { get; set; }
         public int MinOrderSpring { get; set; }
