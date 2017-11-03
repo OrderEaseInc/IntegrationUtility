@@ -244,6 +244,7 @@
             // 
             // categories
             // 
+            this.categories.Controls.Add(this.setCategoriesUsernamePW);
             this.categories.Controls.Add(this.previewMappingOutput);
             this.categories.Controls.Add(this.fieldDescription);
             this.categories.Controls.Add(this.fieldDescriptionLabel);
@@ -488,6 +489,7 @@
             // 
             // customers
             // 
+            this.customers.Controls.Add(this.setCustomersUsernamePW);
             this.customers.Controls.Add(this.previewCustomerMappingOutput);
             this.customers.Controls.Add(this.customerFieldDescription);
             this.customers.Controls.Add(this.label4);
@@ -732,6 +734,7 @@
             // 
             // productsTab
             // 
+            this.productsTab.Controls.Add(this.setProductsUsernamePW);
             this.productsTab.Controls.Add(this.previewProductsMappingOutput);
             this.productsTab.Controls.Add(this.productFieldDescriptionValue);
             this.productsTab.Controls.Add(this.productFieldDescriptionLabel);
@@ -976,6 +979,7 @@
             // 
             // priceLevelsTab
             // 
+            this.priceLevelsTab.Controls.Add(this.setPriceLevelsUsernamePW);
             this.priceLevelsTab.Controls.Add(this.previewPriceLevelsMappingOutput);
             this.priceLevelsTab.Controls.Add(this.priceLevelsFieldDescriptionValue);
             this.priceLevelsTab.Controls.Add(this.priceLevelsFieldDescriptionLabel);
@@ -2347,6 +2351,11 @@
         private System.Windows.Forms.ListBox priceLevelsDataSource;
         private System.Windows.Forms.Button publishPriceLevels;
         private System.Windows.Forms.Button emptyPriceLevelsTransferTable;
+        private System.Windows.Forms.Button setCategoriesUsernamePW;
+        private System.Windows.Forms.Button setCustomersUsernamePW;
+        private System.Windows.Forms.Button setProductsUsernamePW;
+        private System.Windows.Forms.Button setPriceLevelsUsernamePW;
+        private System.Windows.Forms.Button setPricingUsernamePW;
         private System.Windows.Forms.TabPage suppliers;
         private System.Windows.Forms.Button previewSupplierMappingOutput;
         private System.Windows.Forms.Label supplierFieldDescription;
