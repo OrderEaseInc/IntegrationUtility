@@ -381,7 +381,7 @@ namespace LinkGreenODBCUtility
         public List<MappingField> GetMappedFields(string tableName)
         {
             var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            _connection.ConnectionString = "DSN=" + TransferDsnName;
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
@@ -584,7 +584,16 @@ namespace LinkGreenODBCUtility
                         Connection = _conn
                     };
 
-                    _conn.Open();
+                    try
+                    {
+                        _conn.Open();
+                    }
+                    catch (OdbcException e)
+                    {
+                        Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                        return false;
+                    }
+
                     try
                     {
                         if (nuke)
@@ -638,7 +647,16 @@ namespace LinkGreenODBCUtility
                                 Connection = _conn
                             };
 
-                            _conn.Open();
+                            try
+                            {
+                                _conn.Open();
+                            }
+                            catch (OdbcException e)
+                            {
+                                Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                                return false;
+                            }
+
                             try
                             {
                                 comm.ExecuteNonQuery();
@@ -704,12 +722,30 @@ namespace LinkGreenODBCUtility
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 if (clearProduction) {
-                    var _conn = new OdbcConnection($"DSN={DsnName}");
+                    var _conn = new OdbcConnection();
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    _conn.ConnectionString = $"DSN={DsnName}";
+                    if (creds != null)
+                    {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                        {
+                            _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
+                    }
                     var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}") {
                         Connection = _conn
                     };
 
-                    _conn.Open();
+                    try
+                    {
+                        _conn.Open();
+                    }
+                    catch (OdbcException e)
+                    {
+                        Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                        return false;
+                    }
+
                     try {
                             clearCommand.ExecuteNonQuery();
                             Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
@@ -745,7 +781,15 @@ namespace LinkGreenODBCUtility
                     }
 
                     var _conn = new OdbcConnection();
-                    _conn.ConnectionString = "DSN=" + DsnName;
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    _conn.ConnectionString = $"DSN={DsnName}";
+                    if (creds != null)
+                    {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                        {
+                            _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
+                    }
 
                     // we need to ensure that this record doesn't exist in the production db already
                     var mappedKey = GetFieldMapping(tableName, tableKey);
@@ -769,7 +813,15 @@ namespace LinkGreenODBCUtility
                                 Connection = _conn
                             };
 
-                            _conn.Open();
+                            try
+                            {
+                                _conn.Open();
+                            }
+                            catch (OdbcException e)
+                            {
+                                Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                                return false;
+                            }
 
                             if (!string.IsNullOrEmpty(existsSql)) {
                                 var existsCommand = new OdbcCommand(existsSql, _conn);
@@ -831,13 +883,31 @@ namespace LinkGreenODBCUtility
                 string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
 
                 var _connection = new OdbcConnection();
-                _connection.ConnectionString = "DSN=" + DsnName;
+                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                _connection.ConnectionString = $"DSN={DsnName}";
+                if (creds != null)
+                {
+                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
+                    {
+                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                    }
+                }
 
                 string sql = $"SELECT {keyMappingName}, {chainedFromColumnNames} FROM {tableMappingName}";
                 var command = new OdbcCommand(sql) {
                     Connection = _connection
                 };
-                _connection.Open();
+
+                try
+                {
+                    _connection.Open();
+                }
+                catch (OdbcException e)
+                {
+                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                    return false;
+                }
+
                 OdbcDataReader reader = command.ExecuteReader();
                 Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
                 try {
@@ -881,7 +951,15 @@ namespace LinkGreenODBCUtility
                                 Connection = _conn
                             };
 
-                            _conn.Open();
+                            try
+                            {
+                                _conn.Open();
+                            }
+                            catch (OdbcException e)
+                            {
+                                Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                                return false;
+                            }
 
                             try {
                                 comm.ExecuteNonQuery();
