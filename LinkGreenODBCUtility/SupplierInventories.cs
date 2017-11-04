@@ -1,4 +1,5 @@
-﻿using DataTransfer.AccessDatabase;
+﻿using System.Collections.Generic;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -40,6 +41,25 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
+        public bool PushMatchedSkus()
+        {
+            // clear out transfer table
+            Empty();
+
+            var mappedDsnName = new Mapping().GetDsnName(TableName);
+            var newMapping = new Mapping(mappedDsnName);
+            if (newMapping.MigrateData(TableName)) {
+                Logger.Instance.Debug($"Supplier Inventories migrated using DSN: {mappedDsnName}");
+            } else {
+                Logger.Instance.Warning("Failed to migrate Supplier Inventories.");
+            }
+
+            // Push any matched BuyerSKUs back up to LinkGreen
+            repository.SyncAllSupplierInventories();
+
+            return true;
+        }
+
         public bool Publish()
         {
             // clear out transfer table
@@ -51,6 +71,7 @@ namespace LinkGreenODBCUtility
             var mappedDsnName = new Mapping().GetDsnName(TableName);
             var newMapping = new Mapping(mappedDsnName);
             newMapping.PushData(TableName, TableKey, true);
+            
             return true;
         }
     }
