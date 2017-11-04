@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UtilityMappings));
             this.Tables = new System.Windows.Forms.TabControl();
             this.categories = new System.Windows.Forms.TabPage();
-            this.setCategoriesUsernamePW = new System.Windows.Forms.Button();
             this.previewMappingOutput = new System.Windows.Forms.Button();
             this.fieldDescription = new System.Windows.Forms.Label();
             this.fieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -55,7 +54,6 @@
             this.publishToLinkGreen = new System.Windows.Forms.Button();
             this.emptyCategoriesTransferTable = new System.Windows.Forms.Button();
             this.customers = new System.Windows.Forms.TabPage();
-            this.setCustomersUsernamePW = new System.Windows.Forms.Button();
             this.previewCustomerMappingOutput = new System.Windows.Forms.Button();
             this.customerFieldDescription = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -79,7 +77,6 @@
             this.publishCustomers = new System.Windows.Forms.Button();
             this.emptyCustomersTransferTable = new System.Windows.Forms.Button();
             this.productsTab = new System.Windows.Forms.TabPage();
-            this.setProductsUsernamePW = new System.Windows.Forms.Button();
             this.previewProductsMappingOutput = new System.Windows.Forms.Button();
             this.productFieldDescriptionValue = new System.Windows.Forms.Label();
             this.productFieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -103,7 +100,6 @@
             this.publishProducts = new System.Windows.Forms.Button();
             this.emptyProductsTransferTable = new System.Windows.Forms.Button();
             this.priceLevelsTab = new System.Windows.Forms.TabPage();
-            this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
             this.previewPriceLevelsMappingOutput = new System.Windows.Forms.Button();
             this.priceLevelsFieldDescriptionValue = new System.Windows.Forms.Label();
             this.priceLevelsFieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -127,7 +123,6 @@
             this.publishPriceLevels = new System.Windows.Forms.Button();
             this.emptyPriceLevelsTransferTable = new System.Windows.Forms.Button();
             this.pricing = new System.Windows.Forms.TabPage();
-            this.setPricingUsernamePW = new System.Windows.Forms.Button();
             this.previewPricingMappingOutput = new System.Windows.Forms.Button();
             this.pricingFieldDescriptionValue = new System.Windows.Forms.Label();
             this.pricingFieldDescriptionLabel = new System.Windows.Forms.Label();
