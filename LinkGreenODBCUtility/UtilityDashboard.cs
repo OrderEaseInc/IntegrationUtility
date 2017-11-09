@@ -35,6 +35,11 @@ namespace LinkGreenODBCUtility
             Log.PurgeLog();
         }
 
+        private void UtilityDashboard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            JobManager.Dispose();
+        }
+
         private void settingsMappingMenuItem_Click(object sender, EventArgs e)
         {
             UtilityMappings utilitySettings = new UtilityMappings();

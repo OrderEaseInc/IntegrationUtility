@@ -31,16 +31,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UtilityDashboard));
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsMappingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eventLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.taskManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncCategories = new System.Windows.Forms.Button();
             this.syncCustomers = new System.Windows.Forms.Button();
             this.syncProducts = new System.Windows.Forms.Button();
             this.syncPriceLevels = new System.Windows.Forms.Button();
             this.syncPricing = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.settingsMappingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eventLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.taskManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -66,6 +66,39 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.settingsToolStripMenuItem.Text = "File";
+            // 
+            // settingsMappingMenuItem
+            // 
+            this.settingsMappingMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.logo;
+            this.settingsMappingMenuItem.Name = "settingsMappingMenuItem";
+            this.settingsMappingMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.settingsMappingMenuItem.Text = "Mappings";
+            this.settingsMappingMenuItem.Click += new System.EventHandler(this.settingsMappingMenuItem_Click);
+            // 
+            // eventLogToolStripMenuItem
+            // 
+            this.eventLogToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.debug_log;
+            this.eventLogToolStripMenuItem.Name = "eventLogToolStripMenuItem";
+            this.eventLogToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.eventLogToolStripMenuItem.Text = "Event Log";
+            this.eventLogToolStripMenuItem.Click += new System.EventHandler(this.eventLogToolStripMenuItem_Click);
+            // 
+            // taskManagerToolStripMenuItem
+            // 
+            this.taskManagerToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.taskManagerToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.schedule_icon;
+            this.taskManagerToolStripMenuItem.Name = "taskManagerToolStripMenuItem";
+            this.taskManagerToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.taskManagerToolStripMenuItem.Text = "Task Manager";
+            this.taskManagerToolStripMenuItem.Click += new System.EventHandler(this.taskManagerToolStripMenuItem_Click);
+            // 
+            // generalToolStripMenuItem
+            // 
+            this.generalToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.gear;
+            this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
+            this.generalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.generalToolStripMenuItem.Text = "Settings";
+            this.generalToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // syncCategories
             // 
@@ -130,39 +163,6 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // settingsMappingMenuItem
-            // 
-            this.settingsMappingMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.logo;
-            this.settingsMappingMenuItem.Name = "settingsMappingMenuItem";
-            this.settingsMappingMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.settingsMappingMenuItem.Text = "Mappings";
-            this.settingsMappingMenuItem.Click += new System.EventHandler(this.settingsMappingMenuItem_Click);
-            // 
-            // eventLogToolStripMenuItem
-            // 
-            this.eventLogToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.debug_log;
-            this.eventLogToolStripMenuItem.Name = "eventLogToolStripMenuItem";
-            this.eventLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.eventLogToolStripMenuItem.Text = "Event Log";
-            this.eventLogToolStripMenuItem.Click += new System.EventHandler(this.eventLogToolStripMenuItem_Click);
-            // 
-            // generalToolStripMenuItem
-            // 
-            this.generalToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.gear;
-            this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
-            this.generalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.generalToolStripMenuItem.Text = "Settings";
-            this.generalToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // taskManagerToolStripMenuItem
-            // 
-            this.taskManagerToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.taskManagerToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.schedule_icon;
-            this.taskManagerToolStripMenuItem.Name = "taskManagerToolStripMenuItem";
-            this.taskManagerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.taskManagerToolStripMenuItem.Text = "Task Manager";
-            this.taskManagerToolStripMenuItem.Click += new System.EventHandler(this.taskManagerToolStripMenuItem_Click);
-            // 
             // UtilityDashboard
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
@@ -184,6 +184,7 @@
             this.Name = "UtilityDashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Integration Utility";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UtilityDashboard_FormClosing);
             this.Load += new System.EventHandler(this.UtilityDashboard_Load);
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();

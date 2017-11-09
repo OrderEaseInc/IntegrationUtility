@@ -103,6 +103,7 @@
     <Compile Include="Batch.cs" />
     <Compile Include="BuyerInventories.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="CategoriesSyncJob.cs" />
     <Compile Include="CreateTask.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +127,7 @@
       <DependentUpon>EventLog.cs</DependentUpon>
     </Compile>
     <Compile Include="IOdbcTransfer.cs" />
+    <Compile Include="JobManager.cs" />
     <Compile Include="ListItem.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LoggerModel.cs" />

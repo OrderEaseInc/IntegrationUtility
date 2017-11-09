@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Quartz;
+using Quartz.Impl;
 
 namespace LinkGreenODBCUtility
 {
@@ -71,6 +73,32 @@ namespace LinkGreenODBCUtility
         private void taskComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cancel_Click(object sender, EventArgs e)
+        {
+            ActiveForm.Close();
+        }
+
+        private void create_Click(object sender, EventArgs e)
+        {
+            string jobName = (taskComboBox.SelectedItem as ListItem).Value;
+            DateTime startDateTime = this.startDateTime.Value;
+            int repeatInterval = Convert.ToInt32((repeatComboBox.SelectedItem as ListItem).Value);
+
+            try
+            {
+                if (JobManager.ScheduleJob(jobName, startDateTime, repeatInterval))
+                {
+                    MessageBox.Show($"Task created: {jobName}");
+                    ActiveForm.Close();
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Logger.Instance.Error($"An error occured while creating the task {jobName}: {ex}");
+                MessageBox.Show($"An error occured while creating the task {jobName}");
+            }
         }
     }
 }

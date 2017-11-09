@@ -63,10 +63,11 @@
             this.startDateTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             this.startDateTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.startDateTime.Location = new System.Drawing.Point(16, 79);
+            this.startDateTime.MinDate = new System.DateTime(2017, 11, 9, 0, 0, 0, 0);
             this.startDateTime.Name = "startDateTime";
             this.startDateTime.Size = new System.Drawing.Size(189, 20);
             this.startDateTime.TabIndex = 2;
-            this.startDateTime.Value = new System.DateTime(2017, 11, 9, 11, 32, 8, 0);
+            this.startDateTime.Value = new System.DateTime(2017, 11, 9, 15, 25, 50, 0);
             // 
             // startDateTimeLabel
             // 
@@ -103,6 +104,7 @@
             this.create.TabIndex = 6;
             this.create.Text = "Create";
             this.create.UseVisualStyleBackColor = true;
+            this.create.Click += new System.EventHandler(this.create_Click);
             // 
             // cancel
             // 
@@ -112,6 +114,7 @@
             this.cancel.TabIndex = 7;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
+            this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
             // CreateTask
             // 
