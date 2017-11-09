@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 
 namespace LinkGreenODBCUtility
 {
@@ -45,10 +46,24 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
+        public static List<IJobDetail> GetJobs()
+        {
+            List<IJobDetail> jobs = new List<IJobDetail>();
+            var groupMatcher = GroupMatcher<JobKey>.GroupContains("User");
+            var jobKeys = sched.GetJobKeys(groupMatcher);
+            foreach (var jobKey in jobKeys)
+            {
+                IJobDetail detail = sched.GetJobDetail(jobKey);
+
+                jobs.Add(detail);
+            }
+
+            return jobs;
+        }
+
         public static void Dispose()
         {
-            // Wait for jobs to complete and then shutdown
-            sched.Shutdown(true);
+            sched.Shutdown(true); // Wait for jobs to complete and then shutdown
         }
     }
 }

@@ -22,5 +22,16 @@ namespace LinkGreenODBCUtility
             var CreateTask = new CreateTask();
             CreateTask.ShowDialog();
         }
+
+        private void TaskManager_Load(object sender, EventArgs e)
+        {
+            var jobs = JobManager.GetJobs();
+
+            DataGridViewButtonColumn DelColumn = new DataGridViewButtonColumn();
+            DelColumn.Text = "Delete";
+            DelColumn.Name = "Delete";
+            DelColumn.DataPropertyName = "Delete";
+            tasksGridView.Columns.Add(DelColumn);
+        }
     }
 }
