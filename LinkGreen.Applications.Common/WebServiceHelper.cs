@@ -231,6 +231,22 @@ namespace LinkGreen.Applications.Common
             }
         }
 
+        public static void UpdateSupplierInventory(SupplierInventory inventory, string buyerLinkedSku)
+        {
+            var requestUrl = $"buyerinventoryservice/rest/linkitem/{Key}";
+            var request = new RestRequest(requestUrl, Method.POST);
+            var body = new {
+                BuyerSKU = buyerLinkedSku,
+                SupplierId = inventory.SupplierId.Value,
+                SupplierSKU = inventory.SupplierSku
+            };
+            request.AddJsonBody(body);
+            var response = Client.Execute<ApiResult<BuyerInventoryLinkItemResult>>(request);
+            if (response.StatusCode != HttpStatusCode.OK) {
+                throw new Exception("Error linking the buyer inventory item");
+            }
+        }
+
         public static void UpdateInventoryItemQuantity(string sku, int newQty)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantity/{Key}/{sku}/{newQty}";

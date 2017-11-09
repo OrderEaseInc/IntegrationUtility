@@ -12,5 +12,13 @@ namespace LinkGreen.Applications.Common.Model
         public string SizeDescription { get; set; }
         public ICollection<QuantityPricingBreak> Pricing { get; set; }
         public string SupplierSku { get; set; }
+        // NOTE these aren't in the LinkGreen API payload
+        public int? SupplierId { get; set; }
+        public string OurSupplierNumber { get; set; }
+
+        public SupplierInventory Clone()
+        {
+            return (SupplierInventory) MemberwiseClone();
+        }
     }
 }

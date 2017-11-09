@@ -62,6 +62,12 @@ namespace LinkGreenODBCUtility
                     tableNames.Add(row["TABLE_NAME"].ToString());
                 }
 
+                var views = _connection.GetSchema("Views");
+
+                foreach (DataRow row in views.Rows) {
+                    tableNames.Add(row["TABLE_NAME"].ToString());
+                }
+
                 return tableNames;
             }
             finally

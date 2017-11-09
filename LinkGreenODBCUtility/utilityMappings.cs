@@ -1187,6 +1187,17 @@ namespace LinkGreenODBCUtility
             }
         }
 
+        private void publishMatchedSupplierInventorySkus_Click(object sender, EventArgs e)
+        {
+            var supplierInventories = new SupplierInventories();
+            var result = supplierInventories.PushMatchedSkus();
+            if (result) {
+                MessageBox.Show("Matched Supplier Inventories Published", "Success");
+            } else {
+                MessageBox.Show("Supplier Inventories failed to Publish. No API Key was found", "Publish Failure");
+            }
+        }
+
         private void pullSuppliersFromLinkGreen_Click(object sender, EventArgs e)
         {
             var suppliers = new Suppliers();
