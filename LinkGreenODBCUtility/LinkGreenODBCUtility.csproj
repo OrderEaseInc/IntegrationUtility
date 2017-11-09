@@ -56,6 +56,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -74,11 +80,14 @@
     <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz, Version=2.6.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.6.1\lib\net40\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,6 +103,12 @@
     <Compile Include="Batch.cs" />
     <Compile Include="BuyerInventories.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="CreateTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateTask.Designer.cs">
+      <DependentUpon>CreateTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Credentials.cs" />
     <Compile Include="Customers.cs" />
     <Compile Include="DsnCredentials.cs">
@@ -130,7 +145,14 @@
     <Compile Include="Logger.cs" />
     <Compile Include="SupplierInventories.cs" />
     <Compile Include="Suppliers.cs" />
-    <Compile Include="TaskManager.cs" />
+    <Compile Include="BatchTaskManager.cs" />
+    <Compile Include="TaskManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TaskManager.Designer.cs">
+      <DependentUpon>TaskManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UtilityDashboard.cs">
       <SubType>Form</SubType>
@@ -157,10 +179,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Log\log-sanitized.txt" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\schedule-icon.png" />
     <None Include="Resources\key.png" />
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />
+    <EmbeddedResource Include="CreateTask.resx">
+      <DependentUpon>CreateTask.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DsnCredentials.resx">
       <DependentUpon>DsnCredentials.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MappingPreview.resx">
       <DependentUpon>MappingPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TaskManager.resx">
+      <DependentUpon>TaskManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UtilityDashboard.resx">
       <DependentUpon>UtilityDashboard.cs</DependentUpon>
@@ -202,7 +234,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj">

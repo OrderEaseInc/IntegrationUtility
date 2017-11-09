@@ -152,5 +152,11 @@ namespace LinkGreenODBCUtility
                 Logger.Instance.Error("Pricing failed to sync.");
             }
         }
+
+        private void taskManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var TaskManager = new TaskManager();
+            TaskManager.ShowDialog();
+        }
     }
 }

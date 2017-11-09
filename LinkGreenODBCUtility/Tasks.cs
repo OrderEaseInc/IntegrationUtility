@@ -1,0 +1,168 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Odbc;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LinkGreenODBCUtility
+{
+    class Tasks
+    {
+        public string Task;
+
+        public Tasks(string task = null)
+        {
+            Task = task;
+        }
+
+        public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval)
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            var command = new OdbcCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval})")
+            {
+                Connection = _connection
+            };
+
+            _connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+                Logger.Instance.Debug($"Task saved: '{taskName}'");
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while creating the task {taskName}.");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+            return false;
+        }
+
+        public List<string> GetAll()
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            var command = new OdbcCommand($"SELECT TaskName FROM `Tasks`", _connection);
+            _connection.Open();
+            OdbcDataReader reader = command.ExecuteReader();
+            try
+            {
+                List<string> tasks = new List<string>();
+                while (reader.Read())
+                {
+                    tasks.Add(reader[0].ToString());
+                }
+
+                return tasks;
+            }
+            finally
+            {
+                reader.Close();
+                _connection.Close();
+            }
+        }
+
+        public string GetDisplayName(string task = null)
+        {
+            if (!string.IsNullOrEmpty(task) || !string.IsNullOrEmpty(Task))
+            {
+                if (string.IsNullOrEmpty(task))
+                {
+                    task = Task;
+                }
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = $"DSN={Settings.DsnName}";
+                var command = new OdbcCommand($"SELECT TaskDisplayName FROM `Tasks` WHERE TaskName = '{task}'", _connection);
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        return reader[0].ToString();
+                    }
+
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            return null;
+        }
+
+        public string GetStartDateTime(string task = null)
+        {
+            if (!string.IsNullOrEmpty(task) || !string.IsNullOrEmpty(Task))
+            {
+                if (string.IsNullOrEmpty(task))
+                {
+                    task = Task;
+                }
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = $"DSN={Settings.DsnName}";
+                var command = new OdbcCommand($"SELECT StartDateTime FROM `Tasks` WHERE TaskName = '{task}'", _connection);
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        return reader[0].ToString();
+                    }
+
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            return null;
+        }
+
+        public string GetRepeatInterval(string task = null)
+        {
+            if (!string.IsNullOrEmpty(task) || !string.IsNullOrEmpty(Task))
+            {
+                if (string.IsNullOrEmpty(task))
+                {
+                    task = Task;
+                }
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = $"DSN={Settings.DsnName}";
+                var command = new OdbcCommand($"SELECT MinuteRepeatInterval FROM `Tasks` WHERE TaskName = '{task}'", _connection);
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        return reader[0].ToString();
+                    }
+
+                    return null;
+                }
+                finally
+                {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            return null;
+        }
+    }
+}
