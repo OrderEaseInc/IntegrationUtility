@@ -40,7 +40,13 @@ namespace LinkGreenODBCUtility
 
         private void UtilityDashboard_FormClosing(object sender, FormClosingEventArgs e)
         {
-            JobManager.Dispose();
+            DialogResult dialogResult = MessageBox.Show($"Tasks will not execute while the Integration Utility is closed. Are you sure you want to exit?", "Are you sure?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                JobManager.Dispose();
+            }
+
+            e.Cancel = dialogResult == DialogResult.No;
         }
 
         private void settingsMappingMenuItem_Click(object sender, EventArgs e)
