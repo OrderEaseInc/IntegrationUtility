@@ -29,6 +29,9 @@ namespace LinkGreenODBCUtility
             taskOne.Value = "Categories";
             taskComboBox.Items.Add(taskOne);
 
+            // Start Date/Time
+            startDateTime.Value = DateTime.Now;
+
             // Repeat intervals
             repeatComboBox.DisplayMember = "Text";
             repeatComboBox.ValueMember = "Value";
@@ -83,14 +86,23 @@ namespace LinkGreenODBCUtility
         private void create_Click(object sender, EventArgs e)
         {
             string jobName = (taskComboBox.SelectedItem as ListItem).Value;
+            string jobDisplayName = (taskComboBox.SelectedItem as ListItem).Text;
             DateTime startDateTime = this.startDateTime.Value;
             int repeatInterval = Convert.ToInt32((repeatComboBox.SelectedItem as ListItem).Value);
 
             try
             {
+                var Tasks = new Tasks();
                 if (JobManager.ScheduleJob(jobName, startDateTime, repeatInterval))
                 {
-                    MessageBox.Show($"Task created: {jobName}");
+                    if (Tasks.CreateTask(jobName, jobDisplayName, startDateTime, repeatInterval))
+                    {
+                        MessageBox.Show($"Task created: {jobName}");
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Task {jobName} created but will be lost if application is closed.");
+                    }
                     ActiveForm.Close();
                 }
             }

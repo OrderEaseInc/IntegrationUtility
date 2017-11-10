@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using DataTransfer.AccessDatabase;
+using DataTransfer.AccessDatabase.Models;
 
 namespace LinkGreenODBCUtility
 {
@@ -45,27 +46,19 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
-        public List<string> GetAll()
+        public IEnumerable<Task> GetAll()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={Settings.DsnName}";
-            var command = new OdbcCommand($"SELECT TaskName FROM `Tasks`", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                List<string> tasks = new List<string>();
-                while (reader.Read())
-                {
-                    tasks.Add(reader[0].ToString());
-                }
+            var TaskRepo = new TaskRepository($"DSN={Settings.DsnName}");
+            return TaskRepo.GetAll();
+        }
 
-                return tasks;
-            }
-            finally
+        public void RestoreTasks()
+        {
+            IEnumerable<Task> savedTasks = GetAll();
+
+            foreach (Task task in savedTasks)
             {
-                reader.Close();
-                _connection.Close();
+                JobManager.ScheduleJob(task.TaskName, task.StartDateTime, task.RepeatInterval);
             }
         }
 

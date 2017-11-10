@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -37,9 +38,10 @@ namespace LinkGreenODBCUtility
 
                     return true;
                 }
-                catch (ArgumentException ex)
+                catch (Exception ex)
                 {
                     Logger.Instance.Error($"An error occured while creating task {jobName}: {ex}");
+                    MessageBox.Show($"An error occured while creating task {jobName}. Does the task already exist?", "Error");
                 }
             }
 

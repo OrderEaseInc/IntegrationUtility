@@ -32,6 +32,9 @@ namespace LinkGreenODBCUtility
                 Settings.SetupAppConfig(config.AppSettings.Settings["ApiKey"].Value);
             }
             
+            var Tasks = new Tasks();
+            Tasks.RestoreTasks();
+
             Log.PurgeLog();
         }
 
