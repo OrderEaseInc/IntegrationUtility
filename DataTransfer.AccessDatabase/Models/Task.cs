@@ -15,5 +15,9 @@ namespace DataTransfer.AccessDatabase.Models
         public DateTime StartDateTime { get; set; }
 
         public int RepeatInterval { get; set; }
+
+        public string LastExecuteStatus { get; set; }
+
+        public string Status { get; set; }
     }
 }

@@ -48,6 +48,32 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
+        private static JobKey GetJobKey(string jobName, string groupName = "User")
+        {
+            var groupMatcher = GroupMatcher<JobKey>.GroupContains(groupName);
+            JobKey jobKey = sched.GetJobKeys(groupMatcher).FirstOrDefault(s => s.Name == jobName);
+            return jobKey;
+        }
+
+        private static TriggerKey GetTriggerKey(string triggerName, string groupName = "User")
+        {
+            var groupMatcher = GroupMatcher<TriggerKey>.GroupContains(groupName);
+            TriggerKey key = sched.GetTriggerKeys(groupMatcher).FirstOrDefault(s => s.Name == triggerName);
+            return key;
+        }
+
+        public static IJobDetail GetJob(string jobName)
+        {
+            if (string.IsNullOrEmpty(jobName))
+            {
+                return null;
+            }
+
+            JobKey jobKey = GetJobKey(jobName);
+            IJobDetail job = sched.GetJobDetail(jobKey);
+            return job;
+        }
+
         public static List<IJobDetail> GetJobs()
         {
             List<IJobDetail> jobs = new List<IJobDetail>();
@@ -61,6 +87,69 @@ namespace LinkGreenODBCUtility
             }
 
             return jobs;
+        }
+
+        public static bool DeleteJob(string jobName)
+        {
+            try
+            {
+                JobKey jobKey = GetJobKey(jobName);
+                sched.DeleteJob(jobKey);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public static List<IJobExecutionContext> GetCurrentlyExecutingJobs()
+        {
+            List<IJobExecutionContext> jobs = new List<IJobExecutionContext>();
+            var currentJobs = sched.GetCurrentlyExecutingJobs();
+            foreach (var job in currentJobs)
+            {
+                jobs.Add(job);
+            }
+
+            return jobs;
+        }
+
+        public static bool PauseJob(string jobName)
+        {
+            try
+            {
+                JobKey jobKey = GetJobKey(jobName);
+                sched.PauseJob(jobKey);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public static bool ResumeJob(string jobName)
+        {
+            try
+            {
+                JobKey jobKey = GetJobKey(jobName);
+                sched.ResumeJob(jobKey);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public static bool IsTriggerPaused(string triggerName, string triggerGroup)
+        {
+            TriggerKey key = GetTriggerKey(triggerName, triggerGroup);
+            return sched.GetTriggerState(key) == TriggerState.Paused;
         }
 
         public static void Dispose()

@@ -47,7 +47,6 @@
             this.taskComboBox.Name = "taskComboBox";
             this.taskComboBox.Size = new System.Drawing.Size(189, 21);
             this.taskComboBox.TabIndex = 0;
-            this.taskComboBox.SelectedIndexChanged += new System.EventHandler(this.taskComboBox_SelectedIndexChanged);
             // 
             // taskLabel
             // 
@@ -135,6 +134,7 @@
             this.Name = "CreateTask";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create Task";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CreateTask_FormClosed);
             this.Load += new System.EventHandler(this.CreateTask_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

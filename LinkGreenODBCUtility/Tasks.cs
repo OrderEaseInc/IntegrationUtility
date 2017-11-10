@@ -46,6 +46,35 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
+        public bool DeleteTask(string taskName)
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            var command = new OdbcCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
+            {
+                Connection = _connection
+            };
+
+            _connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+                Logger.Instance.Debug($"Task deleted: '{taskName}'");
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while deleting the task {taskName}.");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+            return false;
+        }
+
         public IEnumerable<Task> GetAll()
         {
             var TaskRepo = new TaskRepository($"DSN={Settings.DsnName}");
@@ -60,6 +89,38 @@ namespace LinkGreenODBCUtility
             {
                 JobManager.ScheduleJob(task.TaskName, task.StartDateTime, task.RepeatInterval);
             }
+        }
+
+        public bool TaskExists(string task = null)
+        {
+            if (!string.IsNullOrEmpty(task) || !string.IsNullOrEmpty(Task))
+            {
+                if (string.IsNullOrEmpty(task))
+                {
+                    task = Task;
+                }
+                var _connection = new OdbcConnection();
+                _connection.ConnectionString = $"DSN={Settings.DsnName}";
+                var command = new OdbcCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", _connection);
+                _connection.Open();
+                OdbcDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                finally
+                {
+                    reader.Close();
+                    _connection.Close();
+                }
+            }
+
+            return false;
         }
 
         public string GetDisplayName(string task = null)

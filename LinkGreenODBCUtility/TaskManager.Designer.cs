@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskManager));
             this.addTask = new System.Windows.Forms.Button();
             this.tasksGridView = new System.Windows.Forms.DataGridView();
-            this.activeTasksLabel = new System.Windows.Forms.Label();
+            this.tasksLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,22 +55,23 @@
             this.tasksGridView.ReadOnly = true;
             this.tasksGridView.Size = new System.Drawing.Size(584, 234);
             this.tasksGridView.TabIndex = 1;
+            this.tasksGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tasksGridView_CellContentClick);
             // 
-            // activeTasksLabel
+            // tasksLabel
             // 
-            this.activeTasksLabel.AutoSize = true;
-            this.activeTasksLabel.Location = new System.Drawing.Point(12, 29);
-            this.activeTasksLabel.Name = "activeTasksLabel";
-            this.activeTasksLabel.Size = new System.Drawing.Size(72, 13);
-            this.activeTasksLabel.TabIndex = 2;
-            this.activeTasksLabel.Text = "Active Tasks:";
+            this.tasksLabel.AutoSize = true;
+            this.tasksLabel.Location = new System.Drawing.Point(12, 29);
+            this.tasksLabel.Name = "tasksLabel";
+            this.tasksLabel.Size = new System.Drawing.Size(39, 13);
+            this.tasksLabel.TabIndex = 2;
+            this.tasksLabel.Text = "Tasks:";
             // 
             // TaskManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(608, 297);
-            this.Controls.Add(this.activeTasksLabel);
+            this.Controls.Add(this.tasksLabel);
             this.Controls.Add(this.tasksGridView);
             this.Controls.Add(this.addTask);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -89,6 +90,6 @@
 
         private System.Windows.Forms.Button addTask;
         private System.Windows.Forms.DataGridView tasksGridView;
-        private System.Windows.Forms.Label activeTasksLabel;
+        private System.Windows.Forms.Label tasksLabel;
     }
 }

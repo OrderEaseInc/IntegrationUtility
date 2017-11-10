@@ -14,6 +14,8 @@ namespace LinkGreenODBCUtility
 {
     public partial class CreateTask : Form
     {
+        private TaskManager _taskManager;
+
         public CreateTask()
         {
             InitializeComponent();
@@ -73,9 +75,9 @@ namespace LinkGreenODBCUtility
             repeatComboBox.Items.Add(repeatFourWeeks);
         }
 
-        private void taskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void CreateTask_FormClosed(object sender, FormClosedEventArgs e)
         {
-
+            TaskManager.LoadTasks();
         }
 
         private void cancel_Click(object sender, EventArgs e)
@@ -93,6 +95,18 @@ namespace LinkGreenODBCUtility
             try
             {
                 var Tasks = new Tasks();
+                if (Tasks.TaskExists(jobName))
+                {
+                    DialogResult dialogResult = MessageBox.Show($"Are you sure you want to overwrite the task {jobName}?", "Overwrite Task?", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        if (JobManager.DeleteJob(jobName))
+                        {
+                            Tasks.DeleteTask(jobName);
+                        }
+                    }
+                }
+
                 if (JobManager.ScheduleJob(jobName, startDateTime, repeatInterval))
                 {
                     if (Tasks.CreateTask(jobName, jobDisplayName, startDateTime, repeatInterval))
@@ -104,12 +118,14 @@ namespace LinkGreenODBCUtility
                         MessageBox.Show($"Task {jobName} created but will be lost if application is closed.");
                     }
                     ActiveForm.Close();
+                    TaskManager.LoadTasks();
                 }
             }
             catch (ArgumentException ex)
             {
                 Logger.Instance.Error($"An error occured while creating the task {jobName}: {ex}");
                 MessageBox.Show($"An error occured while creating the task {jobName}");
+                TaskManager.LoadTasks();
             }
         }
     }
