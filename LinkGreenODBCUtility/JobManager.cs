@@ -89,6 +89,18 @@ namespace LinkGreenODBCUtility
             return jobs;
         }
 
+        public static List<IJobExecutionContext> GetCurrentlyExecutingJobs()
+        {
+            List<IJobExecutionContext> jobs = new List<IJobExecutionContext>();
+            var currentJobs = sched.GetCurrentlyExecutingJobs();
+            foreach (var job in currentJobs)
+            {
+                jobs.Add(job);
+            }
+
+            return jobs;
+        }
+
         public static bool DeleteJob(string jobName)
         {
             try
@@ -102,18 +114,6 @@ namespace LinkGreenODBCUtility
             {
                 return false;
             }
-        }
-
-        public static List<IJobExecutionContext> GetCurrentlyExecutingJobs()
-        {
-            List<IJobExecutionContext> jobs = new List<IJobExecutionContext>();
-            var currentJobs = sched.GetCurrentlyExecutingJobs();
-            foreach (var job in currentJobs)
-            {
-                jobs.Add(job);
-            }
-
-            return jobs;
         }
 
         public static bool PauseJob(string jobName)
