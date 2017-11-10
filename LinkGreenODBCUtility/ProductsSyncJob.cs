@@ -7,7 +7,7 @@ using Quartz;
 
 namespace LinkGreenODBCUtility
 {
-    public class CategoriesSyncJob : IJob
+    public class ProductsSyncJob : IJob
     {
         private static Mapping Mapping = new Mapping();
 
@@ -15,19 +15,19 @@ namespace LinkGreenODBCUtility
         {
             Logger.Instance.Info($"Job started: {GetType().Name}");
 
-            var categories = new Categories();
-            categories.UpdateTemporaryTables();
-            categories.Empty();
+            var products = new Products();
+            products.UpdateTemporaryTables();
+            products.Empty();
 
-            string mappedDsnName = Mapping.GetDsnName("Categories");
+            string mappedDsnName = Mapping.GetDsnName("Products");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Categories") && categories.Publish())
+            if (newMapping.MigrateData("Products") && products.Publish())
             {
-                Logger.Instance.Info("Categories synced.");
+                Logger.Instance.Info("Products synced.");
             }
             else
             {
-                Logger.Instance.Error("Categories failed to sync.");
+                Logger.Instance.Error("Products failed to sync.");
             }
 
             Logger.Instance.Info($"Job finished: {GetType().Name}");

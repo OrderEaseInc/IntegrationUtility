@@ -103,6 +103,7 @@
     <Compile Include="Batch.cs" />
     <Compile Include="BuyerInventories.cs" />
     <Compile Include="Categories.cs" />
+    <Compile Include="CustomersSyncJob.cs" />
     <Compile Include="CategoriesSyncJob.cs" />
     <Compile Include="CreateTask.cs">
       <SubType>Form</SubType>
@@ -142,7 +143,10 @@
     <Compile Include="OdbcWrapper.cs" />
     <Compile Include="PriceLevelPrices.cs" />
     <Compile Include="PriceLevels.cs" />
+    <Compile Include="PriceLevelsSyncJob.cs" />
+    <Compile Include="PricingSyncJob.cs" />
     <Compile Include="Products.cs" />
+    <Compile Include="ProductsSyncJob.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="SupplierInventories.cs" />

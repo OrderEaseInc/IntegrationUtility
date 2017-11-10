@@ -26,10 +26,26 @@ namespace LinkGreenODBCUtility
             // Tasks
             taskComboBox.DisplayMember = "Text";
             taskComboBox.ValueMember = "Value";
-            var taskOne = new ListItem();
-            taskOne.Text = "Sync Categories";
-            taskOne.Value = "Categories";
-            taskComboBox.Items.Add(taskOne);
+            var taskCategories = new ListItem();
+            taskCategories.Text = "Sync Categories";
+            taskCategories.Value = "Categories";
+            taskComboBox.Items.Add(taskCategories);
+            var taskCustomers = new ListItem();
+            taskCustomers.Text = "Sync Customers";
+            taskCustomers.Value = "Customers";
+            taskComboBox.Items.Add(taskCustomers);
+            var taskProducts = new ListItem();
+            taskProducts.Text = "Sync Products";
+            taskProducts.Value = "Products";
+            taskComboBox.Items.Add(taskProducts);
+            var taskPriceLevels = new ListItem();
+            taskPriceLevels.Text = "Sync Price Levels";
+            taskPriceLevels.Value = "Price Levels";
+            taskComboBox.Items.Add(taskPriceLevels);
+            var taskPricing = new ListItem();
+            taskPricing.Text = "Sync Pricing";
+            taskPricing.Value = "Pricing";
+            taskComboBox.Items.Add(taskPricing);
 
             // Start Date/Time
             startDateTime.Value = DateTime.Now;
