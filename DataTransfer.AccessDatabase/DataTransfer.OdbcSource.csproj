@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoRepository.cs" />
+    <Compile Include="ConnectionInstance.cs" />
     <Compile Include="DynamicDataReader.cs" />
     <Compile Include="Models\ProductPrice.cs" />
     <Compile Include="Models\PriceLevel.cs" />
@@ -60,7 +62,9 @@
     <Compile Include="Repositories\SupplierInventoryRepository.cs" />
     <Compile Include="Utils\ReflectionUtils.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LinkGreen.Applications.Common\LinkGreen.Applications.Common.csproj">
       <Project>{A7519764-B219-44E4-9535-211B7FCA3B11}</Project>

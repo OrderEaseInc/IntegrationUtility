@@ -5,6 +5,7 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -21,8 +22,7 @@ namespace LinkGreenODBCUtility
 
         public static void PurgeLog()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {DeadDate.ToOADate()}")
             {
                 Connection = _connection
@@ -50,9 +50,7 @@ namespace LinkGreenODBCUtility
 
         public DataTable LoadLog()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
-
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             string query = $"SELECT `Timestamp`, `Level`, `Message` FROM `{LogTable}` WHERE `Level` NOT LIKE 'DEBUG' ORDER BY `Timestamp` DESC";
             if (Settings.DebugMode)
             {

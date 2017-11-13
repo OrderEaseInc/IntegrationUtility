@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Data.Odbc;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -137,8 +138,7 @@ namespace LinkGreenODBCUtility
 
         private void SaveLog(SeverityLevel level, string text)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
             text = text.Replace("'", "''");
             text = text.Replace("\"", "\\\"");
             var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")

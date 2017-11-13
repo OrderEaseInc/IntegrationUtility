@@ -21,8 +21,7 @@ namespace LinkGreenODBCUtility
 
             pass = Encryption.Encrypt(pass, encryptionKey);
 
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             var deleteCommand = new OdbcCommand($"DELETE * FROM DsnCredentials WHERE DsnName = '{dsn}' AND Username = '{user}'")
             {
                 Connection = _connection
@@ -50,8 +49,7 @@ namespace LinkGreenODBCUtility
 
         public static Credentials GetDsnCreds(string dsn)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT Username, Password FROM DsnCredentials WHERE DsnName = '{dsn}'", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();

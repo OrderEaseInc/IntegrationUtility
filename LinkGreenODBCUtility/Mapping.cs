@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -30,9 +31,8 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetTableNames()
         {
-            var _connection = new OdbcConnection();
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-            _connection.ConnectionString = $"DSN={DsnName}";
             if (creds != null)
             {
                 if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -78,8 +78,7 @@ namespace LinkGreenODBCUtility
 
         public string GetDsnName(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `DsnName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
 
             try
@@ -111,8 +110,7 @@ namespace LinkGreenODBCUtility
 
         public string GetTableMapping(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `MappingName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
 
             try
@@ -144,8 +142,7 @@ namespace LinkGreenODBCUtility
 
         public string GetFieldMapping(string tableName, string fieldName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `MappingName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `FieldName` = '{fieldName}'", _connection);
 
             try
@@ -177,8 +174,7 @@ namespace LinkGreenODBCUtility
 
         public string GetMappingField(string tableName, string mappingName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `FieldName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `MappingName` = '{mappingName}'", _connection);
 
             try
@@ -210,8 +206,7 @@ namespace LinkGreenODBCUtility
 
         public string GetFieldProperty(string tableName, string fieldName, string property)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `{property}` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND (`FieldName` = '{fieldName}' OR `MappingName` = '{fieldName}')", _connection);
 
             try
@@ -243,8 +238,7 @@ namespace LinkGreenODBCUtility
 
         public List<MappingField> GetTableFields(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` FROM `FieldMappings` WHERE `TableName` = '{tableName}'", _connection);
 
             try
@@ -315,8 +309,7 @@ namespace LinkGreenODBCUtility
 
         public List<MappingField> GetUnmappedFields(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
@@ -380,8 +373,7 @@ namespace LinkGreenODBCUtility
 
         public List<MappingField> GetMappedFields(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + TransferDsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
                                           $"FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
@@ -451,9 +443,8 @@ namespace LinkGreenODBCUtility
             {
                 dsnName = Settings.DsnName;
             }
-            var _connection = new OdbcConnection();
+            var _connection = ConnectionInstance.GetConnection($"DSN={dsnName}");
             Credentials creds = DsnCreds.GetDsnCreds(dsnName);
-            _connection.ConnectionString = $"DSN={dsnName}";
             if (creds != null)
             {
                 if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -527,9 +518,8 @@ namespace LinkGreenODBCUtility
 
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
-                var _connection = new OdbcConnection();
+                var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
                 Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                _connection.ConnectionString = $"DSN={DsnName}";
                 if (creds != null)
                 {
                     if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -577,8 +567,7 @@ namespace LinkGreenODBCUtility
                         Logger.Instance.Warning($"No column indexes were created for migrating data to {Settings.DsnName}.{tableName}.");
                     }
 
-                    var _conn = new OdbcConnection();
-                    _conn.ConnectionString = "DSN=" + TransferDsnName;
+                    var _conn = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
                     var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
                     {
                         Connection = _conn
@@ -722,9 +711,8 @@ namespace LinkGreenODBCUtility
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 if (clearProduction) {
-                    var _conn = new OdbcConnection();
+                    var _conn = ConnectionInstance.GetConnection($"DSN={DsnName}");
                     Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                    _conn.ConnectionString = $"DSN={DsnName}";
                     if (creds != null)
                     {
                         if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -756,8 +744,7 @@ namespace LinkGreenODBCUtility
                     }
                 }
 
-                var _connection = new OdbcConnection();
-                _connection.ConnectionString = "DSN=" + TransferDsnName;
+                var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
 
                 string sql = $"SELECT {chainedFromColumnNames} FROM {tableName}";
                 var command = new OdbcCommand(sql) {
@@ -780,9 +767,8 @@ namespace LinkGreenODBCUtility
                         Logger.Instance.Warning($"No column indexes were created for migrating data to {DsnName}.{tableMappingName}.");
                     }
 
-                    var _conn = new OdbcConnection();
+                    var _conn = ConnectionInstance.GetConnection($"DSN={DsnName}");
                     Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                    _conn.ConnectionString = $"DSN={DsnName}";
                     if (creds != null)
                     {
                         if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -882,9 +868,8 @@ namespace LinkGreenODBCUtility
 
                 string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
 
-                var _connection = new OdbcConnection();
+                var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
                 Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                _connection.ConnectionString = $"DSN={DsnName}";
                 if (creds != null)
                 {
                     if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
@@ -924,9 +909,8 @@ namespace LinkGreenODBCUtility
                         Logger.Instance.Warning($"No column indexes were created for migrating data to {TransferDsnName}.{tableName}.");
                     }
 
-                    var _conn = new OdbcConnection();
-                    _conn.ConnectionString = "DSN=" + TransferDsnName;
-                    
+                    var _conn = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
+
                     var rowCount = 0;
                     while (reader.Read()) {
                         if (columnIndexes.Count == updatableColumns.Count + 1) {
@@ -1039,8 +1023,7 @@ namespace LinkGreenODBCUtility
 
         private bool ValidateRequiredFields(string tableName)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={TransferDsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={TransferDsnName}");
             var command = new OdbcCommand($"SELECT * FROM `FieldMappings` " +
                                           $"WHERE `TableName` = '{tableName}' " +
                                           $"AND (`MappingName` = '' OR `MappingName` IS NULL)" +
@@ -1094,9 +1077,8 @@ namespace LinkGreenODBCUtility
 
             if (mappingColumns.Count > 0)
             {
-                var _connection = new OdbcConnection();
+                var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
                 Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                _connection.ConnectionString = $"DSN={DsnName}";
                 if (creds != null)
                 {
                     if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))

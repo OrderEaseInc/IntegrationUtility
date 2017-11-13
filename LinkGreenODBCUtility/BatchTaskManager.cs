@@ -4,6 +4,7 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -20,8 +21,7 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetCommandsByTrigger()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
             var command = new OdbcCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
