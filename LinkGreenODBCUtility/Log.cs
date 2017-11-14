@@ -12,7 +12,7 @@ namespace LinkGreenODBCUtility
     class Log
     {
         private static string LogTable = "Log";
-        private static string DsnName = Settings.DsnName;
+        private static string DsnName = Logger._loggerDsnName;
         private static DateTime DeadDate = DateTime.Now.AddDays(-30);
 
         public Log()

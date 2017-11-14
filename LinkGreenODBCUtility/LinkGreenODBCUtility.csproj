@@ -281,5 +281,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>LinkGreenDataTransfer.mdb</TargetPath>
     </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Database\LinkGreenLog.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>LinkGreenLog.mdb</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 </Project>

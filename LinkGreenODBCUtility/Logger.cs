@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +16,9 @@ namespace LinkGreenODBCUtility
 {
     public class Logger
     {
+        private static OdbcConnection _connection;
+        public static string _loggerDsnName = "LinkGreenLog";
+        private static string _loggerConnectionString = $"DSN={_loggerDsnName}";
         private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
@@ -29,6 +33,12 @@ namespace LinkGreenODBCUtility
         };
 
         static Logger()
+        {
+            Init();
+            _connection = ConnectionInstance.GetConnection(_loggerConnectionString);
+        }
+
+        private static void Init()
         {
             DatetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -138,7 +148,6 @@ namespace LinkGreenODBCUtility
 
         private void SaveLog(SeverityLevel level, string text)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
             text = text.Replace("'", "''");
             text = text.Replace("\"", "\\\"");
             var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
