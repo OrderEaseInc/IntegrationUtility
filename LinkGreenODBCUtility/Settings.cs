@@ -15,6 +15,38 @@ namespace LinkGreenODBCUtility
         public static string DsnName = "LinkGreenDataTransfer";
         public static bool DebugMode = false;
 
+        public static void Init()
+        {
+            try
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
+                if (string.IsNullOrEmpty(encryptionKey))
+                {
+                    Guid g = Guid.NewGuid();
+                    string GuidString = Convert.ToBase64String(g.ToByteArray());
+                    GuidString = GuidString.Replace("=", "");
+                    GuidString = GuidString.Replace("+", "");
+
+                    config.AppSettings.Settings["EncryptionKey"].Value = GuidString;
+                    config.Save(ConfigurationSaveMode.Modified);
+                }
+
+                config.AppSettings.Settings["BaseUrl"].Value = "http://dev.linkgreen.ca/";
+
+                if (!GetSandboxMode())
+                {
+                    config.AppSettings.Settings["BaseUrl"].Value = "https://api.linkgreen.ca/";
+                }
+
+                config.Save(ConfigurationSaveMode.Modified);
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while initializing the app config: {e.Message}");
+            }
+        }
+
         public static bool TryConnect()
         {
             var _connection = new OdbcConnection();
@@ -278,23 +310,77 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
-        public static void SetupAppConfig(string apiKey)
+        public static bool GetSandboxMode()
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = "DSN=" + DsnName;
+            var command = new OdbcCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
+            _connection.Open();
+            OdbcDataReader reader = command.ExecuteReader();
+            try
+            {
+                bool? sandboxMode = null;
+                while (reader.Read())
+                {
+                    sandboxMode = Convert.ToInt32(reader[0].ToString()) == 1;
+                }
+
+                if (sandboxMode == null)
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    sandboxMode = Convert.ToInt32(config.AppSettings.Settings["SandboxMode"].Value) == 1;
+                }
+
+                return sandboxMode ?? true;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occurred while retrieving the setting SandboxMode: {e.Message}");
+            }
+            finally
+            {
+                reader.Close();
+                _connection.Close();
+            }
+
+            return true;
+        }
+
+        public static void SaveSandboxMode(string sandboxMode)
+        {
+            var _connection = new OdbcConnection();
+            _connection.ConnectionString = "DSN=" + DsnName;
+            var command = new OdbcCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
+            {
+                Connection = _connection
+            };
+
+            _connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings["SandboxMode"].Value = sandboxMode;
+                config.Save(ConfigurationSaveMode.Modified);
+
+                Logger.Instance.Debug($"Setting SandboxMode saved: '{sandboxMode}'");
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while updating the setting SandboxMode.");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+        }
+
+        public static void SetupUserConfig(string apiKey)
         {
             try
             {
                 var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
-                if (string.IsNullOrEmpty(encryptionKey))
-                {
-                    Guid g = Guid.NewGuid();
-                    string GuidString = Convert.ToBase64String(g.ToByteArray());
-                    GuidString = GuidString.Replace("=", "");
-                    GuidString = GuidString.Replace("+", "");
-
-                    config.AppSettings.Settings["EncryptionKey"].Value = GuidString;
-                    config.Save(ConfigurationSaveMode.Modified);
-                }
-                
                 UserAndCompany user = WebServiceHelper.GetUserInfoByApiKey(apiKey);
 
                 if (user != null)
@@ -320,7 +406,7 @@ namespace LinkGreenODBCUtility
             }
             catch (Exception e)
             {
-                Logger.Instance.Error($"An error occured while setting up the app config: {e.Message}");
+                Logger.Instance.Error($"An error occured while setting up the user config: {e.Message}");
             }
         }
     }
