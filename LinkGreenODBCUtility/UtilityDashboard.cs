@@ -22,6 +22,8 @@ namespace LinkGreenODBCUtility
 
         private void UtilityDashboard_Load(object sender, EventArgs e)
         {
+            Settings.Init();
+
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings["ApiKey"].Value = Settings.GetApiKey();
             config.Save(ConfigurationSaveMode.Modified);
@@ -29,7 +31,7 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(config.AppSettings.Settings["ApiKey"].Value))
             {
-                Settings.SetupAppConfig(config.AppSettings.Settings["ApiKey"].Value);
+                Settings.SetupUserConfig(config.AppSettings.Settings["ApiKey"].Value);
             }
             
             Log.PurgeLog();

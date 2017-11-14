@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -31,6 +32,7 @@ namespace LinkGreenODBCUtility
             }
             
             updateCategories.Checked = Settings.GetUpdateCategories();
+            sandboxMode.Checked = Settings.GetSandboxMode();
         }
 
         private void cancel_Click(object sender, EventArgs e)
@@ -42,9 +44,10 @@ namespace LinkGreenODBCUtility
         {
             Settings.SaveApiKey(apiKey.Text);
             Settings.SaveUpdateCategories(updateCategories.Checked ? "1" : "0");
+            Settings.SaveSandboxMode(sandboxMode.Checked ? "1" : "0");
             Settings.DebugMode = debugMode.Checked;
             ActiveForm.Close();
-            Logger.Instance.Debug($"Settings saved: (ApiKey: '{apiKey.Text}', DebugMode: {debugMode.Checked}, UpdateCategories: {updateCategories.Checked})");
+            Logger.Instance.Debug($"Settings saved: (ApiKey: '{apiKey.Text}', DebugMode: {debugMode.Checked}, SandboxMode: {sandboxMode.Checked}, UpdateCategories: {updateCategories.Checked})");
         }
 
         private void apiKeyDetailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
