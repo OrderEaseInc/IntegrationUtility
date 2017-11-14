@@ -37,6 +37,8 @@
             this.apiKeyDetailLink = new System.Windows.Forms.LinkLabel();
             this.debugMode = new System.Windows.Forms.CheckBox();
             this.updateCategories = new System.Windows.Forms.CheckBox();
+            this.sandboxMode = new System.Windows.Forms.CheckBox();
+            this.sandboxLabelDetail = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // apiKey
@@ -114,18 +116,39 @@
             this.updateCategories.AutoSize = true;
             this.updateCategories.Checked = true;
             this.updateCategories.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.updateCategories.Location = new System.Drawing.Point(12, 141);
+            this.updateCategories.Location = new System.Drawing.Point(12, 160);
             this.updateCategories.Name = "updateCategories";
             this.updateCategories.Size = new System.Drawing.Size(192, 17);
             this.updateCategories.TabIndex = 8;
             this.updateCategories.Text = "Update Categories (Product Import)";
             this.updateCategories.UseVisualStyleBackColor = true;
             // 
+            // sandboxMode
+            // 
+            this.sandboxMode.AutoSize = true;
+            this.sandboxMode.Location = new System.Drawing.Point(12, 141);
+            this.sandboxMode.Name = "sandboxMode";
+            this.sandboxMode.Size = new System.Drawing.Size(98, 17);
+            this.sandboxMode.TabIndex = 9;
+            this.sandboxMode.Text = "Sandbox Mode";
+            this.sandboxMode.UseVisualStyleBackColor = true;
+            // 
+            // sandboxLabelDetail
+            // 
+            this.sandboxLabelDetail.AutoSize = true;
+            this.sandboxLabelDetail.Location = new System.Drawing.Point(117, 141);
+            this.sandboxLabelDetail.Name = "sandboxLabelDetail";
+            this.sandboxLabelDetail.Size = new System.Drawing.Size(224, 13);
+            this.sandboxLabelDetail.TabIndex = 10;
+            this.sandboxLabelDetail.Text = "( Login for viewing at http://dev.linkgreen.ca )";
+            // 
             // UtilitySettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(359, 216);
+            this.Controls.Add(this.sandboxLabelDetail);
+            this.Controls.Add(this.sandboxMode);
             this.Controls.Add(this.updateCategories);
             this.Controls.Add(this.debugMode);
             this.Controls.Add(this.apiKeyDetailLink);
@@ -158,5 +181,7 @@
         private System.Windows.Forms.LinkLabel apiKeyDetailLink;
         private System.Windows.Forms.CheckBox debugMode;
         private System.Windows.Forms.CheckBox updateCategories;
+        private System.Windows.Forms.CheckBox sandboxMode;
+        private System.Windows.Forms.Label sandboxLabelDetail;
     }
 }
