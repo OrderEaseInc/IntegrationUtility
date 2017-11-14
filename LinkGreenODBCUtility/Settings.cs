@@ -305,8 +305,7 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSandboxMode()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -341,8 +340,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveSandboxMode(string sandboxMode)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
             {
                 Connection = _connection
