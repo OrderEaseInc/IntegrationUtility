@@ -35,7 +35,6 @@ namespace LinkGreenODBCUtility
         static Logger()
         {
             Init();
-            _connection = ConnectionInstance.GetConnection(_loggerConnectionString);
         }
 
         private static void Init()
@@ -148,6 +147,7 @@ namespace LinkGreenODBCUtility
 
         private void SaveLog(SeverityLevel level, string text)
         {
+            _connection = ConnectionInstance.GetConnection(_loggerConnectionString);
             text = text.Replace("'", "''");
             text = text.Replace("\"", "\\\"");
             var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
