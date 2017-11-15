@@ -155,14 +155,17 @@ namespace LinkGreenODBCUtility
                 Connection = _connection
             };
 
-            _connection.Open();
             try
             {
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    _connection.Open();
+                }
                 command.ExecuteNonQuery();
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_loggerConnectionString);
             }
         }
 

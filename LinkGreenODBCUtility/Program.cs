@@ -64,23 +64,9 @@ namespace LinkGreenODBCUtility
                         "DSN=" + logDsnName + "\0DBQ=" + logDsPath + "\0");
                     if (logConnectSuccess)
                     {
-                        var logConnection = ConnectionInstance.GetConnection($"DSN={logDsnName}");
-                        try
-                        {
-                            logConnection.Open();
-                            logConnection.Close();
-                            Application.EnableVisualStyles();
-                            Application.SetCompatibleTextRenderingDefault(false);
-                            Application.Run(new UtilityDashboard());
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show($"Failed to connect to {logDsnName} DSN", "Connection Failed");
-                        }
-                        finally
-                        {
-                            logConnection.Close();
-                        }
+                        Application.EnableVisualStyles();
+                        Application.SetCompatibleTextRenderingDefault(false);
+                        Application.Run(new UtilityDashboard());
                     }
                     else
                     {

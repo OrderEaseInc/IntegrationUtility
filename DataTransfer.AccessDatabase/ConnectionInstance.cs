@@ -65,13 +65,18 @@ namespace DataTransfer.AccessDatabase
                 {
                     keepTrying = false;
                 }
-
-                Thread.Sleep(1000);
             }
 
             sw.Stop();
             
+            connection.Close();
             return connection;
+        }
+
+        public static void CloseConnection(string connectionString)
+        {
+            var connection = _connectionContainer[connectionString];
+            connection.Close();
         }
     }
 }
