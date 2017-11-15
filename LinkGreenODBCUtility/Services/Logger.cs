@@ -160,8 +160,8 @@ namespace LinkGreenODBCUtility
                 if (_connection.State == ConnectionState.Closed)
                 {
                     _connection.Open();
+                    command.ExecuteNonQuery();
                 }
-                command.ExecuteNonQuery();
             }
             finally
             {

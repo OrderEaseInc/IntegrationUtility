@@ -25,9 +25,41 @@ namespace LinkGreenODBCUtility
                 {
                     sched.Start();
 
-                    IJobDetail job = JobBuilder.Create<CategoriesSyncJob>()
-                        .WithIdentity(jobName, "User")
-                        .Build();
+                    IJobDetail job;
+
+                    switch (jobName)
+                    {
+                        case "Categories":
+                            job = JobBuilder.Create<CategoriesSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "Customers":
+                            job = JobBuilder.Create<CustomersSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "Products":
+                            job = JobBuilder.Create<ProductsSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "Price Levels":
+                            job = JobBuilder.Create<PriceLevelsSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "Pricing":
+                            job = JobBuilder.Create<PricingSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        default:
+                            job = JobBuilder.Create<PricingSyncJob>()
+                                .WithIdentity("DefaultJob", "User")
+                                .Build();
+                            break;
+                    }
 
                     ITrigger trigger = TriggerBuilder.Create()
                         .WithSimpleSchedule(x => x.WithIntervalInMinutes(repeatInterval).RepeatForever())

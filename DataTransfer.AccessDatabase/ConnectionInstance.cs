@@ -56,7 +56,7 @@ namespace DataTransfer.AccessDatabase
 
             while (keepTrying)
             {
-                if (sw.Elapsed > TimeSpan.FromSeconds(3600))
+                if (sw.Elapsed > TimeSpan.FromSeconds(36))
                 {
                     connection.Close();
                     // Handle this and inform user
