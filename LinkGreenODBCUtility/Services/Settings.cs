@@ -50,7 +50,7 @@ namespace LinkGreenODBCUtility
 
         public static bool TryConnect()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             try
             {
                 _connection.Open();
@@ -70,7 +70,7 @@ namespace LinkGreenODBCUtility
 
         public static string GetApiKey()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -110,7 +110,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveApiKey(string apiKey)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `ApiKey` = '{apiKey}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -139,7 +139,7 @@ namespace LinkGreenODBCUtility
 
         public static string GetInstallationId()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `InstallationId` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -177,7 +177,7 @@ namespace LinkGreenODBCUtility
         public static void SaveInstallationId()
         {
             Guid guid = Guid.NewGuid();
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `InstallationId` = '{guid}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -206,7 +206,7 @@ namespace LinkGreenODBCUtility
 
         public static bool GetUpdateCategories()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -241,7 +241,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveUpdateCategories(string updateCategories)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -270,7 +270,7 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSanitizeLog()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -305,7 +305,7 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSandboxMode()
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -340,7 +340,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveSandboxMode(string sandboxMode)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
             {
                 Connection = _connection

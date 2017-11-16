@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
@@ -12,11 +13,11 @@ namespace DataTransfer.AccessDatabase
     {
         private static ConnectionInstance instance = null;
         private static readonly object padlock = new object();
-        private static Dictionary<string, OdbcConnection> _connectionContainer;
+        private static ConcurrentDictionary<string, OdbcConnection> _connectionContainer;
 
         private ConnectionInstance()
         {
-            _connectionContainer = new Dictionary<string, OdbcConnection>();
+            _connectionContainer = new ConcurrentDictionary<string, OdbcConnection>();
         }
 
         public static ConnectionInstance Instance
@@ -41,11 +42,11 @@ namespace DataTransfer.AccessDatabase
         {
             if (!_connectionContainer.ContainsKey(connectionString))
             {
-                _connectionContainer.Add(connectionString, new OdbcConnection(connectionString));
+                _connectionContainer.GetOrAdd(connectionString, new OdbcConnection(connectionString));
             }
         }
         
-        public static OdbcConnection GetConnection(string connectionString)
+        public OdbcConnection GetConnection(string connectionString)
         {
             Instance.AddConnectionIfNotExists(connectionString);
             var connection = _connectionContainer[connectionString];
@@ -56,11 +57,15 @@ namespace DataTransfer.AccessDatabase
 
             while (keepTrying)
             {
-                if (sw.Elapsed > TimeSpan.FromSeconds(36))
+                if (sw.Elapsed > TimeSpan.FromSeconds(900)) // 15 mins
                 {
-                    connection.Close();
-                    // Handle this and inform user
+                    if (connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching)
+                    {
+                        connection = RefreshConnection(connectionString);
+                    }
+                    sw.Restart();
                 }
+
                 if (connection.State == ConnectionState.Closed)
                 {
                     keepTrying = false;
@@ -68,8 +73,12 @@ namespace DataTransfer.AccessDatabase
             }
 
             sw.Stop();
-            
-            connection.Close();
+
+            if (connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching)
+            {
+                connection = RefreshConnection(connectionString);
+            }
+
             return connection;
         }
 
@@ -77,6 +86,16 @@ namespace DataTransfer.AccessDatabase
         {
             var connection = _connectionContainer[connectionString];
             connection.Close();
+        }
+
+        public static OdbcConnection RefreshConnection(string connectionString)
+        {
+            var connection = _connectionContainer[connectionString];
+            connection.Close();
+            connection.Dispose();
+            _connectionContainer.TryRemove(connectionString, out connection);
+            Instance.AddConnectionIfNotExists(connectionString);
+            return _connectionContainer[connectionString];
         }
     }
 }

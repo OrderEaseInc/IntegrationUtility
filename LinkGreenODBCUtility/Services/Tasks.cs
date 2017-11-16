@@ -19,7 +19,7 @@ namespace LinkGreenODBCUtility
 
         public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
             var command = new OdbcCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval})")
             {
                 Connection = _connection
@@ -47,7 +47,7 @@ namespace LinkGreenODBCUtility
 
         public bool DeleteTask(string taskName)
         {
-            var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
             var command = new OdbcCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
             {
                 Connection = _connection
@@ -97,7 +97,7 @@ namespace LinkGreenODBCUtility
                 {
                     task = Task;
                 }
-                var _connection = ConnectionInstance.GetConnection($"DSN={Settings.DsnName}");
+                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
                 var command = new OdbcCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", _connection);
                 _connection.Open();
                 OdbcDataReader reader = command.ExecuteReader();

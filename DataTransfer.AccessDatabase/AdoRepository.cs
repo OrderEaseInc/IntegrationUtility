@@ -14,7 +14,7 @@ namespace DataTransfer.AccessDatabase
         protected AdoRepository(string connectionString)
         {
             _connectionString = connectionString;
-            Connection = ConnectionInstance.GetConnection(_connectionString);
+            Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
         }
 
         protected virtual T PopulateRecord(dynamic reader)
