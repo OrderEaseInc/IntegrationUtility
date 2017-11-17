@@ -45,6 +45,35 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
+        public bool SetStatus(string taskName, string status)
+        {
+            var now = DateTime.Now.ToString();
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
+            var command = new OdbcCommand($"UPDATE Tasks SET Status = '{status}', LastExecuted = '{now}' WHERE TaskName = '{taskName}'")
+            {
+                Connection = _connection
+            };
+
+            _connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+                Logger.Instance.Debug($"Task status updated: '{taskName}' {status} {now}");
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Instance.Error($"An error occured while updating the status of task {taskName}.");
+            }
+            finally
+            {
+                _connection.Close();
+            }
+
+            return false;
+        }
+
         public bool DeleteTask(string taskName)
         {
             var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");

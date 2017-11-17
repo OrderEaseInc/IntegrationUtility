@@ -9,11 +9,14 @@ namespace LinkGreenODBCUtility
 {
     public class CategoriesSyncJob : IJob
     {
+        private static string jobName = "Categories";
         private static Mapping Mapping = new Mapping();
 
         public void Execute(IJobExecutionContext context)
         {
             Logger.Instance.Info($"Job started: {GetType().Name}");
+
+            var Tasks = new Tasks();
 
             var categories = new Categories();
             categories.UpdateTemporaryTables();
@@ -24,10 +27,12 @@ namespace LinkGreenODBCUtility
             if (newMapping.MigrateData("Categories") && categories.Publish())
             {
                 Logger.Instance.Info("Categories synced.");
+                Tasks.SetStatus(jobName, "Success");
             }
             else
             {
                 Logger.Instance.Error("Categories failed to sync.");
+                Tasks.SetStatus(jobName, "Failed");
             }
 
             Logger.Instance.Info($"Job finished: {GetType().Name}");

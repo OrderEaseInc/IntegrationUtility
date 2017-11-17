@@ -25,7 +25,7 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, Status FROM {TableName}"))
+            using (var command = new OdbcCommand($"SELECT TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, Status, LastExecuted FROM {TableName}"))
             {
                 return GetRecords(command);
             }
@@ -52,7 +52,8 @@ namespace DataTransfer.AccessDatabase
                     TaskDisplayName = reader.TaskDisplayName,
                     StartDateTime = reader.StartDateTime,
                     RepeatInterval = reader.MinuteRepeatInterval,
-                    LastExecuteStatus = reader.Status
+                    LastExecuteStatus = reader.Status,
+                    LastExecuted = reader.LastExecuted
                 };
             }
             catch (RuntimeBinderException exception)

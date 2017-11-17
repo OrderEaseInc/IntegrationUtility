@@ -19,5 +19,7 @@ namespace DataTransfer.AccessDatabase.Models
         public string LastExecuteStatus { get; set; }
 
         public string Status { get; set; }
+
+        public DateTime? LastExecuted { get; set; }
     }
 }
