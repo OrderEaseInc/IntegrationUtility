@@ -22,7 +22,8 @@ namespace LinkGreenODBCUtility
         private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
-        public static readonly Logger Instance = new Logger();
+        private static Logger instance = null;
+        private static readonly object padlock = new object();
         private static Dictionary<SeverityLevel, string> LevelNames = new Dictionary<SeverityLevel, string>()
         {
             { SeverityLevel.Information, "INFO" },
@@ -35,6 +36,24 @@ namespace LinkGreenODBCUtility
         static Logger()
         {
             Init();
+        }
+
+        public static Logger Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (padlock)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Logger();
+                        }
+                    }
+                }
+                return instance;
+            }
         }
 
         private static void Init()
