@@ -13,22 +13,32 @@ namespace DataTransfer.AccessDatabase
     {
         private const string TableName = "Suppliers";
         private const string TableKey = "SupplierId";
+        private const string DsnName = "LinkGreenDataTransfer";
 
         public SupplierRepository(string connectionString) : base(connectionString) { }
 
         public int DownloadAllSuppliers()
         {
             var suppliers = GetAll();
+            if (suppliers == null)
+            {
+                return 0;
+            }
+
             foreach (var supplier in suppliers) {
                 Insert(supplier);
             }
+
             return suppliers.Count();
         }
 
         public int SyncAllSuppliers()
         {
             var count = 0;
-            var command = new OdbcCommand($"SELECT * FROM {TableName}");
+            var command = new OdbcCommand($"SELECT * FROM {TableName}")
+            {
+                Connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}")
+            };
             var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
             var updatedSuppliers = GetRecords(command);
             foreach (var supplier in updatedSuppliers.Where(s => lgSuppliers.ContainsKey(s.Id))) {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LinkGreenODBCUtility.Services.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -54,9 +55,24 @@ namespace LinkGreenODBCUtility
                                 .WithIdentity(jobName, "User")
                                 .Build();
                             break;
+                        case "Suppliers":
+                            job = JobBuilder.Create<SuppliersSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "SupplierInventory":
+                            job = JobBuilder.Create<SupplierInventorySyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "BuyerInventory":
+                            job = JobBuilder.Create<BuyerInventorySyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
                         default:
-                            job = JobBuilder.Create<PricingSyncJob>()
-                                .WithIdentity("DefaultJob", "User")
+                            job = JobBuilder.Create<CategoriesSyncJob>()
+                                .WithIdentity(jobName, "User")
                                 .Build();
                             break;
                     }
@@ -102,6 +118,11 @@ namespace LinkGreenODBCUtility
             }
 
             JobKey jobKey = GetJobKey(jobName);
+            if (jobKey == null)
+            {
+                return null;
+            }
+
             IJobDetail job = sched.GetJobDetail(jobKey);
             return job;
         }

@@ -25,9 +25,35 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, Status, LastExecuted FROM {TableName}"))
+            using (var command = new OdbcCommand($"SELECT " +
+                                                 $"TaskName, " +
+                                                 $"TaskDisplayName, " +
+                                                 $"StartDateTime, " +
+                                                 $"MinuteRepeatInterval, " +
+                                                 $"Status, " +
+                                                 $"ExecutionStartDateTime, " +
+                                                 $"ExecutionEndDateTime, " +
+                                                 $"ExecutionDuration " +
+                                                 $"FROM {TableName}"))
             {
                 return GetRecords(command);
+            }
+        }
+
+        public Task GetTask(string taskName)
+        {
+            using (var command = new OdbcCommand($"SELECT " +
+                                                 $"TaskName, " +
+                                                 $"TaskDisplayName, " +
+                                                 $"StartDateTime, " +
+                                                 $"MinuteRepeatInterval, " +
+                                                 $"Status, " +
+                                                 $"ExecutionStartDateTime, " +
+                                                 $"ExecutionEndDateTime, " +
+                                                 $"ExecutionDuration " +
+                                                 $"FROM {TableName} WHERE TaskName = '{taskName}'"))
+            {
+                return GetRecord(command);
             }
         }
 
@@ -53,7 +79,9 @@ namespace DataTransfer.AccessDatabase
                     StartDateTime = reader.StartDateTime,
                     RepeatInterval = reader.MinuteRepeatInterval,
                     LastExecuteStatus = reader.Status,
-                    LastExecuted = reader.LastExecuted
+                    ExecutionStartDateTime = reader.ExecutionStartDateTime,
+                    ExecutionEndDateTime = reader.ExecutionEndDateTime,
+                    ExecutionDuration = TimeSpan.FromSeconds(reader.ExecutionDuration)
                 };
             }
             catch (RuntimeBinderException exception)

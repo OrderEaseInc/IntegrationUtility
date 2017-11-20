@@ -20,6 +20,10 @@ namespace DataTransfer.AccessDatabase.Models
 
         public string Status { get; set; }
 
-        public DateTime? LastExecuted { get; set; }
+        public DateTime? ExecutionStartDateTime { get; set; }
+
+        public DateTime? ExecutionEndDateTime { get; set; }
+
+        public TimeSpan? ExecutionDuration { get; set; }
     }
 }

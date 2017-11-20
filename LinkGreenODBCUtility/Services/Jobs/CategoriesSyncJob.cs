@@ -15,8 +15,8 @@ namespace LinkGreenODBCUtility
         public void Execute(IJobExecutionContext context)
         {
             Logger.Instance.Info($"Job started: {GetType().Name}");
-
             var Tasks = new Tasks();
+            Tasks.StartTask(jobName);
 
             var categories = new Categories();
             categories.UpdateTemporaryTables();
@@ -35,6 +35,7 @@ namespace LinkGreenODBCUtility
                 Tasks.SetStatus(jobName, "Failed");
             }
 
+            Tasks.EndTask(jobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

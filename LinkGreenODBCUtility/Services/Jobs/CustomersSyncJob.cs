@@ -15,12 +15,12 @@ namespace LinkGreenODBCUtility
         public void Execute(IJobExecutionContext context)
         {
             Logger.Instance.Info($"Job started: {GetType().Name}");
+            var Tasks = new Tasks();
+            Tasks.StartTask(jobName);
 
             var customers = new Customers();
             customers.UpdateTemporaryTables();
             customers.Empty();
-
-            var Tasks = new Tasks();
 
             string mappedDsnName = Mapping.GetDsnName("Customers");
             var newMapping = new Mapping(mappedDsnName);
@@ -35,6 +35,7 @@ namespace LinkGreenODBCUtility
                 Tasks.SetStatus(jobName, "Failed");
             }
 
+            Tasks.EndTask(jobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

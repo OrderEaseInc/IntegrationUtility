@@ -14,8 +14,8 @@ namespace LinkGreenODBCUtility.Services.Jobs
         public void Execute(IJobExecutionContext context)
         {
             Logger.Instance.Info($"Job started: {GetType().Name}");
-
             var Tasks = new Tasks();
+            Tasks.StartTask(jobName);
 
             var suppliers = new Suppliers();
             var result = suppliers.Publish();
@@ -30,6 +30,7 @@ namespace LinkGreenODBCUtility.Services.Jobs
                 Tasks.SetStatus(jobName, "Failed");
             }
 
+            Tasks.EndTask(jobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

@@ -46,6 +46,12 @@ namespace DataTransfer.AccessDatabase
             }
         }
         
+        /// <summary>
+        /// Used to retrieve a new connection. If a connection is not active (fetching or executing) then it will wait for 15 minutes before timing out.
+        /// NOTE: Do not try and call GetConnection if another useage has not opened it's connection already
+        /// </summary>
+        /// <param name="connectionString">The string to be used for the connection</param>
+        /// <returns>OdbcConnection</returns>
         public OdbcConnection GetConnection(string connectionString)
         {
             Instance.AddConnectionIfNotExists(connectionString);
