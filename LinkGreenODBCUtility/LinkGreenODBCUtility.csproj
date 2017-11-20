@@ -103,8 +103,11 @@
     <Compile Include="Services\Batch\Batch.cs" />
     <Compile Include="Services\BuyerInventories.cs" />
     <Compile Include="Services\Categories.cs" />
+    <Compile Include="Services\Jobs\BuyerInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\CustomersSyncJob.cs" />
     <Compile Include="Services\Jobs\CategoriesSyncJob.cs" />
+    <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
+    <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Views\CreateTask.cs">
       <SubType>Form</SubType>
     </Compile>

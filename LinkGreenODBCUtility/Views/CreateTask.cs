@@ -46,6 +46,18 @@ namespace LinkGreenODBCUtility
             taskPricing.Text = "Sync Pricing";
             taskPricing.Value = "Pricing";
             taskComboBox.Items.Add(taskPricing);
+            var taskSuppliers = new ListItem();
+            taskSuppliers.Text = "Sync Suppliers";
+            taskSuppliers.Value = "Suppliers";
+            taskComboBox.Items.Add(taskSuppliers);
+            var taskSupplierInventory = new ListItem();
+            taskSupplierInventory.Text = "Sync Supplier Inventory";
+            taskSupplierInventory.Value = "SupplierInventory";
+            taskComboBox.Items.Add(taskSupplierInventory);
+            var taskBuyerInventory = new ListItem();
+            taskBuyerInventory.Text = "Sync Buyer Inventory";
+            taskBuyerInventory.Value = "BuyerInventory";
+            taskComboBox.Items.Add(taskBuyerInventory);
 
             // Start Date/Time
             startDateTime.Value = DateTime.Now;
