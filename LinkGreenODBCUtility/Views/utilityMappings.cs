@@ -830,8 +830,15 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Failed to migrate categories.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate categories.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate categories.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate categories.");
+                }
             }
         }
 
@@ -1134,8 +1141,15 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Failed to migrate customers.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate customers.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate customers.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate customers.");
+                }
             }
         }
 
@@ -1143,12 +1157,22 @@ namespace LinkGreenODBCUtility
         {
             string mappedDsnName = Mapping.GetDsnName("Suppliers");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Suppliers")) {
+            if (newMapping.MigrateData("Suppliers"))
+            {
                 MessageBox.Show("Suppliers migrated successfully.", "Suppliers Migrated");
                 Logger.Instance.Debug($"Suppliers migrated using DSN: {mappedDsnName}");
-            } else {
-                MessageBox.Show("Failed to migrate suppliers.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate suppliers.");
+            }
+            else
+            {
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate suppliers.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate suppliers.");
+                }
             }
         }
 
@@ -1183,7 +1207,14 @@ namespace LinkGreenODBCUtility
             if (result) {
                 MessageBox.Show("Supplier Inventories Synced", "Success");
             } else {
-                MessageBox.Show("Supplier Inventories failed to sync. No API Key was found", "Sync Failure");
+                if (!supplierInventories._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Supplier Inventories failed to sync. No API Key was found", "Sync Failure");
+                }
             }
         }
 
@@ -1194,7 +1225,14 @@ namespace LinkGreenODBCUtility
             if (result) {
                 MessageBox.Show("Matched Supplier Inventories Published", "Success");
             } else {
-                MessageBox.Show("Supplier Inventories failed to Publish. No API Key was found", "Publish Failure");
+                if (!supplierInventories._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Supplier Inventories failed to Publish. Is your API key set?", "Publish Failure");
+                }
             }
         }
 
@@ -1357,8 +1395,15 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Failed to migrate products.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate products.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate products.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate products.");
+                }
             }
         }
 
@@ -1370,12 +1415,22 @@ namespace LinkGreenODBCUtility
 
             string mappedDsnName = Mapping.GetDsnName("BuyerInventories");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("BuyerInventories")) {
+            if (newMapping.MigrateData("BuyerInventories"))
+            {
                 MessageBox.Show("Buyer Inventory migrated successfully.", "Buyer Inventory Migrated");
-                Logger.Instance.Debug($"Buyer Inventory migrated using DSN: {mappedDsnName}");
-            } else {
-                MessageBox.Show("Failed to migrate Buyer Inventory.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate Buyer Inventory.");
+                Logger.Instance.Debug($"Buyer inventory migrated using DSN: {mappedDsnName}");
+            }
+            else
+            {
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate buyer inventory.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate inventory.");
+                }
             }
         }
 
@@ -1506,8 +1561,15 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Failed to migrate pricing.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate pricing.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate pricing.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate pricing.");
+                }
             }
         }
 
@@ -1623,13 +1685,20 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevels"))
             {
-                MessageBox.Show("Price levels migrated successfully.", "Price Levels Migrated");
+                MessageBox.Show("Price Levels migrated successfully.", "Price Levels Migrated");
                 Logger.Instance.Debug($"Price Levels migrated using DSN: {mappedDsnName}");
             }
             else
             {
-                MessageBox.Show("Failed to migrate price levels.", "Migration Failed");
-                Logger.Instance.Warning("Failed to migrate price levels.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to migrate price levels.", "Migration Failed");
+                    Logger.Instance.Warning("Failed to migrate price levels.");
+                }
             }
         }
 

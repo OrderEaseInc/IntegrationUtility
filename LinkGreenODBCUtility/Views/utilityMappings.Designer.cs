@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UtilityMappings));
             this.Tables = new System.Windows.Forms.TabControl();
             this.categories = new System.Windows.Forms.TabPage();
+            this.setCategoriesUsernamePW = new System.Windows.Forms.Button();
             this.previewMappingOutput = new System.Windows.Forms.Button();
             this.fieldDescription = new System.Windows.Forms.Label();
             this.fieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -54,6 +55,7 @@
             this.publishToLinkGreen = new System.Windows.Forms.Button();
             this.emptyCategoriesTransferTable = new System.Windows.Forms.Button();
             this.customers = new System.Windows.Forms.TabPage();
+            this.setCustomersUsernamePW = new System.Windows.Forms.Button();
             this.previewCustomerMappingOutput = new System.Windows.Forms.Button();
             this.customerFieldDescription = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -77,6 +79,7 @@
             this.publishCustomers = new System.Windows.Forms.Button();
             this.emptyCustomersTransferTable = new System.Windows.Forms.Button();
             this.productsTab = new System.Windows.Forms.TabPage();
+            this.setProductsUsernamePW = new System.Windows.Forms.Button();
             this.previewProductsMappingOutput = new System.Windows.Forms.Button();
             this.productFieldDescriptionValue = new System.Windows.Forms.Label();
             this.productFieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -100,6 +103,7 @@
             this.publishProducts = new System.Windows.Forms.Button();
             this.emptyProductsTransferTable = new System.Windows.Forms.Button();
             this.priceLevelsTab = new System.Windows.Forms.TabPage();
+            this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
             this.previewPriceLevelsMappingOutput = new System.Windows.Forms.Button();
             this.priceLevelsFieldDescriptionValue = new System.Windows.Forms.Label();
             this.priceLevelsFieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -123,6 +127,7 @@
             this.publishPriceLevels = new System.Windows.Forms.Button();
             this.emptyPriceLevelsTransferTable = new System.Windows.Forms.Button();
             this.pricing = new System.Windows.Forms.TabPage();
+            this.setPricingUsernamePW = new System.Windows.Forms.Button();
             this.previewPricingMappingOutput = new System.Windows.Forms.Button();
             this.pricingFieldDescriptionValue = new System.Windows.Forms.Label();
             this.pricingFieldDescriptionLabel = new System.Windows.Forms.Label();
@@ -146,6 +151,7 @@
             this.publishPricing = new System.Windows.Forms.Button();
             this.emptyPricingTransferTable = new System.Windows.Forms.Button();
             this.suppliers = new System.Windows.Forms.TabPage();
+            this.setSuppliersUsernamePW = new System.Windows.Forms.Button();
             this.pullSuppliersFromLinkGreen = new System.Windows.Forms.Button();
             this.previewSupplierMappingOutput = new System.Windows.Forms.Button();
             this.supplierFieldDescription = new System.Windows.Forms.Label();
@@ -170,6 +176,8 @@
             this.downloadSuppliers = new System.Windows.Forms.Button();
             this.emptySuppliersTransferTable = new System.Windows.Forms.Button();
             this.supplierInventory = new System.Windows.Forms.TabPage();
+            this.publishMatchedSupplierInventorySkus = new System.Windows.Forms.Button();
+            this.setSupplierInventoryUsernamePW = new System.Windows.Forms.Button();
             this.previewSupplierInventoryMappingOutput = new System.Windows.Forms.Button();
             this.supplierInventoryFieldDescription = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -193,6 +201,7 @@
             this.syncSupplierInventory = new System.Windows.Forms.Button();
             this.emptySupplierInventoryTransferTable = new System.Windows.Forms.Button();
             this.buyerInventory = new System.Windows.Forms.TabPage();
+            this.setBuyerInventoryUsernamePW = new System.Windows.Forms.Button();
             this.previewBuyerInventoryMappingOutput = new System.Windows.Forms.Button();
             this.buyerInventoryFieldDescriptionValue = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -214,15 +223,7 @@
             this.buyerInventoryDataSource = new System.Windows.Forms.ListBox();
             this.publishBuyerInventory = new System.Windows.Forms.Button();
             this.emptyBuyerInventoryTransferTable = new System.Windows.Forms.Button();
-            this.publishMatchedSupplierInventorySkus = new System.Windows.Forms.Button();
-            this.setCategoriesUsernamePW = new System.Windows.Forms.Button();
-            this.setCustomersUsernamePW = new System.Windows.Forms.Button();
-            this.setProductsUsernamePW = new System.Windows.Forms.Button();
-            this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
-            this.setPricingUsernamePW = new System.Windows.Forms.Button();
-            this.setSuppliersUsernamePW = new System.Windows.Forms.Button();
-            this.setSupplierInventoryUsernamePW = new System.Windows.Forms.Button();
-            this.setBuyerInventoryUsernamePW = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
@@ -287,10 +288,10 @@
             // setCategoriesUsernamePW
             // 
             this.setCategoriesUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setCategoriesUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(161, 34);
+            this.setCategoriesUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(174, 41);
             this.setCategoriesUsernamePW.Name = "setCategoriesUsernamePW";
-            this.setCategoriesUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setCategoriesUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setCategoriesUsernamePW.TabIndex = 23;
             this.setCategoriesUsernamePW.UseVisualStyleBackColor = true;
             this.setCategoriesUsernamePW.Click += new System.EventHandler(this.setCategoriesUsernamePW_Click);
@@ -543,10 +544,10 @@
             // setCustomersUsernamePW
             // 
             this.setCustomersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setCustomersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.setCustomersUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setCustomersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setCustomersUsernamePW.Location = new System.Drawing.Point(177, 42);
             this.setCustomersUsernamePW.Name = "setCustomersUsernamePW";
-            this.setCustomersUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setCustomersUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setCustomersUsernamePW.TabIndex = 45;
             this.setCustomersUsernamePW.UseVisualStyleBackColor = true;
             this.setCustomersUsernamePW.Click += new System.EventHandler(this.setCustomersUsernamePW_Click);
@@ -799,10 +800,10 @@
             // setProductsUsernamePW
             // 
             this.setProductsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setProductsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.setProductsUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setProductsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setProductsUsernamePW.Location = new System.Drawing.Point(177, 42);
             this.setProductsUsernamePW.Name = "setProductsUsernamePW";
-            this.setProductsUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setProductsUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setProductsUsernamePW.TabIndex = 67;
             this.setProductsUsernamePW.UseVisualStyleBackColor = true;
             this.setProductsUsernamePW.Click += new System.EventHandler(this.setProductsUsernamePW_Click);
@@ -1055,10 +1056,10 @@
             // setPriceLevelsUsernamePW
             // 
             this.setPriceLevelsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setPriceLevelsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setPriceLevelsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(177, 42);
             this.setPriceLevelsUsernamePW.Name = "setPriceLevelsUsernamePW";
-            this.setPriceLevelsUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setPriceLevelsUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setPriceLevelsUsernamePW.TabIndex = 111;
             this.setPriceLevelsUsernamePW.UseVisualStyleBackColor = true;
             this.setPriceLevelsUsernamePW.Click += new System.EventHandler(this.setPriceLevelsUsernamePW_Click);
@@ -1311,10 +1312,10 @@
             // setPricingUsernamePW
             // 
             this.setPricingUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setPricingUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.setPricingUsernamePW.Location = new System.Drawing.Point(164, 35);
+            this.setPricingUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setPricingUsernamePW.Location = new System.Drawing.Point(177, 42);
             this.setPricingUsernamePW.Name = "setPricingUsernamePW";
-            this.setPricingUsernamePW.Size = new System.Drawing.Size(36, 22);
+            this.setPricingUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setPricingUsernamePW.TabIndex = 112;
             this.setPricingUsernamePW.UseVisualStyleBackColor = true;
             this.setPricingUsernamePW.Click += new System.EventHandler(this.setPricingUsernamePW_Click);
@@ -1563,6 +1564,17 @@
             this.suppliers.TabIndex = 5;
             this.suppliers.Text = "Suppliers";
             this.suppliers.UseVisualStyleBackColor = true;
+            // 
+            // setSuppliersUsernamePW
+            // 
+            this.setSuppliersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setSuppliersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setSuppliersUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setSuppliersUsernamePW.Name = "setSuppliersUsernamePW";
+            this.setSuppliersUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setSuppliersUsernamePW.TabIndex = 113;
+            this.setSuppliersUsernamePW.UseVisualStyleBackColor = true;
+            this.setSuppliersUsernamePW.Click += new System.EventHandler(this.setSuppliersUsernamePW_Click);
             // 
             // pullSuppliersFromLinkGreen
             // 
@@ -1820,6 +1832,27 @@
             this.supplierInventory.Text = "Supplier Inventory";
             this.supplierInventory.UseVisualStyleBackColor = true;
             // 
+            // publishMatchedSupplierInventorySkus
+            // 
+            this.publishMatchedSupplierInventorySkus.Location = new System.Drawing.Point(83, 497);
+            this.publishMatchedSupplierInventorySkus.Name = "publishMatchedSupplierInventorySkus";
+            this.publishMatchedSupplierInventorySkus.Size = new System.Drawing.Size(126, 23);
+            this.publishMatchedSupplierInventorySkus.TabIndex = 67;
+            this.publishMatchedSupplierInventorySkus.Text = "Publish Matched SKUs";
+            this.publishMatchedSupplierInventorySkus.UseVisualStyleBackColor = true;
+            this.publishMatchedSupplierInventorySkus.Click += new System.EventHandler(this.publishMatchedSupplierInventorySkus_Click);
+            // 
+            // setSupplierInventoryUsernamePW
+            // 
+            this.setSupplierInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setSupplierInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setSupplierInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setSupplierInventoryUsernamePW.Name = "setSupplierInventoryUsernamePW";
+            this.setSupplierInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setSupplierInventoryUsernamePW.TabIndex = 114;
+            this.setSupplierInventoryUsernamePW.UseVisualStyleBackColor = true;
+            this.setSupplierInventoryUsernamePW.Click += new System.EventHandler(this.setSupplierInventoryUsernamePW_Click);
+            // 
             // previewSupplierInventoryMappingOutput
             // 
             this.previewSupplierInventoryMappingOutput.Location = new System.Drawing.Point(217, 423);
@@ -2034,6 +2067,7 @@
             // 
             // buyerInventory
             // 
+            this.buyerInventory.Controls.Add(this.label3);
             this.buyerInventory.Controls.Add(this.setBuyerInventoryUsernamePW);
             this.buyerInventory.Controls.Add(this.previewBuyerInventoryMappingOutput);
             this.buyerInventory.Controls.Add(this.buyerInventoryFieldDescriptionValue);
@@ -2062,6 +2096,17 @@
             this.buyerInventory.TabIndex = 7;
             this.buyerInventory.Text = "Buyer Inventory";
             this.buyerInventory.UseVisualStyleBackColor = true;
+            // 
+            // setBuyerInventoryUsernamePW
+            // 
+            this.setBuyerInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setBuyerInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setBuyerInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setBuyerInventoryUsernamePW.Name = "setBuyerInventoryUsernamePW";
+            this.setBuyerInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setBuyerInventoryUsernamePW.TabIndex = 115;
+            this.setBuyerInventoryUsernamePW.UseVisualStyleBackColor = true;
+            this.setBuyerInventoryUsernamePW.Click += new System.EventHandler(this.setBuyerInventoryUsernamePW_Click);
             // 
             // previewBuyerInventoryMappingOutput
             // 
@@ -2264,103 +2309,15 @@
             this.emptyBuyerInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptyBuyerInventoryTransferTable.Click += new System.EventHandler(this.emptyBuyerInventoriesTransferTable_Click);
             // 
-            // publishMatchedSupplierInventorySkus
+            // label3
             // 
-            this.publishMatchedSupplierInventorySkus.Location = new System.Drawing.Point(83, 497);
-            this.publishMatchedSupplierInventorySkus.Name = "publishMatchedSupplierInventorySkus";
-            this.publishMatchedSupplierInventorySkus.Size = new System.Drawing.Size(126, 23);
-            this.publishMatchedSupplierInventorySkus.TabIndex = 67;
-            this.publishMatchedSupplierInventorySkus.Text = "Publish Matched SKUs";
-            this.publishMatchedSupplierInventorySkus.UseVisualStyleBackColor = true;
-            this.publishMatchedSupplierInventorySkus.Click += new System.EventHandler(this.publishMatchedSupplierInventorySkus_Click);
-            // 
-            // setCategoriesUsernamePW
-            // 
-            this.setCategoriesUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setCategoriesUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(174, 41);
-            this.setCategoriesUsernamePW.Name = "setCategoriesUsernamePW";
-            this.setCategoriesUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setCategoriesUsernamePW.TabIndex = 23;
-            this.setCategoriesUsernamePW.UseVisualStyleBackColor = true;
-            this.setCategoriesUsernamePW.Click += new System.EventHandler(this.setCategoriesUsernamePW_Click);
-            // 
-            // setCustomersUsernamePW
-            // 
-            this.setCustomersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setCustomersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setCustomersUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setCustomersUsernamePW.Name = "setCustomersUsernamePW";
-            this.setCustomersUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setCustomersUsernamePW.TabIndex = 45;
-            this.setCustomersUsernamePW.UseVisualStyleBackColor = true;
-            this.setCustomersUsernamePW.Click += new System.EventHandler(this.setCustomersUsernamePW_Click);
-            // 
-            // setProductsUsernamePW
-            // 
-            this.setProductsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setProductsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setProductsUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setProductsUsernamePW.Name = "setProductsUsernamePW";
-            this.setProductsUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setProductsUsernamePW.TabIndex = 67;
-            this.setProductsUsernamePW.UseVisualStyleBackColor = true;
-            this.setProductsUsernamePW.Click += new System.EventHandler(this.setProductsUsernamePW_Click);
-            // 
-            // setPriceLevelsUsernamePW
-            // 
-            this.setPriceLevelsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setPriceLevelsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setPriceLevelsUsernamePW.Name = "setPriceLevelsUsernamePW";
-            this.setPriceLevelsUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setPriceLevelsUsernamePW.TabIndex = 111;
-            this.setPriceLevelsUsernamePW.UseVisualStyleBackColor = true;
-            this.setPriceLevelsUsernamePW.Click += new System.EventHandler(this.setPriceLevelsUsernamePW_Click);
-            // 
-            // setPricingUsernamePW
-            // 
-            this.setPricingUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setPricingUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setPricingUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setPricingUsernamePW.Name = "setPricingUsernamePW";
-            this.setPricingUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setPricingUsernamePW.TabIndex = 112;
-            this.setPricingUsernamePW.UseVisualStyleBackColor = true;
-            this.setPricingUsernamePW.Click += new System.EventHandler(this.setPricingUsernamePW_Click);
-            // 
-            // setSuppliersUsernamePW
-            // 
-            this.setSuppliersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setSuppliersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setSuppliersUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setSuppliersUsernamePW.Name = "setSuppliersUsernamePW";
-            this.setSuppliersUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setSuppliersUsernamePW.TabIndex = 113;
-            this.setSuppliersUsernamePW.UseVisualStyleBackColor = true;
-            this.setSuppliersUsernamePW.Click += new System.EventHandler(this.setSuppliersUsernamePW_Click);
-            // 
-            // setSupplierInventoryUsernamePW
-            // 
-            this.setSupplierInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setSupplierInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setSupplierInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setSupplierInventoryUsernamePW.Name = "setSupplierInventoryUsernamePW";
-            this.setSupplierInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setSupplierInventoryUsernamePW.TabIndex = 114;
-            this.setSupplierInventoryUsernamePW.UseVisualStyleBackColor = true;
-            this.setSupplierInventoryUsernamePW.Click += new System.EventHandler(this.setSupplierInventoryUsernamePW_Click);
-            // 
-            // setBuyerInventoryUsernamePW
-            // 
-            this.setBuyerInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setBuyerInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setBuyerInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setBuyerInventoryUsernamePW.Name = "setBuyerInventoryUsernamePW";
-            this.setBuyerInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setBuyerInventoryUsernamePW.TabIndex = 115;
-            this.setBuyerInventoryUsernamePW.UseVisualStyleBackColor = true;
-            this.setBuyerInventoryUsernamePW.Click += new System.EventHandler(this.setBuyerInventoryUsernamePW_Click);
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(28, 468);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 116;
+            this.label3.Text = "Actions:";
             // 
             // UtilityMappings
             // 
@@ -2596,6 +2553,7 @@
         private System.Windows.Forms.Button setSuppliersUsernamePW;
         private System.Windows.Forms.Button setSupplierInventoryUsernamePW;
         private System.Windows.Forms.Button setBuyerInventoryUsernamePW;
+        private System.Windows.Forms.Label label3;
     }
 }
 

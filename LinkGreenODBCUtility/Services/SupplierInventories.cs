@@ -8,6 +8,7 @@ namespace LinkGreenODBCUtility
         private readonly SupplierInventoryRepository repository;
         private const string TableName = "SupplierInventories";
         private const string TableKey = "SupplierSKU";
+        public bool _validFields;
 
         public SupplierInventories()
         {
@@ -48,10 +49,22 @@ namespace LinkGreenODBCUtility
 
             var mappedDsnName = new Mapping().GetDsnName(TableName);
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData(TableName)) {
-                Logger.Instance.Debug($"Supplier Inventories migrated using DSN: {mappedDsnName}");
-            } else {
-                Logger.Instance.Warning("Failed to migrate Supplier Inventories.");
+            if (newMapping.MigrateData(TableName))
+            {
+                Logger.Instance.Debug($"Suppliers migrated using DSN: {mappedDsnName}");
+            }
+            else
+            {
+                if (!newMapping._validFields)
+                {
+                    _validFields = false;
+                }
+                else
+                {
+                    Logger.Instance.Warning("Failed to migrate suppliers.");
+                }
+
+                return false;
             }
 
             // Push any matched BuyerSKUs back up to LinkGreen
@@ -70,9 +83,20 @@ namespace LinkGreenODBCUtility
             // Clear out the supplier inventory data & re-populate it
             var mappedDsnName = new Mapping().GetDsnName(TableName);
             var newMapping = new Mapping(mappedDsnName);
-            newMapping.PushData(TableName, TableKey, true);
-            
-            return true;
+            if (newMapping.PushData(TableName, TableKey, true))
+            {
+                Logger.Instance.Debug("Supplier Inventory migrated from utility to mapped production database.");
+                return true;
+            }
+
+            if (!newMapping._validPushFields)
+            {
+                _validFields = false;
+            }
+
+            Logger.Instance.Error("Failed to migrate Supplier Inventory from utility to mapped production database.");
+
+            return false;
         }
     }
 }

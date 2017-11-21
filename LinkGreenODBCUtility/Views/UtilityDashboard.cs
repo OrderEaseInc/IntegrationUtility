@@ -66,15 +66,30 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("Categories");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Categories") && categories.Publish())
+            if (newMapping.MigrateData("Categories"))
             {
-                MessageBox.Show("Categories Synced", "Success");
-                Logger.Instance.Info("Categories synced.");
+                if (categories.Publish())
+                {
+                    MessageBox.Show("Categories Synced", "Success");
+                    Logger.Instance.Info("Categories synced.");
+                }
+                else
+                {
+                    MessageBox.Show("Categories failed to sync. Do you have your API Key set?", "Sync Failure");
+                    Logger.Instance.Error("Categories failed to sync.");
+                }
             }
             else
             {
-                MessageBox.Show("Categories failed to sync. Do you have your API Key set?", "Sync Failure");
-                Logger.Instance.Error("Categories failed to sync.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Categories failed to migrate.", "Unknown Error");
+                    Logger.Instance.Error("Categories failed to migrate.");
+                }
             }
         }
 
@@ -98,15 +113,30 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("Customers");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Customers") && customers.Publish())
+            if (newMapping.MigrateData("Customers"))
             {
-                MessageBox.Show("Customers Synced", "Success");
-                Logger.Instance.Info("Customers synced.");
+                if (customers.Publish())
+                {
+                    MessageBox.Show("Customers Synced", "Success");
+                    Logger.Instance.Info("Customers synced.");
+                }
+                else
+                {
+                    MessageBox.Show("Customers failed to sync. Do you have your API Key set?", "Sync Failure");
+                    Logger.Instance.Error("Customers failed to sync.");
+                }
             }
             else
             {
-                MessageBox.Show("Customers failed to sync. Do you have your API Key set?", "Sync Failure");
-                Logger.Instance.Error("Customers failed to sync.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Customers failed to migrate.", "Unknown Error");
+                    Logger.Instance.Error("Customers failed to migrate.");
+                }
             }
         }
 
@@ -118,15 +148,30 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("Products");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Products") && products.Publish())
+            if (newMapping.MigrateData("Products"))
             {
-                MessageBox.Show("Products Synced", "Success");
-                Logger.Instance.Info("Products synced.");
+                if (products.Publish())
+                {
+                    MessageBox.Show("Products Synced", "Success");
+                    Logger.Instance.Info("Products synced.");
+                }
+                else
+                {
+                    MessageBox.Show("Products failed to sync. Do you have your API Key set?", "Sync Failure");
+                    Logger.Instance.Error("Products failed to sync.");
+                }
             }
             else
             {
-                MessageBox.Show("Products failed to sync. Do you have your API Key set?", "Sync Failure");
-                Logger.Instance.Error("Products failed to sync.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Products failed to migrate.", "Unknown Error");
+                    Logger.Instance.Error("Products failed to migrate.");
+                }
             }
         }
 
@@ -138,15 +183,30 @@ namespace LinkGreenODBCUtility
             
             string mappedDsnName = Mapping.GetDsnName("PriceLevels");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("PriceLevels") && priceLevels.Publish())
+            if (newMapping.MigrateData("PriceLevels"))
             {
-                MessageBox.Show("Price Levels Synced", "Success");
-                Logger.Instance.Info("Price Levels synced.");
+                if (priceLevels.Publish())
+                {
+                    MessageBox.Show("Price Levels Synced", "Success");
+                    Logger.Instance.Info("Price Levels synced.");
+                }
+                else
+                {
+                    MessageBox.Show("Price Levels failed to sync. Do you have your API Key set?", "Sync Failure");
+                    Logger.Instance.Error("Price Levels failed to sync.");
+                }
             }
             else
             {
-                MessageBox.Show("Price Levels failed to sync. Do you have your API Key set?", "Sync Failure");
-                Logger.Instance.Error("Price Levels failed to sync.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Price Levels failed to migrate.", "Unknown Error");
+                    Logger.Instance.Error("Price Levels failed to migrate.");
+                }
             }
         }
 
@@ -158,15 +218,30 @@ namespace LinkGreenODBCUtility
 
             string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("PriceLevelPrices") && priceLevelPrices.Publish())
+            if (newMapping.MigrateData("PriceLevelPrices"))
             {
-                MessageBox.Show("Pricing Synced", "Success");
-                Logger.Instance.Info("Pricing synced.");
+                if (priceLevelPrices.Publish())
+                {
+                    MessageBox.Show("Pricing Synced", "Success");
+                    Logger.Instance.Info("Pricing synced.");
+                }
+                else
+                {
+                    MessageBox.Show("Pricing failed to sync. Do you have your API Key set?", "Sync Failure");
+                    Logger.Instance.Error("Pricing failed to sync.");
+                }
             }
             else
             {
-                MessageBox.Show("Pricing failed to sync. Do you have your API Key set?", "Sync Failure");
-                Logger.Instance.Error("Pricing failed to sync.");
+                if (!newMapping._validFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Pricing failed to migrate.", "Unknown Error");
+                    Logger.Instance.Error("Pricing failed to migrate.");
+                }
             }
         }
 
