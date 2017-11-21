@@ -89,7 +89,11 @@ namespace LinkGreenODBCUtility
             DelColumn.UseColumnTextForButtonValue = true;
             _tasksGridView.Columns.Add(DelColumn);
 
+            // TODO: Restore scroll position
+//            int horizontalOffset = FirstCompletelyVisibleColumnIndex;
             _tasksGridView.Refresh();
+            _tasksGridView.ClearSelection();
+//            _tasksGridView.FirstDisplayedScrollingColumnIndex = horizontalOffset;
         }
 
         private void addTask_Click(object sender, EventArgs e)
@@ -101,6 +105,12 @@ namespace LinkGreenODBCUtility
         private void TaskManager_Load(object sender, EventArgs e)
         {
             _tasksGridView = tasksGridView;
+
+            Timer timer = new Timer();
+            timer.Interval = (10 * 1000); // 10 secs
+            timer.Tick += taskTimer_Tick;
+            timer.Start();
+
             LoadTasks();
         }
 
@@ -179,6 +189,29 @@ namespace LinkGreenODBCUtility
                 {
                     MessageBox.Show($"An error occured while deleting the task.", "Delete Error");
                 }
+            }
+        }
+
+        private void taskTimer_Tick(object sender, EventArgs e)
+        {
+            LoadTasks();
+        }
+
+        public static int FirstCompletelyVisibleColumnIndex
+        {
+            get
+            {
+                // Number of visible columns.
+                int count = _tasksGridView.DisplayedColumnCount(false);
+
+                // Index of first displayed column.
+                int index = _tasksGridView.FirstDisplayedScrollingColumnIndex;
+
+                // Return index of first visible row (if only one visible), else the second one.
+                // (This to be sure that we return an index of a column that is completely visible).
+                // return index == count - 1 ? index : index + 1;
+
+                return index == count - 1 ? index : index + 0;
             }
         }
     }

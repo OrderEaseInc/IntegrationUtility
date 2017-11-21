@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskManager));
             this.addTask = new System.Windows.Forms.Button();
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.tasksLabel = new System.Windows.Forms.Label();
+            this.taskTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,6 +68,10 @@
             this.tasksLabel.TabIndex = 2;
             this.tasksLabel.Text = "Tasks:";
             // 
+            // taskTimer
+            // 
+            this.taskTimer.Tick += new System.EventHandler(this.taskTimer_Tick);
+            // 
             // TaskManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -91,5 +97,6 @@
         private System.Windows.Forms.Button addTask;
         private System.Windows.Forms.DataGridView tasksGridView;
         private System.Windows.Forms.Label tasksLabel;
+        private System.Windows.Forms.Timer taskTimer;
     }
 }
