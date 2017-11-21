@@ -45,6 +45,11 @@ namespace DataTransfer.AccessDatabase
                 _connectionContainer.GetOrAdd(connectionString, new OdbcConnection(connectionString));
             }
         }
+
+        internal static bool ConnectionExists(string connectionString)
+        {
+            return _connectionContainer.ContainsKey(connectionString);
+        }
         
         /// <summary>
         /// Used to retrieve a new connection. If a connection is not active (fetching or executing) then it will wait for 15 minutes before timing out.
@@ -54,8 +59,12 @@ namespace DataTransfer.AccessDatabase
         /// <returns>OdbcConnection</returns>
         public OdbcConnection GetConnection(string connectionString)
         {
-            Instance.AddConnectionIfNotExists(connectionString);
-            var connection = _connectionContainer[connectionString];
+            var connection = new OdbcConnection();
+
+            if (ConnectionExists(connectionString))
+            {
+                connection = _connectionContainer[connectionString];
+            }
             
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -67,31 +76,36 @@ namespace DataTransfer.AccessDatabase
                 {
                     if (connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching)
                     {
-                        connection = RefreshConnection(connectionString);
+                        CloseConnection(connectionString);
                     }
                     sw.Restart();
                 }
 
-                if (connection.State == ConnectionState.Closed)
+                if (ConnectionExists(connectionString))
                 {
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    AddConnectionIfNotExists(connectionString);
+                    connection = _connectionContainer[connectionString];
                     keepTrying = false;
                 }
             }
 
             sw.Stop();
 
-            if (connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching)
-            {
-                connection = RefreshConnection(connectionString);
-            }
-
             return connection;
         }
 
         public static void CloseConnection(string connectionString)
         {
-            var connection = _connectionContainer[connectionString];
-            connection.Close();
+            if (ConnectionExists(connectionString))
+            {
+                var connection = _connectionContainer[connectionString];
+                connection.Close();
+                _connectionContainer.TryRemove(connectionString, out connection);
+            }
         }
 
         public static OdbcConnection RefreshConnection(string connectionString)

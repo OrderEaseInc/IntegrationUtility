@@ -40,7 +40,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
 
             return false;
@@ -69,7 +69,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
 
             return false;
@@ -99,7 +99,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
 
             return false;
@@ -138,7 +138,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
 
             return false;
@@ -166,7 +166,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
 
             return false;
@@ -218,7 +218,7 @@ namespace LinkGreenODBCUtility
                 finally
                 {
                     reader.Close();
-                    _connection.Close();
+                    ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
                 }
             }
 

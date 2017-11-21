@@ -7,6 +7,7 @@ namespace LinkGreenODBCUtility
         private readonly SupplierRepository _supplierRepository;
         private const string TableName = "Suppliers";
         private const string TableKey = "SupplierId";
+        public bool _validPushFields;
 
         public Suppliers()
         {
@@ -30,7 +31,8 @@ namespace LinkGreenODBCUtility
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
             _supplierRepository.SaveFieldMapping(fieldName, mappingName);
-            Logger.Instance.Debug($"{TableName} field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
+            Logger.Instance.Debug(
+                $"{TableName} field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
         public bool Download()
@@ -48,16 +50,25 @@ namespace LinkGreenODBCUtility
             // Push any missing records to the Production database
             var mappedDsnName = new Mapping().GetDsnName(TableName);
             var newMapping = new Mapping(mappedDsnName);
-            newMapping.PushData(TableName, TableKey);
 
-            // Update the Access database with the latest info from the production db
-            newMapping.UpdateData(TableName, TableKey);
+            if (newMapping.PushData(TableName, TableKey))
+            {
+                // Update the Access database with the latest info from the production db
+                newMapping.UpdateData(TableName, TableKey);
 
-            // Send it up to LinkGreen
-            var result = _supplierRepository.SyncAllSuppliers();
-            Logger.Instance.Debug($"{TableName} {result} suppliers contact info updated in LinkGreen");
+                // Send it up to LinkGreen
+                var result = _supplierRepository.SyncAllSuppliers();
+                Logger.Instance.Debug($"{TableName} {result} suppliers contact info updated in LinkGreen");
 
-            return true;
+                return true;
+            }
+
+            if (!newMapping._validPushFields)
+            {
+                _validPushFields = false;
+            }
+
+            return false;
         }
     }
 }

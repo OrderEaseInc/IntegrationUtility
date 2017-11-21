@@ -17,6 +17,7 @@ namespace LinkGreenODBCUtility
         public static string TransferDsnName = Settings.DsnName;
         public bool _validFields = true;
         public bool _validPushFields = true;
+        public bool _validUpdateFields;
 
         public Mapping()
         {
@@ -74,7 +75,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
@@ -106,7 +107,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -138,7 +139,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -170,7 +171,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -202,7 +203,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -234,7 +235,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -305,7 +306,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -369,7 +370,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -435,7 +436,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
@@ -494,7 +495,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={dsnName}");
             }
 
             return new List<string>();
@@ -645,7 +646,6 @@ namespace LinkGreenODBCUtility
                     finally
                     {
                         reader.Close();
-                        _connection.Close();
                     }
                 }
                 catch (OdbcException e)
@@ -655,7 +655,7 @@ namespace LinkGreenODBCUtility
                 }
                 finally
                 {
-                    _connection.Close();
+                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
                 }
             }
 
@@ -702,23 +702,14 @@ namespace LinkGreenODBCUtility
                         Connection = _conn
                     };
 
-                    try
-                    {
-                        _conn.Open();
-                    }
-                    catch (OdbcException e)
-                    {
-                        Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
-                        return false;
-                    }
-
                     try {
-                            clearCommand.ExecuteNonQuery();
-                            Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
+                        _conn.Open();
+                        clearCommand.ExecuteNonQuery();
+                        Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
                     } catch (OdbcException e) {
                         Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
                     } finally {
-                        _conn.Close();
+                        ConnectionInstance.CloseConnection($"DSN={DsnName}");
                     }
                 }
 
@@ -777,32 +768,22 @@ namespace LinkGreenODBCUtility
                                 Connection = _conn
                             };
 
-                            try
-                            {
-                                _conn.Open();
-                            }
-                            catch (OdbcException e)
-                            {
-                                Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
-                                return false;
-                            }
-
                             if (!string.IsNullOrEmpty(existsSql)) {
                                 var existsCommand = new OdbcCommand(existsSql, _conn);
                                 var existsReader = existsCommand.ExecuteReader();
                                 if (existsReader.Read()) {
                                     // there's already a record with this key. move along...
-                                    _conn.Close();
                                     continue;
                                 }
                             }
                             try {
+                                _conn.Open();
                                 comm.ExecuteNonQuery();
                                 rowCount++;
                             } catch (OdbcException e) {
                                 Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
                             } finally {
-                                _conn.Close();
+                                ConnectionInstance.CloseConnection($"DSN={DsnName}");
                             }
 
                         }
@@ -817,7 +798,7 @@ namespace LinkGreenODBCUtility
                     return true;
                 } finally {
                     reader.Close();
-                    _connection.Close();
+                    ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                 }
             }
 
@@ -901,7 +882,6 @@ namespace LinkGreenODBCUtility
                                 }
                             }
                             if (!readerColumns.Any()) {
-                                _conn.Close();
                                 continue;
                             }
 
@@ -929,7 +909,7 @@ namespace LinkGreenODBCUtility
                             } catch (OdbcException e) {
                                 Logger.Instance.Error($"Failed to update record in {DsnName}.{tableMappingName}: {e.Message} \n\nCommand: {comm.CommandText}");
                             } finally {
-                                _conn.Close();
+                                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                             }
 
                         }
@@ -944,11 +924,11 @@ namespace LinkGreenODBCUtility
                     return true;
                 } finally {
                     reader.Close();
-                    _connection.Close();
+                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
                 }
             }
 
-            MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+            _validUpdateFields = false;
             return false;
         }
 
@@ -1028,7 +1008,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
 
             return true;
@@ -1111,7 +1091,7 @@ namespace LinkGreenODBCUtility
                 }
                 finally
                 {
-                    _connection.Close();
+                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
                 }
             }
 

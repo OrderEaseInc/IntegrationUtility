@@ -38,7 +38,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
             }
         }
     }

@@ -63,7 +63,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                Connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return list;
         }
@@ -94,7 +94,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                Connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return record;
         }
@@ -125,7 +125,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                Connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return list;
         }
@@ -141,7 +141,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                Connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
         }
 

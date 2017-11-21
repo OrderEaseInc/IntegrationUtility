@@ -1196,7 +1196,14 @@ namespace LinkGreenODBCUtility
             if(result) {
                 MessageBox.Show("Suppliers Synced", "Success");
             } else {
-                MessageBox.Show("Suppliers failed to sync. No API Key was found", "Sync Failure");
+                if (!suppliers._validPushFields)
+                {
+                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                }
+                else
+                {
+                    MessageBox.Show("Suppliers failed to sync. No API Key was found", "Sync Failure");
+                }
             }
         }
 
