@@ -4,7 +4,7 @@ namespace LinkGreen.Applications.Common.Model
 {
     public class SupplierInventory
     {
-        public string BuyerLinkedSku { get; set; }
+        public string[] BuyerLinkedSkus { get; set; }
         public decimal? CatalogPrice { get; set; }
         public string Description { get; set; }
         public int? Inventory { get; set; }
@@ -15,6 +15,7 @@ namespace LinkGreen.Applications.Common.Model
         // NOTE these aren't in the LinkGreen API payload
         public int? SupplierId { get; set; }
         public string OurSupplierNumber { get; set; }
+        public string BuyerLinkedSku { get; set; }
 
         public SupplierInventory Clone()
         {
