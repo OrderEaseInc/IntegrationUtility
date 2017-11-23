@@ -70,6 +70,11 @@ namespace LinkGreenODBCUtility
                                 .WithIdentity(jobName, "User")
                                 .Build();
                             break;
+                        case SupplierSkuMatchJob.JobName:
+                            job = JobBuilder.Create<SupplierSkuMatchJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
                         default:
                             job = JobBuilder.Create<CategoriesSyncJob>()
                                 .WithIdentity(jobName, "User")

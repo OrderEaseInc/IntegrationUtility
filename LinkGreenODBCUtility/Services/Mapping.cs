@@ -46,7 +46,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -86,7 +88,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -118,7 +122,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -150,7 +156,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -182,7 +190,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -214,7 +224,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -246,7 +258,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -319,7 +333,9 @@ namespace LinkGreenODBCUtility
                                             $"AND (`MappingName` = '' OR `MappingName` IS NULL)", _connection);
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -384,7 +400,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -458,7 +476,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -539,7 +559,9 @@ namespace LinkGreenODBCUtility
 
                 try
                 {
-                    _connection.Open();
+                    if (_connection.State != ConnectionState.Open) {
+                        _connection.Open();
+                    }
 
                     OdbcDataReader reader = command.ExecuteReader();
                     var columnIndexes = new List<KeyValuePair<string, int>>();
@@ -703,7 +725,9 @@ namespace LinkGreenODBCUtility
                     };
 
                     try {
-                        _conn.Open();
+                        if (_conn.State != ConnectionState.Open) {
+                            _conn.Open();
+                        }
                         clearCommand.ExecuteNonQuery();
                         Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
                     } catch (OdbcException e) {
@@ -719,12 +743,18 @@ namespace LinkGreenODBCUtility
                 var command = new OdbcCommand(sql) {
                     Connection = _connection
                 };
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
                 OdbcDataReader reader = command.ExecuteReader();
                 Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
                 try {
-                    for (int x = 0; x < reader.FieldCount; x++) {
-                        string fieldName = GetFieldMapping(tableName, reader.GetName(x));
+                    // we have to cache this info because the reader is only good for a single read,
+                    //  or the connection becomes unreliable.
+                    var fieldCount = reader.FieldCount;
+                    var fieldNames = Enumerable.Range(0, fieldCount).ToDictionary(i => i, i => reader.GetName(i));
+                    for (int x = 0; x < fieldCount; x++) {
+                        string fieldName = GetFieldMapping(tableName, fieldNames[x]);
                         if (!string.IsNullOrEmpty(fieldName)) {
                             columnIndexes.Add(fieldName, x);
                         }
@@ -751,6 +781,10 @@ namespace LinkGreenODBCUtility
                     string existsSql = null;
 
                     var rowCount = 0;
+                    if (command.Connection.State != ConnectionState.Open) {
+                        command.Connection.Open();
+                    }
+                    reader = command.ExecuteReader();
                     while (reader.Read()) {
                         if (columnIndexes.Count == toColumns.Count) {                            
                             var readerColumns = new List<string>();
@@ -769,15 +803,24 @@ namespace LinkGreenODBCUtility
                             };
 
                             if (!string.IsNullOrEmpty(existsSql)) {
-                                var existsCommand = new OdbcCommand(existsSql, _conn);
-                                var existsReader = existsCommand.ExecuteReader();
-                                if (existsReader.Read()) {
-                                    // there's already a record with this key. move along...
-                                    continue;
+                                try {
+                                    var existsCommand = new OdbcCommand(existsSql, _conn);
+                                    if (_conn.State != ConnectionState.Open) {
+                                        _conn.Open();
+                                    }
+                                    var existsReader = existsCommand.ExecuteReader();
+                                    if (existsReader.Read()) {
+                                        // there's already a record with this key. move along...
+                                        continue;
+                                    }
+                                } finally {
+                                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
                                 }
                             }
                             try {
-                                _conn.Open();
+                                if (_conn.State != ConnectionState.Open) {
+                                    _conn.Open();
+                                }
                                 comm.ExecuteNonQuery();
                                 rowCount++;
                             } catch (OdbcException e) {
@@ -844,7 +887,9 @@ namespace LinkGreenODBCUtility
 
                 try
                 {
-                    _connection.Open();
+                    if (_connection.State != ConnectionState.Open) {
+                        _connection.Open();
+                    }
                 }
                 catch (OdbcException e)
                 {
@@ -895,7 +940,9 @@ namespace LinkGreenODBCUtility
 
                             try
                             {
-                                _conn.Open();
+                                if (_conn.State != ConnectionState.Open) {
+                                    _conn.Open();
+                                }
                             }
                             catch (OdbcException e)
                             {
@@ -989,7 +1036,9 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                _connection.Open();
+                if (_connection.State != ConnectionState.Open) {
+                    _connection.Open();
+                }
             }
             catch (OdbcException e)
             {
@@ -1053,7 +1102,9 @@ namespace LinkGreenODBCUtility
 
                 try
                 {
-                    _connection.Open();
+                    if (_connection.State != ConnectionState.Open) {
+                        _connection.Open();
+                    }
                 }
                 catch (OdbcException e)
                 {

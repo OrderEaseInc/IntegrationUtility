@@ -44,7 +44,9 @@ namespace DataTransfer.AccessDatabase
             var list = new List<T>();
 
             command.Connection = Connection;
-            Connection.Open();
+            if (Connection.State != ConnectionState.Open) {
+                Connection.Open();
+            }
             try
             {
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
@@ -72,7 +74,9 @@ namespace DataTransfer.AccessDatabase
         {
             T record = null;
             command.Connection = Connection;
-            Connection.Open();
+            if (Connection.State != ConnectionState.Open) {
+                Connection.Open();
+            }
             try
             {
                 //var reader = command.ExecuteReader();
@@ -103,7 +107,9 @@ namespace DataTransfer.AccessDatabase
             var list = new List<T>();
             command.Connection = Connection;
             command.CommandType = CommandType.StoredProcedure;
-            Connection.Open();
+            if (Connection.State != ConnectionState.Open) {
+                Connection.Open();
+                }
             try
             {
                 //var reader = command.ExecuteReader();
@@ -134,7 +140,9 @@ namespace DataTransfer.AccessDatabase
         {
             command.Connection = Connection;
             command.CommandType = CommandType.Text;
-            Connection.Open();
+            if (Connection.State != ConnectionState.Open) {
+                Connection.Open();
+            }
             try
             {
                 command.ExecuteNonQuery();

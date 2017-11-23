@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Odbc;
 using System.Linq;
 using System.Text;
@@ -85,7 +86,9 @@ namespace LinkGreenODBCUtility
                 Connection = _connection
             };
 
-            _connection.Open();
+            if (_connection.State != ConnectionState.Open) {
+                _connection.Open();
+            }
             try
             {
                 _executionStartDateTime = dateNow;
