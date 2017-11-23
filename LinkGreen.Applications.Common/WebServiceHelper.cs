@@ -156,8 +156,8 @@ namespace LinkGreen.Applications.Common
             var response
                 = Client.Execute<ApiResult<List<InventoryItemResponse>>>(request);
 
-            if (response.Data.Result == null)
-                return null;
+            if (response?.Data?.Result == null)
+                return new List<InventoryItemResponse>();
 
             var inventory = response.Data.Item;
             return inventory;
@@ -171,8 +171,8 @@ namespace LinkGreen.Applications.Common
             var response
                 = Client.Execute<ApiResult<List<CompanyAndRelationshipResult>>>(request);
 
-            if (response.Data.Result == null)
-                return null;
+            if (response?.Data?.Result == null)
+                return new List<CompanyAndRelationshipResult>();
 
             var companies = response.Data.Item;
             return companies;
@@ -186,8 +186,8 @@ namespace LinkGreen.Applications.Common
             var response
                 = Client.Execute<ApiResult<List<PrivateCategory>>>(request);
 
-            if (response.Data.Result == null)
-                return null;
+            if (response?.Data?.Result == null)
+                return new List<PrivateCategory>();
 
             var cats = response.Data.Item;
             return cats;
@@ -199,7 +199,7 @@ namespace LinkGreen.Applications.Common
             var request = new RestRequest(requestUrl, Method.GET);
             var response = Client.Execute<ApiResult<List<Supplier>>>(request);
 
-            if (response.Data.Result == null) return null;
+            if (response?.Data?.Result == null) return new List<Supplier>();
 
             var buyers = response.Data.Item;
             return buyers;
@@ -211,7 +211,7 @@ namespace LinkGreen.Applications.Common
             var request = new RestRequest(requestUrl, Method.GET);
             var response = Client.Execute<ApiResult<List<SupplierInventory>>>(request);
 
-            if (response.Data.Result == null) return null;
+            if (response?.Data?.Result == null) return new List<SupplierInventory>();
 
             var inventory = response.Data.Item;
             return inventory;

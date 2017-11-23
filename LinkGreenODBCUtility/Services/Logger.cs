@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,15 +10,20 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Data.Odbc;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
     public class Logger
     {
+        private static OdbcConnection _connection;
+        public static string _loggerDsnName = "LinkGreenLog";
+        private static string _loggerConnectionString = $"DSN={_loggerDsnName}";
         private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
-        public static readonly Logger Instance = new Logger();
+        private static Logger instance = null;
+        private static readonly object padlock = new object();
         private static Dictionary<SeverityLevel, string> LevelNames = new Dictionary<SeverityLevel, string>()
         {
             { SeverityLevel.Information, "INFO" },
@@ -28,6 +34,29 @@ namespace LinkGreenODBCUtility
         };
 
         static Logger()
+        {
+            Init();
+        }
+
+        public static Logger Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (padlock)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Logger();
+                        }
+                    }
+                }
+                return instance;
+            }
+        }
+
+        private static void Init()
         {
             DatetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -137,8 +166,7 @@ namespace LinkGreenODBCUtility
 
         private void SaveLog(SeverityLevel level, string text)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = $"DSN={Settings.DsnName}";
+            _connection = ConnectionInstance.Instance.GetConnection(_loggerConnectionString);
             text = text.Replace("'", "''");
             text = text.Replace("\"", "\\\"");
             var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
@@ -146,14 +174,20 @@ namespace LinkGreenODBCUtility
                 Connection = _connection
             };
 
-            _connection.Open();
             try
             {
-                command.ExecuteNonQuery();
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    _connection.Open();
+                    if (_connection.State == ConnectionState.Open)
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_loggerConnectionString);
             }
         }
 

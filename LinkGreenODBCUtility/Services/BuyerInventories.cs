@@ -35,8 +35,8 @@ namespace LinkGreenODBCUtility
 
         public void UpdateTemporaryTables()
         {
-            TaskManager taskManager = new TaskManager("BuyerInventories");
-            var commands = taskManager.GetCommandsByTrigger();
+            BatchTaskManager batchTaskManager = new BatchTaskManager("BuyerInventories");
+            var commands = batchTaskManager.GetCommandsByTrigger();
             foreach (string cmd in commands) {
                 Batch.Exec(cmd);
             }

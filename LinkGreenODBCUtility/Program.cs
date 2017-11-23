@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -55,9 +56,22 @@ namespace LinkGreenODBCUtility
             {
                 if (Settings.TryConnect())
                 {
-                    Application.EnableVisualStyles();
-                    Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new UtilityDashboard());
+                    string logDsnName = Logger._loggerDsnName;
+                    string logDsPath = AppDomain.CurrentDomain.BaseDirectory + $"{logDsnName}.mdb";
+                    bool logConnectSuccess = Utils.CreateDataSource((IntPtr)0,
+                        ODBC_Request_Modes.ODBC_ADD_SYS_DSN,
+                        "Microsoft Access Driver (*.mdb)\0",
+                        "DSN=" + logDsnName + "\0DBQ=" + logDsPath + "\0");
+                    if (logConnectSuccess)
+                    {
+                        Application.EnableVisualStyles();
+                        Application.SetCompatibleTextRenderingDefault(false);
+                        Application.Run(new UtilityDashboard());
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Failed to create {logDsnName} DSN", "DSN Creation Failed");
+                    }
                 }
                 else
                 {

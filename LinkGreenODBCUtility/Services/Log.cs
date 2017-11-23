@@ -5,13 +5,14 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
     class Log
     {
         private static string LogTable = "Log";
-        private static string DsnName = Settings.DsnName;
+        private static string DsnName = Logger._loggerDsnName;
         private static DateTime DeadDate = DateTime.Now.AddDays(-30);
 
         public Log()
@@ -21,8 +22,7 @@ namespace LinkGreenODBCUtility
 
         public static void PurgeLog()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {DeadDate.ToOADate()}")
             {
                 Connection = _connection
@@ -44,15 +44,13 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
         public DataTable LoadLog()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
-
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             string query = $"SELECT `Timestamp`, `Level`, `Message` FROM `{LogTable}` WHERE `Level` NOT LIKE 'DEBUG' ORDER BY `Timestamp` DESC";
             if (Settings.DebugMode)
             {
@@ -77,7 +75,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             var mapping = new Mapping();

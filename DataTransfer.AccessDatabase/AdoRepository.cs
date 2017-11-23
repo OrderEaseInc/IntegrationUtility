@@ -8,12 +8,13 @@ namespace DataTransfer.AccessDatabase
 {
     public abstract class AdoRepository<T> where T : class
     {
-        // ReSharper disable once StaticMemberInGenericType b/c it's a repository per type we can definitely keep one connection per repo
-        private static OdbcConnection _connection;
+        private OdbcConnection Connection;
+        private readonly string _connectionString;
 
         protected AdoRepository(string connectionString)
         {
-            _connection = new OdbcConnection(connectionString);
+            _connectionString = connectionString;
+            Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
         }
 
         protected virtual T PopulateRecord(dynamic reader)
@@ -41,8 +42,9 @@ namespace DataTransfer.AccessDatabase
         protected IEnumerable<T> GetRecords(OdbcCommand command)
         {
             var list = new List<T>();
-            command.Connection = _connection;
-            _connection.Open();
+
+            command.Connection = Connection;
+            Connection.Open();
             try
             {
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
@@ -61,7 +63,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return list;
         }
@@ -69,8 +71,8 @@ namespace DataTransfer.AccessDatabase
         protected T GetRecord(OdbcCommand command)
         {
             T record = null;
-            command.Connection = _connection;
-            _connection.Open();
+            command.Connection = Connection;
+            Connection.Open();
             try
             {
                 //var reader = command.ExecuteReader();
@@ -92,16 +94,16 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return record;
         }
         protected IEnumerable<T> ExecuteStoredProc(OdbcCommand command)
         {
             var list = new List<T>();
-            command.Connection = _connection;
+            command.Connection = Connection;
             command.CommandType = CommandType.StoredProcedure;
-            _connection.Open();
+            Connection.Open();
             try
             {
                 //var reader = command.ExecuteReader();
@@ -123,29 +125,28 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
             return list;
         }
 
         protected void ExecuteCommand(OdbcCommand command)
         {
-            command.Connection = _connection;
+            command.Connection = Connection;
             command.CommandType = CommandType.Text;
-            _connection.Open();
+            Connection.Open();
             try
             {
                 command.ExecuteNonQuery();
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection(_connectionString);
             }
         }
 
         public static string NullableString(string value) => value == null ? "null" : $"'{value.Replace("'", "''").Replace("\"", "\\\"")}'";
         public static string NullableInt(int? value) => value.HasValue ? value.ToString() : "null";
         public static string NullableDecimal(decimal? value) => value.HasValue ? value.ToString() : "null";
-
     }
 }

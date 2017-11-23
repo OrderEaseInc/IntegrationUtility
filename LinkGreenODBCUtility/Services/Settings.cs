@@ -5,6 +5,7 @@ using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 
@@ -49,8 +50,7 @@ namespace LinkGreenODBCUtility
 
         public static bool TryConnect()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             try
             {
                 _connection.Open();
@@ -62,7 +62,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return true;
@@ -70,8 +70,7 @@ namespace LinkGreenODBCUtility
 
         public static string GetApiKey()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -103,7 +102,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return null;
@@ -111,8 +110,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveApiKey(string apiKey)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `ApiKey` = '{apiKey}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -135,14 +133,13 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
         public static string GetInstallationId()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `InstallationId` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -171,7 +168,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return null;
@@ -180,8 +177,7 @@ namespace LinkGreenODBCUtility
         public static void SaveInstallationId()
         {
             Guid guid = Guid.NewGuid();
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `InstallationId` = '{guid}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -204,14 +200,13 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
         public static bool GetUpdateCategories()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -238,7 +233,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return true;
@@ -246,8 +241,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveUpdateCategories(string updateCategories)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -270,14 +264,13 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
         public static bool GetSanitizeLog()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -304,7 +297,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return false;
@@ -312,8 +305,7 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSandboxMode()
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
             OdbcDataReader reader = command.ExecuteReader();
@@ -340,7 +332,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
 
             return true;
@@ -348,8 +340,7 @@ namespace LinkGreenODBCUtility
 
         public static void SaveSandboxMode(string sandboxMode)
         {
-            var _connection = new OdbcConnection();
-            _connection.ConnectionString = "DSN=" + DsnName;
+            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             var command = new OdbcCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
             {
                 Connection = _connection
@@ -372,7 +363,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                _connection.Close();
+                ConnectionInstance.CloseConnection($"DSN={DsnName}");
             }
         }
 
