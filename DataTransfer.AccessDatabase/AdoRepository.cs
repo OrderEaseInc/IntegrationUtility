@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Objects;
 using System.Data.Odbc;
-using System.Data.SqlClient;
 
 namespace DataTransfer.AccessDatabase
 {
     public abstract class AdoRepository<T> where T : class
     {
-        private OdbcConnection Connection;
         private readonly string _connectionString;
 
         protected AdoRepository(string connectionString)
         {
             _connectionString = connectionString;
-            Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
         }
 
         protected virtual T PopulateRecord(dynamic reader)
@@ -24,14 +22,8 @@ namespace DataTransfer.AccessDatabase
 
         public virtual void SaveTableMapping(string dsnName, string tableName, string linkGreenTableName)
         {
-            using (var command = new OdbcCommand($"DELETE * FROM `TableMappings` WHERE `TableName` = '{linkGreenTableName}'"))
-            {
-                ExecuteCommand(command);
-            }
-            using (var command = new OdbcCommand($"INSERT INTO `TableMappings` (`DsnName`, `TableName`, `MappingName`) VALUES ('{dsnName}', '{linkGreenTableName}', '{tableName}')"))
-            {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM `TableMappings` WHERE `TableName` = '{linkGreenTableName}'");
+            ExecuteCommand($"INSERT INTO `TableMappings` (`DsnName`, `TableName`, `MappingName`) VALUES ('{dsnName}', '{linkGreenTableName}', '{tableName}')");
         }
 
         public virtual void SaveFieldMapping(string fieldName, string mappingName)
@@ -39,117 +31,76 @@ namespace DataTransfer.AccessDatabase
             throw new NotImplementedException();
         }
 
-        protected IEnumerable<T> GetRecords(OdbcCommand command)
+        protected IEnumerable<T> GetRecords(string sql)
         {
             var list = new List<T>();
 
-            command.Connection = Connection;
-            if (Connection.State != ConnectionState.Open) {
-                Connection.Open();
-            }
-            try
-            {
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
-                //var reader = command.ExecuteReader();
+            using (var connection = new OdbcConnection(_connectionString)) {
+                using (var command = new OdbcCommand(sql, connection)) {
+                    connection.Open();
+                    try {
+                        dynamic reader = new DynamicDataReader(command.ExecuteReader());
+                        //var reader = command.ExecuteReader();
 
-                try
-                {
-                    while (reader.Read())
-                        list.Add(PopulateRecord(reader));
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
+                        try {
+                            while (reader.Read())
+                                list.Add(PopulateRecord(reader));
+                        } finally {
+                            // Always call Close when done reading.
+                            reader.Close();
+                        }
+                    } finally {
+                        connection.Close();
+                    }
+                    return list;
                 }
             }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_connectionString);
-            }
-            return list;
         }
 
-        protected T GetRecord(OdbcCommand command)
+        protected T GetRecord(string sql, params ObjectParameter[] parameters)
         {
             T record = null;
-            command.Connection = Connection;
-            if (Connection.State != ConnectionState.Open) {
-                Connection.Open();
-            }
-            try
-            {
-                //var reader = command.ExecuteReader();
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
-                
-                try
-                {
-                    while (reader.Read())
-                    {
-                        record = PopulateRecord(reader);
-                        break;
+            using (var connection = new OdbcConnection(_connectionString)) {
+                using (var command = new OdbcCommand(sql, connection)) {
+                    foreach (var parameter in parameters) {
+                        command.Parameters.Add(parameter);
                     }
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
-                }
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_connectionString);
-            }
-            return record;
-        }
-        protected IEnumerable<T> ExecuteStoredProc(OdbcCommand command)
-        {
-            var list = new List<T>();
-            command.Connection = Connection;
-            command.CommandType = CommandType.StoredProcedure;
-            if (Connection.State != ConnectionState.Open) {
-                Connection.Open();
-                }
-            try
-            {
-                //var reader = command.ExecuteReader();
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
+                    connection.Open();
 
-                try
-                {
-                    while (reader.Read())
-                    {
-                        var record = PopulateRecord(reader);
-                        if (record != null) list.Add(record);
+                    try {
+                        //var reader = command.ExecuteReader();
+                        dynamic reader = new DynamicDataReader(command.ExecuteReader());
+
+                        try {
+                            while (reader.Read()) {
+                                record = PopulateRecord(reader);
+                                break;
+                            }
+                        } finally {
+                            // Always call Close when done reading.
+                            reader.Close();
+                        }
+                    } finally {
+                        connection.Close();
                     }
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
+                    return record;
                 }
             }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_connectionString);
-            }
-            return list;
         }
 
-        protected void ExecuteCommand(OdbcCommand command)
+        protected void ExecuteCommand(string sql)
         {
-            command.Connection = Connection;
-            command.CommandType = CommandType.Text;
-            if (Connection.State != ConnectionState.Open) {
-                Connection.Open();
-            }
-            try
-            {
-                command.ExecuteNonQuery();
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_connectionString);
+            using (var connection = new OdbcConnection(_connectionString)) {
+                using (var command = new OdbcCommand(sql, connection)) {
+
+                    command.CommandType = CommandType.Text;
+                    connection.Open();
+                    try {
+                        command.ExecuteNonQuery();
+                    } finally {
+                        connection.Close();
+                    }
+                }
             }
         }
 

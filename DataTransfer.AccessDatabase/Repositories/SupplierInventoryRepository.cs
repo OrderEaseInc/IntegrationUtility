@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using System.Linq;
 using LinkGreen.Applications.Common;
@@ -33,16 +32,12 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'");
         }
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM {TableName}");
         }
 
         private void Insert(SupplierInventory inventory, Supplier supplier)
@@ -54,9 +49,7 @@ namespace DataTransfer.AccessDatabase
                     $"VALUES ({NullableString(buyerLinkedSku)}, {NullableDecimal(inventory.CatalogPrice)}, " +
                     $"{NullableString(inventory.Description)}, {NullableInt(inventory.Inventory)}, {inventory.ItemId}," +
                     $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)})";
-                using (var command = new OdbcCommand(sql)) {
-                    ExecuteCommand(command);
-                }
+                ExecuteCommand(sql);
             }
         }
 
@@ -69,8 +62,7 @@ namespace DataTransfer.AccessDatabase
             //  Questionable - maybe this should be configurable?
             foreach (var supplier in suppliers.Where(s => !string.IsNullOrEmpty(s.OurContactInfo.OurSupplierNumber))) {
                 var lgSupplierInventories = WebServiceHelper.GetSupplierInventory(supplier.Id).ToDictionary(si => si.ItemId);
-                var command = new OdbcCommand($"SELECT * FROM {TableName} Where SupplierId = {supplier.Id}");
-                var updatedSupplierInventories = GetRecords(command);
+                var updatedSupplierInventories = GetRecords($"SELECT * FROM {TableName} Where SupplierId = {supplier.Id}");
                 foreach (var inventory in updatedSupplierInventories.Where(i => !string.IsNullOrEmpty(i.BuyerLinkedSku) && lgSupplierInventories.ContainsKey(i.ItemId))) {
                     var lgSupplierInventory = lgSupplierInventories[inventory.ItemId];
                     if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == inventory.BuyerLinkedSku))) {

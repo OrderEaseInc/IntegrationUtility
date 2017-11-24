@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using LinkGreen.Applications.Common.Model;
 using Microsoft.CSharp.RuntimeBinder;
@@ -15,23 +14,17 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM {TableName}");
         }
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'");
         }
 
         public IEnumerable<BuyerInventory> GetAll()
         {
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName}")) {
-                return GetRecords(command);
-            }
+            return GetRecords($"SELECT * FROM {TableName}");
         }
 
         protected override BuyerInventory PopulateRecord(dynamic reader)

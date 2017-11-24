@@ -35,12 +35,8 @@ namespace DataTransfer.AccessDatabase
         public int SyncAllSuppliers()
         {
             var count = 0;
-            var command = new OdbcCommand($"SELECT * FROM {TableName}")
-            {
-                Connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}")
-            };
             var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
-            var updatedSuppliers = GetRecords(command);
+            var updatedSuppliers = GetRecords($"SELECT * FROM {TableName}");
             foreach (var supplier in updatedSuppliers.Where(s => lgSuppliers.ContainsKey(s.Id))) {
                 var lgSupplier = lgSuppliers[supplier.Id];
                 WebServiceHelper.UpdateSupplierContactInfo(lgSupplier, supplier.OurContactInfo.OurSupplierNumber);
@@ -52,16 +48,12 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'");
         }
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM {TableName}");
         }
 
         private IEnumerable<Supplier> GetAll()
@@ -69,7 +61,7 @@ namespace DataTransfer.AccessDatabase
             var suppliers = WebServiceHelper.GetAllSuppliers();
             return suppliers;
         }
-        
+
         private void Insert(Supplier supplier)
         {
             var sql =
@@ -77,9 +69,7 @@ namespace DataTransfer.AccessDatabase
                 $"Values ({supplier.Id}, {NullableString(supplier.Name)}, {NullableString(supplier.OurContactInfo?.ContactName)}, " +
                 $"{NullableString(supplier.OurContactInfo?.Email)}, {NullableString(supplier.OurContactInfo?.Phone)}, " +
                 $"{NullableString(supplier.OurContactInfo?.OurBillToNumber)}, {NullableString(supplier.OurContactInfo?.OurSupplierNumber)})";
-            using (var command = new OdbcCommand(sql)) {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand(sql);
         }
 
         protected override Supplier PopulateRecord(dynamic reader)
