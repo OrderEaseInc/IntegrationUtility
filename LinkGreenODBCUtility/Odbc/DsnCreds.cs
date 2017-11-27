@@ -21,72 +21,66 @@ namespace LinkGreenODBCUtility
 
             pass = Encryption.Encrypt(pass, encryptionKey);
 
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var deleteCommand = new OdbcCommand($"DELETE * FROM DsnCredentials WHERE DsnName = '{dsn}' AND Username = '{user}'")
-            {
-                Connection = _connection
-            };
-            var insertCommand = new OdbcCommand($"INSERT INTO DsnCredentials (DsnName, Username, Password) VALUES ('{dsn}', '{user}', '{pass}')")
-            {
-                Connection = _connection
-            };
+            using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                try {
+                    _connection.Open();
+                    using (var deleteCommand = new OdbcCommand($"DELETE * FROM DsnCredentials WHERE DsnName = '{dsn}' AND Username = '{user}'", _connection)) {
+                        try {
+                            deleteCommand.ExecuteNonQuery();
+                        } catch (Exception e) {
+                            Logger.Instance.Error($"An error occured while saving Dsn Credentials.");
+                        }
+                    }
 
-            _connection.Open();
-            try
-            {
-                deleteCommand.ExecuteNonQuery();
-                insertCommand.ExecuteNonQuery(); 
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while saving Dsn Credentials.");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                    using (var insertCommand = new OdbcCommand($"INSERT INTO DsnCredentials (DsnName, Username, Password) VALUES ('{dsn}', '{user}', '{pass}')", _connection)) {
+                        try {
+                            insertCommand.ExecuteNonQuery();
+                        } catch (Exception e) {
+                            Logger.Instance.Error($"An error occured while saving Dsn Credentials.");
+                        }
+                    }
+                } finally {
+                    _connection.Close();
+                }
             }
         }
 
+
         public static Credentials GetDsnCreds(string dsn)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT Username, Password FROM DsnCredentials WHERE DsnName = '{dsn}'", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                string username = null;
-                string password = null;
-                while (reader.Read())
-                {
-                    username = reader[0].ToString();
-                    password = reader[1].ToString();
+            using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                using (var command = new OdbcCommand($"SELECT Username, Password FROM DsnCredentials WHERE DsnName = '{dsn}'", _connection)) {
+                    _connection.Open();
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            string username = null;
+                            string password = null;
+                            while (reader.Read()) {
+                                username = reader[0].ToString();
+                                password = reader[1].ToString();
+                            }
+
+                            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                            string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
+
+                            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password)) {
+                                return new Credentials() {
+                                    Username = username,
+                                    Password = Encryption.Decrypt(password, encryptionKey)
+                                };
+                            }
+                        } catch (Exception e) {
+                            Logger.Instance.Error($"An error occured while retrieving the Credentials for DSN {dsn}");
+                            MessageBox.Show($"An error occured while retrieving the Credentials for DSN {dsn}", "Error Retrieving Credentials");
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+
+                        return null;
+                    }
                 }
-
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
-
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-                {
-                    return new Credentials()
-                    {
-                        Username = username,
-                        Password = Encryption.Decrypt(password, encryptionKey)
-                    };
-                }
             }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while retrieving the Credentials for DSN {dsn}");
-                MessageBox.Show($"An error occured while retrieving the Credentials for DSN {dsn}", "Error Retrieving Credentials");
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
-            }
-
-            return null;
         }
     }
 }

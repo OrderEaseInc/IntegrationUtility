@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LinkGreenODBCUtility.Services.Jobs;
 using Quartz;
 using Quartz.Impl;
 
@@ -54,6 +55,10 @@ namespace LinkGreenODBCUtility
             taskSupplierInventory.Text = "Sync Supplier Inventory";
             taskSupplierInventory.Value = "SupplierInventory";
             taskComboBox.Items.Add(taskSupplierInventory);
+            var taskPublishMatchedSkus = new ListItem();
+            taskPublishMatchedSkus.Text = "Publish Matched Supplier SKUs";
+            taskPublishMatchedSkus.Value = SupplierSkuMatchJob.JobName;
+            taskComboBox.Items.Add(taskPublishMatchedSkus);
             var taskBuyerInventory = new ListItem();
             taskBuyerInventory.Text = "Sync Buyer Inventory";
             taskBuyerInventory.Value = "BuyerInventory";

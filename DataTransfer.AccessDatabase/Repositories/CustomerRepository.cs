@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 using LinkGreen.Applications.Common.Model;
@@ -26,28 +25,19 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName} WHERE Active = True"))
-            {
-                return GetRecords(command);
-            }
+            return GetRecords($"SELECT * FROM {TableName} WHERE Active = True");
         }
 
         #endregion
 
         public void ClearAll()
         {
-            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
-            {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM {TableName}");
         }
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
-            {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'");
         }
 
         private string CleanProvince(string province)

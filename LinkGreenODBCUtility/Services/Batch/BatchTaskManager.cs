@@ -21,24 +21,23 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetCommandsByTrigger()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                List<string> commands = new List<string>();
-                while (reader.Read())
-                {
-                    commands.Add(reader[0].ToString());
-                }
+            using (var _connection = new OdbcConnection($"DSN={Settings.DsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", _connection)) {
+                    _connection.Open();
+                    using (OdbcDataReader reader = command.ExecuteReader()) {
+                        try {
+                            List<string> commands = new List<string>();
+                            while (reader.Read()) {
+                                commands.Add(reader[0].ToString());
+                            }
 
-                return commands;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                            return commands;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
+                }
             }
         }
     }

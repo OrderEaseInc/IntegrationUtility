@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Data.Odbc;
+using System.Threading;
 using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
@@ -166,28 +167,26 @@ namespace LinkGreenODBCUtility
 
         private void SaveLog(SeverityLevel level, string text)
         {
-            _connection = ConnectionInstance.Instance.GetConnection(_loggerConnectionString);
-            text = text.Replace("'", "''");
-            text = text.Replace("\"", "\\\"");
-            var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
-            {
-                Connection = _connection
-            };
+            using (var _connection = new OdbcConnection(_loggerConnectionString)) {
+                text = text.Replace("'", "''");
+                text = text.Replace("\"", "\\\"");
+                using (var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')", _connection)) {
 
-            try
-            {
-                if (_connection.State == ConnectionState.Closed)
-                {
-                    _connection.Open();
-                    if (_connection.State == ConnectionState.Open)
-                    {
+                    try {
+                        _connection.Open();
                         command.ExecuteNonQuery();
+                    } catch (OdbcException) {
+                        try {
+                            // let's try this again...
+                            Thread.Sleep(500);
+                            command.ExecuteNonQuery();
+                        } catch (OdbcException) {
+                            /* nevermind */
+                        }
+                    } finally {
+                        _connection.Close();
                     }
                 }
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_loggerConnectionString);
             }
         }
 

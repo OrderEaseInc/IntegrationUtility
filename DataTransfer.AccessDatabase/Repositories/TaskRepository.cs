@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.IO;
 using DataTransfer.AccessDatabase.Models;
 using Microsoft.CSharp.RuntimeBinder;
@@ -25,46 +24,37 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT " +
-                                                 $"TaskName, " +
-                                                 $"TaskDisplayName, " +
-                                                 $"StartDateTime, " +
-                                                 $"MinuteRepeatInterval, " +
-                                                 $"Status, " +
-                                                 $"ExecutionStartDateTime, " +
-                                                 $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration " +
-                                                 $"FROM {TableName}"))
-            {
-                return GetRecords(command);
-            }
+            return GetRecords($"SELECT " +
+                              $"TaskName, " +
+                              $"TaskDisplayName, " +
+                              $"StartDateTime, " +
+                              $"MinuteRepeatInterval, " +
+                              $"Status, " +
+                              $"ExecutionStartDateTime, " +
+                              $"ExecutionEndDateTime, " +
+                              $"ExecutionDuration " +
+                              $"FROM {TableName}");
         }
 
         public Task GetTask(string taskName)
         {
-            using (var command = new OdbcCommand($"SELECT " +
-                                                 $"TaskName, " +
-                                                 $"TaskDisplayName, " +
-                                                 $"StartDateTime, " +
-                                                 $"MinuteRepeatInterval, " +
-                                                 $"Status, " +
-                                                 $"ExecutionStartDateTime, " +
-                                                 $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration " +
-                                                 $"FROM {TableName} WHERE TaskName = '{taskName}'"))
-            {
-                return GetRecord(command);
-            }
+            return GetRecord($"SELECT " +
+                             $"TaskName, " +
+                             $"TaskDisplayName, " +
+                             $"StartDateTime, " +
+                             $"MinuteRepeatInterval, " +
+                             $"Status, " +
+                             $"ExecutionStartDateTime, " +
+                             $"ExecutionEndDateTime, " +
+                             $"ExecutionDuration " +
+                             $"FROM {TableName} WHERE TaskName = '{taskName}'");
         }
 
         #endregion
 
         public void ClearAll()
         {
-            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
-            {
-                ExecuteCommand(command);
-            }
+            ExecuteCommand($"DELETE * FROM {TableName}");
         }
 
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db

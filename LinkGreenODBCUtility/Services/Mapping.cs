@@ -34,484 +34,410 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetTableNames()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-            if (creds != null)
-            {
-                if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                {
-                    _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
-                }
-            }
-
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                MessageBox.Show($"Failed to connect to DSN {DsnName}. Are your credentials set?", "Failed to Connect");
-                return new List<string>();
-            }
-
-            try
-            {
-                var tables = _connection.GetSchema("Tables");
-                List<string> tableNames = new List<string>();
-
-                foreach (DataRow row in tables.Rows)
-                {
-                    tableNames.Add(row["TABLE_NAME"].ToString());
+            using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                if (creds != null) {
+                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                    }
                 }
 
-                var views = _connection.GetSchema("Views");
-
-                foreach (DataRow row in views.Rows) {
-                    tableNames.Add(row["TABLE_NAME"].ToString());
+                try {
+                    _connection.Open();
+                } catch (OdbcException e) {
+                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                    MessageBox.Show($"Failed to connect to DSN {DsnName}. Are your credentials set?", "Failed to Connect");
+                    return new List<string>();
                 }
 
-                return tableNames;
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                try {
+                    var tables = _connection.GetSchema("Tables");
+                    List<string> tableNames = new List<string>();
+
+                    foreach (DataRow row in tables.Rows) {
+                        tableNames.Add(row["TABLE_NAME"].ToString());
+                    }
+
+                    var views = _connection.GetSchema("Views");
+
+                    foreach (DataRow row in views.Rows) {
+                        tableNames.Add(row["TABLE_NAME"].ToString());
+                    }
+
+                    return tableNames;
+                } finally {
+                    _connection.Close();
+                }
             }
         }
 
         public string GetDsnName(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `DsnName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `DsnName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return null;
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return null;
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                while (reader.Read())
-                {
-                    return reader[0].ToString();
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            while (reader.Read()) {
+                                return reader[0].ToString();
+                            }
+
+                            return null;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public string GetTableMapping(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `MappingName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `MappingName` FROM `TableMappings` WHERE `TableName` = '{tableName}'", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return null;
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return null;
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                while (reader.Read())
-                {
-                    return reader[0].ToString();
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            while (reader.Read()) {
+                                return reader[0].ToString();
+                            }
+
+                            return null;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public string GetFieldMapping(string tableName, string fieldName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `MappingName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `FieldName` = '{fieldName}'", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `MappingName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `FieldName` = '{fieldName}'", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return null;
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return null;
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                while (reader.Read())
-                {
-                    return reader[0].ToString();
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            while (reader.Read()) {
+                                return reader[0].ToString();
+                            }
+
+                            return null;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public string GetMappingField(string tableName, string mappingName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `FieldName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `MappingName` = '{mappingName}'", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `FieldName` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND `MappingName` = '{mappingName}'", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return null;
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return null;
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                while (reader.Read())
-                {
-                    return reader[0].ToString();
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            while (reader.Read()) {
+                                return reader[0].ToString();
+                            }
+
+                            return null;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
-        public string GetFieldProperty(string tableName, string fieldName, string property, OdbcConnection _connection = null)
+        public string GetFieldProperty(string tableName, string fieldName, string property, OdbcConnection connection = null)
         {
-            if (_connection == null)
-            {
-                _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            }
-            var command = new OdbcCommand($"SELECT `{property}` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND (`FieldName` = '{fieldName}' OR `MappingName` = '{fieldName}')", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `{property}` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND (`FieldName` = '{fieldName}' OR `MappingName` = '{fieldName}')", _connection)) {
 
-            if (_connection.State == ConnectionState.Closed)
-            {
-                _connection.Open();
-            }
+                    _connection.Open();
 
-            OdbcDataReader reader = command.ExecuteReader();
+                    using (var reader = command.ExecuteReader()) {
 
-            try
-            {
-                while (reader.Read())
-                {
-                    return reader[0].ToString();
+                        try {
+                            while (reader.Read()) {
+                                return reader[0].ToString();
+                            }
+
+                            return null;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-
-                return null;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public List<MappingField> GetTableFields(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` FROM `FieldMappings` WHERE `TableName` = '{tableName}'", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` FROM `FieldMappings` WHERE `TableName` = '{tableName}'", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return new List<MappingField>();
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return new List<MappingField>();
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                    using (var reader = command.ExecuteReader()) {
+                        Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
 
-            for (int x = 0; x < reader.FieldCount; x++)
-            {
-                if (!string.IsNullOrEmpty(reader.GetName(x)))
-                {
-                    columnIndexes.Add(reader.GetName(x), x);
+                        for (int x = 0; x < reader.FieldCount; x++) {
+                            if (!string.IsNullOrEmpty(reader.GetName(x))) {
+                                columnIndexes.Add(reader.GetName(x), x);
+                            }
+                        }
+
+                        if (columnIndexes.Count > 0) {
+                            Logger.Instance.Debug($"Column indexes created for retrieving required fields from table: {TransferDsnName}.{tableName}.");
+                        } else {
+                            Logger.Instance.Warning($"No column indexes created for retrieving required fields from table: {TransferDsnName}.{tableName}.");
+                        }
+
+                        List<MappingField> rows = new List<MappingField>();
+                        try {
+                            int count = 0;
+                            while (reader.Read()) {
+                                var row = new MappingField();
+                                row.TableName = reader[columnIndexes["TableName"]].ToString();
+                                row.FieldName = reader[columnIndexes["FieldName"]].ToString();
+                                row.MappingName = reader[columnIndexes["MappingName"]].ToString();
+                                row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
+                                row.Description = reader[columnIndexes["Description"]].ToString();
+                                row.DataType = reader[columnIndexes["DataType"]].ToString();
+                                row.Required = (bool) reader[columnIndexes["Required"]];
+                                count++;
+                                rows.Add(row);
+                            }
+
+                            if (rows.Count > 0) {
+                                Logger.Instance.Debug($"{rows.Count} required fields were returned for table: {TransferDsnName}.{tableName}");
+                            } else {
+                                Logger.Instance.Warning($"No required fields were found for table: {TransferDsnName}.{tableName}");
+                            }
+
+                            return rows;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-            }
-
-            if (columnIndexes.Count > 0)
-            {
-                Logger.Instance.Debug($"Column indexes created for retrieving required fields from table: {TransferDsnName}.{tableName}.");
-            }
-            else
-            {
-                Logger.Instance.Warning($"No column indexes created for retrieving required fields from table: {TransferDsnName}.{tableName}.");
-            }
-
-            List<MappingField> rows = new List<MappingField>();
-            try
-            {
-                int count = 0;
-                while (reader.Read())
-                {
-                    var row = new MappingField();
-                    row.TableName = reader[columnIndexes["TableName"]].ToString();
-                    row.FieldName = reader[columnIndexes["FieldName"]].ToString();
-                    row.MappingName = reader[columnIndexes["MappingName"]].ToString();
-                    row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
-                    row.Description = reader[columnIndexes["Description"]].ToString();
-                    row.DataType = reader[columnIndexes["DataType"]].ToString();
-                    row.Required = (bool) reader[columnIndexes["Required"]];
-                    count++;
-                    rows.Add(row);
-                }
-
-                if (rows.Count > 0)
-                {
-                    Logger.Instance.Debug($"{rows.Count} required fields were returned for table: {TransferDsnName}.{tableName}");
-                }
-                else
-                {
-                    Logger.Instance.Warning($"No required fields were found for table: {TransferDsnName}.{tableName}");
-                }
-
-                return rows;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public List<MappingField> GetUnmappedFields(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` " +
-                                          $"FROM `FieldMappings` " +
-                                          $"WHERE `TableName` = '{tableName}' " +
-                                            $"AND (`MappingName` = '' OR `MappingName` IS NULL)", _connection);
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return new List<MappingField>();
-            }
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required` " +
+                                                     $"FROM `FieldMappings` " +
+                                                     $"WHERE `TableName` = '{tableName}' " +
+                                                     $"AND (`MappingName` = '' OR `MappingName` IS NULL)", _connection)) {
 
-            OdbcDataReader reader = command.ExecuteReader();
-            Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return new List<MappingField>();
+                    }
 
-            for (int x = 0; x < reader.FieldCount; x++)
-            {
-                if (!string.IsNullOrEmpty(reader.GetName(x)))
-                {
-                    columnIndexes.Add(reader.GetName(x), x);
+                    using (var reader = command.ExecuteReader()) {
+                        Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+
+                        for (int x = 0; x < reader.FieldCount; x++) {
+                            if (!string.IsNullOrEmpty(reader.GetName(x))) {
+                                columnIndexes.Add(reader.GetName(x), x);
+                            }
+                        }
+
+                        if (columnIndexes.Count > 0) {
+                            Logger.Instance.Debug($"Column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
+                        } else {
+                            Logger.Instance.Warning($"No column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
+                        }
+
+                        List<MappingField> rows = new List<MappingField>();
+                        try {
+                            while (reader.Read()) {
+                                var row = new MappingField();
+                                row.TableName = reader[columnIndexes["TableName"]].ToString();
+                                row.FieldName = reader[columnIndexes["FieldName"]].ToString();
+                                row.MappingName = reader[columnIndexes["MappingName"]].ToString();
+                                row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
+                                row.Description = reader[columnIndexes["Description"]].ToString();
+                                row.DataType = reader[columnIndexes["DataType"]].ToString();
+                                row.Required = (bool) reader[columnIndexes["Required"]];
+                                rows.Add(row);
+                            }
+
+                            Logger.Instance.Debug($"{rows.Count} unmapped fields were returned for table: {TransferDsnName}.{tableName}");
+
+                            return rows;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-            }
-
-            if (columnIndexes.Count > 0)
-            {
-                Logger.Instance.Debug($"Column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
-            }
-            else
-            {
-                Logger.Instance.Warning($"No column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
-            }
-
-            List<MappingField> rows = new List<MappingField>();
-            try
-            {
-                while (reader.Read())
-                {
-                    var row = new MappingField();
-                    row.TableName = reader[columnIndexes["TableName"]].ToString();
-                    row.FieldName = reader[columnIndexes["FieldName"]].ToString();
-                    row.MappingName = reader[columnIndexes["MappingName"]].ToString();
-                    row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
-                    row.Description = reader[columnIndexes["Description"]].ToString();
-                    row.DataType = reader[columnIndexes["DataType"]].ToString();
-                    row.Required = (bool)reader[columnIndexes["Required"]];
-                    rows.Add(row);
-                }
-
-                Logger.Instance.Debug($"{rows.Count} unmapped fields were returned for table: {TransferDsnName}.{tableName}");
-
-                return rows;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public List<MappingField> GetMappedFields(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
-                                          $"FROM `FieldMappings` " +
-                                          $"WHERE `TableName` = '{tableName}' " +
-                                          $"AND `MappingName` IS NOT NULL", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT `TableName`, `FieldName`, `MappingName`, `DisplayName`, `Description`, `DataType`, `Required`, `Updatable` " +
+                                                     $"FROM `FieldMappings` " +
+                                                     $"WHERE `TableName` = '{tableName}' " +
+                                                     $"AND `MappingName` IS NOT NULL", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return new List<MappingField>();
-            }
+                    try {
+                        if (_connection.State != ConnectionState.Open) {
+                            _connection.Open();
+                        }
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return new List<MappingField>();
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                    using (var reader = command.ExecuteReader()) {
+                        Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
 
-            for (int x = 0; x < reader.FieldCount; x++)
-            {
-                if (!string.IsNullOrEmpty(reader.GetName(x)))
-                {
-                    columnIndexes.Add(reader.GetName(x), x);
+                        for (int x = 0; x < reader.FieldCount; x++) {
+                            if (!string.IsNullOrEmpty(reader.GetName(x))) {
+                                columnIndexes.Add(reader.GetName(x), x);
+                            }
+                        }
+
+                        if (columnIndexes.Count > 0) {
+                            Logger.Instance.Debug($"Column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
+                        } else {
+                            Logger.Instance.Warning($"No column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
+                        }
+
+                        List<MappingField> rows = new List<MappingField>();
+                        try {
+                            while (reader.Read()) {
+                                var row = new MappingField();
+                                row.TableName = reader[columnIndexes["TableName"]].ToString();
+                                row.FieldName = reader[columnIndexes["FieldName"]].ToString();
+                                row.MappingName = reader[columnIndexes["MappingName"]].ToString();
+                                row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
+                                row.Description = reader[columnIndexes["Description"]].ToString();
+                                row.DataType = reader[columnIndexes["DataType"]].ToString();
+                                row.Required = (bool) reader[columnIndexes["Required"]];
+                                row.Updatable = (bool) reader[columnIndexes["Updatable"]];
+                                rows.Add(row);
+                            }
+
+                            Logger.Instance.Debug($"{rows.Count} unmapped fields were returned for table: {TransferDsnName}.{tableName}");
+
+                            return rows;
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+                    }
                 }
-            }
-
-            if (columnIndexes.Count > 0)
-            {
-                Logger.Instance.Debug($"Column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
-            }
-            else
-            {
-                Logger.Instance.Warning($"No column indexes created for retrieving unmapped fields from table: {TransferDsnName}.{tableName}.");
-            }
-
-            List<MappingField> rows = new List<MappingField>();
-            try
-            {
-                while (reader.Read())
-                {
-                    var row = new MappingField();
-                    row.TableName = reader[columnIndexes["TableName"]].ToString();
-                    row.FieldName = reader[columnIndexes["FieldName"]].ToString();
-                    row.MappingName = reader[columnIndexes["MappingName"]].ToString();
-                    row.DisplayName = reader[columnIndexes["DisplayName"]].ToString();
-                    row.Description = reader[columnIndexes["Description"]].ToString();
-                    row.DataType = reader[columnIndexes["DataType"]].ToString();
-                    row.Required = (bool)reader[columnIndexes["Required"]];
-                    row.Updatable = (bool)reader[columnIndexes["Updatable"]];
-                    rows.Add(row);
-                }
-
-                Logger.Instance.Debug($"{rows.Count} unmapped fields were returned for table: {TransferDsnName}.{tableName}");
-
-                return rows;
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
             }
         }
 
         public List<string> GetColumns(string tableName, string dsnName = "")
         {
-            if (string.IsNullOrEmpty(dsnName))
-            {
+            if (string.IsNullOrEmpty(dsnName)) {
                 dsnName = Settings.DsnName;
             }
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={dsnName}");
-            Credentials creds = DsnCreds.GetDsnCreds(dsnName);
-            if (creds != null)
-            {
-                if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                {
-                    _connection.ConnectionString = $"DSN={dsnName};Uid={creds.Username};Pwd={creds.Password}";
-                }
-            }
-
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return new List<string>();
-            }
-
-            try
-            {
-                var columns = _connection.GetSchema("Columns");
-                List<string> columnNames = new List<string>();
-
-                foreach (DataRow row in columns.Rows)
-                {
-                    if (row["TABLE_NAME"].ToString().Equals(tableName))
-                    {
-                        if (!row["COLUMN_NAME"].ToString().ToUpper().Equals("ID"))
-                        {
-                            columnNames.Add(row["COLUMN_NAME"].ToString());
-                        }
+            using (var _connection = new OdbcConnection($"DSN={dsnName}")) {
+                Credentials creds = DsnCreds.GetDsnCreds(dsnName);
+                if (creds != null) {
+                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                        _connection.ConnectionString = $"DSN={dsnName};Uid={creds.Username};Pwd={creds.Password}";
                     }
                 }
 
-                if (!columnNames.Any())
-                {
-                    Logger.Instance.Warning($"No column names found for {dsnName}.{tableName}.");
+                try {
+                    _connection.Open();
+                } catch (OdbcException e) {
+                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                    return new List<string>();
                 }
 
-                return columnNames;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"Unable to retrieve column names from {dsnName}.{tableName}: {e.Message}");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={dsnName}");
-            }
+                try {
+                    var columns = _connection.GetSchema("Columns");
+                    List<string> columnNames = new List<string>();
 
-            return new List<string>();
+                    foreach (DataRow row in columns.Rows) {
+                        if (row["TABLE_NAME"].ToString().Equals(tableName)) {
+                            if (!row["COLUMN_NAME"].ToString().ToUpper().Equals("ID")) {
+                                columnNames.Add(row["COLUMN_NAME"].ToString());
+                            }
+                        }
+                    }
+
+                    if (!columnNames.Any()) {
+                        Logger.Instance.Warning($"No column names found for {dsnName}.{tableName}.");
+                    }
+
+                    return columnNames;
+                } catch (Exception e) {
+                    Logger.Instance.Error($"Unable to retrieve column names from {dsnName}.{tableName}: {e.Message}");
+                } finally {
+                    _connection.Close();
+                }
+
+                return new List<string>();
+            }
         }
 
         public bool MigrateData(string tableName, bool nuke = true)
         {
-            if (ValidateRequiredFields(tableName))
-            {
+            if (ValidateRequiredFields(tableName)) {
                 string tableMappingName = GetTableMapping(tableName);
 
                 List<MappingField> fromColumns = GetMappedFields(tableName);
                 List<string> toColumnNames = new List<string>();
                 List<string> fromColumnNames = new List<string>();
 
-                foreach (MappingField fromColumn in fromColumns)
-                {
+                foreach (MappingField fromColumn in fromColumns) {
                     toColumnNames.Add(fromColumn.FieldName);
                     fromColumnNames.Add(fromColumn.MappingName);
                 }
@@ -520,144 +446,143 @@ namespace LinkGreenODBCUtility
 
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
-                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                if (creds != null)
-                {
-                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                    {
-                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                var columnIndexes = new List<KeyValuePair<string, int>>();
+
+                using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    if (creds != null) {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                            _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
+                    }
+
+                    string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
+                    using (var command = new OdbcCommand(sql, _connection)) {
+
+                        try {
+                            _connection.Open();
+
+                            using (var reader = command.ExecuteReader()) {
+                                try {
+                                    for (int x = 0; x < reader.FieldCount; x++) {
+                                        string fieldName = GetMappingField(tableName, reader.GetName(x));
+                                        if (!string.IsNullOrEmpty(fieldName)) {
+                                            var columnIndex = new KeyValuePair<string, int>(fieldName, x);
+                                            columnIndexes.Add(columnIndex);
+                                        }
+                                    }
+
+                                    if (columnIndexes.Count > 0) {
+                                        Logger.Instance.Debug($"Column indexes created for migrating data to {Settings.DsnName}.{tableName}.");
+                                    } else {
+                                        Logger.Instance.Warning($"No column indexes were created for migrating data to {Settings.DsnName}.{tableName}.");
+                                    }
+                                } finally {
+                                    reader.Close();
+                                    _connection.Close();
+                                }
+                            }
+                        } catch (OdbcException e) {
+                            Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                            return false;
+                        } finally {
+                            _connection.Close();
+                        }
                     }
                 }
 
-                string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
-                var command = new OdbcCommand(sql)
-                {
-                    Connection = _connection
-                };
+                if (nuke) {
+                    using (var _conn = new OdbcConnection($"DSN={TransferDsnName}")) {
+                        using (var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}", _conn)) {
 
-                try
-                {
-                    _connection.Open();
-
-                    OdbcDataReader reader = command.ExecuteReader();
-                    var columnIndexes = new List<KeyValuePair<string, int>>();
-                    try
-                    {
-                        for (int x = 0; x < reader.FieldCount; x++)
-                        {
-                            string fieldName = GetMappingField(tableName, reader.GetName(x));
-                            if (!string.IsNullOrEmpty(fieldName))
-                            {
-                                var columnIndex = new KeyValuePair<string, int>(fieldName, x);
-                                columnIndexes.Add(columnIndex);
-                            }
-                        }
-
-                        if (columnIndexes.Count > 0)
-                        {
-                            Logger.Instance.Debug($"Column indexes created for migrating data to {Settings.DsnName}.{tableName}.");
-                        }
-                        else
-                        {
-                            Logger.Instance.Warning($"No column indexes were created for migrating data to {Settings.DsnName}.{tableName}.");
-                        }
-
-                        var _conn = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-                        var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
-                        {
-                            Connection = _conn
-                        };
-
-                        try
-                        {
-                            if (nuke)
-                            {
+                            try {
                                 _conn.Open();
                                 nukeCommand.ExecuteNonQuery();
                                 Logger.Instance.Debug($"{Settings.DsnName}.{tableName} nuked.");
+                            } catch (OdbcException e) {
+                                Logger.Instance.Error($"Failed to nuke {Settings.DsnName}{tableName}: {e.Message}");
+                            } finally {
+                                _conn.Close();
                             }
                         }
-                        catch (OdbcException e)
-                        {
+                    }
+                }
+
+                using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                    var creds = DsnCreds.GetDsnCreds(DsnName);
+                    if (creds != null) {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                            _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
+                    }
+
+                    string sql = $"SELECT {chainedFromColumnNames} FROM {tableMappingName}";
+                    using (var command = new OdbcCommand(sql, _connection)) {
+
+                        try {
+                            _connection.Open();
+
+                            using (var reader = command.ExecuteReader()) {
+                                var rowCount = 0;
+                                while (reader.Read()) {
+                                    if (columnIndexes.Count == toColumnNames.Count) {
+                                        List<string> readerColumns = new List<string>();
+
+                                        foreach (KeyValuePair<string, int> colIndex in columnIndexes) {
+                                            string text = reader[colIndex.Value].ToString();
+                                            text = text.Replace("'", "''").Replace("\"", "\\\"");
+                                            string original = text;
+                                            using (var _conn = new OdbcConnection($"DSN={TransferDsnName}")) {
+                                                try {
+                                                    _conn.Open();
+                                                    text = SanitizeField(tableName, colIndex.Key, text, _conn);
+                                                } finally {
+                                                    _conn.Close();
+                                                }
+                                            }
+                                            if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text) {
+                                                File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
+                                            }
+                                            if (string.IsNullOrEmpty(text)) {
+                                                text = "null";
+                                                readerColumns.Add(text);
+                                            } else {
+                                                readerColumns.Add("'" + text + "'");
+                                            }
+                                        }
+
+                                        string readerColumnValues = string.Join(",", readerColumns);
+                                        string stmt = $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+
+                                        using (var _conn = new OdbcConnection($"DSN={TransferDsnName}")) {
+                                            using (var comm = new OdbcCommand(stmt, _conn)) {
+
+                                                try {
+                                                    comm.ExecuteNonQuery();
+                                                    rowCount++;
+                                                } catch (OdbcException e) {
+                                                    Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                if (rowCount > 0) {
+                                    Logger.Instance.Debug($"{rowCount} records inserted into {Settings.DsnName}.{tableName}.");
+                                } else {
+                                    Logger.Instance.Warning($"No records inserted into {Settings.DsnName}.{tableName}.");
+                                }
+
+                                return true;
+                            }
+                        } catch (OdbcException e) {
                             Logger.Instance.Error($"Failed to nuke {Settings.DsnName}{tableName}: {e.Message}");
+                        } finally {
+                            _connection.Close();
                         }
-
-                        var rowCount = 0;
-                        while (reader.Read())
-                        {
-                            if (columnIndexes.Count == toColumnNames.Count)
-                            {
-                                List<string> readerColumns = new List<string>();
-
-                                foreach (KeyValuePair<string, int> colIndex in columnIndexes)
-                                {
-                                    string text = reader[colIndex.Value].ToString();
-                                    text = text.Replace("'", "''").Replace("\"", "\\\"");
-                                    string original = text;
-                                    text = SanitizeField(tableName, colIndex.Key, text, _conn);
-                                    if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
-                                    {
-                                        File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
-                                    }
-                                    if (string.IsNullOrEmpty(text))
-                                    {
-                                        text = "null";
-                                        readerColumns.Add(text);
-                                    }
-                                    else
-                                    {
-                                        readerColumns.Add("'" + text + "'");
-                                    }
-                                }
-
-                                string readerColumnValues = string.Join(",", readerColumns);
-                                string stmt = $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
-
-                                var comm = new OdbcCommand(stmt)
-                                {
-                                    Connection = _conn
-                                };
-
-                                try
-                                {
-                                    comm.ExecuteNonQuery();
-                                    rowCount++;
-                                }
-                                catch (OdbcException e)
-                                {
-                                    Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
-                                }
-
-                            }
-                        }
-
-                        if (rowCount > 0)
-                        {
-                            Logger.Instance.Debug($"{rowCount} records inserted into {Settings.DsnName}.{tableName}.");
-                        }
-                        else
-                        {
-                            Logger.Instance.Warning($"No records inserted into {Settings.DsnName}.{tableName}.");
-                        }
-
-                        return true;
                     }
-                    finally
-                    {
-                        reader.Close();
-                        ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
-                    }
-                }
-                catch (OdbcException e)
-                {
-                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                    return false;
-                }
-                finally
-                {
-                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
-                    ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                 }
             }
 
@@ -691,117 +616,137 @@ namespace LinkGreenODBCUtility
                 string chainedFromColumnNames = string.Join(",", fromColumnNames);
 
                 if (clearProduction) {
-                    var _conn = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                    if (creds != null)
-                    {
-                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                        {
-                            _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
-                        }
-                    }
-                    var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}") {
-                        Connection = _conn
-                    };
-
-                    try {
-                        _conn.Open();
-                        clearCommand.ExecuteNonQuery();
-                        Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
-                    } catch (OdbcException e) {
-                        Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
-                    } finally {
-                        ConnectionInstance.CloseConnection($"DSN={DsnName}");
-                    }
-                }
-
-                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-
-                string sql = $"SELECT {chainedFromColumnNames} FROM {tableName}";
-                var command = new OdbcCommand(sql) {
-                    Connection = _connection
-                };
-                _connection.Open();
-                OdbcDataReader reader = command.ExecuteReader();
-                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
-                try {
-                    for (int x = 0; x < reader.FieldCount; x++) {
-                        string fieldName = GetFieldMapping(tableName, reader.GetName(x));
-                        if (!string.IsNullOrEmpty(fieldName)) {
-                            columnIndexes.Add(fieldName, x);
-                        }
-                    }
-
-                    if (columnIndexes.Count > 0) {
-                        Logger.Instance.Debug($"Column indexes created for migrating data to {DsnName}.{tableMappingName}.");
-                    } else {
-                        Logger.Instance.Warning($"No column indexes were created for migrating data to {DsnName}.{tableMappingName}.");
-                    }
-
-                    var _conn = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                    if (creds != null)
-                    {
-                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                        {
-                            _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
-                        }
-                    }
-
-                    // we need to ensure that this record doesn't exist in the production db already
-                    var mappedKey = GetFieldMapping(tableName, tableKey);
-                    string existsSql = null;
-
-                    var rowCount = 0;
-                    while (reader.Read()) {
-                        if (columnIndexes.Count == toColumns.Count) {                            
-                            var readerColumns = new List<string>();
-                            foreach (var col in toColumns) {                                
-                                var text = ValueOrNull(reader[columnIndexes[col.MappingName]].ToString(), col.DataType);
-                                readerColumns.Add(text);
-                                if (col.MappingName == mappedKey) {
-                                    existsSql = $"SELECT * FROM {tableMappingName} WHERE {mappedKey} = {text}";
-                                }
+                    using (var _conn = new OdbcConnection($"DSN={DsnName}")) {
+                        Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                        if (creds != null) {
+                            if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                                _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
                             }
-                            string readerColumnValues = string.Join(",", readerColumns);
-                            string stmt = $"INSERT INTO {tableMappingName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+                        }
+                        using (var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}", _conn)) {
 
-                            var comm = new OdbcCommand(stmt) {
-                                Connection = _conn
-                            };
-
-                            if (!string.IsNullOrEmpty(existsSql)) {
-                                var existsCommand = new OdbcCommand(existsSql, _conn);
-                                var existsReader = existsCommand.ExecuteReader();
-                                if (existsReader.Read()) {
-                                    // there's already a record with this key. move along...
-                                    continue;
-                                }
-                            }
                             try {
                                 _conn.Open();
-                                comm.ExecuteNonQuery();
-                                rowCount++;
+                                clearCommand.ExecuteNonQuery();
+                                Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
                             } catch (OdbcException e) {
-                                Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
                             } finally {
-                                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                                _conn.Close();
                             }
-
                         }
                     }
-
-                    if (rowCount > 0) {
-                        Logger.Instance.Debug($"{rowCount} records inserted into {DsnName}.{tableMappingName}.");
-                    } else {
-                        Logger.Instance.Warning($"No records inserted into {DsnName}.{tableMappingName}.");
-                    }
-
-                    return true;
-                } finally {
-                    reader.Close();
-                    ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                 }
+
+                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
+                using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                    string sql = $"SELECT {chainedFromColumnNames} FROM {tableName}";
+                    using (var command = new OdbcCommand(sql, _connection)) {
+                        _connection.Open();
+                        using (var reader = command.ExecuteReader()) {
+
+                            try {
+                                // we have to cache this info because the reader is only good for a single read,
+                                //  or the connection becomes unreliable.
+                                var fieldCount = reader.FieldCount;
+                                var fieldNames = Enumerable.Range(0, fieldCount).ToDictionary(i => i, i => reader.GetName(i));
+                                for (int x = 0; x < fieldCount; x++) {
+                                    string fieldName = GetFieldMapping(tableName, fieldNames[x]);
+                                    if (!string.IsNullOrEmpty(fieldName)) {
+                                        columnIndexes.Add(fieldName, x);
+                                    }
+                                }
+                            } finally {
+                                reader.Close();
+                                _connection.Close();
+                            }
+                        }
+                    }
+                }
+
+                if (columnIndexes.Count > 0) {
+                    Logger.Instance.Debug($"Column indexes created for migrating data to {DsnName}.{tableMappingName}.");
+                } else {
+                    Logger.Instance.Warning($"No column indexes were created for migrating data to {DsnName}.{tableMappingName}.");
+                }
+
+                using (var _conn = new OdbcConnection($"DSN={DsnName}")) {
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    if (creds != null) {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                            _conn.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
+                    }
+                }
+
+                // we need to ensure that this record doesn't exist in the production db already
+                var mappedKey = GetFieldMapping(tableName, tableKey);
+                string existsSql = null;
+
+                var rowCount = 0;
+                using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                    string sql = $"SELECT {chainedFromColumnNames} FROM {tableName}";
+                    using (var command = new OdbcCommand(sql, _connection)) {
+                        _connection.Open();
+                        using (var reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                if (columnIndexes.Count == toColumns.Count) {
+                                    var readerColumns = new List<string>();
+                                    foreach (var col in toColumns) {
+                                        var text = ValueOrNull(reader[columnIndexes[col.MappingName]].ToString(), col.DataType);
+                                        readerColumns.Add(text);
+                                        if (col.MappingName == mappedKey) {
+                                            existsSql = $"SELECT * FROM {tableMappingName} WHERE {mappedKey} = {text}";
+                                        }
+                                    }
+                                    string readerColumnValues = string.Join(",", readerColumns);
+                                    string stmt = $"INSERT INTO {tableMappingName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+
+
+                                    if (!string.IsNullOrEmpty(existsSql)) {
+                                        using (var _conn = new OdbcConnection($"DSN={DsnName}")) {
+                                            using (var existsCommand = new OdbcCommand(existsSql, _conn)) {
+                                                try {
+                                                    if (_conn.State != ConnectionState.Open) {
+                                                        _conn.Open();
+                                                    }
+                                                    var existsReader = existsCommand.ExecuteReader();
+                                                    if (existsReader.Read()) {
+                                                        // there's already a record with this key. move along...
+                                                        continue;
+                                                    }
+                                                } finally {
+                                                    _conn.Close();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    using (var _conn = new OdbcConnection($"DSN={DsnName}")) {
+                                        using (var comm = new OdbcCommand(stmt, _conn)) {
+                                            try {
+                                                _conn.Open();
+                                                comm.ExecuteNonQuery();
+                                                rowCount++;
+                                            } catch (OdbcException e) {
+                                                Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                            } finally {
+                                                _conn.Close();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (rowCount > 0) {
+                    Logger.Instance.Debug($"{rowCount} records inserted into {DsnName}.{tableMappingName}.");
+                } else {
+                    Logger.Instance.Warning($"No records inserted into {DsnName}.{tableMappingName}.");
+                }
+
+                return true;
             }
 
             _validPushFields = false;
@@ -829,104 +774,96 @@ namespace LinkGreenODBCUtility
 
                 string chainedFromColumnNames = string.Join(",", fromColumnNames.Select(c => $"{c}"));
 
-                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                if (creds != null)
-                {
-                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                    {
-                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
-                    }
-                }
-
-                string sql = $"SELECT {keyMappingName}, {chainedFromColumnNames} FROM {tableMappingName}";
-                var command = new OdbcCommand(sql) {
-                    Connection = _connection
-                };
-
-                try
-                {
-                    _connection.Open();
-                }
-                catch (OdbcException e)
-                {
-                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                    return false;
-                }
-
-                OdbcDataReader reader = command.ExecuteReader();
-                Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
-                try {
-                    for (int x = 0; x < reader.FieldCount; x++) {
-                        string fieldName = GetMappingField(tableName, reader.GetName(x));
-                        if (!string.IsNullOrEmpty(fieldName)) {
-                            columnIndexes.Add(fieldName, x);
+                using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    if (creds != null) {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                            _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
                         }
                     }
 
-                    if (columnIndexes.Count > 0) {
-                        Logger.Instance.Debug($"Column indexes created for migrating data to {TransferDsnName}.{tableName}.");
-                    } else {
-                        Logger.Instance.Warning($"No column indexes were created for migrating data to {TransferDsnName}.{tableName}.");
-                    }
+                    string sql = $"SELECT {keyMappingName}, {chainedFromColumnNames} FROM {tableMappingName}";
+                    using (var command = new OdbcCommand(sql, _connection)) {
 
-                    var _conn = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
+                        try {
+                            _connection.Open();
+                        } catch (OdbcException e) {
+                            Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                            return false;
+                        }
 
-                    var rowCount = 0;
-                    while (reader.Read()) {
-                        if (columnIndexes.Count == updatableColumns.Count + 1) {
-                            List<string> readerColumns = new List<string>();
-                            foreach (var col in updatableColumns) {
-                                var colName = col.FieldName;
-                                string value = ValueOrNull(reader[columnIndexes[colName]].ToString(), col.DataType);
-                                if (value != "null") {
-                                    readerColumns.Add($"{colName} = {value}");
-                                }
-                            }
-                            if (!readerColumns.Any()) {
-                                continue;
-                            }
-
-                            var keyValue = ValueOrNull(reader[columnIndexes[tableKey]].ToString(), "Number");
-                            string readerColumnValues = string.Join(",", readerColumns);
-                            string stmt = $"UPDATE {tableName} SET {readerColumnValues} WHERE {tableKey} = {keyValue}";
-
-                            var comm = new OdbcCommand(stmt) {
-                                Connection = _conn
-                            };
-
-                            try
-                            {
-                                _conn.Open();
-                            }
-                            catch (OdbcException e)
-                            {
-                                Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
-                                return false;
-                            }
-
+                        using (var reader = command.ExecuteReader()) {
+                            Dictionary<string, int> columnIndexes = new Dictionary<string, int>();
                             try {
-                                comm.ExecuteNonQuery();
-                                rowCount++;
-                            } catch (OdbcException e) {
-                                Logger.Instance.Error($"Failed to update record in {DsnName}.{tableMappingName}: {e.Message} \n\nCommand: {comm.CommandText}");
-                            } finally {
-                                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
-                            }
+                                for (int x = 0; x < reader.FieldCount; x++) {
+                                    string fieldName = GetMappingField(tableName, reader.GetName(x));
+                                    if (!string.IsNullOrEmpty(fieldName)) {
+                                        columnIndexes.Add(fieldName, x);
+                                    }
+                                }
 
+                                if (columnIndexes.Count > 0) {
+                                    Logger.Instance.Debug($"Column indexes created for migrating data to {TransferDsnName}.{tableName}.");
+                                } else {
+                                    Logger.Instance.Warning($"No column indexes were created for migrating data to {TransferDsnName}.{tableName}.");
+                                }
+
+                                var rowCount = 0;
+                                while (reader.Read()) {
+                                    if (columnIndexes.Count == updatableColumns.Count + 1) {
+                                        List<string> readerColumns = new List<string>();
+                                        foreach (var col in updatableColumns) {
+                                            var colName = col.FieldName;
+                                            string value = ValueOrNull(reader[columnIndexes[colName]].ToString(), col.DataType);
+                                            if (value != "null") {
+                                                readerColumns.Add($"{colName} = {value}");
+                                            }
+                                        }
+                                        if (!readerColumns.Any()) {
+                                            continue;
+                                        }
+
+                                        var keyValue = ValueOrNull(reader[columnIndexes[tableKey]].ToString(), "Number");
+                                        string readerColumnValues = string.Join(",", readerColumns);
+                                        string stmt = $"UPDATE {tableName} SET {readerColumnValues} WHERE {tableKey} = {keyValue}";
+
+                                        using (var _conn = new OdbcConnection($"DSN={TransferDsnName}")) {
+                                            using (var comm = new OdbcCommand(stmt, _conn)) {
+
+
+                                                try {
+                                                    _conn.Open();
+                                                } catch (OdbcException e) {
+                                                    Logger.Instance.Error($"Failed to connect using connection string {_conn.ConnectionString}.");
+                                                    return false;
+                                                }
+
+                                                try {
+                                                    comm.ExecuteNonQuery();
+                                                    rowCount++;
+                                                } catch (OdbcException e) {
+                                                    Logger.Instance.Error($"Failed to update record in {DsnName}.{tableMappingName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                                } finally {
+                                                    _conn.Close();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (rowCount > 0) {
+                                    Logger.Instance.Debug($"{rowCount} records updated in {TransferDsnName}.{tableName}.");
+                                } else {
+                                    Logger.Instance.Warning($"No records updated in {TransferDsnName}.{tableName}.");
+                                }
+
+                                return true;
+                            } finally {
+                                reader.Close();
+                                _connection.Close();
+                            }
                         }
                     }
-
-                    if (rowCount > 0) {
-                        Logger.Instance.Debug($"{rowCount} records updated in {TransferDsnName}.{tableName}.");
-                    } else {
-                        Logger.Instance.Warning($"No records updated in {TransferDsnName}.{tableName}.");
-                    }
-
-                    return true;
-                } finally {
-                    reader.Close();
-                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
                 }
             }
 
@@ -983,37 +920,33 @@ namespace LinkGreenODBCUtility
 
         private bool ValidateRequiredFields(string tableName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
-            var command = new OdbcCommand($"SELECT * FROM `FieldMappings` " +
-                                          $"WHERE `TableName` = '{tableName}' " +
-                                          $"AND (`MappingName` = '' OR `MappingName` IS NULL)" +
-                                          $"AND `Required` = TRUE", _connection);
+            using (var _connection = new OdbcConnection($"DSN={TransferDsnName}")) {
+                using (var command = new OdbcCommand($"SELECT * FROM `FieldMappings` " +
+                                                     $"WHERE `TableName` = '{tableName}' " +
+                                                     $"AND (`MappingName` = '' OR `MappingName` IS NULL)" +
+                                                     $"AND `Required` = TRUE", _connection)) {
 
-            try
-            {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return false;
-            }
+                    try {
+                        _connection.Open();
+                    } catch (OdbcException e) {
+                        Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                        return false;
+                    }
 
-            OdbcDataReader reader = command.ExecuteReader();
-            try
-            {
-                if (reader.HasRows)
-                {
-                    return false;
+                    using (var reader = command.ExecuteReader()) {
+                        try {
+                            if (reader.HasRows) {
+                                return false;
+                            }
+                        } finally {
+                            reader.Close();
+                            _connection.Close();
+                        }
+
+                        return true;
+                    }
                 }
             }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
-            }
-
-            return true;
         }
 
         public DataTable PreviewMapping(string tableName)
@@ -1035,65 +968,52 @@ namespace LinkGreenODBCUtility
 
             string columnNames = string.Join(",", mappingColumns);
 
-            if (mappingColumns.Count > 0)
-            {
-                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-                Credentials creds = DsnCreds.GetDsnCreds(DsnName);
-                if (creds != null)
-                {
-                    if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password))
-                    {
-                        _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
-                    }
-                }
-
-                string query = $"SELECT {columnNames} FROM `{tableMappingName}`";
-                var command = new OdbcCommand(query)
-                {
-                    Connection = _connection
-                };
-
-                try
-                {
-                    _connection.Open();
-                }
-                catch (OdbcException e)
-                {
-                    Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                    return new DataTable();
-                }
-
-                OdbcDataAdapter adapter = new OdbcDataAdapter(query, _connection);
-                DataTable table = new DataTable();
-
-                var items = GetUnmappedFields(tableName);
-                foreach (MappingField item in items)
-                {
-                    table.Columns.Add(item.DisplayName);
-                }
-
-                try
-                {
-                    adapter.Fill(table);
-                    int rowCount = table.Rows.Count;
-                    for (int i = 20; i < rowCount; i++)
-                    {
-                        table.Rows.RemoveAt(i);
+            if (mappingColumns.Count > 0) {
+                using (var _connection = new OdbcConnection($"DSN={DsnName}")) {
+                    Credentials creds = DsnCreds.GetDsnCreds(DsnName);
+                    if (creds != null) {
+                        if (!string.IsNullOrEmpty(creds.Username) && !string.IsNullOrEmpty(creds.Password)) {
+                            _connection.ConnectionString = $"DSN={DsnName};Uid={creds.Username};Pwd={creds.Password}";
+                        }
                     }
 
-                    table.DefaultView.AllowDelete = false;
-                    table.DefaultView.AllowEdit = false;
-                    table.DefaultView.AllowNew = false;
+                    string query = $"SELECT {columnNames} FROM `{tableMappingName}`";
+                    using (var command = new OdbcCommand(query, _connection)) {
 
-                    return table;
-                }
-                catch (Exception e)
-                {
-                    Logger.Instance.Error($"An error occured while populating the preview table: {e.Message}");
-                }
-                finally
-                {
-                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                        try {
+                            _connection.Open();
+                        } catch (OdbcException e) {
+                            Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
+                            return new DataTable();
+                        }
+
+                        using (var adapter = new OdbcDataAdapter(query, _connection)) {
+                            DataTable table = new DataTable();
+
+                            var items = GetUnmappedFields(tableName);
+                            foreach (MappingField item in items) {
+                                table.Columns.Add(item.DisplayName);
+                            }
+
+                            try {
+                                adapter.Fill(table);
+                                int rowCount = table.Rows.Count;
+                                for (int i = 20; i < rowCount; i++) {
+                                    table.Rows.RemoveAt(i);
+                                }
+
+                                table.DefaultView.AllowDelete = false;
+                                table.DefaultView.AllowEdit = false;
+                                table.DefaultView.AllowNew = false;
+
+                                return table;
+                            } catch (Exception e) {
+                                Logger.Instance.Error($"An error occured while populating the preview table: {e.Message}");
+                            } finally {
+                                _connection.Close();
+                            }
+                        }
+                    }
                 }
             }
 

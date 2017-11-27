@@ -18,7 +18,7 @@ namespace LinkGreenODBCUtility.Services.Jobs
             Tasks.StartTask(jobName);
 
             var supplierInventories = new SupplierInventories();
-            var result = supplierInventories.PushMatchedSkus();
+            var result = supplierInventories.Publish();
             if (result)
             {
                 Logger.Instance.Info("Matched Supplier Inventory Synced.");

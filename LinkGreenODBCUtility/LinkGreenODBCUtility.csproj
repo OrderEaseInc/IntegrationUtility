@@ -107,6 +107,7 @@
     <Compile Include="Services\Jobs\CustomersSyncJob.cs" />
     <Compile Include="Services\Jobs\CategoriesSyncJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
+    <Compile Include="Services\Jobs\SupplierSkuMatchJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Views\CreateTask.cs">
       <SubType>Form</SubType>
