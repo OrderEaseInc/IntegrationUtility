@@ -207,22 +207,21 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        public string GetFieldProperty(string tableName, string fieldName, string property)
+        public string GetFieldProperty(string tableName, string fieldName, string property, OdbcConnection _connection = null)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
+            if (_connection == null)
+            {
+                _connection = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
+            }
             var command = new OdbcCommand($"SELECT `{property}` FROM `FieldMappings` WHERE `TableName` = '{tableName}' AND (`FieldName` = '{fieldName}' OR `MappingName` = '{fieldName}')", _connection);
 
-            try
+            if (_connection.State == ConnectionState.Closed)
             {
                 _connection.Open();
             }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Failed to connect using connection string {_connection.ConnectionString}.");
-                return null;
-            }
 
             OdbcDataReader reader = command.ExecuteReader();
+
             try
             {
                 while (reader.Read())
@@ -564,16 +563,17 @@ namespace LinkGreenODBCUtility
                             Logger.Instance.Warning($"No column indexes were created for migrating data to {Settings.DsnName}.{tableName}.");
                         }
 
-//                        var _conn = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
+                        var _conn = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
                         var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
                         {
-                            Connection = _connection
+                            Connection = _conn
                         };
 
                         try
                         {
                             if (nuke)
                             {
+                                _conn.Open();
                                 nukeCommand.ExecuteNonQuery();
                                 Logger.Instance.Debug($"{Settings.DsnName}.{tableName} nuked.");
                             }
@@ -595,7 +595,7 @@ namespace LinkGreenODBCUtility
                                     string text = reader[colIndex.Value].ToString();
                                     text = text.Replace("'", "''").Replace("\"", "\\\"");
                                     string original = text;
-                                    text = SanitizeField(tableName, colIndex.Key, text);
+                                    text = SanitizeField(tableName, colIndex.Key, text, _conn);
                                     if (!string.IsNullOrEmpty(text) && Settings.GetSanitizeLog() && original != text)
                                     {
                                         File.AppendAllText(@"log-sanitized.txt", $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
@@ -612,11 +612,11 @@ namespace LinkGreenODBCUtility
                                 }
 
                                 string readerColumnValues = string.Join(",", readerColumns);
-                                string stmt = $"INSERT INTO `{tableName}` ({chainedToColumnNames}) VALUES ({readerColumnValues})";
+                                string stmt = $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
                                 var comm = new OdbcCommand(stmt)
                                 {
-                                    Connection = _connection
+                                    Connection = _conn
                                 };
 
                                 try
@@ -646,6 +646,7 @@ namespace LinkGreenODBCUtility
                     finally
                     {
                         reader.Close();
+                        ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                     }
                 }
                 catch (OdbcException e)
@@ -656,6 +657,7 @@ namespace LinkGreenODBCUtility
                 finally
                 {
                     ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                    ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
                 }
             }
 
@@ -974,13 +976,13 @@ namespace LinkGreenODBCUtility
             return string.IsNullOrEmpty(value) ? "null" : $"{delimiter}{value.Replace("'", "''").Replace("\"", "\\\"")}{delimiter}";
         }
 
-        private string SanitizeField(string tableName, string field, string text)
+        private string SanitizeField(string tableName, string field, string text, OdbcConnection connection)
         {
-            string sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly");
-            string sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail");
-            string sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice");
-            string sanitizeAlphanumeric = GetFieldProperty(tableName, field, "SanitizeAlphaNumeric");
-            string sanitizeUniqueId = GetFieldProperty(tableName, field, "SanitizeUniqueId");
+            string sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly", connection);
+            string sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail", connection);
+            string sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice", connection);
+            string sanitizeAlphanumeric = GetFieldProperty(tableName, field, "SanitizeAlphaNumeric", connection);
+            string sanitizeUniqueId = GetFieldProperty(tableName, field, "SanitizeUniqueId", connection);
 
             if (!string.IsNullOrEmpty(text))
             {
