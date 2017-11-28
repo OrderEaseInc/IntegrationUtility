@@ -8,13 +8,11 @@ namespace DataTransfer.AccessDatabase
 {
     public abstract class AdoRepository<T> where T : class
     {
-        private OdbcConnection Connection;
         private readonly string _connectionString;
 
         protected AdoRepository(string connectionString)
         {
             _connectionString = connectionString;
-            Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
         }
 
         protected virtual T PopulateRecord(dynamic reader)
@@ -43,8 +41,8 @@ namespace DataTransfer.AccessDatabase
         {
             var list = new List<T>();
 
-            command.Connection = Connection;
-            Connection.Open();
+            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection.Open();
             try
             {
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
@@ -71,8 +69,8 @@ namespace DataTransfer.AccessDatabase
         protected T GetRecord(OdbcCommand command)
         {
             T record = null;
-            command.Connection = Connection;
-            Connection.Open();
+            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection.Open();
             try
             {
                 //var reader = command.ExecuteReader();
@@ -101,9 +99,9 @@ namespace DataTransfer.AccessDatabase
         protected IEnumerable<T> ExecuteStoredProc(OdbcCommand command)
         {
             var list = new List<T>();
-            command.Connection = Connection;
+            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
             command.CommandType = CommandType.StoredProcedure;
-            Connection.Open();
+            command.Connection.Open();
             try
             {
                 //var reader = command.ExecuteReader();
@@ -132,9 +130,9 @@ namespace DataTransfer.AccessDatabase
 
         protected void ExecuteCommand(OdbcCommand command)
         {
-            command.Connection = Connection;
+            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
             command.CommandType = CommandType.Text;
-            Connection.Open();
+            command.Connection.Open();
             try
             {
                 command.ExecuteNonQuery();

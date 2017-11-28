@@ -47,12 +47,16 @@ namespace DataTransfer.AccessDatabase
 
         private void Insert(SupplierInventory inventory, Supplier supplier)
         {
-            var sql = $"INSERT INTO {TableName} (BuyerLinkedSku, CatalogPrice, Description, Inventory, ItemId, SizeDescription, SupplierSku, SupplierId, OurSupplierNumber) " +
-                $"VALUES ({NullableString(inventory.BuyerLinkedSku)}, {NullableDecimal(inventory.CatalogPrice)}, " +
-                $"{NullableString(inventory.Description)}, {NullableInt(inventory.Inventory)}, {inventory.ItemId}," +
-                $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)})";
-            using (var command = new OdbcCommand(sql)) {
-                ExecuteCommand(command);
+            var buyerLinkedSkus = inventory.BuyerLinkedSkus?.Any() == true ? inventory.BuyerLinkedSkus : new[] {default(string)};
+            foreach (var buyerLinkedSku in buyerLinkedSkus) {
+                var sql =
+                    $"INSERT INTO {TableName} (BuyerLinkedSku, CatalogPrice, Description, Inventory, ItemId, SizeDescription, SupplierSku, SupplierId, OurSupplierNumber) " +
+                    $"VALUES ({NullableString(buyerLinkedSku)}, {NullableDecimal(inventory.CatalogPrice)}, " +
+                    $"{NullableString(inventory.Description)}, {NullableInt(inventory.Inventory)}, {inventory.ItemId}," +
+                    $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)})";
+                using (var command = new OdbcCommand(sql)) {
+                    ExecuteCommand(command);
+                }
             }
         }
 
@@ -69,7 +73,7 @@ namespace DataTransfer.AccessDatabase
                 var updatedSupplierInventories = GetRecords(command);
                 foreach (var inventory in updatedSupplierInventories.Where(i => !string.IsNullOrEmpty(i.BuyerLinkedSku) && lgSupplierInventories.ContainsKey(i.ItemId))) {
                     var lgSupplierInventory = lgSupplierInventories[inventory.ItemId];
-                    if (lgSupplierInventory.BuyerLinkedSku != inventory.BuyerLinkedSku) {
+                    if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == inventory.BuyerLinkedSku))) {
                         // this didn't come in from the web service
                         lgSupplierInventory.SupplierId = supplier.Id;
                         WebServiceHelper.UpdateSupplierInventory(lgSupplierInventory, inventory.BuyerLinkedSku);

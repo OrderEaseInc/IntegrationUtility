@@ -12,16 +12,13 @@ namespace DataTransfer.AccessDatabase
     public class SupplierRepository : AdoRepository<Supplier>
     {
         private const string TableName = "Suppliers";
-        private const string TableKey = "SupplierId";
-        private const string DsnName = "LinkGreenDataTransfer";
 
         public SupplierRepository(string connectionString) : base(connectionString) { }
 
         public int DownloadAllSuppliers()
         {
             var suppliers = GetAll();
-            if (suppliers == null)
-            {
+            if (suppliers == null) {
                 return 0;
             }
 
@@ -29,18 +26,19 @@ namespace DataTransfer.AccessDatabase
                 Insert(supplier);
             }
 
-            return suppliers.Count();
+            return suppliers.Count;
         }
 
         public int SyncAllSuppliers()
         {
             var count = 0;
-            var command = new OdbcCommand($"SELECT * FROM {TableName}")
-            {
-                Connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}")
-            };
             var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
-            var updatedSuppliers = GetRecords(command);
+
+            IEnumerable<Supplier> updatedSuppliers;
+            using (var command = new OdbcCommand($"SELECT * FROM {TableName}")) {
+                updatedSuppliers = GetRecords(command);
+            }
+
             foreach (var supplier in updatedSuppliers.Where(s => lgSuppliers.ContainsKey(s.Id))) {
                 var lgSupplier = lgSuppliers[supplier.Id];
                 WebServiceHelper.UpdateSupplierContactInfo(lgSupplier, supplier.OurContactInfo.OurSupplierNumber);
@@ -64,7 +62,7 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
-        private IEnumerable<Supplier> GetAll()
+        private List<Supplier> GetAll()
         {
             var suppliers = WebServiceHelper.GetAllSuppliers();
             return suppliers;
