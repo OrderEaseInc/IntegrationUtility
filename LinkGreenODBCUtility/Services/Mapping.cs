@@ -554,15 +554,6 @@ namespace LinkGreenODBCUtility
                             }
                         }
 
-                        if (columnIndexes.Count > 0)
-                        {
-                            Logger.Instance.Debug($"Column indexes created for migrating data to {Settings.DsnName}.{tableName}.");
-                        }
-                        else
-                        {
-                            Logger.Instance.Warning($"No column indexes were created for migrating data to {Settings.DsnName}.{tableName}.");
-                        }
-
                         var _conn = ConnectionInstance.Instance.GetConnection($"DSN={TransferDsnName}");
                         var nukeCommand = new OdbcCommand($"DELETE * FROM {tableName}")
                         {
@@ -995,6 +986,8 @@ namespace LinkGreenODBCUtility
 
         private string SanitizeField(string tableName, string field, string text, OdbcConnection connection)
         {
+            connection.Close();
+            connection.Open();
             string sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly", connection);
             string sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail", connection);
             string sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice", connection);
