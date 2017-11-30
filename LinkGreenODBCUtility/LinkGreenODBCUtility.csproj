@@ -108,6 +108,7 @@
     <Compile Include="Services\Jobs\CategoriesSyncJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
+    <Compile Include="Services\InventoryQuantity.cs" />
     <Compile Include="Views\CreateTask.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +138,7 @@
     <Compile Include="Models\LoggerModel.cs" />
     <Compile Include="Services\Mapping.cs" />
     <Compile Include="Models\MappingField.cs" />
+    <Compile Include="Services\LinkedSkus.cs" />
     <Compile Include="Views\MappingPreview.cs">
       <SubType>Form</SubType>
     </Compile>

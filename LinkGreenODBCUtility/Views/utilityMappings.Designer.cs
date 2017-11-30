@@ -102,6 +102,30 @@
             this.productsDataSource = new System.Windows.Forms.ListBox();
             this.publishProducts = new System.Windows.Forms.Button();
             this.emptyProductsTransferTable = new System.Windows.Forms.Button();
+            this.inventoryQuantity = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.setInventoryQuantityUsernamePW = new System.Windows.Forms.Button();
+            this.previewInventoryQuantity = new System.Windows.Forms.Button();
+            this.inventoryQuantityFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.migrateInventoryQuantity = new System.Windows.Forms.Button();
+            this.activeInventoryQuantityFieldMappingValue = new System.Windows.Forms.Label();
+            this.activeInventoryQuantityFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapInventoryQuantityFields = new System.Windows.Forms.Button();
+            this.mappingInventoryQuantityFields = new System.Windows.Forms.ListBox();
+            this.inventoryQuantityFields = new System.Windows.Forms.ListBox();
+            this.mappedInventoryQuantityTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label68 = new System.Windows.Forms.Label();
+            this.label69 = new System.Windows.Forms.Label();
+            this.activeInventoryQuantityTableMappingValue = new System.Windows.Forms.Label();
+            this.label71 = new System.Windows.Forms.Label();
+            this.label72 = new System.Windows.Forms.Label();
+            this.label73 = new System.Windows.Forms.Label();
+            this.label74 = new System.Windows.Forms.Label();
+            this.inventoryQuantityTableName = new System.Windows.Forms.ListBox();
+            this.inventoryQuantityDataSource = new System.Windows.Forms.ListBox();
+            this.publishInventoryQuantity = new System.Windows.Forms.Button();
+            this.emptyInventoryQuantityTransferTable = new System.Windows.Forms.Button();
             this.priceLevelsTab = new System.Windows.Forms.TabPage();
             this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
             this.previewPriceLevelsMappingOutput = new System.Windows.Forms.Button();
@@ -176,7 +200,6 @@
             this.downloadSuppliers = new System.Windows.Forms.Button();
             this.emptySuppliersTransferTable = new System.Windows.Forms.Button();
             this.supplierInventory = new System.Windows.Forms.TabPage();
-            this.publishMatchedSupplierInventorySkus = new System.Windows.Forms.Button();
             this.setSupplierInventoryUsernamePW = new System.Windows.Forms.Button();
             this.previewSupplierInventoryMappingOutput = new System.Windows.Forms.Button();
             this.supplierInventoryFieldDescription = new System.Windows.Forms.Label();
@@ -200,14 +223,38 @@
             this.supplierInventoryDataSource = new System.Windows.Forms.ListBox();
             this.syncSupplierInventory = new System.Windows.Forms.Button();
             this.emptySupplierInventoryTransferTable = new System.Windows.Forms.Button();
+            this.linkedSkus = new System.Windows.Forms.TabPage();
+            this.publishLinkedSkus = new System.Windows.Forms.Button();
+            this.setLinkedSkusUsernamePW = new System.Windows.Forms.Button();
+            this.previewLinkedSkusMappingOutput = new System.Windows.Forms.Button();
+            this.linkedSkusFieldDescription = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.activeLinkedSkuFieldMappingValue = new System.Windows.Forms.Label();
+            this.activeLinkedSkuFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapLinkedSkuFields = new System.Windows.Forms.Button();
+            this.mappingLinkedSkuFields = new System.Windows.Forms.ListBox();
+            this.linkedSkuFields = new System.Windows.Forms.ListBox();
+            this.mappedLinkedSkusTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label59 = new System.Windows.Forms.Label();
+            this.label60 = new System.Windows.Forms.Label();
+            this.activeLinkedSkusTableMappingValue = new System.Windows.Forms.Label();
+            this.label62 = new System.Windows.Forms.Label();
+            this.label63 = new System.Windows.Forms.Label();
+            this.label64 = new System.Windows.Forms.Label();
+            this.label65 = new System.Windows.Forms.Label();
+            this.label66 = new System.Windows.Forms.Label();
+            this.linkedSkusTableName = new System.Windows.Forms.ListBox();
+            this.linkedSkusDataSource = new System.Windows.Forms.ListBox();
+            this.emptyLinkedSkusTransferTable = new System.Windows.Forms.Button();
             this.buyerInventory = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.setBuyerInventoryUsernamePW = new System.Windows.Forms.Button();
             this.previewBuyerInventoryMappingOutput = new System.Windows.Forms.Button();
             this.buyerInventoryFieldDescriptionValue = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.migrateBuyerInventory = new System.Windows.Forms.Button();
             this.activeBuyerInventoryFieldMappingValue = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
+            this.activeBuyerInventoryFieldMappingLabel = new System.Windows.Forms.Label();
             this.mapBuyerInventoryFields = new System.Windows.Forms.Button();
             this.mappingBuyerInventoryFields = new System.Windows.Forms.ListBox();
             this.requiredBuyerInventoryFields = new System.Windows.Forms.ListBox();
@@ -223,15 +270,16 @@
             this.buyerInventoryDataSource = new System.Windows.Forms.ListBox();
             this.publishBuyerInventory = new System.Windows.Forms.Button();
             this.emptyBuyerInventoryTransferTable = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
             this.productsTab.SuspendLayout();
+            this.inventoryQuantity.SuspendLayout();
             this.priceLevelsTab.SuspendLayout();
             this.pricing.SuspendLayout();
             this.suppliers.SuspendLayout();
             this.supplierInventory.SuspendLayout();
+            this.linkedSkus.SuspendLayout();
             this.buyerInventory.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -240,10 +288,12 @@
             this.Tables.Controls.Add(this.categories);
             this.Tables.Controls.Add(this.customers);
             this.Tables.Controls.Add(this.productsTab);
+            this.Tables.Controls.Add(this.inventoryQuantity);
             this.Tables.Controls.Add(this.priceLevelsTab);
             this.Tables.Controls.Add(this.pricing);
             this.Tables.Controls.Add(this.suppliers);
             this.Tables.Controls.Add(this.supplierInventory);
+            this.Tables.Controls.Add(this.linkedSkus);
             this.Tables.Controls.Add(this.buyerInventory);
             this.Tables.Location = new System.Drawing.Point(13, 12);
             this.Tables.Name = "Tables";
@@ -1019,6 +1069,261 @@
             this.emptyProductsTransferTable.Text = "Empty Transfer Table";
             this.emptyProductsTransferTable.UseVisualStyleBackColor = true;
             this.emptyProductsTransferTable.Click += new System.EventHandler(this.emptyProductsTransferTable_Click);
+            // 
+            // inventoryQuantity
+            // 
+            this.inventoryQuantity.Controls.Add(this.label10);
+            this.inventoryQuantity.Controls.Add(this.setInventoryQuantityUsernamePW);
+            this.inventoryQuantity.Controls.Add(this.previewInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFieldDescriptionValue);
+            this.inventoryQuantity.Controls.Add(this.label57);
+            this.inventoryQuantity.Controls.Add(this.migrateInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingValue);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingLabel);
+            this.inventoryQuantity.Controls.Add(this.mapInventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.mappingInventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.mappedInventoryQuantityTableFieldsLabel);
+            this.inventoryQuantity.Controls.Add(this.label68);
+            this.inventoryQuantity.Controls.Add(this.label69);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityTableMappingValue);
+            this.inventoryQuantity.Controls.Add(this.label71);
+            this.inventoryQuantity.Controls.Add(this.label72);
+            this.inventoryQuantity.Controls.Add(this.label73);
+            this.inventoryQuantity.Controls.Add(this.label74);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityTableName);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityDataSource);
+            this.inventoryQuantity.Controls.Add(this.publishInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.emptyInventoryQuantityTransferTable);
+            this.inventoryQuantity.Location = new System.Drawing.Point(4, 22);
+            this.inventoryQuantity.Name = "inventoryQuantity";
+            this.inventoryQuantity.Size = new System.Drawing.Size(410, 532);
+            this.inventoryQuantity.TabIndex = 9;
+            this.inventoryQuantity.Text = "Inventory Quantities";
+            this.inventoryQuantity.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(28, 468);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.TabIndex = 139;
+            this.label10.Text = "Actions:";
+            // 
+            // setInventoryQuantityUsernamePW
+            // 
+            this.setInventoryQuantityUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setInventoryQuantityUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setInventoryQuantityUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setInventoryQuantityUsernamePW.Name = "setInventoryQuantityUsernamePW";
+            this.setInventoryQuantityUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setInventoryQuantityUsernamePW.TabIndex = 138;
+            this.setInventoryQuantityUsernamePW.UseVisualStyleBackColor = true;
+            this.setInventoryQuantityUsernamePW.Click += new System.EventHandler(this.setInventoryQuantityUsernamePW_Click);
+            // 
+            // previewInventoryQuantity
+            // 
+            this.previewInventoryQuantity.Location = new System.Drawing.Point(217, 423);
+            this.previewInventoryQuantity.Name = "previewInventoryQuantity";
+            this.previewInventoryQuantity.Size = new System.Drawing.Size(75, 23);
+            this.previewInventoryQuantity.TabIndex = 137;
+            this.previewInventoryQuantity.Text = "Preview";
+            this.previewInventoryQuantity.UseVisualStyleBackColor = true;
+            this.previewInventoryQuantity.Click += new System.EventHandler(this.previewInventoryQuantity_Click);
+            // 
+            // inventoryQuantityFieldDescriptionValue
+            // 
+            this.inventoryQuantityFieldDescriptionValue.AutoSize = true;
+            this.inventoryQuantityFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.inventoryQuantityFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
+            this.inventoryQuantityFieldDescriptionValue.Name = "inventoryQuantityFieldDescriptionValue";
+            this.inventoryQuantityFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.inventoryQuantityFieldDescriptionValue.TabIndex = 136;
+            this.inventoryQuantityFieldDescriptionValue.Text = "N/A";
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(25, 445);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(63, 13);
+            this.label57.TabIndex = 135;
+            this.label57.Text = "Description:";
+            // 
+            // migrateInventoryQuantity
+            // 
+            this.migrateInventoryQuantity.Location = new System.Drawing.Point(164, 494);
+            this.migrateInventoryQuantity.Name = "migrateInventoryQuantity";
+            this.migrateInventoryQuantity.Size = new System.Drawing.Size(88, 23);
+            this.migrateInventoryQuantity.TabIndex = 134;
+            this.migrateInventoryQuantity.Text = "Migrate Data";
+            this.migrateInventoryQuantity.UseVisualStyleBackColor = true;
+            this.migrateInventoryQuantity.Click += new System.EventHandler(this.migrateInventoryQuantity_Click);
+            // 
+            // activeInventoryQuantityFieldMappingValue
+            // 
+            this.activeInventoryQuantityFieldMappingValue.AutoSize = true;
+            this.activeInventoryQuantityFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeInventoryQuantityFieldMappingValue.Location = new System.Drawing.Point(140, 428);
+            this.activeInventoryQuantityFieldMappingValue.Name = "activeInventoryQuantityFieldMappingValue";
+            this.activeInventoryQuantityFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeInventoryQuantityFieldMappingValue.TabIndex = 133;
+            this.activeInventoryQuantityFieldMappingValue.Text = "N/A";
+            // 
+            // activeInventoryQuantityFieldMappingLabel
+            // 
+            this.activeInventoryQuantityFieldMappingLabel.AutoSize = true;
+            this.activeInventoryQuantityFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
+            this.activeInventoryQuantityFieldMappingLabel.Name = "activeInventoryQuantityFieldMappingLabel";
+            this.activeInventoryQuantityFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeInventoryQuantityFieldMappingLabel.TabIndex = 132;
+            this.activeInventoryQuantityFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapInventoryQuantityFields
+            // 
+            this.mapInventoryQuantityFields.Location = new System.Drawing.Point(298, 423);
+            this.mapInventoryQuantityFields.Name = "mapInventoryQuantityFields";
+            this.mapInventoryQuantityFields.Size = new System.Drawing.Size(87, 23);
+            this.mapInventoryQuantityFields.TabIndex = 131;
+            this.mapInventoryQuantityFields.Text = "Map Selected";
+            this.mapInventoryQuantityFields.UseVisualStyleBackColor = true;
+            this.mapInventoryQuantityFields.Click += new System.EventHandler(this.mapInventoryQuantityFields_Click);
+            // 
+            // mappingInventoryQuantityFields
+            // 
+            this.mappingInventoryQuantityFields.FormattingEnabled = true;
+            this.mappingInventoryQuantityFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingInventoryQuantityFields.Name = "mappingInventoryQuantityFields";
+            this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingInventoryQuantityFields.TabIndex = 130;
+            // 
+            // inventoryQuantityFields
+            // 
+            this.inventoryQuantityFields.FormattingEnabled = true;
+            this.inventoryQuantityFields.Location = new System.Drawing.Point(26, 282);
+            this.inventoryQuantityFields.Name = "inventoryQuantityFields";
+            this.inventoryQuantityFields.Size = new System.Drawing.Size(174, 134);
+            this.inventoryQuantityFields.TabIndex = 129;
+            this.inventoryQuantityFields.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityFields_SelectedIndexChanged);
+            // 
+            // mappedInventoryQuantityTableFieldsLabel
+            // 
+            this.mappedInventoryQuantityTableFieldsLabel.AutoSize = true;
+            this.mappedInventoryQuantityTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedInventoryQuantityTableFieldsLabel.Name = "mappedInventoryQuantityTableFieldsLabel";
+            this.mappedInventoryQuantityTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedInventoryQuantityTableFieldsLabel.TabIndex = 128;
+            this.mappedInventoryQuantityTableFieldsLabel.Text = "N/A:";
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(28, 265);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(37, 13);
+            this.label68.TabIndex = 127;
+            this.label68.Text = "Fields:";
+            // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label69.Location = new System.Drawing.Point(31, 237);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(96, 13);
+            this.label69.TabIndex = 126;
+            this.label69.Text = "Field Mappings:";
+            // 
+            // activeInventoryQuantityTableMappingValue
+            // 
+            this.activeInventoryQuantityTableMappingValue.AutoSize = true;
+            this.activeInventoryQuantityTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeInventoryQuantityTableMappingValue.Location = new System.Drawing.Point(145, 205);
+            this.activeInventoryQuantityTableMappingValue.Name = "activeInventoryQuantityTableMappingValue";
+            this.activeInventoryQuantityTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeInventoryQuantityTableMappingValue.TabIndex = 125;
+            this.activeInventoryQuantityTableMappingValue.Text = "N/A";
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.Location = new System.Drawing.Point(25, 205);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(114, 13);
+            this.label71.TabIndex = 124;
+            this.label71.Text = "Active Table Mapping:";
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Location = new System.Drawing.Point(203, 44);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(68, 13);
+            this.label72.TabIndex = 123;
+            this.label72.Text = "Table Name:";
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(28, 44);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(64, 13);
+            this.label73.TabIndex = 121;
+            this.label73.Text = "DSN Name:";
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label74.Location = new System.Drawing.Point(28, 16);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(95, 13);
+            this.label74.TabIndex = 120;
+            this.label74.Text = "Table Mapping:";
+            // 
+            // inventoryQuantityTableName
+            // 
+            this.inventoryQuantityTableName.FormattingEnabled = true;
+            this.inventoryQuantityTableName.HorizontalScrollbar = true;
+            this.inventoryQuantityTableName.Location = new System.Drawing.Point(206, 60);
+            this.inventoryQuantityTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.inventoryQuantityTableName.Name = "inventoryQuantityTableName";
+            this.inventoryQuantityTableName.Size = new System.Drawing.Size(180, 134);
+            this.inventoryQuantityTableName.TabIndex = 118;
+            this.inventoryQuantityTableName.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityTableName_SelectedIndexChanged);
+            // 
+            // inventoryQuantityDataSource
+            // 
+            this.inventoryQuantityDataSource.FormattingEnabled = true;
+            this.inventoryQuantityDataSource.HorizontalScrollbar = true;
+            this.inventoryQuantityDataSource.Location = new System.Drawing.Point(28, 60);
+            this.inventoryQuantityDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.inventoryQuantityDataSource.Name = "inventoryQuantityDataSource";
+            this.inventoryQuantityDataSource.Size = new System.Drawing.Size(172, 134);
+            this.inventoryQuantityDataSource.TabIndex = 117;
+            this.inventoryQuantityDataSource.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityDataSource_SelectedIndexChanged);
+            // 
+            // publishInventoryQuantity
+            // 
+            this.publishInventoryQuantity.Location = new System.Drawing.Point(258, 494);
+            this.publishInventoryQuantity.Name = "publishInventoryQuantity";
+            this.publishInventoryQuantity.Size = new System.Drawing.Size(126, 23);
+            this.publishInventoryQuantity.TabIndex = 122;
+            this.publishInventoryQuantity.Text = "Publish To LinkGreen";
+            this.publishInventoryQuantity.UseVisualStyleBackColor = true;
+            this.publishInventoryQuantity.Click += new System.EventHandler(this.publishInventoryQuantity_Click);
+            // 
+            // emptyInventoryQuantityTransferTable
+            // 
+            this.emptyInventoryQuantityTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyInventoryQuantityTransferTable.Name = "emptyInventoryQuantityTransferTable";
+            this.emptyInventoryQuantityTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyInventoryQuantityTransferTable.TabIndex = 119;
+            this.emptyInventoryQuantityTransferTable.Text = "Empty Transfer Table";
+            this.emptyInventoryQuantityTransferTable.UseVisualStyleBackColor = true;
+            this.emptyInventoryQuantityTransferTable.Click += new System.EventHandler(this.emptyInventoryQuantityTransferTable_Click);
             // 
             // priceLevelsTab
             // 
@@ -1800,7 +2105,6 @@
             // 
             // supplierInventory
             // 
-            this.supplierInventory.Controls.Add(this.publishMatchedSupplierInventorySkus);
             this.supplierInventory.Controls.Add(this.setSupplierInventoryUsernamePW);
             this.supplierInventory.Controls.Add(this.previewSupplierInventoryMappingOutput);
             this.supplierInventory.Controls.Add(this.supplierInventoryFieldDescription);
@@ -1831,16 +2135,6 @@
             this.supplierInventory.TabIndex = 6;
             this.supplierInventory.Text = "Supplier Inventory";
             this.supplierInventory.UseVisualStyleBackColor = true;
-            // 
-            // publishMatchedSupplierInventorySkus
-            // 
-            this.publishMatchedSupplierInventorySkus.Location = new System.Drawing.Point(83, 497);
-            this.publishMatchedSupplierInventorySkus.Name = "publishMatchedSupplierInventorySkus";
-            this.publishMatchedSupplierInventorySkus.Size = new System.Drawing.Size(126, 23);
-            this.publishMatchedSupplierInventorySkus.TabIndex = 67;
-            this.publishMatchedSupplierInventorySkus.Text = "Publish Matched SKUs";
-            this.publishMatchedSupplierInventorySkus.UseVisualStyleBackColor = true;
-            this.publishMatchedSupplierInventorySkus.Click += new System.EventHandler(this.publishMatchedSupplierInventorySkus_Click);
             // 
             // setSupplierInventoryUsernamePW
             // 
@@ -1884,9 +2178,9 @@
             // 
             // pullSupplierInventoriesFromLinkGreen
             // 
-            this.pullSupplierInventoriesFromLinkGreen.Location = new System.Drawing.Point(215, 468);
+            this.pullSupplierInventoriesFromLinkGreen.Location = new System.Drawing.Point(158, 484);
             this.pullSupplierInventoriesFromLinkGreen.Name = "pullSupplierInventoriesFromLinkGreen";
-            this.pullSupplierInventoriesFromLinkGreen.Size = new System.Drawing.Size(136, 23);
+            this.pullSupplierInventoriesFromLinkGreen.Size = new System.Drawing.Size(113, 23);
             this.pullSupplierInventoriesFromLinkGreen.TabIndex = 63;
             this.pullSupplierInventoriesFromLinkGreen.Text = "Pull from LinkGreen";
             this.pullSupplierInventoriesFromLinkGreen.UseVisualStyleBackColor = true;
@@ -2047,9 +2341,9 @@
             // 
             // syncSupplierInventory
             // 
-            this.syncSupplierInventory.Location = new System.Drawing.Point(217, 497);
+            this.syncSupplierInventory.Location = new System.Drawing.Point(277, 484);
             this.syncSupplierInventory.Name = "syncSupplierInventory";
-            this.syncSupplierInventory.Size = new System.Drawing.Size(134, 23);
+            this.syncSupplierInventory.Size = new System.Drawing.Size(109, 23);
             this.syncSupplierInventory.TabIndex = 50;
             this.syncSupplierInventory.Text = "Sync";
             this.syncSupplierInventory.UseVisualStyleBackColor = true;
@@ -2057,13 +2351,257 @@
             // 
             // emptySupplierInventoryTransferTable
             // 
-            this.emptySupplierInventoryTransferTable.Location = new System.Drawing.Point(83, 468);
+            this.emptySupplierInventoryTransferTable.Location = new System.Drawing.Point(26, 484);
             this.emptySupplierInventoryTransferTable.Name = "emptySupplierInventoryTransferTable";
             this.emptySupplierInventoryTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptySupplierInventoryTransferTable.TabIndex = 47;
             this.emptySupplierInventoryTransferTable.Text = "Empty Transfer Table";
             this.emptySupplierInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptySupplierInventoryTransferTable.Click += new System.EventHandler(this.emptySupplierInventoriesTransferTable_Click);
+            // 
+            // linkedSkus
+            // 
+            this.linkedSkus.Controls.Add(this.publishLinkedSkus);
+            this.linkedSkus.Controls.Add(this.setLinkedSkusUsernamePW);
+            this.linkedSkus.Controls.Add(this.previewLinkedSkusMappingOutput);
+            this.linkedSkus.Controls.Add(this.linkedSkusFieldDescription);
+            this.linkedSkus.Controls.Add(this.label44);
+            this.linkedSkus.Controls.Add(this.activeLinkedSkuFieldMappingValue);
+            this.linkedSkus.Controls.Add(this.activeLinkedSkuFieldMappingLabel);
+            this.linkedSkus.Controls.Add(this.mapLinkedSkuFields);
+            this.linkedSkus.Controls.Add(this.mappingLinkedSkuFields);
+            this.linkedSkus.Controls.Add(this.linkedSkuFields);
+            this.linkedSkus.Controls.Add(this.mappedLinkedSkusTableFieldsLabel);
+            this.linkedSkus.Controls.Add(this.label59);
+            this.linkedSkus.Controls.Add(this.label60);
+            this.linkedSkus.Controls.Add(this.activeLinkedSkusTableMappingValue);
+            this.linkedSkus.Controls.Add(this.label62);
+            this.linkedSkus.Controls.Add(this.label63);
+            this.linkedSkus.Controls.Add(this.label64);
+            this.linkedSkus.Controls.Add(this.label65);
+            this.linkedSkus.Controls.Add(this.label66);
+            this.linkedSkus.Controls.Add(this.linkedSkusTableName);
+            this.linkedSkus.Controls.Add(this.linkedSkusDataSource);
+            this.linkedSkus.Controls.Add(this.emptyLinkedSkusTransferTable);
+            this.linkedSkus.Location = new System.Drawing.Point(4, 22);
+            this.linkedSkus.Name = "linkedSkus";
+            this.linkedSkus.Size = new System.Drawing.Size(410, 532);
+            this.linkedSkus.TabIndex = 8;
+            this.linkedSkus.Text = "Linked Skus";
+            this.linkedSkus.UseVisualStyleBackColor = true;
+            // 
+            // publishLinkedSkus
+            // 
+            this.publishLinkedSkus.Location = new System.Drawing.Point(158, 482);
+            this.publishLinkedSkus.Name = "publishLinkedSkus";
+            this.publishLinkedSkus.Size = new System.Drawing.Size(126, 23);
+            this.publishLinkedSkus.TabIndex = 137;
+            this.publishLinkedSkus.Text = "Publish Linked SKUs";
+            this.publishLinkedSkus.UseVisualStyleBackColor = true;
+            this.publishLinkedSkus.Click += new System.EventHandler(this.publishLinkedSkus_Click);
+            // 
+            // setLinkedSkusUsernamePW
+            // 
+            this.setLinkedSkusUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setLinkedSkusUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setLinkedSkusUsernamePW.Location = new System.Drawing.Point(177, 40);
+            this.setLinkedSkusUsernamePW.Name = "setLinkedSkusUsernamePW";
+            this.setLinkedSkusUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setLinkedSkusUsernamePW.TabIndex = 138;
+            this.setLinkedSkusUsernamePW.UseVisualStyleBackColor = true;
+            this.setLinkedSkusUsernamePW.Click += new System.EventHandler(this.setLinkedSkusUsernamePW_Click);
+            // 
+            // previewLinkedSkusMappingOutput
+            // 
+            this.previewLinkedSkusMappingOutput.Location = new System.Drawing.Point(217, 421);
+            this.previewLinkedSkusMappingOutput.Name = "previewLinkedSkusMappingOutput";
+            this.previewLinkedSkusMappingOutput.Size = new System.Drawing.Size(75, 23);
+            this.previewLinkedSkusMappingOutput.TabIndex = 136;
+            this.previewLinkedSkusMappingOutput.Text = "Preview";
+            this.previewLinkedSkusMappingOutput.UseVisualStyleBackColor = true;
+            this.previewLinkedSkusMappingOutput.Click += new System.EventHandler(this.previewLinkedSkusMappingOutput_Click);
+            // 
+            // linkedSkusFieldDescription
+            // 
+            this.linkedSkusFieldDescription.AutoSize = true;
+            this.linkedSkusFieldDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkedSkusFieldDescription.Location = new System.Drawing.Point(94, 443);
+            this.linkedSkusFieldDescription.Name = "linkedSkusFieldDescription";
+            this.linkedSkusFieldDescription.Size = new System.Drawing.Size(24, 13);
+            this.linkedSkusFieldDescription.TabIndex = 135;
+            this.linkedSkusFieldDescription.Text = "N/A";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(25, 443);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(63, 13);
+            this.label44.TabIndex = 134;
+            this.label44.Text = "Description:";
+            // 
+            // activeLinkedSkuFieldMappingValue
+            // 
+            this.activeLinkedSkuFieldMappingValue.AutoSize = true;
+            this.activeLinkedSkuFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeLinkedSkuFieldMappingValue.Location = new System.Drawing.Point(140, 426);
+            this.activeLinkedSkuFieldMappingValue.Name = "activeLinkedSkuFieldMappingValue";
+            this.activeLinkedSkuFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeLinkedSkuFieldMappingValue.TabIndex = 132;
+            this.activeLinkedSkuFieldMappingValue.Text = "N/A";
+            // 
+            // activeLinkedSkuFieldMappingLabel
+            // 
+            this.activeLinkedSkuFieldMappingLabel.AutoSize = true;
+            this.activeLinkedSkuFieldMappingLabel.Location = new System.Drawing.Point(25, 426);
+            this.activeLinkedSkuFieldMappingLabel.Name = "activeLinkedSkuFieldMappingLabel";
+            this.activeLinkedSkuFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeLinkedSkuFieldMappingLabel.TabIndex = 131;
+            this.activeLinkedSkuFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapLinkedSkuFields
+            // 
+            this.mapLinkedSkuFields.Location = new System.Drawing.Point(298, 421);
+            this.mapLinkedSkuFields.Name = "mapLinkedSkuFields";
+            this.mapLinkedSkuFields.Size = new System.Drawing.Size(87, 23);
+            this.mapLinkedSkuFields.TabIndex = 130;
+            this.mapLinkedSkuFields.Text = "Map Selected";
+            this.mapLinkedSkuFields.UseVisualStyleBackColor = true;
+            this.mapLinkedSkuFields.Click += new System.EventHandler(this.mapLinkedSkuFields_Click);
+            // 
+            // mappingLinkedSkuFields
+            // 
+            this.mappingLinkedSkuFields.FormattingEnabled = true;
+            this.mappingLinkedSkuFields.Location = new System.Drawing.Point(206, 280);
+            this.mappingLinkedSkuFields.Name = "mappingLinkedSkuFields";
+            this.mappingLinkedSkuFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingLinkedSkuFields.TabIndex = 129;
+            // 
+            // linkedSkuFields
+            // 
+            this.linkedSkuFields.FormattingEnabled = true;
+            this.linkedSkuFields.Location = new System.Drawing.Point(26, 280);
+            this.linkedSkuFields.Name = "linkedSkuFields";
+            this.linkedSkuFields.Size = new System.Drawing.Size(174, 134);
+            this.linkedSkuFields.TabIndex = 128;
+            this.linkedSkuFields.SelectedIndexChanged += new System.EventHandler(this.linkedSkuFields_SelectedIndexChanged);
+            // 
+            // mappedLinkedSkusTableFieldsLabel
+            // 
+            this.mappedLinkedSkusTableFieldsLabel.AutoSize = true;
+            this.mappedLinkedSkusTableFieldsLabel.Location = new System.Drawing.Point(206, 263);
+            this.mappedLinkedSkusTableFieldsLabel.Name = "mappedLinkedSkusTableFieldsLabel";
+            this.mappedLinkedSkusTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedLinkedSkusTableFieldsLabel.TabIndex = 127;
+            this.mappedLinkedSkusTableFieldsLabel.Text = "N/A:";
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(28, 263);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(37, 13);
+            this.label59.TabIndex = 126;
+            this.label59.Text = "Fields:";
+            // 
+            // label60
+            // 
+            this.label60.AutoSize = true;
+            this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label60.Location = new System.Drawing.Point(31, 235);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(96, 13);
+            this.label60.TabIndex = 125;
+            this.label60.Text = "Field Mappings:";
+            // 
+            // activeLinkedSkusTableMappingValue
+            // 
+            this.activeLinkedSkusTableMappingValue.AutoSize = true;
+            this.activeLinkedSkusTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeLinkedSkusTableMappingValue.Location = new System.Drawing.Point(145, 203);
+            this.activeLinkedSkusTableMappingValue.Name = "activeLinkedSkusTableMappingValue";
+            this.activeLinkedSkusTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeLinkedSkusTableMappingValue.TabIndex = 124;
+            this.activeLinkedSkusTableMappingValue.Text = "N/A";
+            // 
+            // label62
+            // 
+            this.label62.AutoSize = true;
+            this.label62.Location = new System.Drawing.Point(25, 203);
+            this.label62.Name = "label62";
+            this.label62.Size = new System.Drawing.Size(114, 13);
+            this.label62.TabIndex = 123;
+            this.label62.Text = "Active Table Mapping:";
+            // 
+            // label63
+            // 
+            this.label63.AutoSize = true;
+            this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label63.Location = new System.Drawing.Point(28, 466);
+            this.label63.Name = "label63";
+            this.label63.Size = new System.Drawing.Size(53, 13);
+            this.label63.TabIndex = 122;
+            this.label63.Text = "Actions:";
+            // 
+            // label64
+            // 
+            this.label64.AutoSize = true;
+            this.label64.Location = new System.Drawing.Point(203, 42);
+            this.label64.Name = "label64";
+            this.label64.Size = new System.Drawing.Size(68, 13);
+            this.label64.TabIndex = 121;
+            this.label64.Text = "Table Name:";
+            // 
+            // label65
+            // 
+            this.label65.AutoSize = true;
+            this.label65.Location = new System.Drawing.Point(28, 42);
+            this.label65.Name = "label65";
+            this.label65.Size = new System.Drawing.Size(64, 13);
+            this.label65.TabIndex = 119;
+            this.label65.Text = "DSN Name:";
+            // 
+            // label66
+            // 
+            this.label66.AutoSize = true;
+            this.label66.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label66.Location = new System.Drawing.Point(28, 14);
+            this.label66.Name = "label66";
+            this.label66.Size = new System.Drawing.Size(95, 13);
+            this.label66.TabIndex = 118;
+            this.label66.Text = "Table Mapping:";
+            // 
+            // linkedSkusTableName
+            // 
+            this.linkedSkusTableName.FormattingEnabled = true;
+            this.linkedSkusTableName.HorizontalScrollbar = true;
+            this.linkedSkusTableName.Location = new System.Drawing.Point(206, 58);
+            this.linkedSkusTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.linkedSkusTableName.Name = "linkedSkusTableName";
+            this.linkedSkusTableName.Size = new System.Drawing.Size(180, 134);
+            this.linkedSkusTableName.TabIndex = 116;
+            this.linkedSkusTableName.SelectedIndexChanged += new System.EventHandler(this.linkedSkusTableName_SelectedIndexChanged);
+            // 
+            // linkedSkusDataSource
+            // 
+            this.linkedSkusDataSource.FormattingEnabled = true;
+            this.linkedSkusDataSource.HorizontalScrollbar = true;
+            this.linkedSkusDataSource.Location = new System.Drawing.Point(28, 58);
+            this.linkedSkusDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.linkedSkusDataSource.Name = "linkedSkusDataSource";
+            this.linkedSkusDataSource.Size = new System.Drawing.Size(172, 134);
+            this.linkedSkusDataSource.TabIndex = 115;
+            this.linkedSkusDataSource.SelectedIndexChanged += new System.EventHandler(this.linkedSkusDataSource_SelectedIndexChanged);
+            // 
+            // emptyLinkedSkusTransferTable
+            // 
+            this.emptyLinkedSkusTransferTable.Location = new System.Drawing.Point(26, 482);
+            this.emptyLinkedSkusTransferTable.Name = "emptyLinkedSkusTransferTable";
+            this.emptyLinkedSkusTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyLinkedSkusTransferTable.TabIndex = 117;
+            this.emptyLinkedSkusTransferTable.Text = "Empty Transfer Table";
+            this.emptyLinkedSkusTransferTable.UseVisualStyleBackColor = true;
+            this.emptyLinkedSkusTransferTable.Click += new System.EventHandler(this.emptyLinkedSkusTransferTable_Click);
             // 
             // buyerInventory
             // 
@@ -2074,7 +2612,7 @@
             this.buyerInventory.Controls.Add(this.label7);
             this.buyerInventory.Controls.Add(this.migrateBuyerInventory);
             this.buyerInventory.Controls.Add(this.activeBuyerInventoryFieldMappingValue);
-            this.buyerInventory.Controls.Add(this.label36);
+            this.buyerInventory.Controls.Add(this.activeBuyerInventoryFieldMappingLabel);
             this.buyerInventory.Controls.Add(this.mapBuyerInventoryFields);
             this.buyerInventory.Controls.Add(this.mappingBuyerInventoryFields);
             this.buyerInventory.Controls.Add(this.requiredBuyerInventoryFields);
@@ -2096,6 +2634,16 @@
             this.buyerInventory.TabIndex = 7;
             this.buyerInventory.Text = "Buyer Inventory";
             this.buyerInventory.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(28, 468);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 116;
+            this.label3.Text = "Actions:";
             // 
             // setBuyerInventoryUsernamePW
             // 
@@ -2157,14 +2705,14 @@
             this.activeBuyerInventoryFieldMappingValue.TabIndex = 83;
             this.activeBuyerInventoryFieldMappingValue.Text = "N/A";
             // 
-            // label36
+            // activeBuyerInventoryFieldMappingLabel
             // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(25, 428);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(109, 13);
-            this.label36.TabIndex = 82;
-            this.label36.Text = "Active Field Mapping:";
+            this.activeBuyerInventoryFieldMappingLabel.AutoSize = true;
+            this.activeBuyerInventoryFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
+            this.activeBuyerInventoryFieldMappingLabel.Name = "activeBuyerInventoryFieldMappingLabel";
+            this.activeBuyerInventoryFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeBuyerInventoryFieldMappingLabel.TabIndex = 82;
+            this.activeBuyerInventoryFieldMappingLabel.Text = "Active Field Mapping:";
             // 
             // mapBuyerInventoryFields
             // 
@@ -2309,16 +2857,6 @@
             this.emptyBuyerInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptyBuyerInventoryTransferTable.Click += new System.EventHandler(this.emptyBuyerInventoriesTransferTable_Click);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(28, 468);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
-            this.label3.TabIndex = 116;
-            this.label3.Text = "Actions:";
-            // 
             // UtilityMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2343,6 +2881,8 @@
             this.customers.PerformLayout();
             this.productsTab.ResumeLayout(false);
             this.productsTab.PerformLayout();
+            this.inventoryQuantity.ResumeLayout(false);
+            this.inventoryQuantity.PerformLayout();
             this.priceLevelsTab.ResumeLayout(false);
             this.priceLevelsTab.PerformLayout();
             this.pricing.ResumeLayout(false);
@@ -2351,6 +2891,8 @@
             this.suppliers.PerformLayout();
             this.supplierInventory.ResumeLayout(false);
             this.supplierInventory.PerformLayout();
+            this.linkedSkus.ResumeLayout(false);
+            this.linkedSkus.PerformLayout();
             this.buyerInventory.ResumeLayout(false);
             this.buyerInventory.PerformLayout();
             this.ResumeLayout(false);
@@ -2528,7 +3070,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button migrateBuyerInventory;
         private System.Windows.Forms.Label activeBuyerInventoryFieldMappingValue;
-        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label activeBuyerInventoryFieldMappingLabel;
         private System.Windows.Forms.Button mapBuyerInventoryFields;
         private System.Windows.Forms.ListBox mappingBuyerInventoryFields;
         private System.Windows.Forms.ListBox requiredBuyerInventoryFields;
@@ -2549,11 +3091,57 @@
         private System.Windows.Forms.Button setProductsUsernamePW;
         private System.Windows.Forms.Button setPriceLevelsUsernamePW;
         private System.Windows.Forms.Button setPricingUsernamePW;
-        private System.Windows.Forms.Button publishMatchedSupplierInventorySkus;
         private System.Windows.Forms.Button setSuppliersUsernamePW;
         private System.Windows.Forms.Button setSupplierInventoryUsernamePW;
         private System.Windows.Forms.Button setBuyerInventoryUsernamePW;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabPage linkedSkus;
+        private System.Windows.Forms.Button publishLinkedSkus;
+        private System.Windows.Forms.Button setLinkedSkusUsernamePW;
+        private System.Windows.Forms.Button previewLinkedSkusMappingOutput;
+        private System.Windows.Forms.Label linkedSkusFieldDescription;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label activeLinkedSkuFieldMappingValue;
+        private System.Windows.Forms.Label activeLinkedSkuFieldMappingLabel;
+        private System.Windows.Forms.Button mapLinkedSkuFields;
+        private System.Windows.Forms.ListBox mappingLinkedSkuFields;
+        private System.Windows.Forms.ListBox linkedSkuFields;
+        private System.Windows.Forms.Label mappedLinkedSkusTableFieldsLabel;
+        private System.Windows.Forms.Label label59;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.Label activeLinkedSkusTableMappingValue;
+        private System.Windows.Forms.Label label62;
+        private System.Windows.Forms.Label label63;
+        private System.Windows.Forms.Label label64;
+        private System.Windows.Forms.Label label65;
+        private System.Windows.Forms.Label label66;
+        private System.Windows.Forms.ListBox linkedSkusTableName;
+        private System.Windows.Forms.ListBox linkedSkusDataSource;
+        private System.Windows.Forms.Button emptyLinkedSkusTransferTable;
+        private System.Windows.Forms.TabPage inventoryQuantity;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button setInventoryQuantityUsernamePW;
+        private System.Windows.Forms.Button previewInventoryQuantity;
+        private System.Windows.Forms.Label inventoryQuantityFieldDescriptionValue;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.Button migrateInventoryQuantity;
+        private System.Windows.Forms.Label activeInventoryQuantityFieldMappingValue;
+        private System.Windows.Forms.Label activeInventoryQuantityFieldMappingLabel;
+        private System.Windows.Forms.Button mapInventoryQuantityFields;
+        private System.Windows.Forms.ListBox mappingInventoryQuantityFields;
+        private System.Windows.Forms.ListBox inventoryQuantityFields;
+        private System.Windows.Forms.Label mappedInventoryQuantityTableFieldsLabel;
+        private System.Windows.Forms.Label label68;
+        private System.Windows.Forms.Label label69;
+        private System.Windows.Forms.Label activeInventoryQuantityTableMappingValue;
+        private System.Windows.Forms.Label label71;
+        private System.Windows.Forms.Label label72;
+        private System.Windows.Forms.Label label73;
+        private System.Windows.Forms.Label label74;
+        private System.Windows.Forms.ListBox inventoryQuantityTableName;
+        private System.Windows.Forms.ListBox inventoryQuantityDataSource;
+        private System.Windows.Forms.Button publishInventoryQuantity;
+        private System.Windows.Forms.Button emptyInventoryQuantityTransferTable;
     }
 }
 

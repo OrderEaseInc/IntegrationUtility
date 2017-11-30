@@ -152,7 +152,7 @@ namespace LinkGreenODBCUtility
 
                 WebServiceHelper.PushBuyerInventory(request);
 
-                Logger.Instance.Debug($"Finished importing buyer inventory {++items} of {products.Count}. Id: {product.Id}");
+                Logger.Instance.Debug($"Finished importing inventory {++items} of {products.Count}. Id: {product.Id}");
             }
 
             return true;

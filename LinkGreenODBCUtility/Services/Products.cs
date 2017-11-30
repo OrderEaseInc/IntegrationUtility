@@ -84,7 +84,7 @@ namespace LinkGreenODBCUtility
                     bool updateCategories = Settings.GetUpdateCategories();
                     //lets check if this item already exists, if so just update qty, else
                     var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
-                    var existingCategory = existingCategories.FirstOrDefault(s => s.Name == product.Category);
+                    var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == product.Category);
 
                     // Add
                     if (existing == null)
