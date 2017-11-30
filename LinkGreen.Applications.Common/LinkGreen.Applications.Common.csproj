@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Model\ApiResult.cs" />
     <Compile Include="Model\BuyerInventory.cs" />
+    <Compile Include="Model\InventoryQuantity.cs" />
     <Compile Include="Model\Supplier.cs" />
     <Compile Include="Model\SupplierContact.cs" />
     <Compile Include="Model\CompanyAndRelationshipResult.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Model\PrivateCategory.cs" />
     <Compile Include="Model\QuantityPricingBreak.cs" />
     <Compile Include="Model\Relationship.cs" />
+    <Compile Include="Model\LinkedItem.cs" />
     <Compile Include="Model\SupplierInventory.cs" />
     <Compile Include="Model\UserAndCompany.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

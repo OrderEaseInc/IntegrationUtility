@@ -51,6 +51,8 @@
     <Compile Include="OdbcDataTransferObjectBase.cs" />
     <Compile Include="Models\ProductInventory.cs" />
     <Compile Include="Repositories\BuyerInventoryRepository.cs" />
+    <Compile Include="Repositories\InventoryQuantityRepository.cs" />
+    <Compile Include="Repositories\LinkedSkusRepository.cs" />
     <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Repositories\SupplierRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />

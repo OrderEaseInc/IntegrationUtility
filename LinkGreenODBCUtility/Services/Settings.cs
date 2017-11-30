@@ -33,14 +33,11 @@ namespace LinkGreenODBCUtility
                     config.Save(ConfigurationSaveMode.Modified);
                 }
 
-                config.AppSettings.Settings["BaseUrl"].Value = "http://dev.linkgreen.ca/";
-
-                if (!GetSandboxMode())
+                if (GetSandboxMode())
                 {
-                    config.AppSettings.Settings["BaseUrl"].Value = "https://api.linkgreen.ca/";
+                    config.AppSettings.Settings["BaseUrl"].Value = "http://dev.linkgreen.ca/";
+                    config.Save(ConfigurationSaveMode.Modified);
                 }
-
-                config.Save(ConfigurationSaveMode.Modified);
             }
             catch (Exception e)
             {
