@@ -38,6 +38,10 @@ namespace LinkGreenODBCUtility
             taskProducts.Text = "Sync Products";
             taskProducts.Value = "Products";
             taskComboBox.Items.Add(taskProducts);
+            var taskInventoryQuantities = new ListItem();
+            taskInventoryQuantities.Text = "Sync Inventory Quantities";
+            taskInventoryQuantities.Value = "InventoryQuantities";
+            taskComboBox.Items.Add(taskInventoryQuantities);
             var taskPriceLevels = new ListItem();
             taskPriceLevels.Text = "Sync Price Levels";
             taskPriceLevels.Value = "Price Levels";
@@ -54,6 +58,10 @@ namespace LinkGreenODBCUtility
             taskSupplierInventory.Text = "Sync Supplier Inventory";
             taskSupplierInventory.Value = "SupplierInventory";
             taskComboBox.Items.Add(taskSupplierInventory);
+            var taskLinkedSkus = new ListItem();
+            taskLinkedSkus.Text = "Sync Linked Skus";
+            taskLinkedSkus.Value = "LinkedSkus";
+            taskComboBox.Items.Add(taskLinkedSkus);
             var taskBuyerInventory = new ListItem();
             taskBuyerInventory.Text = "Sync Buyer Inventory";
             taskBuyerInventory.Value = "BuyerInventory";

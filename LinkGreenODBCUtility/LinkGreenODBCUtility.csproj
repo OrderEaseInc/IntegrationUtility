@@ -106,6 +106,8 @@
     <Compile Include="Services\Jobs\BuyerInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\CustomersSyncJob.cs" />
     <Compile Include="Services\Jobs\CategoriesSyncJob.cs" />
+    <Compile Include="Services\Jobs\InventoryQuantitiesSyncJob.cs" />
+    <Compile Include="Services\Jobs\LinkedSkusSyncJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Services\InventoryQuantity.cs" />

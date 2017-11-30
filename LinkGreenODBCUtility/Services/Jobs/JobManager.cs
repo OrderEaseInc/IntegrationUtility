@@ -45,6 +45,11 @@ namespace LinkGreenODBCUtility
                                 .WithIdentity(jobName, "User")
                                 .Build();
                             break;
+                        case "InventoryQuantities":
+                            job = JobBuilder.Create<InventoryQuantitiesSyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
                         case "Price Levels":
                             job = JobBuilder.Create<PriceLevelsSyncJob>()
                                 .WithIdentity(jobName, "User")
@@ -62,6 +67,11 @@ namespace LinkGreenODBCUtility
                             break;
                         case "SupplierInventory":
                             job = JobBuilder.Create<SupplierInventorySyncJob>()
+                                .WithIdentity(jobName, "User")
+                                .Build();
+                            break;
+                        case "LinkedSkus":
+                            job = JobBuilder.Create<LinkedSKusSyncJob>()
                                 .WithIdentity(jobName, "User")
                                 .Build();
                             break;
