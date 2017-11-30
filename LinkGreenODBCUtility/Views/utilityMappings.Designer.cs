@@ -102,6 +102,30 @@
             this.productsDataSource = new System.Windows.Forms.ListBox();
             this.publishProducts = new System.Windows.Forms.Button();
             this.emptyProductsTransferTable = new System.Windows.Forms.Button();
+            this.inventoryQuantity = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.setInventoryQuantityUsernamePW = new System.Windows.Forms.Button();
+            this.previewInventoryQuantity = new System.Windows.Forms.Button();
+            this.inventoryQuantityFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.migrateInventoryQuantity = new System.Windows.Forms.Button();
+            this.activeInventoryQuantityFieldMappingValue = new System.Windows.Forms.Label();
+            this.activeInventoryQuantityFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapInventoryQuantityFields = new System.Windows.Forms.Button();
+            this.mappingInventoryQuantityFields = new System.Windows.Forms.ListBox();
+            this.inventoryQuantityFields = new System.Windows.Forms.ListBox();
+            this.mappedInventoryQuantityTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label68 = new System.Windows.Forms.Label();
+            this.label69 = new System.Windows.Forms.Label();
+            this.activeInventoryQuantityTableMappingValue = new System.Windows.Forms.Label();
+            this.label71 = new System.Windows.Forms.Label();
+            this.label72 = new System.Windows.Forms.Label();
+            this.label73 = new System.Windows.Forms.Label();
+            this.label74 = new System.Windows.Forms.Label();
+            this.inventoryQuantityTableName = new System.Windows.Forms.ListBox();
+            this.inventoryQuantityDataSource = new System.Windows.Forms.ListBox();
+            this.publishInventoryQuantity = new System.Windows.Forms.Button();
+            this.emptyInventoryQuantityTransferTable = new System.Windows.Forms.Button();
             this.priceLevelsTab = new System.Windows.Forms.TabPage();
             this.setPriceLevelsUsernamePW = new System.Windows.Forms.Button();
             this.previewPriceLevelsMappingOutput = new System.Windows.Forms.Button();
@@ -246,41 +270,17 @@
             this.buyerInventoryDataSource = new System.Windows.Forms.ListBox();
             this.publishBuyerInventory = new System.Windows.Forms.Button();
             this.emptyBuyerInventoryTransferTable = new System.Windows.Forms.Button();
-            this.inventoryQuantity = new System.Windows.Forms.TabPage();
-            this.label10 = new System.Windows.Forms.Label();
-            this.setInventoryQuantityUsernamePW = new System.Windows.Forms.Button();
-            this.previewInventoryQuantity = new System.Windows.Forms.Button();
-            this.inventoryQuantityFieldDescriptionValue = new System.Windows.Forms.Label();
-            this.label57 = new System.Windows.Forms.Label();
-            this.migrateInventoryQuantity = new System.Windows.Forms.Button();
-            this.activeInventoryQuantityFieldMappingValue = new System.Windows.Forms.Label();
-            this.activeInventoryQuantityFieldMappingLabel = new System.Windows.Forms.Label();
-            this.mapInventoryQuantityFields = new System.Windows.Forms.Button();
-            this.mappingInventoryQuantityFields = new System.Windows.Forms.ListBox();
-            this.inventoryQuantityFields = new System.Windows.Forms.ListBox();
-            this.mappedInventoryQuantityTableFieldsLabel = new System.Windows.Forms.Label();
-            this.label68 = new System.Windows.Forms.Label();
-            this.label69 = new System.Windows.Forms.Label();
-            this.activeInventoryQuantityTableMappingValue = new System.Windows.Forms.Label();
-            this.label71 = new System.Windows.Forms.Label();
-            this.label72 = new System.Windows.Forms.Label();
-            this.label73 = new System.Windows.Forms.Label();
-            this.label74 = new System.Windows.Forms.Label();
-            this.inventoryQuantityTableName = new System.Windows.Forms.ListBox();
-            this.inventoryQuantityDataSource = new System.Windows.Forms.ListBox();
-            this.publishInventoryQuantity = new System.Windows.Forms.Button();
-            this.emptyInventoryQuantityTransferTable = new System.Windows.Forms.Button();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
             this.productsTab.SuspendLayout();
+            this.inventoryQuantity.SuspendLayout();
             this.priceLevelsTab.SuspendLayout();
             this.pricing.SuspendLayout();
             this.suppliers.SuspendLayout();
             this.supplierInventory.SuspendLayout();
             this.linkedSkus.SuspendLayout();
             this.buyerInventory.SuspendLayout();
-            this.inventoryQuantity.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tables
@@ -844,7 +844,7 @@
             this.productsTab.Padding = new System.Windows.Forms.Padding(3);
             this.productsTab.Size = new System.Drawing.Size(410, 532);
             this.productsTab.TabIndex = 3;
-            this.productsTab.Text = "Inventory";
+            this.productsTab.Text = "Products";
             this.productsTab.UseVisualStyleBackColor = true;
             // 
             // setProductsUsernamePW
@@ -1069,6 +1069,261 @@
             this.emptyProductsTransferTable.Text = "Empty Transfer Table";
             this.emptyProductsTransferTable.UseVisualStyleBackColor = true;
             this.emptyProductsTransferTable.Click += new System.EventHandler(this.emptyProductsTransferTable_Click);
+            // 
+            // inventoryQuantity
+            // 
+            this.inventoryQuantity.Controls.Add(this.label10);
+            this.inventoryQuantity.Controls.Add(this.setInventoryQuantityUsernamePW);
+            this.inventoryQuantity.Controls.Add(this.previewInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFieldDescriptionValue);
+            this.inventoryQuantity.Controls.Add(this.label57);
+            this.inventoryQuantity.Controls.Add(this.migrateInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingValue);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingLabel);
+            this.inventoryQuantity.Controls.Add(this.mapInventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.mappingInventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFields);
+            this.inventoryQuantity.Controls.Add(this.mappedInventoryQuantityTableFieldsLabel);
+            this.inventoryQuantity.Controls.Add(this.label68);
+            this.inventoryQuantity.Controls.Add(this.label69);
+            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityTableMappingValue);
+            this.inventoryQuantity.Controls.Add(this.label71);
+            this.inventoryQuantity.Controls.Add(this.label72);
+            this.inventoryQuantity.Controls.Add(this.label73);
+            this.inventoryQuantity.Controls.Add(this.label74);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityTableName);
+            this.inventoryQuantity.Controls.Add(this.inventoryQuantityDataSource);
+            this.inventoryQuantity.Controls.Add(this.publishInventoryQuantity);
+            this.inventoryQuantity.Controls.Add(this.emptyInventoryQuantityTransferTable);
+            this.inventoryQuantity.Location = new System.Drawing.Point(4, 22);
+            this.inventoryQuantity.Name = "inventoryQuantity";
+            this.inventoryQuantity.Size = new System.Drawing.Size(410, 532);
+            this.inventoryQuantity.TabIndex = 9;
+            this.inventoryQuantity.Text = "Inventory Quantities";
+            this.inventoryQuantity.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(28, 468);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.TabIndex = 139;
+            this.label10.Text = "Actions:";
+            // 
+            // setInventoryQuantityUsernamePW
+            // 
+            this.setInventoryQuantityUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setInventoryQuantityUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setInventoryQuantityUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setInventoryQuantityUsernamePW.Name = "setInventoryQuantityUsernamePW";
+            this.setInventoryQuantityUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setInventoryQuantityUsernamePW.TabIndex = 138;
+            this.setInventoryQuantityUsernamePW.UseVisualStyleBackColor = true;
+            this.setInventoryQuantityUsernamePW.Click += new System.EventHandler(this.setInventoryQuantityUsernamePW_Click);
+            // 
+            // previewInventoryQuantity
+            // 
+            this.previewInventoryQuantity.Location = new System.Drawing.Point(217, 423);
+            this.previewInventoryQuantity.Name = "previewInventoryQuantity";
+            this.previewInventoryQuantity.Size = new System.Drawing.Size(75, 23);
+            this.previewInventoryQuantity.TabIndex = 137;
+            this.previewInventoryQuantity.Text = "Preview";
+            this.previewInventoryQuantity.UseVisualStyleBackColor = true;
+            this.previewInventoryQuantity.Click += new System.EventHandler(this.previewInventoryQuantity_Click);
+            // 
+            // inventoryQuantityFieldDescriptionValue
+            // 
+            this.inventoryQuantityFieldDescriptionValue.AutoSize = true;
+            this.inventoryQuantityFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.inventoryQuantityFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
+            this.inventoryQuantityFieldDescriptionValue.Name = "inventoryQuantityFieldDescriptionValue";
+            this.inventoryQuantityFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.inventoryQuantityFieldDescriptionValue.TabIndex = 136;
+            this.inventoryQuantityFieldDescriptionValue.Text = "N/A";
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(25, 445);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(63, 13);
+            this.label57.TabIndex = 135;
+            this.label57.Text = "Description:";
+            // 
+            // migrateInventoryQuantity
+            // 
+            this.migrateInventoryQuantity.Location = new System.Drawing.Point(164, 494);
+            this.migrateInventoryQuantity.Name = "migrateInventoryQuantity";
+            this.migrateInventoryQuantity.Size = new System.Drawing.Size(88, 23);
+            this.migrateInventoryQuantity.TabIndex = 134;
+            this.migrateInventoryQuantity.Text = "Migrate Data";
+            this.migrateInventoryQuantity.UseVisualStyleBackColor = true;
+            this.migrateInventoryQuantity.Click += new System.EventHandler(this.migrateInventoryQuantity_Click);
+            // 
+            // activeInventoryQuantityFieldMappingValue
+            // 
+            this.activeInventoryQuantityFieldMappingValue.AutoSize = true;
+            this.activeInventoryQuantityFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeInventoryQuantityFieldMappingValue.Location = new System.Drawing.Point(140, 428);
+            this.activeInventoryQuantityFieldMappingValue.Name = "activeInventoryQuantityFieldMappingValue";
+            this.activeInventoryQuantityFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeInventoryQuantityFieldMappingValue.TabIndex = 133;
+            this.activeInventoryQuantityFieldMappingValue.Text = "N/A";
+            // 
+            // activeInventoryQuantityFieldMappingLabel
+            // 
+            this.activeInventoryQuantityFieldMappingLabel.AutoSize = true;
+            this.activeInventoryQuantityFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
+            this.activeInventoryQuantityFieldMappingLabel.Name = "activeInventoryQuantityFieldMappingLabel";
+            this.activeInventoryQuantityFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeInventoryQuantityFieldMappingLabel.TabIndex = 132;
+            this.activeInventoryQuantityFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapInventoryQuantityFields
+            // 
+            this.mapInventoryQuantityFields.Location = new System.Drawing.Point(298, 423);
+            this.mapInventoryQuantityFields.Name = "mapInventoryQuantityFields";
+            this.mapInventoryQuantityFields.Size = new System.Drawing.Size(87, 23);
+            this.mapInventoryQuantityFields.TabIndex = 131;
+            this.mapInventoryQuantityFields.Text = "Map Selected";
+            this.mapInventoryQuantityFields.UseVisualStyleBackColor = true;
+            this.mapInventoryQuantityFields.Click += new System.EventHandler(this.mapInventoryQuantityFields_Click);
+            // 
+            // mappingInventoryQuantityFields
+            // 
+            this.mappingInventoryQuantityFields.FormattingEnabled = true;
+            this.mappingInventoryQuantityFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingInventoryQuantityFields.Name = "mappingInventoryQuantityFields";
+            this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingInventoryQuantityFields.TabIndex = 130;
+            // 
+            // inventoryQuantityFields
+            // 
+            this.inventoryQuantityFields.FormattingEnabled = true;
+            this.inventoryQuantityFields.Location = new System.Drawing.Point(26, 282);
+            this.inventoryQuantityFields.Name = "inventoryQuantityFields";
+            this.inventoryQuantityFields.Size = new System.Drawing.Size(174, 134);
+            this.inventoryQuantityFields.TabIndex = 129;
+            this.inventoryQuantityFields.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityFields_SelectedIndexChanged);
+            // 
+            // mappedInventoryQuantityTableFieldsLabel
+            // 
+            this.mappedInventoryQuantityTableFieldsLabel.AutoSize = true;
+            this.mappedInventoryQuantityTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedInventoryQuantityTableFieldsLabel.Name = "mappedInventoryQuantityTableFieldsLabel";
+            this.mappedInventoryQuantityTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedInventoryQuantityTableFieldsLabel.TabIndex = 128;
+            this.mappedInventoryQuantityTableFieldsLabel.Text = "N/A:";
+            // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.Location = new System.Drawing.Point(28, 265);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(37, 13);
+            this.label68.TabIndex = 127;
+            this.label68.Text = "Fields:";
+            // 
+            // label69
+            // 
+            this.label69.AutoSize = true;
+            this.label69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label69.Location = new System.Drawing.Point(31, 237);
+            this.label69.Name = "label69";
+            this.label69.Size = new System.Drawing.Size(96, 13);
+            this.label69.TabIndex = 126;
+            this.label69.Text = "Field Mappings:";
+            // 
+            // activeInventoryQuantityTableMappingValue
+            // 
+            this.activeInventoryQuantityTableMappingValue.AutoSize = true;
+            this.activeInventoryQuantityTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeInventoryQuantityTableMappingValue.Location = new System.Drawing.Point(145, 205);
+            this.activeInventoryQuantityTableMappingValue.Name = "activeInventoryQuantityTableMappingValue";
+            this.activeInventoryQuantityTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeInventoryQuantityTableMappingValue.TabIndex = 125;
+            this.activeInventoryQuantityTableMappingValue.Text = "N/A";
+            // 
+            // label71
+            // 
+            this.label71.AutoSize = true;
+            this.label71.Location = new System.Drawing.Point(25, 205);
+            this.label71.Name = "label71";
+            this.label71.Size = new System.Drawing.Size(114, 13);
+            this.label71.TabIndex = 124;
+            this.label71.Text = "Active Table Mapping:";
+            // 
+            // label72
+            // 
+            this.label72.AutoSize = true;
+            this.label72.Location = new System.Drawing.Point(203, 44);
+            this.label72.Name = "label72";
+            this.label72.Size = new System.Drawing.Size(68, 13);
+            this.label72.TabIndex = 123;
+            this.label72.Text = "Table Name:";
+            // 
+            // label73
+            // 
+            this.label73.AutoSize = true;
+            this.label73.Location = new System.Drawing.Point(28, 44);
+            this.label73.Name = "label73";
+            this.label73.Size = new System.Drawing.Size(64, 13);
+            this.label73.TabIndex = 121;
+            this.label73.Text = "DSN Name:";
+            // 
+            // label74
+            // 
+            this.label74.AutoSize = true;
+            this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label74.Location = new System.Drawing.Point(28, 16);
+            this.label74.Name = "label74";
+            this.label74.Size = new System.Drawing.Size(95, 13);
+            this.label74.TabIndex = 120;
+            this.label74.Text = "Table Mapping:";
+            // 
+            // inventoryQuantityTableName
+            // 
+            this.inventoryQuantityTableName.FormattingEnabled = true;
+            this.inventoryQuantityTableName.HorizontalScrollbar = true;
+            this.inventoryQuantityTableName.Location = new System.Drawing.Point(206, 60);
+            this.inventoryQuantityTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.inventoryQuantityTableName.Name = "inventoryQuantityTableName";
+            this.inventoryQuantityTableName.Size = new System.Drawing.Size(180, 134);
+            this.inventoryQuantityTableName.TabIndex = 118;
+            this.inventoryQuantityTableName.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityTableName_SelectedIndexChanged);
+            // 
+            // inventoryQuantityDataSource
+            // 
+            this.inventoryQuantityDataSource.FormattingEnabled = true;
+            this.inventoryQuantityDataSource.HorizontalScrollbar = true;
+            this.inventoryQuantityDataSource.Location = new System.Drawing.Point(28, 60);
+            this.inventoryQuantityDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.inventoryQuantityDataSource.Name = "inventoryQuantityDataSource";
+            this.inventoryQuantityDataSource.Size = new System.Drawing.Size(172, 134);
+            this.inventoryQuantityDataSource.TabIndex = 117;
+            this.inventoryQuantityDataSource.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityDataSource_SelectedIndexChanged);
+            // 
+            // publishInventoryQuantity
+            // 
+            this.publishInventoryQuantity.Location = new System.Drawing.Point(258, 494);
+            this.publishInventoryQuantity.Name = "publishInventoryQuantity";
+            this.publishInventoryQuantity.Size = new System.Drawing.Size(126, 23);
+            this.publishInventoryQuantity.TabIndex = 122;
+            this.publishInventoryQuantity.Text = "Publish To LinkGreen";
+            this.publishInventoryQuantity.UseVisualStyleBackColor = true;
+            this.publishInventoryQuantity.Click += new System.EventHandler(this.publishInventoryQuantity_Click);
+            // 
+            // emptyInventoryQuantityTransferTable
+            // 
+            this.emptyInventoryQuantityTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyInventoryQuantityTransferTable.Name = "emptyInventoryQuantityTransferTable";
+            this.emptyInventoryQuantityTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyInventoryQuantityTransferTable.TabIndex = 119;
+            this.emptyInventoryQuantityTransferTable.Text = "Empty Transfer Table";
+            this.emptyInventoryQuantityTransferTable.UseVisualStyleBackColor = true;
+            this.emptyInventoryQuantityTransferTable.Click += new System.EventHandler(this.emptyInventoryQuantityTransferTable_Click);
             // 
             // priceLevelsTab
             // 
@@ -2602,261 +2857,6 @@
             this.emptyBuyerInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptyBuyerInventoryTransferTable.Click += new System.EventHandler(this.emptyBuyerInventoriesTransferTable_Click);
             // 
-            // inventoryQuantity
-            // 
-            this.inventoryQuantity.Controls.Add(this.label10);
-            this.inventoryQuantity.Controls.Add(this.setInventoryQuantityUsernamePW);
-            this.inventoryQuantity.Controls.Add(this.previewInventoryQuantity);
-            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFieldDescriptionValue);
-            this.inventoryQuantity.Controls.Add(this.label57);
-            this.inventoryQuantity.Controls.Add(this.migrateInventoryQuantity);
-            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingValue);
-            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityFieldMappingLabel);
-            this.inventoryQuantity.Controls.Add(this.mapInventoryQuantityFields);
-            this.inventoryQuantity.Controls.Add(this.mappingInventoryQuantityFields);
-            this.inventoryQuantity.Controls.Add(this.inventoryQuantityFields);
-            this.inventoryQuantity.Controls.Add(this.mappedInventoryQuantityTableFieldsLabel);
-            this.inventoryQuantity.Controls.Add(this.label68);
-            this.inventoryQuantity.Controls.Add(this.label69);
-            this.inventoryQuantity.Controls.Add(this.activeInventoryQuantityTableMappingValue);
-            this.inventoryQuantity.Controls.Add(this.label71);
-            this.inventoryQuantity.Controls.Add(this.label72);
-            this.inventoryQuantity.Controls.Add(this.label73);
-            this.inventoryQuantity.Controls.Add(this.label74);
-            this.inventoryQuantity.Controls.Add(this.inventoryQuantityTableName);
-            this.inventoryQuantity.Controls.Add(this.inventoryQuantityDataSource);
-            this.inventoryQuantity.Controls.Add(this.publishInventoryQuantity);
-            this.inventoryQuantity.Controls.Add(this.emptyInventoryQuantityTransferTable);
-            this.inventoryQuantity.Location = new System.Drawing.Point(4, 22);
-            this.inventoryQuantity.Name = "inventoryQuantity";
-            this.inventoryQuantity.Size = new System.Drawing.Size(410, 532);
-            this.inventoryQuantity.TabIndex = 9;
-            this.inventoryQuantity.Text = "Inventory Quantities";
-            this.inventoryQuantity.UseVisualStyleBackColor = true;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(28, 468);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
-            this.label10.TabIndex = 139;
-            this.label10.Text = "Actions:";
-            // 
-            // setInventoryQuantityUsernamePW
-            // 
-            this.setInventoryQuantityUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
-            this.setInventoryQuantityUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setInventoryQuantityUsernamePW.Location = new System.Drawing.Point(177, 42);
-            this.setInventoryQuantityUsernamePW.Name = "setInventoryQuantityUsernamePW";
-            this.setInventoryQuantityUsernamePW.Size = new System.Drawing.Size(23, 17);
-            this.setInventoryQuantityUsernamePW.TabIndex = 138;
-            this.setInventoryQuantityUsernamePW.UseVisualStyleBackColor = true;
-            this.setInventoryQuantityUsernamePW.Click += new System.EventHandler(this.setInventoryQuantityUsernamePW_Click);
-            // 
-            // previewInventoryQuantity
-            // 
-            this.previewInventoryQuantity.Location = new System.Drawing.Point(217, 423);
-            this.previewInventoryQuantity.Name = "previewInventoryQuantity";
-            this.previewInventoryQuantity.Size = new System.Drawing.Size(75, 23);
-            this.previewInventoryQuantity.TabIndex = 137;
-            this.previewInventoryQuantity.Text = "Preview";
-            this.previewInventoryQuantity.UseVisualStyleBackColor = true;
-            this.previewInventoryQuantity.Click += new System.EventHandler(this.previewInventoryQuantity_Click);
-            // 
-            // inventoryQuantityFieldDescriptionValue
-            // 
-            this.inventoryQuantityFieldDescriptionValue.AutoSize = true;
-            this.inventoryQuantityFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.inventoryQuantityFieldDescriptionValue.Location = new System.Drawing.Point(94, 445);
-            this.inventoryQuantityFieldDescriptionValue.Name = "inventoryQuantityFieldDescriptionValue";
-            this.inventoryQuantityFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
-            this.inventoryQuantityFieldDescriptionValue.TabIndex = 136;
-            this.inventoryQuantityFieldDescriptionValue.Text = "N/A";
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(25, 445);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(63, 13);
-            this.label57.TabIndex = 135;
-            this.label57.Text = "Description:";
-            // 
-            // migrateInventoryQuantity
-            // 
-            this.migrateInventoryQuantity.Location = new System.Drawing.Point(164, 494);
-            this.migrateInventoryQuantity.Name = "migrateInventoryQuantity";
-            this.migrateInventoryQuantity.Size = new System.Drawing.Size(88, 23);
-            this.migrateInventoryQuantity.TabIndex = 134;
-            this.migrateInventoryQuantity.Text = "Migrate Data";
-            this.migrateInventoryQuantity.UseVisualStyleBackColor = true;
-            this.migrateInventoryQuantity.Click += new System.EventHandler(this.migrateInventoryQuantity_Click);
-            // 
-            // activeInventoryQuantityFieldMappingValue
-            // 
-            this.activeInventoryQuantityFieldMappingValue.AutoSize = true;
-            this.activeInventoryQuantityFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.activeInventoryQuantityFieldMappingValue.Location = new System.Drawing.Point(140, 428);
-            this.activeInventoryQuantityFieldMappingValue.Name = "activeInventoryQuantityFieldMappingValue";
-            this.activeInventoryQuantityFieldMappingValue.Size = new System.Drawing.Size(27, 13);
-            this.activeInventoryQuantityFieldMappingValue.TabIndex = 133;
-            this.activeInventoryQuantityFieldMappingValue.Text = "N/A";
-            // 
-            // activeInventoryQuantityFieldMappingLabel
-            // 
-            this.activeInventoryQuantityFieldMappingLabel.AutoSize = true;
-            this.activeInventoryQuantityFieldMappingLabel.Location = new System.Drawing.Point(25, 428);
-            this.activeInventoryQuantityFieldMappingLabel.Name = "activeInventoryQuantityFieldMappingLabel";
-            this.activeInventoryQuantityFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
-            this.activeInventoryQuantityFieldMappingLabel.TabIndex = 132;
-            this.activeInventoryQuantityFieldMappingLabel.Text = "Active Field Mapping:";
-            // 
-            // mapInventoryQuantityFields
-            // 
-            this.mapInventoryQuantityFields.Location = new System.Drawing.Point(298, 423);
-            this.mapInventoryQuantityFields.Name = "mapInventoryQuantityFields";
-            this.mapInventoryQuantityFields.Size = new System.Drawing.Size(87, 23);
-            this.mapInventoryQuantityFields.TabIndex = 131;
-            this.mapInventoryQuantityFields.Text = "Map Selected";
-            this.mapInventoryQuantityFields.UseVisualStyleBackColor = true;
-            this.mapInventoryQuantityFields.Click += new System.EventHandler(this.mapInventoryQuantityFields_Click);
-            // 
-            // mappingInventoryQuantityFields
-            // 
-            this.mappingInventoryQuantityFields.FormattingEnabled = true;
-            this.mappingInventoryQuantityFields.Location = new System.Drawing.Point(206, 282);
-            this.mappingInventoryQuantityFields.Name = "mappingInventoryQuantityFields";
-            this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(180, 134);
-            this.mappingInventoryQuantityFields.TabIndex = 130;
-            // 
-            // inventoryQuantityFields
-            // 
-            this.inventoryQuantityFields.FormattingEnabled = true;
-            this.inventoryQuantityFields.Location = new System.Drawing.Point(26, 282);
-            this.inventoryQuantityFields.Name = "inventoryQuantityFields";
-            this.inventoryQuantityFields.Size = new System.Drawing.Size(174, 134);
-            this.inventoryQuantityFields.TabIndex = 129;
-            this.inventoryQuantityFields.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityFields_SelectedIndexChanged);
-            // 
-            // mappedInventoryQuantityTableFieldsLabel
-            // 
-            this.mappedInventoryQuantityTableFieldsLabel.AutoSize = true;
-            this.mappedInventoryQuantityTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
-            this.mappedInventoryQuantityTableFieldsLabel.Name = "mappedInventoryQuantityTableFieldsLabel";
-            this.mappedInventoryQuantityTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
-            this.mappedInventoryQuantityTableFieldsLabel.TabIndex = 128;
-            this.mappedInventoryQuantityTableFieldsLabel.Text = "N/A:";
-            // 
-            // label68
-            // 
-            this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(28, 265);
-            this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(37, 13);
-            this.label68.TabIndex = 127;
-            this.label68.Text = "Fields:";
-            // 
-            // label69
-            // 
-            this.label69.AutoSize = true;
-            this.label69.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label69.Location = new System.Drawing.Point(31, 237);
-            this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(96, 13);
-            this.label69.TabIndex = 126;
-            this.label69.Text = "Field Mappings:";
-            // 
-            // activeInventoryQuantityTableMappingValue
-            // 
-            this.activeInventoryQuantityTableMappingValue.AutoSize = true;
-            this.activeInventoryQuantityTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.activeInventoryQuantityTableMappingValue.Location = new System.Drawing.Point(145, 205);
-            this.activeInventoryQuantityTableMappingValue.Name = "activeInventoryQuantityTableMappingValue";
-            this.activeInventoryQuantityTableMappingValue.Size = new System.Drawing.Size(27, 13);
-            this.activeInventoryQuantityTableMappingValue.TabIndex = 125;
-            this.activeInventoryQuantityTableMappingValue.Text = "N/A";
-            // 
-            // label71
-            // 
-            this.label71.AutoSize = true;
-            this.label71.Location = new System.Drawing.Point(25, 205);
-            this.label71.Name = "label71";
-            this.label71.Size = new System.Drawing.Size(114, 13);
-            this.label71.TabIndex = 124;
-            this.label71.Text = "Active Table Mapping:";
-            // 
-            // label72
-            // 
-            this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(203, 44);
-            this.label72.Name = "label72";
-            this.label72.Size = new System.Drawing.Size(68, 13);
-            this.label72.TabIndex = 123;
-            this.label72.Text = "Table Name:";
-            // 
-            // label73
-            // 
-            this.label73.AutoSize = true;
-            this.label73.Location = new System.Drawing.Point(28, 44);
-            this.label73.Name = "label73";
-            this.label73.Size = new System.Drawing.Size(64, 13);
-            this.label73.TabIndex = 121;
-            this.label73.Text = "DSN Name:";
-            // 
-            // label74
-            // 
-            this.label74.AutoSize = true;
-            this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label74.Location = new System.Drawing.Point(28, 16);
-            this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(95, 13);
-            this.label74.TabIndex = 120;
-            this.label74.Text = "Table Mapping:";
-            // 
-            // inventoryQuantityTableName
-            // 
-            this.inventoryQuantityTableName.FormattingEnabled = true;
-            this.inventoryQuantityTableName.HorizontalScrollbar = true;
-            this.inventoryQuantityTableName.Location = new System.Drawing.Point(206, 60);
-            this.inventoryQuantityTableName.Margin = new System.Windows.Forms.Padding(5);
-            this.inventoryQuantityTableName.Name = "inventoryQuantityTableName";
-            this.inventoryQuantityTableName.Size = new System.Drawing.Size(180, 134);
-            this.inventoryQuantityTableName.TabIndex = 118;
-            this.inventoryQuantityTableName.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityTableName_SelectedIndexChanged);
-            // 
-            // inventoryQuantityDataSource
-            // 
-            this.inventoryQuantityDataSource.FormattingEnabled = true;
-            this.inventoryQuantityDataSource.HorizontalScrollbar = true;
-            this.inventoryQuantityDataSource.Location = new System.Drawing.Point(28, 60);
-            this.inventoryQuantityDataSource.Margin = new System.Windows.Forms.Padding(5);
-            this.inventoryQuantityDataSource.Name = "inventoryQuantityDataSource";
-            this.inventoryQuantityDataSource.Size = new System.Drawing.Size(172, 134);
-            this.inventoryQuantityDataSource.TabIndex = 117;
-            this.inventoryQuantityDataSource.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityDataSource_SelectedIndexChanged);
-            // 
-            // publishInventoryQuantity
-            // 
-            this.publishInventoryQuantity.Location = new System.Drawing.Point(258, 494);
-            this.publishInventoryQuantity.Name = "publishInventoryQuantity";
-            this.publishInventoryQuantity.Size = new System.Drawing.Size(126, 23);
-            this.publishInventoryQuantity.TabIndex = 122;
-            this.publishInventoryQuantity.Text = "Publish To LinkGreen";
-            this.publishInventoryQuantity.UseVisualStyleBackColor = true;
-            this.publishInventoryQuantity.Click += new System.EventHandler(this.publishInventoryQuantity_Click);
-            // 
-            // emptyInventoryQuantityTransferTable
-            // 
-            this.emptyInventoryQuantityTransferTable.Location = new System.Drawing.Point(31, 494);
-            this.emptyInventoryQuantityTransferTable.Name = "emptyInventoryQuantityTransferTable";
-            this.emptyInventoryQuantityTransferTable.Size = new System.Drawing.Size(126, 23);
-            this.emptyInventoryQuantityTransferTable.TabIndex = 119;
-            this.emptyInventoryQuantityTransferTable.Text = "Empty Transfer Table";
-            this.emptyInventoryQuantityTransferTable.UseVisualStyleBackColor = true;
-            this.emptyInventoryQuantityTransferTable.Click += new System.EventHandler(this.emptyInventoryQuantityTransferTable_Click);
-            // 
             // UtilityMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2881,6 +2881,8 @@
             this.customers.PerformLayout();
             this.productsTab.ResumeLayout(false);
             this.productsTab.PerformLayout();
+            this.inventoryQuantity.ResumeLayout(false);
+            this.inventoryQuantity.PerformLayout();
             this.priceLevelsTab.ResumeLayout(false);
             this.priceLevelsTab.PerformLayout();
             this.pricing.ResumeLayout(false);
@@ -2893,8 +2895,6 @@
             this.linkedSkus.PerformLayout();
             this.buyerInventory.ResumeLayout(false);
             this.buyerInventory.PerformLayout();
-            this.inventoryQuantity.ResumeLayout(false);
-            this.inventoryQuantity.PerformLayout();
             this.ResumeLayout(false);
 
         }
