@@ -593,11 +593,18 @@ namespace LinkGreenODBCUtility
                                     }
                                     if (string.IsNullOrEmpty(text))
                                     {
-                                        text = "null";
+                                        text = "'null'";
                                         readerColumns.Add(text);
                                     }
                                     else
                                     {
+                                        if (text.ToLower() == "true" || text.ToLower() == "yes")
+                                        {
+                                            text = "1";
+                                        } else if (text.ToLower() == "false" || text.ToLower() == "no")
+                                        {
+                                            text = "0";
+                                        }
                                         readerColumns.Add("'" + text + "'");
                                     }
                                 }
