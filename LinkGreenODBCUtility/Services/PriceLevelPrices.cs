@@ -73,6 +73,11 @@ namespace LinkGreenODBCUtility
                         continue;
                     }
 
+                    if (price.MinimumPurchase <= 0)
+                    {
+                        price.MinimumPurchase = 1;
+                    }
+
                     if (price.Price > 0 && price.Price < publishedProduct.NetPrice) //no point in creating a price level price if it will cost more than net 
                     {
                         PricingLevelItemRequest item = new PricingLevelItemRequest
