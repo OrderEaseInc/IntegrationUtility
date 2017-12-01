@@ -14,9 +14,11 @@ namespace LinkGreenODBCUtility
     public static class JobManager
     {
         // construct a scheduler factory
-        public static ISchedulerFactory schedFact = new StdSchedulerFactory();
+        public static ISchedulerFactory SchedFact = new StdSchedulerFactory();
         // get a scheduler
-        public static IScheduler sched = schedFact.GetScheduler();
+        public static IScheduler Sched = SchedFact.GetScheduler();
+
+        public static string DefaultGroup = "User";
 
         public static bool ScheduleJob(string jobName, DateTime startDateTime, int repeatInterval)
         {
@@ -24,7 +26,7 @@ namespace LinkGreenODBCUtility
             {
                 try
                 {
-                    sched.Start();
+                    Sched.Start();
 
                     IJobDetail job;
 
@@ -32,57 +34,57 @@ namespace LinkGreenODBCUtility
                     {
                         case "Categories":
                             job = JobBuilder.Create<CategoriesSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "Customers":
                             job = JobBuilder.Create<CustomersSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "Products":
                             job = JobBuilder.Create<ProductsSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "InventoryQuantities":
                             job = JobBuilder.Create<InventoryQuantitiesSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "Price Levels":
                             job = JobBuilder.Create<PriceLevelsSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "Pricing":
                             job = JobBuilder.Create<PricingSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "Suppliers":
                             job = JobBuilder.Create<SuppliersSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "SupplierInventory":
                             job = JobBuilder.Create<SupplierInventorySyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "LinkedSkus":
                             job = JobBuilder.Create<LinkedSKusSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         case "BuyerInventory":
                             job = JobBuilder.Create<BuyerInventorySyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                         default:
                             job = JobBuilder.Create<CategoriesSyncJob>()
-                                .WithIdentity(jobName, "User")
+                                .WithIdentity(jobName, DefaultGroup)
                                 .Build();
                             break;
                     }
@@ -92,7 +94,7 @@ namespace LinkGreenODBCUtility
                         .StartAt(startDateTime)
                         .Build();
 
-                    sched.ScheduleJob(job, trigger);
+                    Sched.ScheduleJob(job, trigger);
 
                     return true;
                 }
@@ -106,17 +108,23 @@ namespace LinkGreenODBCUtility
             return false;
         }
 
-        private static JobKey GetJobKey(string jobName, string groupName = "User")
+        private static JobKey GetJobKey(string jobName, string groupName = null)
         {
+            if (string.IsNullOrEmpty(groupName))
+                groupName = DefaultGroup;
+
             var groupMatcher = GroupMatcher<JobKey>.GroupContains(groupName);
-            JobKey jobKey = sched.GetJobKeys(groupMatcher).FirstOrDefault(s => s.Name == jobName);
+            JobKey jobKey = Sched.GetJobKeys(groupMatcher).FirstOrDefault(s => s.Name == jobName);
             return jobKey;
         }
 
-        private static TriggerKey GetTriggerKey(string triggerName, string groupName = "User")
+        private static TriggerKey GetTriggerKey(string triggerName, string groupName = null)
         {
+            if (string.IsNullOrEmpty(groupName))
+                groupName = DefaultGroup;
+
             var groupMatcher = GroupMatcher<TriggerKey>.GroupContains(groupName);
-            TriggerKey key = sched.GetTriggerKeys(groupMatcher).FirstOrDefault(s => s.Name == triggerName);
+            TriggerKey key = Sched.GetTriggerKeys(groupMatcher).FirstOrDefault(s => s.Name == triggerName);
             return key;
         }
 
@@ -133,18 +141,18 @@ namespace LinkGreenODBCUtility
                 return null;
             }
 
-            IJobDetail job = sched.GetJobDetail(jobKey);
+            IJobDetail job = Sched.GetJobDetail(jobKey);
             return job;
         }
 
         public static List<IJobDetail> GetJobs()
         {
             List<IJobDetail> jobs = new List<IJobDetail>();
-            var groupMatcher = GroupMatcher<JobKey>.GroupContains("User");
-            var jobKeys = sched.GetJobKeys(groupMatcher);
+            var groupMatcher = GroupMatcher<JobKey>.GroupContains(DefaultGroup);
+            var jobKeys = Sched.GetJobKeys(groupMatcher);
             foreach (var jobKey in jobKeys)
             {
-                IJobDetail detail = sched.GetJobDetail(jobKey);
+                IJobDetail detail = Sched.GetJobDetail(jobKey);
 
                 jobs.Add(detail);
             }
@@ -155,7 +163,7 @@ namespace LinkGreenODBCUtility
         public static List<IJobExecutionContext> GetCurrentlyExecutingJobs()
         {
             List<IJobExecutionContext> jobs = new List<IJobExecutionContext>();
-            var currentJobs = sched.GetCurrentlyExecutingJobs();
+            var currentJobs = Sched.GetCurrentlyExecutingJobs();
             foreach (var job in currentJobs)
             {
                 jobs.Add(job);
@@ -169,7 +177,7 @@ namespace LinkGreenODBCUtility
             try
             {
                 JobKey jobKey = GetJobKey(jobName);
-                sched.DeleteJob(jobKey);
+                Sched.DeleteJob(jobKey);
 
                 return true;
             }
@@ -184,7 +192,7 @@ namespace LinkGreenODBCUtility
             try
             {
                 JobKey jobKey = GetJobKey(jobName);
-                sched.PauseJob(jobKey);
+                Sched.PauseJob(jobKey);
 
                 return true;
             }
@@ -199,7 +207,7 @@ namespace LinkGreenODBCUtility
             try
             {
                 JobKey jobKey = GetJobKey(jobName);
-                sched.ResumeJob(jobKey);
+                Sched.ResumeJob(jobKey);
 
                 return true;
             }
@@ -212,12 +220,12 @@ namespace LinkGreenODBCUtility
         public static bool IsTriggerPaused(string triggerName, string triggerGroup)
         {
             TriggerKey key = GetTriggerKey(triggerName, triggerGroup);
-            return sched.GetTriggerState(key) == TriggerState.Paused;
+            return Sched.GetTriggerState(key) == TriggerState.Paused;
         }
 
         public static void Dispose()
         {
-            sched.Shutdown(true); // Wait for jobs to complete and then shutdown
+            Sched.Shutdown(true); // Wait for jobs to complete and then shutdown
         }
     }
 }
