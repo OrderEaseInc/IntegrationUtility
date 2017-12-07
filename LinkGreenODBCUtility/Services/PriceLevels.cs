@@ -65,7 +65,7 @@ namespace LinkGreenODBCUtility
 
                 foreach (var level in levelsToImport)
                 {
-                    var effectiveDate = level.EffectiveDate ?? DateTime.Now;
+                    var effectiveDate = level.EffectiveDate ?? DateTime.Now.ToUniversalTime();
                     if (level.EndDate < effectiveDate)
                     {
                         level.EndDate = null;
@@ -75,7 +75,7 @@ namespace LinkGreenODBCUtility
                         Name = level.Name,
                         ExternalReference = level.ExternalReference,
                         InventoryItems = new List<PricingLevelItemRequest>(),
-                        EffectiveDate = level.EffectiveDate,
+                        EffectiveDate = effectiveDate,
                         EndDate = level.EndDate
                     };
 
