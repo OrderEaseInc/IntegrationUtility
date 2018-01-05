@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using DataTransfer.AccessDatabase;
-using LinkGreenODBCUtility.Properties;
 
 namespace LinkGreenODBCUtility
 {
@@ -43,7 +36,7 @@ namespace LinkGreenODBCUtility
                     buyerInventoryDataSource.Items.Add(sourceName);
                 }
             }
-            
+
             var mapping = new Mapping(DsnName);
 
             // Categories
@@ -120,7 +113,8 @@ namespace LinkGreenODBCUtility
                 case 6:
                     string mappedSuppliersDsnName = mapping.GetDsnName("Suppliers");
                     cusIdx = suppliersDataSource.FindString(mappedSuppliersDsnName);
-                    if (cusIdx != -1) {
+                    if (cusIdx != -1)
+                    {
                         suppliersDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveSupplierTableMapping();
@@ -128,7 +122,8 @@ namespace LinkGreenODBCUtility
                 case 7:
                     string mappedSupplierInventoryDsnName = mapping.GetDsnName("SupplierInventories");
                     cusIdx = supplierInventoryDataSource.FindString(mappedSupplierInventoryDsnName);
-                    if (cusIdx != -1) {
+                    if (cusIdx != -1)
+                    {
                         supplierInventoryDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveSupplierInventoryTableMapping();
@@ -145,7 +140,8 @@ namespace LinkGreenODBCUtility
                 case 9:
                     var mappedBuyerInventoryDsnName = mapping.GetDsnName("BuyerInventories");
                     cusIdx = buyerInventoryDataSource.FindString(mappedBuyerInventoryDsnName);
-                    if (cusIdx != -1) {
+                    if (cusIdx != -1)
+                    {
                         buyerInventoryDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveBuyerInventoryTableMapping();
@@ -226,7 +222,8 @@ namespace LinkGreenODBCUtility
         {
             string mappedTableName = Mapping.GetTableMapping("BuyerInventories");
             string mappedDsnName = Mapping.GetDsnName("BuyerInventories");
-            if (!string.IsNullOrEmpty(mappedTableName)) {
+            if (!string.IsNullOrEmpty(mappedTableName))
+            {
                 string activeTableMapping = mappedDsnName + " > " + mappedTableName;
                 activeBuyerInventoryFieldMappingValue.Text = activeTableMapping;
                 mappedBuyerInventoryTableFieldsLabel.Text = activeTableMapping;
@@ -253,7 +250,7 @@ namespace LinkGreenODBCUtility
             {
                 string activeTableMapping = mappedDsnName + " > " + mappedTableName;
                 activePriceLevelsTableMappingValue.Text = activeTableMapping;
-                mappedPriceLevelsTableFieldsLabel.Text = activeTableMapping; 
+                mappedPriceLevelsTableFieldsLabel.Text = activeTableMapping;
             }
         }
 
@@ -262,14 +259,16 @@ namespace LinkGreenODBCUtility
             var mapping = new Mapping(DsnName);
             string mappedTableName = mapping.GetTableMapping("Suppliers");
             string mappedDsnName = mapping.GetDsnName("Suppliers");
-            if (!string.IsNullOrEmpty(mappedTableName)) {
+            if (!string.IsNullOrEmpty(mappedTableName))
+            {
                 string activeTableMapping = mappedDsnName + " > " + mappedTableName;
                 activeSupplierTableMappingValue.Text = activeTableMapping;
                 mappedSuppliersTableFieldsLabel.Text = activeTableMapping;
             }
 
             var suppliersTableItem = suppliersTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (suppliersTableItem != null) {
+            if (suppliersTableItem != null)
+            {
                 suppliersTableName.SelectedItem = suppliersTableItem;
             }
         }
@@ -279,14 +278,16 @@ namespace LinkGreenODBCUtility
             var mapping = new Mapping(DsnName);
             string mappedTableName = mapping.GetTableMapping("SupplierInventories");
             string mappedDsnName = mapping.GetDsnName("SupplierInventories");
-            if (!string.IsNullOrEmpty(mappedTableName)) {
+            if (!string.IsNullOrEmpty(mappedTableName))
+            {
                 string activeTableMapping = mappedDsnName + " > " + mappedTableName;
                 activeSupplierInventoryTableMappingValue.Text = activeTableMapping;
                 mappedSupplierInventoryTableFieldsLabel.Text = activeTableMapping;
             }
 
             var supplierInventoryTableItem = supplierInventoryTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (supplierInventoryTableItem != null) {
+            if (supplierInventoryTableItem != null)
+            {
                 supplierInventoryTableName.SelectedItem = supplierInventoryTableItem;
             }
         }
@@ -362,10 +363,13 @@ namespace LinkGreenODBCUtility
         private void DisplayActiveSupplierFieldMapping(string displayName, string fieldName)
         {
             string mappedFieldName = Mapping.GetFieldMapping("Suppliers", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName)) {
+            if (!string.IsNullOrEmpty(mappedFieldName))
+            {
                 activeSupplierFieldMappingLabel.Text = displayName + " : ";
                 activeSupplierFieldMappingValue.Text = mappedFieldName;
-            } else {
+            }
+            else
+            {
                 activeSupplierFieldMappingLabel.Text = displayName + " : ";
                 activeSupplierFieldMappingValue.Text = "N/A";
             }
@@ -404,10 +408,13 @@ namespace LinkGreenODBCUtility
         private void DisplayActiveSupplierInventoryFieldMapping(string displayName, string fieldName)
         {
             string mappedFieldName = Mapping.GetFieldMapping("SupplierInventories", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName)) {
+            if (!string.IsNullOrEmpty(mappedFieldName))
+            {
                 activeSupplierInventoryFieldMappingLabel.Text = displayName + " : ";
                 activeSupplierInventoryFieldMappingValue.Text = mappedFieldName;
-            } else {
+            }
+            else
+            {
                 activeSupplierInventoryFieldMappingLabel.Text = displayName + " : ";
                 activeSupplierInventoryFieldMappingValue.Text = "N/A";
             }
@@ -459,7 +466,7 @@ namespace LinkGreenODBCUtility
         }
 
         private void DisplayFieldDescription(string tableName, string fieldName)
-        {   
+        {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
             string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
             if (!string.IsNullOrEmpty(description))
@@ -482,7 +489,8 @@ namespace LinkGreenODBCUtility
         {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
             string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
-            if (!string.IsNullOrEmpty(description)) {
+            if (!string.IsNullOrEmpty(description))
+            {
                 supplierFieldDescription.Text = description + " (" + dataType + ")";
             }
         }
@@ -511,13 +519,14 @@ namespace LinkGreenODBCUtility
         {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
             string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
-            if (!string.IsNullOrEmpty(description)) {
+            if (!string.IsNullOrEmpty(description))
+            {
                 supplierInventoryFieldDescription.Text = description + " (" + dataType + ")";
             }
         }
 
         private void DisplayProductFieldDescription(string tableName, string fieldName)
-        {  
+        {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
             string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
             if (!string.IsNullOrEmpty(description))
@@ -527,7 +536,7 @@ namespace LinkGreenODBCUtility
         }
 
         private void DisplayPricingFieldDescription(string tableName, string fieldName)
-        {   
+        {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
             string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
             if (!string.IsNullOrEmpty(description))
@@ -575,13 +584,13 @@ namespace LinkGreenODBCUtility
                 mappingCategoryFields.Items.Clear();
                 if (!string.IsNullOrEmpty(mappedTableName))
                 {
-                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName); 
-                    foreach (string column in columns) 
+                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
+                    foreach (string column in columns)
                     {
                         mappingCategoryFields.Items.Add(column);
                     }
                 }
-            } 
+            }
         }
 
         private void SetupCustomerMappingFields()
@@ -627,11 +636,13 @@ namespace LinkGreenODBCUtility
             //Set the required fields from access db
             List<MappingField> tableFields = Mapping.GetTableFields("Suppliers");
             supplierFields.Items.Clear();
-            foreach (MappingField tableField in tableFields) {
+            foreach (MappingField tableField in tableFields)
+            {
                 ListItem item = new ListItem();
                 string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
                 item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required) {
+                if (tableField.Required)
+                {
                     item.Text = "* " + item.Text;
                 }
                 item.Value = tableField.FieldName;
@@ -641,14 +652,17 @@ namespace LinkGreenODBCUtility
             }
 
             //Set the available fields to map
-            if (suppliersDataSource.SelectedItem != null) {
+            if (suppliersDataSource.SelectedItem != null)
+            {
                 string mappedTableName = Mapping.GetTableMapping("Suppliers");
                 string mappedDsnName = Mapping.GetDsnName("Suppliers");
 
                 mappingSupplierFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName)) {
+                if (!string.IsNullOrEmpty(mappedTableName))
+                {
                     List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns) {
+                    foreach (string column in columns)
+                    {
                         mappingSupplierFields.Items.Add(column);
                     }
                 }
@@ -660,11 +674,13 @@ namespace LinkGreenODBCUtility
             //Set the required fields from access db
             List<MappingField> tableFields = Mapping.GetTableFields("SupplierInventories");
             requiredSupplierInventoryFields.Items.Clear();
-            foreach (MappingField tableField in tableFields) {
+            foreach (MappingField tableField in tableFields)
+            {
                 ListItem item = new ListItem();
                 string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
                 item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required) {
+                if (tableField.Required)
+                {
                     item.Text = "* " + item.Text;
                 }
                 item.Value = tableField.FieldName;
@@ -674,14 +690,17 @@ namespace LinkGreenODBCUtility
             }
 
             //Set the available fields to map
-            if (supplierInventoryDataSource.SelectedItem != null) {
+            if (supplierInventoryDataSource.SelectedItem != null)
+            {
                 string mappedTableName = Mapping.GetTableMapping("SupplierInventories");
                 string mappedDsnName = Mapping.GetDsnName("SupplierInventories");
 
                 mappingSupplierInventoryFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName)) {
+                if (!string.IsNullOrEmpty(mappedTableName))
+                {
                     List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns) {
+                    foreach (string column in columns)
+                    {
                         mappingSupplierInventoryFields.Items.Add(column);
                     }
                 }
@@ -807,11 +826,13 @@ namespace LinkGreenODBCUtility
             //Set the required fields from access db
             List<MappingField> tableFields = Mapping.GetTableFields("BuyerInventories");
             requiredBuyerInventoryFields.Items.Clear();
-            foreach (MappingField tableField in tableFields) {
+            foreach (MappingField tableField in tableFields)
+            {
                 ListItem item = new ListItem();
                 string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
                 item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required) {
+                if (tableField.Required)
+                {
                     item.Text = "* " + item.Text;
                 }
                 item.Value = tableField.FieldName;
@@ -821,14 +842,17 @@ namespace LinkGreenODBCUtility
             }
 
             //Set the available fields to map
-            if (buyerInventoryDataSource.SelectedItem != null) {
+            if (buyerInventoryDataSource.SelectedItem != null)
+            {
                 string mappedTableName = Mapping.GetTableMapping("BuyerInventories");
                 string mappedDsnName = Mapping.GetDsnName("BuyerInventories");
 
                 mappingBuyerInventoryFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName)) {
+                if (!string.IsNullOrEmpty(mappedTableName))
+                {
                     List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns) {
+                    foreach (string column in columns)
+                    {
                         mappingBuyerInventoryFields.Items.Add(column);
                     }
                 }
@@ -980,10 +1004,10 @@ namespace LinkGreenODBCUtility
 
         private void requiredCategoryFields_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((requiredCategoryFields.SelectedItem as ListItem).Value != null)
+            if ((requiredCategoryFields.SelectedItem as ListItem)?.Value != null)
             {
                 DisplayActiveFieldMapping((requiredCategoryFields.SelectedItem as ListItem).Display, (requiredCategoryFields.SelectedItem as ListItem).Value);
-                
+
                 DisplayFieldDescription("Categories", (requiredCategoryFields.SelectedItem as ListItem).Value);
             }
         }
@@ -999,7 +1023,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required"); 
+                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
             }
         }
 
@@ -1062,13 +1086,15 @@ namespace LinkGreenODBCUtility
 
         private void suppliersDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (suppliersDataSource.SelectedItem != null) {
+            if (suppliersDataSource.SelectedItem != null)
+            {
                 string dsnName = suppliersDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
 
                 suppliersTableName.Items.Clear();
-                foreach (string tableName in tableNames) {
+                foreach (string tableName in tableNames)
+                {
                     suppliersTableName.Items.Add(tableName);
                 }
 
@@ -1079,13 +1105,15 @@ namespace LinkGreenODBCUtility
 
         private void supplierInventoryDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (supplierInventoryDataSource.SelectedItem != null) {
+            if (supplierInventoryDataSource.SelectedItem != null)
+            {
                 string dsnName = supplierInventoryDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 var tableNames = mapping.GetTableNames();
 
                 supplierInventoryTableName.Items.Clear();
-                foreach (string tableName in tableNames) {
+                foreach (string tableName in tableNames)
+                {
                     supplierInventoryTableName.Items.Add(tableName);
                 }
 
@@ -1110,9 +1138,11 @@ namespace LinkGreenODBCUtility
         private void emptySuppliersTransferTable_Click(object sender, EventArgs e)
         {
             var dialogResult = MessageBox.Show("Are you sure?", "Confirm", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes) {
+            if (dialogResult == DialogResult.Yes)
+            {
                 var suppliers = new Suppliers();
-                if (suppliers.Empty()) {
+                if (suppliers.Empty())
+                {
                     MessageBox.Show("Suppliers transfer table emptied.", "Emptied Successfully");
                 }
             }
@@ -1121,9 +1151,11 @@ namespace LinkGreenODBCUtility
         private void emptyBuyerInventoriesTransferTable_Click(object sender, EventArgs e)
         {
             var dialogResult = MessageBox.Show("Are you sure?", "Confirm", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes) {
+            if (dialogResult == DialogResult.Yes)
+            {
                 var buyerInventories = new BuyerInventories();
-                if (buyerInventories.Empty()) {
+                if (buyerInventories.Empty())
+                {
                     MessageBox.Show("Buyer Inventory transfer table emptied.", "Emptied Successfully");
                 }
             }
@@ -1132,9 +1164,11 @@ namespace LinkGreenODBCUtility
         private void emptySupplierInventoriesTransferTable_Click(object sender, EventArgs e)
         {
             var dialogResult = MessageBox.Show("Are you sure?", "Confirm", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes) {
+            if (dialogResult == DialogResult.Yes)
+            {
                 var supplierInventories = new SupplierInventories();
-                if (supplierInventories.Empty()) {
+                if (supplierInventories.Empty())
+                {
                     MessageBox.Show("Supplier Inventories transfer table emptied.", "Emptied Successfully");
                 }
             }
@@ -1161,14 +1195,17 @@ namespace LinkGreenODBCUtility
         private void suppliersTableName_SelectedIndexChanged(object sender, EventArgs e)
         {
             var suppliers = new Suppliers();
-            if (suppliersTableName.SelectedItem != null) {
+            if (suppliersTableName.SelectedItem != null)
+            {
                 string dsnName = suppliersDataSource.SelectedItem.ToString();
                 string tableName = suppliersTableName.SelectedItem.ToString();
                 suppliers.SaveTableMapping(dsnName, tableName);
 
                 DisplayActiveSupplierTableMapping();
                 SetupSupplierMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select your suppliers table!", "No Suppliers Table Selected");
             }
         }
@@ -1176,14 +1213,17 @@ namespace LinkGreenODBCUtility
         private void supplierInventoryTableName_SelectedIndexChanged(object sender, EventArgs e)
         {
             var supplierInventories = new SupplierInventories();
-            if (supplierInventoryTableName.SelectedItem != null) {
+            if (supplierInventoryTableName.SelectedItem != null)
+            {
                 string dsnName = supplierInventoryDataSource.SelectedItem.ToString();
                 string tableName = supplierInventoryTableName.SelectedItem.ToString();
                 supplierInventories.SaveTableMapping(dsnName, tableName);
 
                 DisplayActiveSupplierInventoryTableMapping();
                 SetupSupplierInventoryMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select your supplier inventory table!", "No Supplier Inventory Table Selected");
             }
         }
@@ -1200,7 +1240,8 @@ namespace LinkGreenODBCUtility
 
         private void supplierFields_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((supplierFields.SelectedItem as ListItem).Value != null) {
+            if ((supplierFields.SelectedItem as ListItem).Value != null)
+            {
                 DisplayActiveSupplierFieldMapping((supplierFields.SelectedItem as ListItem).Display, (supplierFields.SelectedItem as ListItem).Value);
 
                 DisplaySupplierFieldDescription("Suppliers", (supplierFields.SelectedItem as ListItem).Value);
@@ -1209,7 +1250,8 @@ namespace LinkGreenODBCUtility
 
         private void requiredSupplierInventoryFields_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((requiredSupplierInventoryFields.SelectedItem as ListItem).Value != null) {
+            if ((requiredSupplierInventoryFields.SelectedItem as ListItem).Value != null)
+            {
                 DisplayActiveSupplierFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Display, (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
 
                 DisplaySupplierInventoryFieldDescription("SupplierInventories", (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
@@ -1220,10 +1262,16 @@ namespace LinkGreenODBCUtility
         {
             if (customerFields.SelectedItem != null && mappingCustomerFields.SelectedItem != null)
             {
+                var lastMappedItem = mappingCustomerFields.SelectedIndex;
+                var lastMappingField =customerFields.SelectedIndex;
                 var customers = new Customers();
+
                 customers.SaveFieldMapping((customerFields.SelectedItem as ListItem).Value, mappingCustomerFields.SelectedItem.ToString());
                 DisplayActiveCustomerFieldMapping((customerFields.SelectedItem as ListItem).Display, (customerFields.SelectedItem as ListItem).Value);
                 SetupCustomerMappingFields();
+
+                mappingCustomerFields.SelectedIndex = lastMappedItem;
+                customerFields.SelectedIndex = lastMappingField;
             }
             else
             {
@@ -1233,36 +1281,45 @@ namespace LinkGreenODBCUtility
 
         private void mapSupplierFields_Click(object sender, EventArgs e)
         {
-            if (supplierFields.SelectedItem != null && mappingSupplierFields.SelectedItem != null) {
+            if (supplierFields.SelectedItem != null && mappingSupplierFields.SelectedItem != null)
+            {
                 var suppliers = new Suppliers();
                 suppliers.SaveFieldMapping((supplierFields.SelectedItem as ListItem).Value, mappingSupplierFields.SelectedItem.ToString());
                 DisplayActiveSupplierFieldMapping((supplierFields.SelectedItem as ListItem).Display, (supplierFields.SelectedItem as ListItem).Value);
                 SetupSupplierMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
             }
         }
 
         private void mapBuyerInventoryFields_Click(object sender, EventArgs e)
         {
-            if (requiredBuyerInventoryFields.SelectedItem != null && mappingBuyerInventoryFields.SelectedItem != null) {
+            if (requiredBuyerInventoryFields.SelectedItem != null && mappingBuyerInventoryFields.SelectedItem != null)
+            {
                 var buyerInventories = new BuyerInventories();
                 buyerInventories.SaveFieldMapping((requiredBuyerInventoryFields.SelectedItem as ListItem).Value, mappingBuyerInventoryFields.SelectedItem.ToString());
                 DisplayActiveSupplierFieldMapping((requiredBuyerInventoryFields.SelectedItem as ListItem).Display, (requiredBuyerInventoryFields.SelectedItem as ListItem).Value);
                 SetupBuyerInventoryMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
             }
         }
 
         private void mapSupplierInventoryFields_Click(object sender, EventArgs e)
         {
-            if (requiredSupplierInventoryFields.SelectedItem != null && mappingSupplierInventoryFields.SelectedItem != null) {
+            if (requiredSupplierInventoryFields.SelectedItem != null && mappingSupplierInventoryFields.SelectedItem != null)
+            {
                 var supplierInventories = new SupplierInventories();
                 supplierInventories.SaveFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Value, mappingSupplierInventoryFields.SelectedItem.ToString());
                 DisplayActiveSupplierInventoryFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Display, (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
                 SetupSupplierInventoryMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
             }
         }
@@ -1283,39 +1340,48 @@ namespace LinkGreenODBCUtility
 
         private void previewSupplierMappingOutput_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("Suppliers"))) {
+            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("Suppliers")))
+            {
                 var mappedDsnName = Mapping.GetDsnName("Suppliers");
                 var mappingPreview = new MappingPreview("Suppliers", mappedDsnName);
                 mappingPreview.ShowDialog();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
             }
         }
 
         private void previewSupplierInventoryMappingOutput_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("SupplierInventories"))) {
+            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("SupplierInventories")))
+            {
                 var mappedDsnName = Mapping.GetDsnName("SupplierInventories");
                 var mappingPreview = new MappingPreview("SupplierInventories", mappedDsnName);
                 mappingPreview.ShowDialog();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
             }
         }
 
         private void previewBuyerInventoryMappingOutput_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("BuyerInventories"))) {
+            if (!string.IsNullOrEmpty(Mapping.GetTableMapping("BuyerInventories")))
+            {
                 var mappedDsnName = Mapping.GetDsnName("BuyerInventories");
                 var mappingPreview = new MappingPreview("BuyerInventories", mappedDsnName);
                 mappingPreview.ShowDialog();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
             }
         }
 
         private void migrateCustomerData_Click(object sender, EventArgs e)
-        {   
+        {
             string mappedDsnName = Mapping.GetDsnName("Customers");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Customers"))
@@ -1377,9 +1443,12 @@ namespace LinkGreenODBCUtility
         {
             var suppliers = new Suppliers();
             var result = suppliers.Publish();
-            if(result) {
+            if (result)
+            {
                 MessageBox.Show("Suppliers Synced", "Success");
-            } else {
+            }
+            else
+            {
                 if (!suppliers._validPushFields)
                 {
                     MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
@@ -1395,9 +1464,12 @@ namespace LinkGreenODBCUtility
         {
             var supplierInventories = new SupplierInventories();
             var result = supplierInventories.Publish();
-            if (result) {
+            if (result)
+            {
                 MessageBox.Show("Supplier Inventories Synced", "Success");
-            } else {
+            }
+            else
+            {
                 if (!supplierInventories._validFields)
                 {
                     MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
@@ -1413,9 +1485,12 @@ namespace LinkGreenODBCUtility
         {
             var supplierInventories = new SupplierInventories();
             var result = supplierInventories.PushMatchedSkus();
-            if (result) {
+            if (result)
+            {
                 MessageBox.Show("Matched Supplier Inventories Published", "Success");
-            } else {
+            }
+            else
+            {
                 if (!supplierInventories._validFields)
                 {
                     MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
@@ -1431,9 +1506,12 @@ namespace LinkGreenODBCUtility
         {
             var suppliers = new Suppliers();
             var result = suppliers.Download();
-            if (result) {
+            if (result)
+            {
                 MessageBox.Show("Suppliers Downloaded", "Success");
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Suppliers failed to download. No API Key was found", "Download Failure");
             }
         }
@@ -1442,9 +1520,12 @@ namespace LinkGreenODBCUtility
         {
             var supplierInventories = new SupplierInventories();
             var result = supplierInventories.Download();
-            if (result) {
+            if (result)
+            {
                 MessageBox.Show("Supplier Inventories Downloaded", "Success");
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Supplier Inventories failed to download. No API Key was found", "Download Failure");
             }
         }
@@ -1471,13 +1552,15 @@ namespace LinkGreenODBCUtility
 
         private void buyerInventoryDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (buyerInventoryDataSource.SelectedItem != null) {
+            if (buyerInventoryDataSource.SelectedItem != null)
+            {
                 string dsnName = buyerInventoryDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 List<string> tableNames = mapping.GetTableNames();
 
                 buyerInventoryTableName.Items.Clear();
-                foreach (string tableName in tableNames) {
+                foreach (string tableName in tableNames)
+                {
                     buyerInventoryTableName.Items.Add(tableName);
                 }
 
@@ -1507,14 +1590,17 @@ namespace LinkGreenODBCUtility
         private void buyerInventoryTableName_SelectedIndexChanged(object sender, EventArgs e)
         {
             var buyerInventories = new BuyerInventories();
-            if (buyerInventoryTableName.SelectedItem != null) {
+            if (buyerInventoryTableName.SelectedItem != null)
+            {
                 string dsnName = buyerInventoryDataSource.SelectedItem.ToString();
                 string tableName = buyerInventoryTableName.SelectedItem.ToString();
                 buyerInventories.SaveTableMapping(dsnName, tableName);
 
                 DisplayActiveBuyerInventoryTableMapping();
                 SetupBuyerInventoryMappingFields();
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Please select your buyer inventory table!", "No Buyer Inventory Table Selected");
             }
         }
@@ -1576,7 +1662,7 @@ namespace LinkGreenODBCUtility
             var products = new Products();
             products.UpdateTemporaryTables();
 
-            
+
             string mappedDsnName = Mapping.GetDsnName("Products");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Products"))
@@ -1641,9 +1727,12 @@ namespace LinkGreenODBCUtility
         private void publishBuyerInventories_Click(object sender, EventArgs e)
         {
             var buyerInventories = new BuyerInventories();
-            if (buyerInventories.Publish()) {
+            if (buyerInventories.Publish())
+            {
                 MessageBox.Show("Buyer Inventory Published", "Success");
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Buyer Inventory failed to publish. No API Key was found", "Publish Failure");
             }
         }
@@ -1742,7 +1831,7 @@ namespace LinkGreenODBCUtility
         {
             var pricing = new PriceLevelPrices();
             pricing.UpdateTemporaryTables();
-            
+
             string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevelPrices"))
@@ -1850,7 +1939,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required"); 
+                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
             }
         }
 
@@ -1871,7 +1960,7 @@ namespace LinkGreenODBCUtility
         {
             var priceLevels = new PriceLevels();
             priceLevels.UpdateTemporaryTables();
-            
+
             string mappedDsnName = Mapping.GetDsnName("PriceLevels");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevels"))
@@ -2270,6 +2359,66 @@ namespace LinkGreenODBCUtility
             {
                 MessageBox.Show("Inventory Quantities failed to publish. No API Key was found", "Publish Failure");
             }
+        }
+
+        private void mappingCategoryFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingCategoryFields.SelectedIndex > -1)
+                mapCategoryFields_Click(sender, e);
+        }
+
+        private void mappingCustomerFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingCustomerFields.SelectedIndex > -1)
+                mapCustomerFields_Click(sender, e);
+        }
+
+        private void mappingProductFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingProductFields.SelectedIndex > -1)
+                mapProductFields_Click(sender, e);
+        }
+
+        private void mappingInventoryQuantityFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingInventoryQuantityFields.SelectedIndex > -1)
+                mapInventoryQuantityFields_Click(sender, e);
+        }
+
+        private void mappingPriceLevelFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingPriceLevelFields.SelectedIndex > -1)
+                mapPriceLevelsFields_Click(sender, e);
+        }
+
+        private void mappingPricingFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingPricingFields.SelectedIndex > -1)
+                mapPricingFields_Click(sender, e);
+        }
+
+        private void mappingSupplierFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingSupplierFields.SelectedIndex > -1)
+                mapSupplierFields_Click(sender, e);
+        }
+
+        private void mappingSupplierInventoryFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingSupplierInventoryFields.SelectedIndex > -1)
+                mapSupplierInventoryFields_Click(sender, e);
+        }
+
+        private void mappingLinkedSkuFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingLinkedSkuFields.SelectedIndex > -1)
+                mapLinkedSkuFields_Click(sender, e);
+        }
+
+        private void mappingBuyerInventoryFields_DoubleClick(object sender, EventArgs e)
+        {
+            if (mappingBuyerInventoryFields.SelectedIndex > -1)
+                mapBuyerInventoryFields_Click(sender, e);
         }
     }
 }

@@ -350,7 +350,7 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static void InviteBuyers(List<CompanyAndRelationshipResult> buyers)
+        public static string InviteBuyers(List<CompanyAndRelationshipResult> buyers)
         {
             var requestUrl = $"/RelationshipService/rest/Import/{Key}";
             var request = new RestRequest(requestUrl, Method.POST);
@@ -380,8 +380,12 @@ namespace LinkGreen.Applications.Common
 
             var response = Client.Execute(request);
 
+            
+
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Error inviting buyers");
+
+            return response.Content;
         }
 
         public static PrivateCategory PushCategory(PrivateCategory category)

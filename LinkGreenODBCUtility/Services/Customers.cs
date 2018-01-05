@@ -15,7 +15,7 @@ namespace LinkGreenODBCUtility
 
         public Customers()
         {
-            
+
         }
 
         public Customers(string clientDsnName)
@@ -57,7 +57,8 @@ namespace LinkGreenODBCUtility
         }
         public bool Publish()
         {
-            string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            // string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {
@@ -75,12 +76,13 @@ namespace LinkGreenODBCUtility
 
                     try
                     {
-                        WebServiceHelper.InviteBuyers(batch);
+                        var response = WebServiceHelper.InviteBuyers(batch);
+                        Logger.Instance.Info(response);
                         numOfPublishedCustomers++;
                     }
                     catch (Exception e)
                     {
-                        //ignore timeout
+                        Logger.Instance.Error(e.Message);
                     }
 
                     skip += take;

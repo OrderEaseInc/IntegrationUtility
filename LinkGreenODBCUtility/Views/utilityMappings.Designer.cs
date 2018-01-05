@@ -285,6 +285,9 @@
             // 
             // Tables
             // 
+            this.Tables.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.Tables.Controls.Add(this.categories);
             this.Tables.Controls.Add(this.customers);
             this.Tables.Controls.Add(this.productsTab);
@@ -298,7 +301,7 @@
             this.Tables.Location = new System.Drawing.Point(13, 12);
             this.Tables.Name = "Tables";
             this.Tables.SelectedIndex = 0;
-            this.Tables.Size = new System.Drawing.Size(418, 558);
+            this.Tables.Size = new System.Drawing.Size(552, 558);
             this.Tables.TabIndex = 0;
             this.Tables.SelectedIndexChanged += new System.EventHandler(this.mappingTabChanged);
             // 
@@ -330,7 +333,7 @@
             this.categories.Location = new System.Drawing.Point(4, 22);
             this.categories.Name = "categories";
             this.categories.Padding = new System.Windows.Forms.Padding(3);
-            this.categories.Size = new System.Drawing.Size(410, 532);
+            this.categories.Size = new System.Drawing.Size(544, 532);
             this.categories.TabIndex = 0;
             this.categories.Text = "Categories";
             this.categories.UseVisualStyleBackColor = true;
@@ -339,7 +342,7 @@
             // 
             this.setCategoriesUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setCategoriesUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(174, 41);
+            this.setCategoriesUsernamePW.Location = new System.Drawing.Point(227, 39);
             this.setCategoriesUsernamePW.Name = "setCategoriesUsernamePW";
             this.setCategoriesUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setCategoriesUsernamePW.TabIndex = 23;
@@ -377,7 +380,8 @@
             // 
             // migrateCategoryData
             // 
-            this.migrateCategoryData.Location = new System.Drawing.Point(161, 493);
+            this.migrateCategoryData.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.migrateCategoryData.Location = new System.Drawing.Point(228, 493);
             this.migrateCategoryData.Name = "migrateCategoryData";
             this.migrateCategoryData.Size = new System.Drawing.Size(88, 23);
             this.migrateCategoryData.TabIndex = 19;
@@ -417,24 +421,27 @@
             // mappingCategoryFields
             // 
             this.mappingCategoryFields.FormattingEnabled = true;
-            this.mappingCategoryFields.Location = new System.Drawing.Point(203, 281);
+            this.mappingCategoryFields.Location = new System.Drawing.Point(295, 281);
             this.mappingCategoryFields.Name = "mappingCategoryFields";
-            this.mappingCategoryFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingCategoryFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingCategoryFields.Sorted = true;
             this.mappingCategoryFields.TabIndex = 15;
+            this.mappingCategoryFields.DoubleClick += new System.EventHandler(this.mappingCategoryFields_DoubleClick);
             // 
             // requiredCategoryFields
             // 
             this.requiredCategoryFields.FormattingEnabled = true;
             this.requiredCategoryFields.Location = new System.Drawing.Point(23, 281);
             this.requiredCategoryFields.Name = "requiredCategoryFields";
-            this.requiredCategoryFields.Size = new System.Drawing.Size(174, 134);
+            this.requiredCategoryFields.Size = new System.Drawing.Size(225, 134);
+            this.requiredCategoryFields.Sorted = true;
             this.requiredCategoryFields.TabIndex = 14;
             this.requiredCategoryFields.SelectedIndexChanged += new System.EventHandler(this.requiredCategoryFields_SelectedIndexChanged);
             // 
             // mappedTableFieldsLabel
             // 
             this.mappedTableFieldsLabel.AutoSize = true;
-            this.mappedTableFieldsLabel.Location = new System.Drawing.Point(203, 264);
+            this.mappedTableFieldsLabel.Location = new System.Drawing.Point(292, 264);
             this.mappedTableFieldsLabel.Name = "mappedTableFieldsLabel";
             this.mappedTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedTableFieldsLabel.TabIndex = 13;
@@ -491,7 +498,7 @@
             // tableNameLabel
             // 
             this.tableNameLabel.AutoSize = true;
-            this.tableNameLabel.Location = new System.Drawing.Point(200, 43);
+            this.tableNameLabel.Location = new System.Drawing.Point(292, 41);
             this.tableNameLabel.Name = "tableNameLabel";
             this.tableNameLabel.Size = new System.Drawing.Size(68, 13);
             this.tableNameLabel.TabIndex = 7;
@@ -518,12 +525,14 @@
             // 
             // categoriesTableName
             // 
+            this.categoriesTableName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.categoriesTableName.FormattingEnabled = true;
             this.categoriesTableName.HorizontalScrollbar = true;
-            this.categoriesTableName.Location = new System.Drawing.Point(203, 59);
+            this.categoriesTableName.Location = new System.Drawing.Point(295, 59);
             this.categoriesTableName.Margin = new System.Windows.Forms.Padding(5);
             this.categoriesTableName.Name = "categoriesTableName";
-            this.categoriesTableName.Size = new System.Drawing.Size(180, 134);
+            this.categoriesTableName.Size = new System.Drawing.Size(225, 134);
+            this.categoriesTableName.Sorted = true;
             this.categoriesTableName.TabIndex = 2;
             this.categoriesTableName.SelectedIndexChanged += new System.EventHandler(this.categoriesTableName_SelectedIndexChanged);
             // 
@@ -534,13 +543,15 @@
             this.categoriesDataSource.Location = new System.Drawing.Point(25, 59);
             this.categoriesDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.categoriesDataSource.Name = "categoriesDataSource";
-            this.categoriesDataSource.Size = new System.Drawing.Size(172, 134);
+            this.categoriesDataSource.Size = new System.Drawing.Size(225, 134);
+            this.categoriesDataSource.Sorted = true;
             this.categoriesDataSource.TabIndex = 0;
             this.categoriesDataSource.SelectedIndexChanged += new System.EventHandler(this.CategoriesDataSource_SelectedIndexChanged);
             // 
             // publishToLinkGreen
             // 
-            this.publishToLinkGreen.Location = new System.Drawing.Point(255, 493);
+            this.publishToLinkGreen.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.publishToLinkGreen.Location = new System.Drawing.Point(322, 493);
             this.publishToLinkGreen.Name = "publishToLinkGreen";
             this.publishToLinkGreen.Size = new System.Drawing.Size(126, 23);
             this.publishToLinkGreen.TabIndex = 6;
@@ -550,7 +561,8 @@
             // 
             // emptyCategoriesTransferTable
             // 
-            this.emptyCategoriesTransferTable.Location = new System.Drawing.Point(28, 493);
+            this.emptyCategoriesTransferTable.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.emptyCategoriesTransferTable.Location = new System.Drawing.Point(95, 493);
             this.emptyCategoriesTransferTable.Name = "emptyCategoriesTransferTable";
             this.emptyCategoriesTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyCategoriesTransferTable.TabIndex = 4;
@@ -586,7 +598,7 @@
             this.customers.Location = new System.Drawing.Point(4, 22);
             this.customers.Name = "customers";
             this.customers.Padding = new System.Windows.Forms.Padding(3);
-            this.customers.Size = new System.Drawing.Size(410, 532);
+            this.customers.Size = new System.Drawing.Size(544, 532);
             this.customers.TabIndex = 1;
             this.customers.Text = "Customers";
             this.customers.UseVisualStyleBackColor = true;
@@ -595,7 +607,7 @@
             // 
             this.setCustomersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setCustomersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setCustomersUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setCustomersUsernamePW.Location = new System.Drawing.Point(228, 40);
             this.setCustomersUsernamePW.Name = "setCustomersUsernamePW";
             this.setCustomersUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setCustomersUsernamePW.TabIndex = 45;
@@ -633,7 +645,7 @@
             // 
             // migrateCustomerData
             // 
-            this.migrateCustomerData.Location = new System.Drawing.Point(164, 494);
+            this.migrateCustomerData.Location = new System.Drawing.Point(236, 494);
             this.migrateCustomerData.Name = "migrateCustomerData";
             this.migrateCustomerData.Size = new System.Drawing.Size(88, 23);
             this.migrateCustomerData.TabIndex = 41;
@@ -673,24 +685,27 @@
             // mappingCustomerFields
             // 
             this.mappingCustomerFields.FormattingEnabled = true;
-            this.mappingCustomerFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingCustomerFields.Location = new System.Drawing.Point(298, 282);
             this.mappingCustomerFields.Name = "mappingCustomerFields";
-            this.mappingCustomerFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingCustomerFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingCustomerFields.Sorted = true;
             this.mappingCustomerFields.TabIndex = 37;
+            this.mappingCustomerFields.DoubleClick += new System.EventHandler(this.mappingCustomerFields_DoubleClick);
             // 
             // customerFields
             // 
             this.customerFields.FormattingEnabled = true;
             this.customerFields.Location = new System.Drawing.Point(26, 282);
             this.customerFields.Name = "customerFields";
-            this.customerFields.Size = new System.Drawing.Size(174, 134);
+            this.customerFields.Size = new System.Drawing.Size(225, 134);
+            this.customerFields.Sorted = true;
             this.customerFields.TabIndex = 36;
             this.customerFields.SelectedIndexChanged += new System.EventHandler(this.customerFields_SelectedIndexChanged);
             // 
             // mappedCustomerTableFieldsLabel
             // 
             this.mappedCustomerTableFieldsLabel.AutoSize = true;
-            this.mappedCustomerTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedCustomerTableFieldsLabel.Location = new System.Drawing.Point(295, 265);
             this.mappedCustomerTableFieldsLabel.Name = "mappedCustomerTableFieldsLabel";
             this.mappedCustomerTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedCustomerTableFieldsLabel.TabIndex = 35;
@@ -747,7 +762,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(203, 44);
+            this.label13.Location = new System.Drawing.Point(295, 42);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(68, 13);
             this.label13.TabIndex = 29;
@@ -776,10 +791,11 @@
             // 
             this.customersTableName.FormattingEnabled = true;
             this.customersTableName.HorizontalScrollbar = true;
-            this.customersTableName.Location = new System.Drawing.Point(206, 60);
+            this.customersTableName.Location = new System.Drawing.Point(298, 60);
             this.customersTableName.Margin = new System.Windows.Forms.Padding(5);
             this.customersTableName.Name = "customersTableName";
-            this.customersTableName.Size = new System.Drawing.Size(180, 134);
+            this.customersTableName.Size = new System.Drawing.Size(225, 134);
+            this.customersTableName.Sorted = true;
             this.customersTableName.TabIndex = 24;
             this.customersTableName.SelectedIndexChanged += new System.EventHandler(this.customersTableName_SelectedIndexChanged);
             // 
@@ -790,13 +806,14 @@
             this.customersDataSource.Location = new System.Drawing.Point(28, 60);
             this.customersDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.customersDataSource.Name = "customersDataSource";
-            this.customersDataSource.Size = new System.Drawing.Size(172, 134);
+            this.customersDataSource.Size = new System.Drawing.Size(225, 134);
+            this.customersDataSource.Sorted = true;
             this.customersDataSource.TabIndex = 23;
             this.customersDataSource.SelectedIndexChanged += new System.EventHandler(this.customersDataSource_SelectedIndexChanged);
             // 
             // publishCustomers
             // 
-            this.publishCustomers.Location = new System.Drawing.Point(258, 494);
+            this.publishCustomers.Location = new System.Drawing.Point(330, 494);
             this.publishCustomers.Name = "publishCustomers";
             this.publishCustomers.Size = new System.Drawing.Size(126, 23);
             this.publishCustomers.TabIndex = 28;
@@ -806,7 +823,7 @@
             // 
             // emptyCustomersTransferTable
             // 
-            this.emptyCustomersTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyCustomersTransferTable.Location = new System.Drawing.Point(103, 494);
             this.emptyCustomersTransferTable.Name = "emptyCustomersTransferTable";
             this.emptyCustomersTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyCustomersTransferTable.TabIndex = 25;
@@ -842,7 +859,7 @@
             this.productsTab.Location = new System.Drawing.Point(4, 22);
             this.productsTab.Name = "productsTab";
             this.productsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.productsTab.Size = new System.Drawing.Size(410, 532);
+            this.productsTab.Size = new System.Drawing.Size(544, 532);
             this.productsTab.TabIndex = 3;
             this.productsTab.Text = "Products";
             this.productsTab.UseVisualStyleBackColor = true;
@@ -851,7 +868,7 @@
             // 
             this.setProductsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setProductsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setProductsUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setProductsUsernamePW.Location = new System.Drawing.Point(230, 42);
             this.setProductsUsernamePW.Name = "setProductsUsernamePW";
             this.setProductsUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setProductsUsernamePW.TabIndex = 67;
@@ -889,7 +906,7 @@
             // 
             // migrateProductData
             // 
-            this.migrateProductData.Location = new System.Drawing.Point(164, 494);
+            this.migrateProductData.Location = new System.Drawing.Point(229, 494);
             this.migrateProductData.Name = "migrateProductData";
             this.migrateProductData.Size = new System.Drawing.Size(88, 23);
             this.migrateProductData.TabIndex = 63;
@@ -929,24 +946,27 @@
             // mappingProductFields
             // 
             this.mappingProductFields.FormattingEnabled = true;
-            this.mappingProductFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingProductFields.Location = new System.Drawing.Point(298, 282);
             this.mappingProductFields.Name = "mappingProductFields";
-            this.mappingProductFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingProductFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingProductFields.Sorted = true;
             this.mappingProductFields.TabIndex = 59;
+            this.mappingProductFields.DoubleClick += new System.EventHandler(this.mappingProductFields_DoubleClick);
             // 
             // productFields
             // 
             this.productFields.FormattingEnabled = true;
             this.productFields.Location = new System.Drawing.Point(26, 282);
             this.productFields.Name = "productFields";
-            this.productFields.Size = new System.Drawing.Size(174, 134);
+            this.productFields.Size = new System.Drawing.Size(225, 134);
+            this.productFields.Sorted = true;
             this.productFields.TabIndex = 58;
             this.productFields.SelectedIndexChanged += new System.EventHandler(this.productFields_SelectedIndexChanged);
             // 
             // mappedProductTableFieldsLabel
             // 
             this.mappedProductTableFieldsLabel.AutoSize = true;
-            this.mappedProductTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedProductTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedProductTableFieldsLabel.Name = "mappedProductTableFieldsLabel";
             this.mappedProductTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedProductTableFieldsLabel.TabIndex = 57;
@@ -1003,7 +1023,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(203, 44);
+            this.label21.Location = new System.Drawing.Point(295, 44);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(68, 13);
             this.label21.TabIndex = 51;
@@ -1032,10 +1052,11 @@
             // 
             this.productsTableName.FormattingEnabled = true;
             this.productsTableName.HorizontalScrollbar = true;
-            this.productsTableName.Location = new System.Drawing.Point(206, 60);
+            this.productsTableName.Location = new System.Drawing.Point(298, 60);
             this.productsTableName.Margin = new System.Windows.Forms.Padding(5);
             this.productsTableName.Name = "productsTableName";
-            this.productsTableName.Size = new System.Drawing.Size(180, 134);
+            this.productsTableName.Size = new System.Drawing.Size(225, 134);
+            this.productsTableName.Sorted = true;
             this.productsTableName.TabIndex = 46;
             this.productsTableName.SelectedIndexChanged += new System.EventHandler(this.productsTableName_SelectedIndexChanged);
             // 
@@ -1046,13 +1067,14 @@
             this.productsDataSource.Location = new System.Drawing.Point(28, 60);
             this.productsDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.productsDataSource.Name = "productsDataSource";
-            this.productsDataSource.Size = new System.Drawing.Size(172, 134);
+            this.productsDataSource.Size = new System.Drawing.Size(225, 134);
+            this.productsDataSource.Sorted = true;
             this.productsDataSource.TabIndex = 45;
             this.productsDataSource.SelectedIndexChanged += new System.EventHandler(this.productsDataSource_SelectedIndexChanged);
             // 
             // publishProducts
             // 
-            this.publishProducts.Location = new System.Drawing.Point(258, 494);
+            this.publishProducts.Location = new System.Drawing.Point(323, 494);
             this.publishProducts.Name = "publishProducts";
             this.publishProducts.Size = new System.Drawing.Size(126, 23);
             this.publishProducts.TabIndex = 50;
@@ -1062,7 +1084,7 @@
             // 
             // emptyProductsTransferTable
             // 
-            this.emptyProductsTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyProductsTransferTable.Location = new System.Drawing.Point(96, 494);
             this.emptyProductsTransferTable.Name = "emptyProductsTransferTable";
             this.emptyProductsTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyProductsTransferTable.TabIndex = 47;
@@ -1097,7 +1119,7 @@
             this.inventoryQuantity.Controls.Add(this.emptyInventoryQuantityTransferTable);
             this.inventoryQuantity.Location = new System.Drawing.Point(4, 22);
             this.inventoryQuantity.Name = "inventoryQuantity";
-            this.inventoryQuantity.Size = new System.Drawing.Size(410, 532);
+            this.inventoryQuantity.Size = new System.Drawing.Size(544, 532);
             this.inventoryQuantity.TabIndex = 9;
             this.inventoryQuantity.Text = "Inventory Quantities";
             this.inventoryQuantity.UseVisualStyleBackColor = true;
@@ -1116,7 +1138,7 @@
             // 
             this.setInventoryQuantityUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setInventoryQuantityUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setInventoryQuantityUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setInventoryQuantityUsernamePW.Location = new System.Drawing.Point(230, 42);
             this.setInventoryQuantityUsernamePW.Name = "setInventoryQuantityUsernamePW";
             this.setInventoryQuantityUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setInventoryQuantityUsernamePW.TabIndex = 138;
@@ -1154,7 +1176,7 @@
             // 
             // migrateInventoryQuantity
             // 
-            this.migrateInventoryQuantity.Location = new System.Drawing.Point(164, 494);
+            this.migrateInventoryQuantity.Location = new System.Drawing.Point(229, 494);
             this.migrateInventoryQuantity.Name = "migrateInventoryQuantity";
             this.migrateInventoryQuantity.Size = new System.Drawing.Size(88, 23);
             this.migrateInventoryQuantity.TabIndex = 134;
@@ -1194,24 +1216,27 @@
             // mappingInventoryQuantityFields
             // 
             this.mappingInventoryQuantityFields.FormattingEnabled = true;
-            this.mappingInventoryQuantityFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingInventoryQuantityFields.Location = new System.Drawing.Point(298, 282);
             this.mappingInventoryQuantityFields.Name = "mappingInventoryQuantityFields";
-            this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingInventoryQuantityFields.Sorted = true;
             this.mappingInventoryQuantityFields.TabIndex = 130;
+            this.mappingInventoryQuantityFields.DoubleClick += new System.EventHandler(this.mappingInventoryQuantityFields_DoubleClick);
             // 
             // inventoryQuantityFields
             // 
             this.inventoryQuantityFields.FormattingEnabled = true;
             this.inventoryQuantityFields.Location = new System.Drawing.Point(26, 282);
             this.inventoryQuantityFields.Name = "inventoryQuantityFields";
-            this.inventoryQuantityFields.Size = new System.Drawing.Size(174, 134);
+            this.inventoryQuantityFields.Size = new System.Drawing.Size(225, 134);
+            this.inventoryQuantityFields.Sorted = true;
             this.inventoryQuantityFields.TabIndex = 129;
             this.inventoryQuantityFields.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityFields_SelectedIndexChanged);
             // 
             // mappedInventoryQuantityTableFieldsLabel
             // 
             this.mappedInventoryQuantityTableFieldsLabel.AutoSize = true;
-            this.mappedInventoryQuantityTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedInventoryQuantityTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedInventoryQuantityTableFieldsLabel.Name = "mappedInventoryQuantityTableFieldsLabel";
             this.mappedInventoryQuantityTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedInventoryQuantityTableFieldsLabel.TabIndex = 128;
@@ -1258,7 +1283,7 @@
             // label72
             // 
             this.label72.AutoSize = true;
-            this.label72.Location = new System.Drawing.Point(203, 44);
+            this.label72.Location = new System.Drawing.Point(295, 44);
             this.label72.Name = "label72";
             this.label72.Size = new System.Drawing.Size(68, 13);
             this.label72.TabIndex = 123;
@@ -1287,10 +1312,11 @@
             // 
             this.inventoryQuantityTableName.FormattingEnabled = true;
             this.inventoryQuantityTableName.HorizontalScrollbar = true;
-            this.inventoryQuantityTableName.Location = new System.Drawing.Point(206, 60);
+            this.inventoryQuantityTableName.Location = new System.Drawing.Point(298, 60);
             this.inventoryQuantityTableName.Margin = new System.Windows.Forms.Padding(5);
             this.inventoryQuantityTableName.Name = "inventoryQuantityTableName";
-            this.inventoryQuantityTableName.Size = new System.Drawing.Size(180, 134);
+            this.inventoryQuantityTableName.Size = new System.Drawing.Size(225, 134);
+            this.inventoryQuantityTableName.Sorted = true;
             this.inventoryQuantityTableName.TabIndex = 118;
             this.inventoryQuantityTableName.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityTableName_SelectedIndexChanged);
             // 
@@ -1301,13 +1327,14 @@
             this.inventoryQuantityDataSource.Location = new System.Drawing.Point(28, 60);
             this.inventoryQuantityDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.inventoryQuantityDataSource.Name = "inventoryQuantityDataSource";
-            this.inventoryQuantityDataSource.Size = new System.Drawing.Size(172, 134);
+            this.inventoryQuantityDataSource.Size = new System.Drawing.Size(225, 134);
+            this.inventoryQuantityDataSource.Sorted = true;
             this.inventoryQuantityDataSource.TabIndex = 117;
             this.inventoryQuantityDataSource.SelectedIndexChanged += new System.EventHandler(this.inventoryQuantityDataSource_SelectedIndexChanged);
             // 
             // publishInventoryQuantity
             // 
-            this.publishInventoryQuantity.Location = new System.Drawing.Point(258, 494);
+            this.publishInventoryQuantity.Location = new System.Drawing.Point(323, 494);
             this.publishInventoryQuantity.Name = "publishInventoryQuantity";
             this.publishInventoryQuantity.Size = new System.Drawing.Size(126, 23);
             this.publishInventoryQuantity.TabIndex = 122;
@@ -1317,7 +1344,7 @@
             // 
             // emptyInventoryQuantityTransferTable
             // 
-            this.emptyInventoryQuantityTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyInventoryQuantityTransferTable.Location = new System.Drawing.Point(96, 494);
             this.emptyInventoryQuantityTransferTable.Name = "emptyInventoryQuantityTransferTable";
             this.emptyInventoryQuantityTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyInventoryQuantityTransferTable.TabIndex = 119;
@@ -1353,7 +1380,7 @@
             this.priceLevelsTab.Location = new System.Drawing.Point(4, 22);
             this.priceLevelsTab.Name = "priceLevelsTab";
             this.priceLevelsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.priceLevelsTab.Size = new System.Drawing.Size(410, 532);
+            this.priceLevelsTab.Size = new System.Drawing.Size(544, 532);
             this.priceLevelsTab.TabIndex = 4;
             this.priceLevelsTab.Text = "Price Levels";
             this.priceLevelsTab.UseVisualStyleBackColor = true;
@@ -1362,7 +1389,7 @@
             // 
             this.setPriceLevelsUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setPriceLevelsUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setPriceLevelsUsernamePW.Location = new System.Drawing.Point(230, 44);
             this.setPriceLevelsUsernamePW.Name = "setPriceLevelsUsernamePW";
             this.setPriceLevelsUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setPriceLevelsUsernamePW.TabIndex = 111;
@@ -1400,7 +1427,7 @@
             // 
             // migratePriceLevelsData
             // 
-            this.migratePriceLevelsData.Location = new System.Drawing.Point(164, 494);
+            this.migratePriceLevelsData.Location = new System.Drawing.Point(229, 494);
             this.migratePriceLevelsData.Name = "migratePriceLevelsData";
             this.migratePriceLevelsData.Size = new System.Drawing.Size(88, 23);
             this.migratePriceLevelsData.TabIndex = 107;
@@ -1440,24 +1467,27 @@
             // mappingPriceLevelFields
             // 
             this.mappingPriceLevelFields.FormattingEnabled = true;
-            this.mappingPriceLevelFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingPriceLevelFields.Location = new System.Drawing.Point(298, 282);
             this.mappingPriceLevelFields.Name = "mappingPriceLevelFields";
-            this.mappingPriceLevelFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingPriceLevelFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingPriceLevelFields.Sorted = true;
             this.mappingPriceLevelFields.TabIndex = 103;
+            this.mappingPriceLevelFields.DoubleClick += new System.EventHandler(this.mappingPriceLevelFields_DoubleClick);
             // 
             // priceLevelFields
             // 
             this.priceLevelFields.FormattingEnabled = true;
             this.priceLevelFields.Location = new System.Drawing.Point(26, 282);
             this.priceLevelFields.Name = "priceLevelFields";
-            this.priceLevelFields.Size = new System.Drawing.Size(174, 134);
+            this.priceLevelFields.Size = new System.Drawing.Size(225, 134);
+            this.priceLevelFields.Sorted = true;
             this.priceLevelFields.TabIndex = 102;
             this.priceLevelFields.SelectedIndexChanged += new System.EventHandler(this.priceLevelFields_SelectedIndexChanged);
             // 
             // mappedPriceLevelsTableFieldsLabel
             // 
             this.mappedPriceLevelsTableFieldsLabel.AutoSize = true;
-            this.mappedPriceLevelsTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedPriceLevelsTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedPriceLevelsTableFieldsLabel.Name = "mappedPriceLevelsTableFieldsLabel";
             this.mappedPriceLevelsTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedPriceLevelsTableFieldsLabel.TabIndex = 101;
@@ -1514,7 +1544,7 @@
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(203, 44);
+            this.label33.Location = new System.Drawing.Point(295, 44);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(68, 13);
             this.label33.TabIndex = 95;
@@ -1543,10 +1573,11 @@
             // 
             this.priceLevelsTableName.FormattingEnabled = true;
             this.priceLevelsTableName.HorizontalScrollbar = true;
-            this.priceLevelsTableName.Location = new System.Drawing.Point(206, 60);
+            this.priceLevelsTableName.Location = new System.Drawing.Point(298, 60);
             this.priceLevelsTableName.Margin = new System.Windows.Forms.Padding(5);
             this.priceLevelsTableName.Name = "priceLevelsTableName";
-            this.priceLevelsTableName.Size = new System.Drawing.Size(180, 134);
+            this.priceLevelsTableName.Size = new System.Drawing.Size(225, 134);
+            this.priceLevelsTableName.Sorted = true;
             this.priceLevelsTableName.TabIndex = 90;
             this.priceLevelsTableName.SelectedIndexChanged += new System.EventHandler(this.priceLevelsTableName_SelectedIndexChanged);
             // 
@@ -1557,13 +1588,14 @@
             this.priceLevelsDataSource.Location = new System.Drawing.Point(28, 60);
             this.priceLevelsDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.priceLevelsDataSource.Name = "priceLevelsDataSource";
-            this.priceLevelsDataSource.Size = new System.Drawing.Size(172, 134);
+            this.priceLevelsDataSource.Size = new System.Drawing.Size(225, 134);
+            this.priceLevelsDataSource.Sorted = true;
             this.priceLevelsDataSource.TabIndex = 89;
             this.priceLevelsDataSource.SelectedIndexChanged += new System.EventHandler(this.priceLevelsDataSource_SelectedIndexChanged);
             // 
             // publishPriceLevels
             // 
-            this.publishPriceLevels.Location = new System.Drawing.Point(258, 494);
+            this.publishPriceLevels.Location = new System.Drawing.Point(323, 494);
             this.publishPriceLevels.Name = "publishPriceLevels";
             this.publishPriceLevels.Size = new System.Drawing.Size(126, 23);
             this.publishPriceLevels.TabIndex = 94;
@@ -1573,7 +1605,7 @@
             // 
             // emptyPriceLevelsTransferTable
             // 
-            this.emptyPriceLevelsTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyPriceLevelsTransferTable.Location = new System.Drawing.Point(96, 494);
             this.emptyPriceLevelsTransferTable.Name = "emptyPriceLevelsTransferTable";
             this.emptyPriceLevelsTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyPriceLevelsTransferTable.TabIndex = 91;
@@ -1609,7 +1641,7 @@
             this.pricing.Location = new System.Drawing.Point(4, 22);
             this.pricing.Name = "pricing";
             this.pricing.Padding = new System.Windows.Forms.Padding(3);
-            this.pricing.Size = new System.Drawing.Size(410, 532);
+            this.pricing.Size = new System.Drawing.Size(544, 532);
             this.pricing.TabIndex = 2;
             this.pricing.Text = "Pricing";
             this.pricing.UseVisualStyleBackColor = true;
@@ -1618,7 +1650,7 @@
             // 
             this.setPricingUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setPricingUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setPricingUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setPricingUsernamePW.Location = new System.Drawing.Point(230, 42);
             this.setPricingUsernamePW.Name = "setPricingUsernamePW";
             this.setPricingUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setPricingUsernamePW.TabIndex = 112;
@@ -1656,7 +1688,7 @@
             // 
             // migratePricingData
             // 
-            this.migratePricingData.Location = new System.Drawing.Point(164, 494);
+            this.migratePricingData.Location = new System.Drawing.Point(229, 494);
             this.migratePricingData.Name = "migratePricingData";
             this.migratePricingData.Size = new System.Drawing.Size(88, 23);
             this.migratePricingData.TabIndex = 85;
@@ -1696,24 +1728,27 @@
             // mappingPricingFields
             // 
             this.mappingPricingFields.FormattingEnabled = true;
-            this.mappingPricingFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingPricingFields.Location = new System.Drawing.Point(298, 282);
             this.mappingPricingFields.Name = "mappingPricingFields";
-            this.mappingPricingFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingPricingFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingPricingFields.Sorted = true;
             this.mappingPricingFields.TabIndex = 81;
+            this.mappingPricingFields.DoubleClick += new System.EventHandler(this.mappingPricingFields_DoubleClick);
             // 
             // pricingFields
             // 
             this.pricingFields.FormattingEnabled = true;
             this.pricingFields.Location = new System.Drawing.Point(26, 282);
             this.pricingFields.Name = "pricingFields";
-            this.pricingFields.Size = new System.Drawing.Size(174, 134);
+            this.pricingFields.Size = new System.Drawing.Size(225, 134);
+            this.pricingFields.Sorted = true;
             this.pricingFields.TabIndex = 80;
             this.pricingFields.SelectedIndexChanged += new System.EventHandler(this.pricingFields_SelectedIndexChanged);
             // 
             // mappedPricingTableFieldsLabel
             // 
             this.mappedPricingTableFieldsLabel.AutoSize = true;
-            this.mappedPricingTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedPricingTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedPricingTableFieldsLabel.Name = "mappedPricingTableFieldsLabel";
             this.mappedPricingTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedPricingTableFieldsLabel.TabIndex = 79;
@@ -1770,7 +1805,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(203, 44);
+            this.label27.Location = new System.Drawing.Point(295, 44);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(68, 13);
             this.label27.TabIndex = 73;
@@ -1799,10 +1834,11 @@
             // 
             this.pricingTableName.FormattingEnabled = true;
             this.pricingTableName.HorizontalScrollbar = true;
-            this.pricingTableName.Location = new System.Drawing.Point(206, 60);
+            this.pricingTableName.Location = new System.Drawing.Point(298, 60);
             this.pricingTableName.Margin = new System.Windows.Forms.Padding(5);
             this.pricingTableName.Name = "pricingTableName";
-            this.pricingTableName.Size = new System.Drawing.Size(180, 134);
+            this.pricingTableName.Size = new System.Drawing.Size(225, 134);
+            this.pricingTableName.Sorted = true;
             this.pricingTableName.TabIndex = 68;
             this.pricingTableName.SelectedIndexChanged += new System.EventHandler(this.pricingTableName_SelectedIndexChanged);
             // 
@@ -1813,13 +1849,14 @@
             this.pricingDataSource.Location = new System.Drawing.Point(28, 60);
             this.pricingDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.pricingDataSource.Name = "pricingDataSource";
-            this.pricingDataSource.Size = new System.Drawing.Size(172, 134);
+            this.pricingDataSource.Size = new System.Drawing.Size(225, 134);
+            this.pricingDataSource.Sorted = true;
             this.pricingDataSource.TabIndex = 67;
             this.pricingDataSource.SelectedIndexChanged += new System.EventHandler(this.pricingDataSource_SelectedIndexChanged);
             // 
             // publishPricing
             // 
-            this.publishPricing.Location = new System.Drawing.Point(258, 494);
+            this.publishPricing.Location = new System.Drawing.Point(323, 494);
             this.publishPricing.Name = "publishPricing";
             this.publishPricing.Size = new System.Drawing.Size(126, 23);
             this.publishPricing.TabIndex = 72;
@@ -1829,7 +1866,7 @@
             // 
             // emptyPricingTransferTable
             // 
-            this.emptyPricingTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyPricingTransferTable.Location = new System.Drawing.Point(96, 494);
             this.emptyPricingTransferTable.Name = "emptyPricingTransferTable";
             this.emptyPricingTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyPricingTransferTable.TabIndex = 69;
@@ -1865,7 +1902,7 @@
             this.suppliers.Controls.Add(this.emptySuppliersTransferTable);
             this.suppliers.Location = new System.Drawing.Point(4, 22);
             this.suppliers.Name = "suppliers";
-            this.suppliers.Size = new System.Drawing.Size(410, 532);
+            this.suppliers.Size = new System.Drawing.Size(544, 532);
             this.suppliers.TabIndex = 5;
             this.suppliers.Text = "Suppliers";
             this.suppliers.UseVisualStyleBackColor = true;
@@ -1874,7 +1911,7 @@
             // 
             this.setSuppliersUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setSuppliersUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setSuppliersUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setSuppliersUsernamePW.Location = new System.Drawing.Point(230, 44);
             this.setSuppliersUsernamePW.Name = "setSuppliersUsernamePW";
             this.setSuppliersUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setSuppliersUsernamePW.TabIndex = 113;
@@ -1883,7 +1920,7 @@
             // 
             // pullSuppliersFromLinkGreen
             // 
-            this.pullSuppliersFromLinkGreen.Location = new System.Drawing.Point(83, 492);
+            this.pullSuppliersFromLinkGreen.Location = new System.Drawing.Point(138, 492);
             this.pullSuppliersFromLinkGreen.Name = "pullSuppliersFromLinkGreen";
             this.pullSuppliersFromLinkGreen.Size = new System.Drawing.Size(126, 23);
             this.pullSuppliersFromLinkGreen.TabIndex = 45;
@@ -1922,7 +1959,7 @@
             // 
             // migrateSuppliersData
             // 
-            this.migrateSuppliersData.Location = new System.Drawing.Point(215, 468);
+            this.migrateSuppliersData.Location = new System.Drawing.Point(270, 468);
             this.migrateSuppliersData.Name = "migrateSuppliersData";
             this.migrateSuppliersData.Size = new System.Drawing.Size(136, 23);
             this.migrateSuppliersData.TabIndex = 41;
@@ -1962,24 +1999,27 @@
             // mappingSupplierFields
             // 
             this.mappingSupplierFields.FormattingEnabled = true;
-            this.mappingSupplierFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingSupplierFields.Location = new System.Drawing.Point(298, 282);
             this.mappingSupplierFields.Name = "mappingSupplierFields";
-            this.mappingSupplierFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingSupplierFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingSupplierFields.Sorted = true;
             this.mappingSupplierFields.TabIndex = 37;
+            this.mappingSupplierFields.DoubleClick += new System.EventHandler(this.mappingSupplierFields_DoubleClick);
             // 
             // supplierFields
             // 
             this.supplierFields.FormattingEnabled = true;
             this.supplierFields.Location = new System.Drawing.Point(26, 282);
             this.supplierFields.Name = "supplierFields";
-            this.supplierFields.Size = new System.Drawing.Size(174, 134);
+            this.supplierFields.Size = new System.Drawing.Size(225, 134);
+            this.supplierFields.Sorted = true;
             this.supplierFields.TabIndex = 36;
             this.supplierFields.SelectedIndexChanged += new System.EventHandler(this.supplierFields_SelectedIndexChanged);
             // 
             // mappedSuppliersTableFieldsLabel
             // 
             this.mappedSuppliersTableFieldsLabel.AutoSize = true;
-            this.mappedSuppliersTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedSuppliersTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedSuppliersTableFieldsLabel.Name = "mappedSuppliersTableFieldsLabel";
             this.mappedSuppliersTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedSuppliersTableFieldsLabel.TabIndex = 35;
@@ -2036,7 +2076,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(203, 44);
+            this.label39.Location = new System.Drawing.Point(295, 44);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(68, 13);
             this.label39.TabIndex = 29;
@@ -2065,10 +2105,11 @@
             // 
             this.suppliersTableName.FormattingEnabled = true;
             this.suppliersTableName.HorizontalScrollbar = true;
-            this.suppliersTableName.Location = new System.Drawing.Point(206, 60);
+            this.suppliersTableName.Location = new System.Drawing.Point(298, 60);
             this.suppliersTableName.Margin = new System.Windows.Forms.Padding(5);
             this.suppliersTableName.Name = "suppliersTableName";
-            this.suppliersTableName.Size = new System.Drawing.Size(180, 134);
+            this.suppliersTableName.Size = new System.Drawing.Size(225, 134);
+            this.suppliersTableName.Sorted = true;
             this.suppliersTableName.TabIndex = 24;
             this.suppliersTableName.SelectedIndexChanged += new System.EventHandler(this.suppliersTableName_SelectedIndexChanged);
             // 
@@ -2079,13 +2120,14 @@
             this.suppliersDataSource.Location = new System.Drawing.Point(28, 60);
             this.suppliersDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.suppliersDataSource.Name = "suppliersDataSource";
-            this.suppliersDataSource.Size = new System.Drawing.Size(172, 134);
+            this.suppliersDataSource.Size = new System.Drawing.Size(225, 134);
+            this.suppliersDataSource.Sorted = true;
             this.suppliersDataSource.TabIndex = 23;
             this.suppliersDataSource.SelectedIndexChanged += new System.EventHandler(this.suppliersDataSource_SelectedIndexChanged);
             // 
             // downloadSuppliers
             // 
-            this.downloadSuppliers.Location = new System.Drawing.Point(217, 492);
+            this.downloadSuppliers.Location = new System.Drawing.Point(272, 492);
             this.downloadSuppliers.Name = "downloadSuppliers";
             this.downloadSuppliers.Size = new System.Drawing.Size(134, 23);
             this.downloadSuppliers.TabIndex = 28;
@@ -2095,7 +2137,7 @@
             // 
             // emptySuppliersTransferTable
             // 
-            this.emptySuppliersTransferTable.Location = new System.Drawing.Point(83, 468);
+            this.emptySuppliersTransferTable.Location = new System.Drawing.Point(138, 468);
             this.emptySuppliersTransferTable.Name = "emptySuppliersTransferTable";
             this.emptySuppliersTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptySuppliersTransferTable.TabIndex = 25;
@@ -2131,7 +2173,7 @@
             this.supplierInventory.Location = new System.Drawing.Point(4, 22);
             this.supplierInventory.Name = "supplierInventory";
             this.supplierInventory.Padding = new System.Windows.Forms.Padding(3);
-            this.supplierInventory.Size = new System.Drawing.Size(410, 532);
+            this.supplierInventory.Size = new System.Drawing.Size(544, 532);
             this.supplierInventory.TabIndex = 6;
             this.supplierInventory.Text = "Supplier Inventory";
             this.supplierInventory.UseVisualStyleBackColor = true;
@@ -2140,7 +2182,7 @@
             // 
             this.setSupplierInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setSupplierInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setSupplierInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setSupplierInventoryUsernamePW.Location = new System.Drawing.Point(230, 42);
             this.setSupplierInventoryUsernamePW.Name = "setSupplierInventoryUsernamePW";
             this.setSupplierInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setSupplierInventoryUsernamePW.TabIndex = 114;
@@ -2178,7 +2220,7 @@
             // 
             // pullSupplierInventoriesFromLinkGreen
             // 
-            this.pullSupplierInventoriesFromLinkGreen.Location = new System.Drawing.Point(158, 484);
+            this.pullSupplierInventoriesFromLinkGreen.Location = new System.Drawing.Point(224, 484);
             this.pullSupplierInventoriesFromLinkGreen.Name = "pullSupplierInventoriesFromLinkGreen";
             this.pullSupplierInventoriesFromLinkGreen.Size = new System.Drawing.Size(113, 23);
             this.pullSupplierInventoriesFromLinkGreen.TabIndex = 63;
@@ -2218,24 +2260,27 @@
             // mappingSupplierInventoryFields
             // 
             this.mappingSupplierInventoryFields.FormattingEnabled = true;
-            this.mappingSupplierInventoryFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingSupplierInventoryFields.Location = new System.Drawing.Point(298, 282);
             this.mappingSupplierInventoryFields.Name = "mappingSupplierInventoryFields";
-            this.mappingSupplierInventoryFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingSupplierInventoryFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingSupplierInventoryFields.Sorted = true;
             this.mappingSupplierInventoryFields.TabIndex = 59;
+            this.mappingSupplierInventoryFields.DoubleClick += new System.EventHandler(this.mappingSupplierInventoryFields_DoubleClick);
             // 
             // requiredSupplierInventoryFields
             // 
             this.requiredSupplierInventoryFields.FormattingEnabled = true;
             this.requiredSupplierInventoryFields.Location = new System.Drawing.Point(26, 282);
             this.requiredSupplierInventoryFields.Name = "requiredSupplierInventoryFields";
-            this.requiredSupplierInventoryFields.Size = new System.Drawing.Size(174, 134);
+            this.requiredSupplierInventoryFields.Size = new System.Drawing.Size(225, 134);
+            this.requiredSupplierInventoryFields.Sorted = true;
             this.requiredSupplierInventoryFields.TabIndex = 58;
             this.requiredSupplierInventoryFields.SelectedIndexChanged += new System.EventHandler(this.requiredSupplierInventoryFields_SelectedIndexChanged);
             // 
             // mappedSupplierInventoryTableFieldsLabel
             // 
             this.mappedSupplierInventoryTableFieldsLabel.AutoSize = true;
-            this.mappedSupplierInventoryTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedSupplierInventoryTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedSupplierInventoryTableFieldsLabel.Name = "mappedSupplierInventoryTableFieldsLabel";
             this.mappedSupplierInventoryTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedSupplierInventoryTableFieldsLabel.TabIndex = 57;
@@ -2292,7 +2337,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(203, 44);
+            this.label47.Location = new System.Drawing.Point(295, 44);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(68, 13);
             this.label47.TabIndex = 51;
@@ -2321,10 +2366,11 @@
             // 
             this.supplierInventoryTableName.FormattingEnabled = true;
             this.supplierInventoryTableName.HorizontalScrollbar = true;
-            this.supplierInventoryTableName.Location = new System.Drawing.Point(206, 60);
+            this.supplierInventoryTableName.Location = new System.Drawing.Point(298, 60);
             this.supplierInventoryTableName.Margin = new System.Windows.Forms.Padding(5);
             this.supplierInventoryTableName.Name = "supplierInventoryTableName";
-            this.supplierInventoryTableName.Size = new System.Drawing.Size(180, 134);
+            this.supplierInventoryTableName.Size = new System.Drawing.Size(225, 134);
+            this.supplierInventoryTableName.Sorted = true;
             this.supplierInventoryTableName.TabIndex = 46;
             this.supplierInventoryTableName.SelectedIndexChanged += new System.EventHandler(this.supplierInventoryTableName_SelectedIndexChanged);
             // 
@@ -2335,13 +2381,14 @@
             this.supplierInventoryDataSource.Location = new System.Drawing.Point(28, 60);
             this.supplierInventoryDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.supplierInventoryDataSource.Name = "supplierInventoryDataSource";
-            this.supplierInventoryDataSource.Size = new System.Drawing.Size(172, 134);
+            this.supplierInventoryDataSource.Size = new System.Drawing.Size(225, 134);
+            this.supplierInventoryDataSource.Sorted = true;
             this.supplierInventoryDataSource.TabIndex = 45;
             this.supplierInventoryDataSource.SelectedIndexChanged += new System.EventHandler(this.supplierInventoryDataSource_SelectedIndexChanged);
             // 
             // syncSupplierInventory
             // 
-            this.syncSupplierInventory.Location = new System.Drawing.Point(277, 484);
+            this.syncSupplierInventory.Location = new System.Drawing.Point(343, 484);
             this.syncSupplierInventory.Name = "syncSupplierInventory";
             this.syncSupplierInventory.Size = new System.Drawing.Size(109, 23);
             this.syncSupplierInventory.TabIndex = 50;
@@ -2351,7 +2398,7 @@
             // 
             // emptySupplierInventoryTransferTable
             // 
-            this.emptySupplierInventoryTransferTable.Location = new System.Drawing.Point(26, 484);
+            this.emptySupplierInventoryTransferTable.Location = new System.Drawing.Point(92, 484);
             this.emptySupplierInventoryTransferTable.Name = "emptySupplierInventoryTransferTable";
             this.emptySupplierInventoryTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptySupplierInventoryTransferTable.TabIndex = 47;
@@ -2385,14 +2432,14 @@
             this.linkedSkus.Controls.Add(this.emptyLinkedSkusTransferTable);
             this.linkedSkus.Location = new System.Drawing.Point(4, 22);
             this.linkedSkus.Name = "linkedSkus";
-            this.linkedSkus.Size = new System.Drawing.Size(410, 532);
+            this.linkedSkus.Size = new System.Drawing.Size(544, 532);
             this.linkedSkus.TabIndex = 8;
             this.linkedSkus.Text = "Linked Skus";
             this.linkedSkus.UseVisualStyleBackColor = true;
             // 
             // publishLinkedSkus
             // 
-            this.publishLinkedSkus.Location = new System.Drawing.Point(158, 482);
+            this.publishLinkedSkus.Location = new System.Drawing.Point(275, 482);
             this.publishLinkedSkus.Name = "publishLinkedSkus";
             this.publishLinkedSkus.Size = new System.Drawing.Size(126, 23);
             this.publishLinkedSkus.TabIndex = 137;
@@ -2404,7 +2451,7 @@
             // 
             this.setLinkedSkusUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setLinkedSkusUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setLinkedSkusUsernamePW.Location = new System.Drawing.Point(177, 40);
+            this.setLinkedSkusUsernamePW.Location = new System.Drawing.Point(230, 40);
             this.setLinkedSkusUsernamePW.Name = "setLinkedSkusUsernamePW";
             this.setLinkedSkusUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setLinkedSkusUsernamePW.TabIndex = 138;
@@ -2472,24 +2519,27 @@
             // mappingLinkedSkuFields
             // 
             this.mappingLinkedSkuFields.FormattingEnabled = true;
-            this.mappingLinkedSkuFields.Location = new System.Drawing.Point(206, 280);
+            this.mappingLinkedSkuFields.Location = new System.Drawing.Point(298, 280);
             this.mappingLinkedSkuFields.Name = "mappingLinkedSkuFields";
-            this.mappingLinkedSkuFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingLinkedSkuFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingLinkedSkuFields.Sorted = true;
             this.mappingLinkedSkuFields.TabIndex = 129;
+            this.mappingLinkedSkuFields.DoubleClick += new System.EventHandler(this.mappingLinkedSkuFields_DoubleClick);
             // 
             // linkedSkuFields
             // 
             this.linkedSkuFields.FormattingEnabled = true;
             this.linkedSkuFields.Location = new System.Drawing.Point(26, 280);
             this.linkedSkuFields.Name = "linkedSkuFields";
-            this.linkedSkuFields.Size = new System.Drawing.Size(174, 134);
+            this.linkedSkuFields.Size = new System.Drawing.Size(225, 134);
+            this.linkedSkuFields.Sorted = true;
             this.linkedSkuFields.TabIndex = 128;
             this.linkedSkuFields.SelectedIndexChanged += new System.EventHandler(this.linkedSkuFields_SelectedIndexChanged);
             // 
             // mappedLinkedSkusTableFieldsLabel
             // 
             this.mappedLinkedSkusTableFieldsLabel.AutoSize = true;
-            this.mappedLinkedSkusTableFieldsLabel.Location = new System.Drawing.Point(206, 263);
+            this.mappedLinkedSkusTableFieldsLabel.Location = new System.Drawing.Point(298, 263);
             this.mappedLinkedSkusTableFieldsLabel.Name = "mappedLinkedSkusTableFieldsLabel";
             this.mappedLinkedSkusTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedLinkedSkusTableFieldsLabel.TabIndex = 127;
@@ -2546,7 +2596,7 @@
             // label64
             // 
             this.label64.AutoSize = true;
-            this.label64.Location = new System.Drawing.Point(203, 42);
+            this.label64.Location = new System.Drawing.Point(295, 42);
             this.label64.Name = "label64";
             this.label64.Size = new System.Drawing.Size(68, 13);
             this.label64.TabIndex = 121;
@@ -2575,10 +2625,11 @@
             // 
             this.linkedSkusTableName.FormattingEnabled = true;
             this.linkedSkusTableName.HorizontalScrollbar = true;
-            this.linkedSkusTableName.Location = new System.Drawing.Point(206, 58);
+            this.linkedSkusTableName.Location = new System.Drawing.Point(298, 58);
             this.linkedSkusTableName.Margin = new System.Windows.Forms.Padding(5);
             this.linkedSkusTableName.Name = "linkedSkusTableName";
-            this.linkedSkusTableName.Size = new System.Drawing.Size(180, 134);
+            this.linkedSkusTableName.Size = new System.Drawing.Size(225, 134);
+            this.linkedSkusTableName.Sorted = true;
             this.linkedSkusTableName.TabIndex = 116;
             this.linkedSkusTableName.SelectedIndexChanged += new System.EventHandler(this.linkedSkusTableName_SelectedIndexChanged);
             // 
@@ -2589,13 +2640,14 @@
             this.linkedSkusDataSource.Location = new System.Drawing.Point(28, 58);
             this.linkedSkusDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.linkedSkusDataSource.Name = "linkedSkusDataSource";
-            this.linkedSkusDataSource.Size = new System.Drawing.Size(172, 134);
+            this.linkedSkusDataSource.Size = new System.Drawing.Size(225, 134);
+            this.linkedSkusDataSource.Sorted = true;
             this.linkedSkusDataSource.TabIndex = 115;
             this.linkedSkusDataSource.SelectedIndexChanged += new System.EventHandler(this.linkedSkusDataSource_SelectedIndexChanged);
             // 
             // emptyLinkedSkusTransferTable
             // 
-            this.emptyLinkedSkusTransferTable.Location = new System.Drawing.Point(26, 482);
+            this.emptyLinkedSkusTransferTable.Location = new System.Drawing.Point(143, 482);
             this.emptyLinkedSkusTransferTable.Name = "emptyLinkedSkusTransferTable";
             this.emptyLinkedSkusTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyLinkedSkusTransferTable.TabIndex = 117;
@@ -2630,7 +2682,7 @@
             this.buyerInventory.Controls.Add(this.emptyBuyerInventoryTransferTable);
             this.buyerInventory.Location = new System.Drawing.Point(4, 22);
             this.buyerInventory.Name = "buyerInventory";
-            this.buyerInventory.Size = new System.Drawing.Size(410, 532);
+            this.buyerInventory.Size = new System.Drawing.Size(544, 532);
             this.buyerInventory.TabIndex = 7;
             this.buyerInventory.Text = "Buyer Inventory";
             this.buyerInventory.UseVisualStyleBackColor = true;
@@ -2649,7 +2701,7 @@
             // 
             this.setBuyerInventoryUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
             this.setBuyerInventoryUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.setBuyerInventoryUsernamePW.Location = new System.Drawing.Point(177, 42);
+            this.setBuyerInventoryUsernamePW.Location = new System.Drawing.Point(230, 40);
             this.setBuyerInventoryUsernamePW.Name = "setBuyerInventoryUsernamePW";
             this.setBuyerInventoryUsernamePW.Size = new System.Drawing.Size(23, 17);
             this.setBuyerInventoryUsernamePW.TabIndex = 115;
@@ -2687,7 +2739,7 @@
             // 
             // migrateBuyerInventory
             // 
-            this.migrateBuyerInventory.Location = new System.Drawing.Point(164, 494);
+            this.migrateBuyerInventory.Location = new System.Drawing.Point(229, 494);
             this.migrateBuyerInventory.Name = "migrateBuyerInventory";
             this.migrateBuyerInventory.Size = new System.Drawing.Size(88, 23);
             this.migrateBuyerInventory.TabIndex = 84;
@@ -2727,23 +2779,26 @@
             // mappingBuyerInventoryFields
             // 
             this.mappingBuyerInventoryFields.FormattingEnabled = true;
-            this.mappingBuyerInventoryFields.Location = new System.Drawing.Point(206, 282);
+            this.mappingBuyerInventoryFields.Location = new System.Drawing.Point(298, 282);
             this.mappingBuyerInventoryFields.Name = "mappingBuyerInventoryFields";
-            this.mappingBuyerInventoryFields.Size = new System.Drawing.Size(180, 134);
+            this.mappingBuyerInventoryFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingBuyerInventoryFields.Sorted = true;
             this.mappingBuyerInventoryFields.TabIndex = 80;
+            this.mappingBuyerInventoryFields.DoubleClick += new System.EventHandler(this.mappingBuyerInventoryFields_DoubleClick);
             // 
             // requiredBuyerInventoryFields
             // 
             this.requiredBuyerInventoryFields.FormattingEnabled = true;
             this.requiredBuyerInventoryFields.Location = new System.Drawing.Point(26, 282);
             this.requiredBuyerInventoryFields.Name = "requiredBuyerInventoryFields";
-            this.requiredBuyerInventoryFields.Size = new System.Drawing.Size(174, 134);
+            this.requiredBuyerInventoryFields.Size = new System.Drawing.Size(225, 134);
+            this.requiredBuyerInventoryFields.Sorted = true;
             this.requiredBuyerInventoryFields.TabIndex = 79;
             // 
             // mappedBuyerInventoryTableFieldsLabel
             // 
             this.mappedBuyerInventoryTableFieldsLabel.AutoSize = true;
-            this.mappedBuyerInventoryTableFieldsLabel.Location = new System.Drawing.Point(206, 265);
+            this.mappedBuyerInventoryTableFieldsLabel.Location = new System.Drawing.Point(298, 265);
             this.mappedBuyerInventoryTableFieldsLabel.Name = "mappedBuyerInventoryTableFieldsLabel";
             this.mappedBuyerInventoryTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
             this.mappedBuyerInventoryTableFieldsLabel.TabIndex = 78;
@@ -2790,7 +2845,7 @@
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(203, 44);
+            this.label54.Location = new System.Drawing.Point(295, 44);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(68, 13);
             this.label54.TabIndex = 73;
@@ -2819,10 +2874,11 @@
             // 
             this.buyerInventoryTableName.FormattingEnabled = true;
             this.buyerInventoryTableName.HorizontalScrollbar = true;
-            this.buyerInventoryTableName.Location = new System.Drawing.Point(206, 60);
+            this.buyerInventoryTableName.Location = new System.Drawing.Point(298, 60);
             this.buyerInventoryTableName.Margin = new System.Windows.Forms.Padding(5);
             this.buyerInventoryTableName.Name = "buyerInventoryTableName";
-            this.buyerInventoryTableName.Size = new System.Drawing.Size(180, 134);
+            this.buyerInventoryTableName.Size = new System.Drawing.Size(225, 134);
+            this.buyerInventoryTableName.Sorted = true;
             this.buyerInventoryTableName.TabIndex = 68;
             this.buyerInventoryTableName.SelectedIndexChanged += new System.EventHandler(this.buyerInventoryTableName_SelectedIndexChanged);
             // 
@@ -2833,13 +2889,14 @@
             this.buyerInventoryDataSource.Location = new System.Drawing.Point(28, 60);
             this.buyerInventoryDataSource.Margin = new System.Windows.Forms.Padding(5);
             this.buyerInventoryDataSource.Name = "buyerInventoryDataSource";
-            this.buyerInventoryDataSource.Size = new System.Drawing.Size(172, 134);
+            this.buyerInventoryDataSource.Size = new System.Drawing.Size(225, 134);
+            this.buyerInventoryDataSource.Sorted = true;
             this.buyerInventoryDataSource.TabIndex = 67;
             this.buyerInventoryDataSource.SelectedIndexChanged += new System.EventHandler(this.buyerInventoryDataSource_SelectedIndexChanged);
             // 
             // publishBuyerInventory
             // 
-            this.publishBuyerInventory.Location = new System.Drawing.Point(258, 494);
+            this.publishBuyerInventory.Location = new System.Drawing.Point(323, 494);
             this.publishBuyerInventory.Name = "publishBuyerInventory";
             this.publishBuyerInventory.Size = new System.Drawing.Size(126, 23);
             this.publishBuyerInventory.TabIndex = 72;
@@ -2849,7 +2906,7 @@
             // 
             // emptyBuyerInventoryTransferTable
             // 
-            this.emptyBuyerInventoryTransferTable.Location = new System.Drawing.Point(31, 494);
+            this.emptyBuyerInventoryTransferTable.Location = new System.Drawing.Point(96, 494);
             this.emptyBuyerInventoryTransferTable.Name = "emptyBuyerInventoryTransferTable";
             this.emptyBuyerInventoryTransferTable.Size = new System.Drawing.Size(126, 23);
             this.emptyBuyerInventoryTransferTable.TabIndex = 69;
@@ -2862,13 +2919,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(439, 567);
+            this.ClientSize = new System.Drawing.Size(573, 567);
             this.Controls.Add(this.Tables);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(455, 606);
+            this.MaximumSize = new System.Drawing.Size(589, 606);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(455, 558);
+            this.MinimumSize = new System.Drawing.Size(589, 606);
             this.Name = "UtilityMappings";
             this.Opacity = 0.98D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Globalization;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
+using DataTransfer.AccessDatabase;
+using LinkGreen.Applications.Common.Model;
 
 namespace LinkGreenODBCUtility
 {
     public class Tools
     {
+        private static IList<CountryMapping> _allCountries;
+        private static IList<ProvinceMapping> _allProvinces;
+
         public static string CleanStringForSql(string dirtyString)
         {
             HashSet<char> removeChars = new HashSet<char>("|*<>,=~^();`");
@@ -61,6 +66,26 @@ namespace LinkGreenODBCUtility
         public static string CleanUniqueId(string s)
         {
             return Regex.Replace(s, @"[^a-zA-Z0-9_-]+", string.Empty);
+        }
+
+        public static string CleanCountry(string s, string connectionString)
+        {
+            if (_allCountries == null)
+                _allCountries = new CountryMappingRepository(connectionString).GetAll().ToArray();
+            // Country is already a "destination" country
+            if (_allCountries.Any(c => c.Destination.Equals(s, StringComparison.InvariantCultureIgnoreCase))) return s;
+            // Get map country, otherwise it's "Other"
+            return _allCountries.FirstOrDefault(c => c.Source.Equals(s, StringComparison.InvariantCultureIgnoreCase))?.Destination ?? "Other";
+        }
+
+        public static string CleanProvince(string s, string connectionString)
+        {
+            if (_allProvinces == null)
+                _allProvinces = new ProvinceMappingRepository(connectionString).GetAll().ToArray();
+            // Country is already a "destination" country
+            if (_allProvinces.Any(c => c.Destination.Equals(s, StringComparison.InvariantCultureIgnoreCase))) return s;
+            // Get map country, otherwise it's "Other"
+            return _allProvinces.FirstOrDefault(c => c.Source.Equals(s, StringComparison.InvariantCultureIgnoreCase))?.Destination ?? "Other";
         }
     }
 }
