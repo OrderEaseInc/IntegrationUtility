@@ -24,7 +24,10 @@ namespace LinkGreen.Applications.Common
             Key = ConfigurationManager.AppSettings["ApiKey"];
             BaseUrl = ConfigurationManager.AppSettings["BaseUrl"];
             OrderStatuses = ConfigurationManager.AppSettings["OrderStatuses"];
-            Client = new RestClient(BaseUrl);
+            Client = new RestClient(BaseUrl) {
+                Timeout = (int) new TimeSpan(0, 2, 0).TotalMilliseconds,
+                ReadWriteTimeout = (int) new TimeSpan(0, 2, 0).TotalMilliseconds
+            };
         }
 
         public static OrderSummary GetLastOrderNotDownloaded()
@@ -226,7 +229,8 @@ namespace LinkGreen.Applications.Common
             request.AddJsonBody(body);
             var response = Client.Execute<ApiResult<SupplierContact>>(request);
 
-            if (response.StatusCode != HttpStatusCode.OK) {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
                 throw new Exception("Error updating Supplier contact info");
             }
         }
@@ -235,14 +239,16 @@ namespace LinkGreen.Applications.Common
         {
             var requestUrl = $"buyerinventoryservice/rest/linkitem/{Key}";
             var request = new RestRequest(requestUrl, Method.POST);
-            var body = new {
+            var body = new
+            {
                 BuyerSKU = buyerLinkedSku,
                 SupplierId = inventory.SupplierId.Value,
                 SupplierSKU = inventory.SupplierSku
             };
             request.AddJsonBody(body);
             var response = Client.Execute<ApiResult<BuyerInventoryLinkItemResult>>(request);
-            if (response.StatusCode != HttpStatusCode.OK) {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
                 throw new Exception("Error linking the buyer inventory item");
             }
         }
@@ -380,10 +386,10 @@ namespace LinkGreen.Applications.Common
 
             var response = Client.Execute(request);
 
-            
+
 
             if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error inviting buyers");
+                throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
 
             return response.Content;
         }

@@ -11,7 +11,7 @@ namespace LinkGreenODBCUtility
 {
     class Products : IOdbcTransfer
     {
-        public string ConnectionString = $"DSN={Settings.DsnName}";
+        // public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
 
         public Products()
@@ -26,23 +26,23 @@ namespace LinkGreenODBCUtility
 
         public bool Empty()
         {
-            var productInventoryRepository = new ProductInventoryRepository(ConnectionString);
+            var productInventoryRepository = new ProductInventoryRepository(Settings.ConnectionString);
             productInventoryRepository.ClearAll();
             Logger.Instance.Info("Products LinkGreen transfer table emptied.");
-            Logger.Instance.Debug($"{Settings.DsnName}.Products emptied.");
+            Logger.Instance.Debug($"{Settings.ConnectionString}.Products emptied.");
             return true;
         }
 
         public void SaveTableMapping(string dsnName, string tableName)
         {
-            var productRepository = new ProductInventoryRepository(ConnectionString);
+            var productRepository = new ProductInventoryRepository(Settings.ConnectionString);
             productRepository.SaveTableMapping(dsnName, tableName, "Products");
             Logger.Instance.Debug($"Products table mapping saved: (DSN: {dsnName}, Table: {tableName})");
         }
 
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
-            var productRepository = new ProductInventoryRepository(ConnectionString);
+            var productRepository = new ProductInventoryRepository(Settings.ConnectionString);
             productRepository.SaveFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Products field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
@@ -63,7 +63,7 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var products = new ProductInventoryRepository(ConnectionString).GetAll().ToList();
+                var products = new ProductInventoryRepository(Settings.ConnectionString).GetAll().ToList();
                 var existingCategories = WebServiceHelper.GetAllCategories();
 
                 var existingInventory = WebServiceHelper.GetAllInventory();
@@ -80,7 +80,7 @@ namespace LinkGreenODBCUtility
                         Inactive = product.Inactive,
                         QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
                     };
-                    
+
                     bool updateCategories = Settings.GetUpdateCategories();
                     //lets check if this item already exists, if so just update qty, else
                     var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
@@ -91,7 +91,7 @@ namespace LinkGreenODBCUtility
                     {
                         if (existingCategory == null)
                         {
-                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
                             existingCategories.Add(existingCategory);
                         }
                     }
@@ -105,16 +105,16 @@ namespace LinkGreenODBCUtility
                         }
                     }
 
-                    
+
                     if (existingCategory != null && (updateCategories || existing == null))
                     {
-                         request.CategoryId = existingCategory.Id;
+                        request.CategoryId = existingCategory.Id;
                     }
                     else if (existing != null)
                     {
                         request.CategoryId = existing.CategoryId;
                     }
-                    
+
                     request.NetPrice = product.NetPrice;
                     request.OpenSizeDescription = product.OpenSizeDescription ?? "";
                     request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";

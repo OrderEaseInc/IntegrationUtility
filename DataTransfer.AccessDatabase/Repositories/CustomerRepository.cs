@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 using LinkGreen.Applications.Common.Model;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class CustomerRepository : AdoRepository<CompanyAndRelationshipResult>
+    public class CustomerRepository : OleDbRepository<CompanyAndRelationshipResult>
     {
         public CustomerRepository(string connectionString) : base(connectionString)
         {
@@ -26,7 +26,7 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName} WHERE Active = True"))
+            using (var command = new OleDbCommand($"SELECT * FROM {TableName} WHERE Active = True"))
             {
                 return GetRecords(command);
             }
@@ -36,7 +36,7 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}"))
             {
                 ExecuteCommand(command);
             }
@@ -44,7 +44,7 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
             {
                 ExecuteCommand(command);
             }
@@ -128,6 +128,13 @@ namespace DataTransfer.AccessDatabase
             return province;
         }
 
+        private object CleanNull(object value)
+        {
+            if (value == null) return value;
+
+            return (value.ToString().Trim().ToLower().Equals("null") ? null : value) ?? string.Empty;
+        }
+
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
         protected override CompanyAndRelationshipResult PopulateRecord(dynamic reader)
         {
@@ -137,27 +144,27 @@ namespace DataTransfer.AccessDatabase
                 {
                     //RelationshipId = reader.RelationshipId ?? null,
                     //CompanyId = reader.CompanyId ?? null,
-                    ContactName = reader.ContactName ?? string.Empty,
-                    ContactPhone = reader.ContactPhone ?? string.Empty,
-                    ContactEmail = reader.ContactEmail ?? string.Empty,
-                    OurCompanyNumber = reader.OurCompanyNumber ?? string.Empty,
-                    OurBillToNumber = reader.OurBillToNumber ?? string.Empty,
-                    SerializedTaxInfo = reader.SerializedTaxInfo ?? string.Empty,
-                    Name = reader.Name ?? string.Empty,
-                    Address1 = reader.Address1 ?? string.Empty,
-                    Address2 = reader.Address2 ?? string.Empty,
-                    City = reader.City ?? string.Empty,
-                    ProvState = reader.ProvState ?? string.Empty,
-                    PostalCode = reader.PostalCode ?? string.Empty,
-                    Country = reader.Country ?? string.Empty,
-                    FormattedPhone1 = reader.FormattedPhone1 ?? string.Empty,
-                    FormattedPhone2 = reader.FormattedPhone2 ?? string.Empty,
-                    Email1 = reader.Email1 ?? string.Empty,
-                    Email2 = reader.Email2 ?? string.Empty,
-                    Contact1 = reader.Contact1 ?? string.Empty,
-                    Contact2 = reader.Contact2 ?? string.Empty,
-                    Web = reader.Web ?? string.Empty,
-                    BuyerGroup = reader.BuyerGroup ?? string.Empty 
+                    ContactName = CleanNull(reader.ContactName),
+                    ContactPhone = CleanNull(reader.ContactPhone),
+                    ContactEmail = CleanNull(reader.ContactEmail),
+                    OurCompanyNumber = CleanNull(reader.OurCompanyNumber),
+                    OurBillToNumber = CleanNull(reader.OurBillToNumber),
+                    SerializedTaxInfo = CleanNull(reader.SerializedTaxInfo),
+                    Name = CleanNull(reader.Name),
+                    Address1 = CleanNull(reader.Address1),
+                    Address2 = CleanNull(reader.Address2),
+                    City = CleanNull(reader.City),
+                    ProvState = CleanNull(reader.ProvState),
+                    PostalCode = CleanNull(reader.PostalCode),
+                    Country = CleanNull(reader.Country),
+                    FormattedPhone1 = CleanNull(reader.FormattedPhone1),
+                    FormattedPhone2 = CleanNull(reader.FormattedPhone2),
+                    Email1 = CleanNull(reader.Email1),
+                    Email2 = CleanNull(reader.Email2),
+                    Contact1 = CleanNull(reader.Contact1),
+                    Contact2 = CleanNull(reader.Contact2),
+                    Web = CleanNull(reader.Web),
+                    BuyerGroup = CleanNull(reader.BuyerGroup)
                 };
             }
             catch (RuntimeBinderException exception)

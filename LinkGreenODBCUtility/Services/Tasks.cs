@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using DataTransfer.AccessDatabase;
@@ -20,8 +20,9 @@ namespace LinkGreenODBCUtility
 
         public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval})")
+            // var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval})")
             {
                 Connection = _connection
             };
@@ -40,7 +41,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -49,8 +50,8 @@ namespace LinkGreenODBCUtility
         public bool SetStatus(string taskName, string status)
         {
             var now = DateTime.Now.ToString();
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"UPDATE Tasks SET Status = '{status}' WHERE TaskName = '{taskName}'")
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand($"UPDATE Tasks SET Status = '{status}' WHERE TaskName = '{taskName}'")
             {
                 Connection = _connection
             };
@@ -69,7 +70,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -79,8 +80,8 @@ namespace LinkGreenODBCUtility
         {
             var dateNow = DateTime.Now;
             var now = dateNow.ToString();
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"UPDATE Tasks SET ExecutionStartDateTime = '{now}' WHERE TaskName = '{taskName}'")
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand($"UPDATE Tasks SET ExecutionStartDateTime = '{now}' WHERE TaskName = '{taskName}'")
             {
                 Connection = _connection
             };
@@ -99,7 +100,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -108,8 +109,8 @@ namespace LinkGreenODBCUtility
         public bool EndTask(string taskName)
         {
             var now = DateTime.Now.ToString();
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand()
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand()
             {
                 Connection = _connection
             };
@@ -138,7 +139,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -146,8 +147,8 @@ namespace LinkGreenODBCUtility
 
         public bool DeleteTask(string taskName)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
             {
                 Connection = _connection
             };
@@ -166,7 +167,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -174,13 +175,13 @@ namespace LinkGreenODBCUtility
 
         public IEnumerable<Task> GetAll()
         {
-            var TaskRepo = new TaskRepository($"DSN={Settings.DsnName}");
+            var TaskRepo = new TaskRepository(Settings.ConnectionString);
             return TaskRepo.GetAll();
         }
 
         public Task GetTask(string taskName)
         {
-            var TaskRepo = new TaskRepository($"DSN={Settings.DsnName}");
+            var TaskRepo = new TaskRepository(Settings.ConnectionString);
             return TaskRepo.GetTask(taskName);
         }
 
@@ -202,10 +203,11 @@ namespace LinkGreenODBCUtility
                 {
                     task = Task;
                 }
-                var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-                var command = new OdbcCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", _connection);
+
+                var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+                var command = new OleDbCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", _connection);
                 _connection.Open();
-                OdbcDataReader reader = command.ExecuteReader();
+                var reader = command.ExecuteReader();
                 try
                 {
                     while (reader.Read())
@@ -218,7 +220,7 @@ namespace LinkGreenODBCUtility
                 finally
                 {
                     reader.Close();
-                    ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                    _connection.Close();
                 }
             }
 

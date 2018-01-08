@@ -9,7 +9,7 @@ namespace LinkGreenODBCUtility
 {
     class PriceLevelPrices : IOdbcTransfer
     {
-        public string ConnectionString = $"DSN={Settings.DsnName}";
+        //public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
 
         public PriceLevelPrices()
@@ -24,21 +24,21 @@ namespace LinkGreenODBCUtility
 
         public bool Empty()
         {
-            var productPriceRepository = new ProductPriceRepository(ConnectionString);
+            var productPriceRepository = new ProductPriceRepository(Settings.ConnectionString);
             productPriceRepository.ClearAll();
             return true;
         }
 
         public void SaveTableMapping(string dsnName, string tableName)
         {
-            var productPriceRepository = new ProductPriceRepository(ConnectionString);
+            var productPriceRepository = new ProductPriceRepository(Settings.ConnectionString);
             productPriceRepository.SaveTableMapping(dsnName, tableName, "PriceLevelPrices");
             Logger.Instance.Debug($"Product Pricing table mapping saved: (DSN: {dsnName}, Table: {tableName})");
         }
 
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
-            var productPriceRepository = new ProductPriceRepository(ConnectionString);
+            var productPriceRepository = new ProductPriceRepository(Settings.ConnectionString);
             productPriceRepository.SaveFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Product Pricing field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
@@ -59,7 +59,7 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var pricesToImport = new ProductPriceRepository(ConnectionString).GetAll().ToList();
+                var pricesToImport = new ProductPriceRepository(Settings.ConnectionString).GetAll().ToList();
                 var existingInventory = WebServiceHelper.GetAllInventory();
 
                 var prices = pricesToImport;

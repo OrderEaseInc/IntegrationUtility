@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using LinkGreen.Applications.Common.Model;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class BuyerInventoryRepository : AdoRepository<BuyerInventory>
+    public class BuyerInventoryRepository : OleDbRepository<BuyerInventory>
     {
         private const string TableName = "BuyerInventories";
 
@@ -15,29 +15,34 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}"))
+            {
                 ExecuteCommand(command);
             }
         }
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
                 ExecuteCommand(command);
             }
         }
 
         public IEnumerable<BuyerInventory> GetAll()
         {
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"SELECT * FROM {TableName}"))
+            {
                 return GetRecords(command);
             }
         }
 
         protected override BuyerInventory PopulateRecord(dynamic reader)
         {
-            try {
-                return new BuyerInventory {
+            try
+            {
+                return new BuyerInventory
+                {
                     Id = reader.Id,
                     Category = reader.Category,
                     Description = reader.Description,
@@ -63,7 +68,9 @@ namespace DataTransfer.AccessDatabase
                     SupplierId = reader.SupplierId,
                     SupplierSku = reader.SupplierSku
                 };
-            } catch (RuntimeBinderException exception) {
+            }
+            catch (RuntimeBinderException exception)
+            {
                 Console.WriteLine(exception);
                 throw new InvalidDataException("One of the fields in the source ODBC database has an invalid column type or value", exception);
             }

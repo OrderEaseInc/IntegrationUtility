@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +13,11 @@ namespace LinkGreenODBCUtility
 {
     public static class Settings
     {
-        public static string DsnName = "LinkGreenDataTransfer";
+        public static string ConnectViaDsnName = "LinkGreenDataTransfer";
         public static bool DebugMode = false;
+        private static readonly string LogDbName = AppDomain.CurrentDomain.BaseDirectory + $"{Logger._loggerDsnName}.mdb";
+        public static readonly string ConnectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LinkGreenDataTransfer.mdb;Persist Security Info=True";
+     
 
         public static void Init()
         {
@@ -47,19 +50,23 @@ namespace LinkGreenODBCUtility
 
         public static bool TryConnect()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            try
+            //var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                _connection.Open();
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"Could not connect to the DSN {DsnName}: {e.Message}");
-                return false;
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                var connection = cInstance.GetConnection();
+                try
+                {
+                    connection.Open();
+                }
+                catch (OleDbException e)
+                {
+                    Logger.Instance.Error($"Could not connect to the DSN {ConnectionString}: {e.Message}");
+                    return false;
+                }
+                finally
+                {
+                    cInstance.CloseConnection();
+                }
             }
 
             return true;
@@ -67,39 +74,42 @@ namespace LinkGreenODBCUtility
 
         public static string GetApiKey()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                while (reader.Read())
+                var _connection = cInstance.GetConnection();
+                var command = new OleDbCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
+                _connection.Open();
+                var reader = command.ExecuteReader();
+                try
                 {
-//                    if (!string.IsNullOrEmpty(reader[0].ToString()))
-//                    {
-//                        return reader[0].ToString();
-//                    }
-                    return reader[0].ToString();
+                    while (reader.Read())
+                    {
+                        //                    if (!string.IsNullOrEmpty(reader[0].ToString()))
+                        //                    {
+                        //                        return reader[0].ToString();
+                        //                    }
+                        return reader[0].ToString();
+                    }
+
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    string apiKey = config.AppSettings.Settings["ApiKey"].Value;
+
+                    if (string.IsNullOrEmpty(apiKey))
+                    {
+                        Logger.Instance.Warning($"Retrieved a null ApiKey.");
+                    }
+
+                    return apiKey;
                 }
-
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                string apiKey = config.AppSettings.Settings["ApiKey"].Value;
-
-                if (string.IsNullOrEmpty(apiKey))
+                catch (Exception e)
                 {
-                    Logger.Instance.Warning($"Retrieved a null ApiKey.");
+                    Logger.Instance.Error($"An error occurred while retrieving the ApiKey: {e.Message}");
                 }
-
-                return apiKey;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occurred while retrieving the ApiKey: {e.Message}");
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                finally
+                {
+                    reader.Close();
+                    cInstance.CloseConnection();
+                }
             }
 
             return null;
@@ -107,65 +117,69 @@ namespace LinkGreenODBCUtility
 
         public static void SaveApiKey(string apiKey)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"UPDATE `Settings` SET `ApiKey` = '{apiKey}' WHERE `ID` = 1")
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                Connection = _connection
-            };
+                var _connection = cInstance.GetConnection();
+                var command = new OleDbCommand($"UPDATE `Settings` SET `ApiKey` = '{apiKey}' WHERE `ID` = 1",
+                    _connection);
 
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
+                _connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
 
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["ApiKey"].Value = apiKey;
-                config.Save(ConfigurationSaveMode.Modified);
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    config.AppSettings.Settings["ApiKey"].Value = apiKey;
+                    config.Save(ConfigurationSaveMode.Modified);
 
-                Logger.Instance.Debug($"ApiKey saved: '{apiKey}'");
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while updating the ApiKey.");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                    Logger.Instance.Debug($"ApiKey saved: '{apiKey}'");
+                }
+                catch (Exception e)
+                {
+                    Logger.Instance.Error($"An error occured while updating the ApiKey.");
+                }
+                finally
+                {
+                    cInstance.CloseConnection();
+                }
             }
         }
 
         public static string GetInstallationId()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT `InstallationId` FROM `Settings` WHERE `Id` = 1", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                string installationId = null;
-                while (reader.Read())
+                var _connection = cInstance.GetConnection();
+                var command = new OleDbCommand($"SELECT `InstallationId` FROM `Settings` WHERE `Id` = 1", _connection);
+                _connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
+                try
                 {
-                    installationId = reader[0].ToString();
-                }
+                    string installationId = null;
+                    while (reader.Read())
+                    {
+                        installationId = reader[0].ToString();
+                    }
 
-                if (string.IsNullOrEmpty(installationId))
+                    if (string.IsNullOrEmpty(installationId))
+                    {
+                        var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                        installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
+                            ? config.AppSettings.Settings["InstallationId"].Value
+                            : null;
+                    }
+
+                    return installationId;
+                }
+                catch (Exception e)
                 {
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
-                        ? config.AppSettings.Settings["InstallationId"].Value
-                        : null;
+                    Logger.Instance.Error($"An error occured while retrieving the InstallationId: {e.Message}");
                 }
-
-                return installationId;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while retrieving the InstallationId: {e.Message}");
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                finally
+                {
+                    reader.Close();
+                    cInstance.CloseConnection();
+                }
             }
 
             return null;
@@ -173,64 +187,68 @@ namespace LinkGreenODBCUtility
 
         public static void SaveInstallationId()
         {
-            Guid guid = Guid.NewGuid();
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"UPDATE `Settings` SET `InstallationId` = '{guid}' WHERE `ID` = 1")
+            var guid = Guid.NewGuid();
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                Connection = _connection
-            };
+                var _connection = cInstance.GetConnection();
+                var command = new OleDbCommand($"UPDATE `Settings` SET `InstallationId` = '{guid}' WHERE `ID` = 1", _connection);
 
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
+                _connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
 
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["InstallationId"].Value = guid.ToString();
-                config.Save(ConfigurationSaveMode.Modified);
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    config.AppSettings.Settings["InstallationId"].Value = guid.ToString();
+                    config.Save(ConfigurationSaveMode.Modified);
 
-                Logger.Instance.Debug($"InstallationId set to: {config.AppSettings.Settings["InstallationId"].Value}");
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while creating the InstallationId: {e.Message}");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                    Logger.Instance.Debug(
+                        $"InstallationId set to: {config.AppSettings.Settings["InstallationId"].Value}");
+                }
+                catch (Exception e)
+                {
+                    Logger.Instance.Error($"An error occured while creating the InstallationId: {e.Message}");
+                }
+                finally
+                {
+                    cInstance.CloseConnection();
+                }
             }
         }
 
         public static bool GetUpdateCategories()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
-            _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
-            try
+            using (var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection())
             {
-                bool? updateCategories = null;
-                while (reader.Read())
+                var command = new OleDbCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
+                _connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
+                try
                 {
-                    updateCategories = Convert.ToInt32(reader[0].ToString()) == 1;
-                }
+                    bool? updateCategories = null;
+                    while (reader.Read())
+                    {
+                        updateCategories = Convert.ToInt32(reader[0].ToString()) == 1;
+                    }
 
-                if (updateCategories == null)
+                    if (updateCategories == null)
+                    {
+                        var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                        updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
+                    }
+
+                    return updateCategories ?? true;
+                }
+                catch (Exception e)
                 {
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
+                    Logger.Instance.Error(
+                        $"An error occurred while retrieving the setting UpdateCategories: {e.Message}");
                 }
-
-                return updateCategories ?? true;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occurred while retrieving the setting UpdateCategories: {e.Message}");
-            }
-            finally
-            {
-                reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                finally
+                {
+                    reader.Close();
+                    _connection.Close();
+                }
             }
 
             return true;
@@ -238,8 +256,9 @@ namespace LinkGreenODBCUtility
 
         public static void SaveUpdateCategories(string updateCategories)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
+
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var command = new OleDbCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
             {
                 Connection = _connection
             };
@@ -261,16 +280,16 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
         }
 
         public static bool GetSanitizeLog()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var command = new OleDbCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
+            OleDbDataReader reader = command.ExecuteReader();
             try
             {
                 bool? sanitizeLog = null;
@@ -294,7 +313,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
 
             return false;
@@ -302,10 +321,10 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSandboxMode()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var command = new OleDbCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
             _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
+            OleDbDataReader reader = command.ExecuteReader();
             try
             {
                 bool? sandboxMode = null;
@@ -329,7 +348,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
 
             return true;
@@ -337,8 +356,8 @@ namespace LinkGreenODBCUtility
 
         public static void SaveSandboxMode(string sandboxMode)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var command = new OleDbCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
             {
                 Connection = _connection
             };
@@ -360,7 +379,7 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
         }
 
@@ -374,7 +393,7 @@ namespace LinkGreenODBCUtility
                 if (user != null)
                 {
                     config.AppSettings.Settings["ClientId"].Value = user.CompanyId.ToString();
-//                    config.AppSettings.Settings["ClientName"].Value = user.CompanyName;
+                    //                    config.AppSettings.Settings["ClientName"].Value = user.CompanyName;
                     config.AppSettings.Settings["UserName"].Value = user.FullName;
                     config.AppSettings.Settings["EmailAddress"].Value = user.EmailAddress;
                     config.AppSettings.Settings["PhoneNumber"].Value = user.FormattedPhone;

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using DataTransfer.AccessDatabase.Models;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class TaskRepository : AdoRepository<Task>
+    public class TaskRepository : OleDbRepository<Task>
     {
         public TaskRepository(string connectionString) : base(connectionString)
         {
@@ -25,7 +25,7 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT " +
+            using (var command = new OleDbCommand($"SELECT " +
                                                  $"TaskName, " +
                                                  $"TaskDisplayName, " +
                                                  $"StartDateTime, " +
@@ -42,7 +42,7 @@ namespace DataTransfer.AccessDatabase
 
         public Task GetTask(string taskName)
         {
-            using (var command = new OdbcCommand($"SELECT " +
+            using (var command = new OleDbCommand($"SELECT " +
                                                  $"TaskName, " +
                                                  $"TaskDisplayName, " +
                                                  $"StartDateTime, " +
@@ -61,7 +61,7 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (var command = new OdbcCommand($"DELETE * FROM {TableName}"))
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}"))
             {
                 ExecuteCommand(command);
             }

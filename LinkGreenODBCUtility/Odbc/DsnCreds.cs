@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +12,8 @@ namespace LinkGreenODBCUtility
 {
     public static class DsnCreds
     {
-        private static string DsnName = Settings.DsnName;
+        //private static string DsnName = Settings.DsnName;
+        private static string ConnectionString = Settings.ConnectionString;
 
         public static void SaveDsnCreds(string dsn, string user, string pass)
         {
@@ -21,12 +22,13 @@ namespace LinkGreenODBCUtility
 
             pass = Encryption.Encrypt(pass, encryptionKey);
 
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var deleteCommand = new OdbcCommand($"DELETE * FROM DsnCredentials WHERE DsnName = '{dsn}' AND Username = '{user}'")
+            // var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var deleteCommand = new OleDbCommand($"DELETE * FROM DsnCredentials WHERE DsnName = '{dsn}' AND Username = '{user}'")
             {
                 Connection = _connection
             };
-            var insertCommand = new OdbcCommand($"INSERT INTO DsnCredentials (DsnName, Username, Password) VALUES ('{dsn}', '{user}', '{pass}')")
+            var insertCommand = new OleDbCommand($"INSERT INTO DsnCredentials (DsnName, Username, Password) VALUES ('{dsn}', '{user}', '{pass}')")
             {
                 Connection = _connection
             };
@@ -35,7 +37,7 @@ namespace LinkGreenODBCUtility
             try
             {
                 deleteCommand.ExecuteNonQuery();
-                insertCommand.ExecuteNonQuery(); 
+                insertCommand.ExecuteNonQuery();
             }
             catch (Exception e)
             {
@@ -43,16 +45,17 @@ namespace LinkGreenODBCUtility
             }
             finally
             {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
         }
 
         public static Credentials GetDsnCreds(string dsn)
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"SELECT Username, Password FROM DsnCredentials WHERE DsnName = '{dsn}'", _connection);
+            // var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
+            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
+            var command = new OleDbCommand($"SELECT Username, Password FROM DsnCredentials WHERE DsnName = '{dsn}'", _connection);
             _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
             try
             {
                 string username = null;
@@ -83,7 +86,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                _connection.Close();
             }
 
             return null;

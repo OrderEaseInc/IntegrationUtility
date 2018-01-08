@@ -14,7 +14,7 @@ namespace LinkGreenODBCUtility
     public class Mapping
     {
         public string DsnName;
-        public static string TransferDsnName = Settings.DsnName;
+        public static string TransferDsnName = Settings.ConnectViaDsnName;
         public bool _validFields = true;
         public bool _validPushFields = true;
         public bool _validUpdateFields;
@@ -449,7 +449,7 @@ namespace LinkGreenODBCUtility
         {
             if (string.IsNullOrEmpty(dsnName))
             {
-                dsnName = Settings.DsnName;
+                dsnName = Settings.ConnectViaDsnName;
             }
             var _connection = ConnectionInstance.Instance.GetConnection($"DSN={dsnName}");
             Credentials creds = DsnCreds.GetDsnCreds(dsnName);
@@ -581,12 +581,12 @@ namespace LinkGreenODBCUtility
                             {
                                 _conn.Open();
                                 nukeCommand.ExecuteNonQuery();
-                                Logger.Instance.Debug($"{Settings.DsnName}.{tableName} nuked.");
+                                Logger.Instance.Debug($"{Settings.ConnectViaDsnName}.{tableName} nuked.");
                             }
                         }
                         catch (OdbcException e)
                         {
-                            Logger.Instance.Error($"Failed to nuke {Settings.DsnName}{tableName}: {e.Message}");
+                            Logger.Instance.Error($"Failed to nuke {Settings.ConnectViaDsnName}{tableName}: {e.Message}");
                         }
 
                         while (reader.Read())
@@ -607,7 +607,7 @@ namespace LinkGreenODBCUtility
                                     }
                                     if (string.IsNullOrEmpty(text))
                                     {
-                                        text = "'null'";
+                                        text = "NULL";
                                         readerColumns.Add(text);
                                     }
                                     else
@@ -639,7 +639,7 @@ namespace LinkGreenODBCUtility
                                 }
                                 catch (OdbcException e)
                                 {
-                                    Logger.Instance.Error($"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                    Logger.Instance.Error($"Failed to insert record into {Settings.ConnectViaDsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
                                 }
 
                             }
@@ -647,11 +647,11 @@ namespace LinkGreenODBCUtility
 
                         if (rowCount > 0)
                         {
-                            Logger.Instance.Debug($"{rowCount} records inserted into {Settings.DsnName}.{tableName}.");
+                            Logger.Instance.Debug($"{rowCount} records inserted into {Settings.ConnectViaDsnName}.{tableName}.");
                         }
                         else
                         {
-                            Logger.Instance.Warning($"No records inserted into {Settings.DsnName}.{tableName}.");
+                            Logger.Instance.Warning($"No records inserted into {Settings.ConnectViaDsnName}.{tableName}.");
                         }
 
                         return true;
@@ -871,7 +871,7 @@ namespace LinkGreenODBCUtility
                                                 catch (OdbcException e)
                                                 {
                                                     Logger.Instance.Error(
-                                                        $"Failed to insert record into {Settings.DsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                                        $"Failed to insert record into {Settings.ConnectViaDsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
                                                 }
                                                 finally
                                                 {

@@ -9,7 +9,7 @@ namespace LinkGreenODBCUtility
     public partial class UtilityMappings : Form
     {
         public static Mapping Mapping = new Mapping();
-        public string DsnName = Settings.DsnName;
+        public string DsnName = Settings.ConnectViaDsnName;
 
         public UtilityMappings()
         {
@@ -22,7 +22,7 @@ namespace LinkGreenODBCUtility
             List<string> odbcDataSourceNames = GetOdbcDataSources();
             foreach (var sourceName in odbcDataSourceNames)
             {
-                if (sourceName != Settings.DsnName)
+                if (sourceName != Settings.ConnectViaDsnName)
                 {
                     categoriesDataSource.Items.Add(sourceName);
                     customersDataSource.Items.Add(sourceName);

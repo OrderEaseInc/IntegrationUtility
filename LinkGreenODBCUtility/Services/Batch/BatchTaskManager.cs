@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +21,10 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetCommandsByTrigger()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var command = new OdbcCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", _connection);
+            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
+            var command = new OleDbCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", _connection);
             _connection.Open();
-            OdbcDataReader reader = command.ExecuteReader();
+            var reader = command.ExecuteReader();
             try
             {
                 List<string> commands = new List<string>();
@@ -38,7 +38,7 @@ namespace LinkGreenODBCUtility
             finally
             {
                 reader.Close();
-                ConnectionInstance.CloseConnection($"DSN={Settings.DsnName}");
+                _connection.Close();
             }
         }
     }
