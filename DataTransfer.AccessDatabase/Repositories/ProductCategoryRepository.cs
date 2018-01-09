@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class ProductCategoryRepository : AdoRepository<ProductCategory>
+    public class ProductCategoryRepository : OleDbRepository<ProductCategory>
     {
         public ProductCategoryRepository(string connectionString) : base(connectionString)
         {
@@ -25,7 +25,7 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OdbcCommand($"SELECT * FROM `{TableName}`"))
+            using (var command = new OleDbCommand($"SELECT * FROM `{TableName}`"))
             {
                 return GetRecords(command);
             }
@@ -35,7 +35,7 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (var command = new OdbcCommand($"DELETE * FROM `{TableName}`"))
+            using (var command = new OleDbCommand($"DELETE * FROM `{TableName}`"))
             {
                 ExecuteCommand(command);
             }
@@ -43,7 +43,7 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (var command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
             {
                 ExecuteCommand(command);
             }

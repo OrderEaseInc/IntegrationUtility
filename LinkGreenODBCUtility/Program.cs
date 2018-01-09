@@ -20,19 +20,19 @@ namespace LinkGreenODBCUtility
         }
 
         // Use this Init if adding the DSN is handled during installation setup
-//        private static void Init()
-//        {
-//            if (Settings.TryConnect())
-//            {
-//                Application.EnableVisualStyles();
-//                Application.SetCompatibleTextRenderingDefault(false);
-//                Application.Run(new UtilityDashboard());
-//            }
-//            else
-//            {
-//                MessageBox.Show("Failed to connect to LinkGreenDataTransfer DSN", "Connection Failed");
-//            }
-//        }
+        //        private static void Init()
+        //        {
+        //            if (Settings.TryConnect())
+        //            {
+        //                Application.EnableVisualStyles();
+        //                Application.SetCompatibleTextRenderingDefault(false);
+        //                Application.Run(new UtilityDashboard());
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("Failed to connect to LinkGreenDataTransfer DSN", "Connection Failed");
+        //            }
+        //        }
 
         private static void Init()
         {
@@ -46,8 +46,8 @@ namespace LinkGreenODBCUtility
             //                Environment.Exit(0);
             //            }
 
-            string dsnName = Settings.DsnName;
-            string dsPath = AppDomain.CurrentDomain.BaseDirectory + $"{Settings.DsnName}.mdb";
+            string dsnName = Settings.ConnectViaDsnName;
+            string dsPath = AppDomain.CurrentDomain.BaseDirectory + $"{Settings.ConnectViaDsnName}.mdb";
             bool success = Utils.CreateDataSource((IntPtr)0,
                 ODBC_Request_Modes.ODBC_ADD_SYS_DSN,
                 "Microsoft Access Driver (*.mdb)\0",
@@ -75,12 +75,12 @@ namespace LinkGreenODBCUtility
                 }
                 else
                 {
-                    MessageBox.Show($"Failed to connect to {Settings.DsnName} DSN", "Connection Failed");
+                    MessageBox.Show($"Failed to connect to {Settings.ConnectionString} DSN", "Connection Failed");
                 }
             }
             else
             {
-                MessageBox.Show($"Failed to create {Settings.DsnName} DSN", "DSN Creation Failed");
+                MessageBox.Show($"Failed to create {Settings.ConnectionString} DSN", "DSN Creation Failed");
             }
         }
 

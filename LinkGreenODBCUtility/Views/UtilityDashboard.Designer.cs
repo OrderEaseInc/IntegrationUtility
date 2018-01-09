@@ -41,6 +41,7 @@
             this.syncPriceLevels = new System.Windows.Forms.Button();
             this.syncPricing = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.mainMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -163,12 +164,21 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
+            // lblStatus
+            // 
+            this.lblStatus.Location = new System.Drawing.Point(151, 50);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(221, 53);
+            this.lblStatus.TabIndex = 7;
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // UtilityDashboard
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 226);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.syncPricing);
             this.Controls.Add(this.syncPriceLevels);
             this.Controls.Add(this.syncProducts);
@@ -208,5 +218,6 @@
         private System.Windows.Forms.Button syncPriceLevels;
         private System.Windows.Forms.Button syncPricing;
         private System.Windows.Forms.ToolStripMenuItem taskManagerToolStripMenuItem;
+        private System.Windows.Forms.Label lblStatus;
     }
 }

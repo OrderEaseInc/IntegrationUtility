@@ -10,12 +10,12 @@ namespace LinkGreenODBCUtility
 {
     class Customers : IOdbcTransfer
     {
-        public string ConnectionString = $"DSN={Settings.DsnName}";
+        //public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
 
         public Customers()
         {
-            
+
         }
 
         public Customers(string clientDsnName)
@@ -25,23 +25,23 @@ namespace LinkGreenODBCUtility
 
         public bool Empty()
         {
-            var customerRepository = new CustomerRepository(ConnectionString);
+            var customerRepository = new CustomerRepository(Settings.ConnectionString);
             customerRepository.ClearAll();
             Logger.Instance.Info("Customers LinkGreen transfer table emptied.");
-            Logger.Instance.Debug($"{Settings.DsnName}.Customers emptied.");
+            Logger.Instance.Debug($"{Settings.ConnectionString}.Customers emptied.");
             return true;
         }
 
         public void SaveTableMapping(string dsnName, string tableName)
         {
-            var customerRepository = new CustomerRepository(ConnectionString);
+            var customerRepository = new CustomerRepository(Settings.ConnectionString);
             customerRepository.SaveTableMapping(dsnName, tableName, "Customers");
             Logger.Instance.Debug($"Customers table mapping saved: (DSN: {dsnName}, Table: {tableName})");
         }
 
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
-            var categoryRepository = new CustomerRepository(ConnectionString);
+            var categoryRepository = new CustomerRepository(Settings.ConnectionString);
             categoryRepository.SaveFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Customers field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
@@ -57,14 +57,15 @@ namespace LinkGreenODBCUtility
         }
         public bool Publish()
         {
-            string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            // string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var customers = new CustomerRepository(ConnectionString).GetAll().ToList();
+                var customers = new CustomerRepository(Settings.ConnectionString).GetAll().ToList();
 
                 var skip = 0;
-                var take = 5; //was experiencing timeouts with > 5 customers at a time
+                var take = 4; //was experiencing timeouts with > 4 customers at a time
                 int total = 0;
 
                 int numOfPublishedCustomers = 0;
@@ -75,12 +76,13 @@ namespace LinkGreenODBCUtility
 
                     try
                     {
-                        WebServiceHelper.InviteBuyers(batch);
+                        var response = WebServiceHelper.InviteBuyers(batch);
+                        Logger.Instance.Info(response);
                         numOfPublishedCustomers++;
                     }
                     catch (Exception e)
                     {
-                        //ignore timeout
+                        Logger.Instance.Error(e.Message);
                     }
 
                     skip += take;
@@ -89,11 +91,11 @@ namespace LinkGreenODBCUtility
                 if (numOfPublishedCustomers == 0)
                 {
                     Logger.Instance.Warning("No customers were found to import.");
-                    MessageBox.Show("No customers were published.", "No Customers published.");
+                    // MessageBox.Show("No customers were published.", "No Customers published.");
                 }
 
-                Logger.Instance.Info($"{numOfPublishedCustomers} Customers published.");
-                Logger.Instance.Debug($"{numOfPublishedCustomers} Customers published. ApiKey: {apiKey}");
+                Logger.Instance.Info($"{total} Customers published.");
+                Logger.Instance.Debug($"{total} Customers published. ApiKey: {apiKey}");
 
                 return true;
             }

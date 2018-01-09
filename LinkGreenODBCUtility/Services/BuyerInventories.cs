@@ -9,7 +9,7 @@ namespace LinkGreenODBCUtility
 {
     public class BuyerInventories : IOdbcTransfer
     {
-        private readonly BuyerInventoryRepository _repository = new BuyerInventoryRepository($"DSN={Settings.DsnName}");
+        private readonly BuyerInventoryRepository _repository = new BuyerInventoryRepository(Settings.ConnectionString);
         private const string TableName = "BuyerInventories";
         private const string TableKey = "BuyerInventoryId";
 
@@ -17,7 +17,7 @@ namespace LinkGreenODBCUtility
         {
             _repository.ClearAll();
             Logger.Instance.Info($"{TableName} LinkGreen transfer table emptied.");
-            Logger.Instance.Debug($"{Settings.DsnName}.{TableName} emptied.");
+            Logger.Instance.Debug($"{Settings.ConnectionString}.{TableName} emptied.");
             return true;
         }
 
@@ -37,7 +37,8 @@ namespace LinkGreenODBCUtility
         {
             BatchTaskManager batchTaskManager = new BatchTaskManager("BuyerInventories");
             var commands = batchTaskManager.GetCommandsByTrigger();
-            foreach (string cmd in commands) {
+            foreach (string cmd in commands)
+            {
                 Batch.Exec(cmd);
             }
         }
@@ -48,15 +49,19 @@ namespace LinkGreenODBCUtility
 
             var mappedDsnName = new Mapping().GetDsnName("BuyerInventories");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("BuyerInventories")) {
+            if (newMapping.MigrateData("BuyerInventories"))
+            {
                 Logger.Instance.Debug($"Buyer Inventory migrated using DSN: {mappedDsnName}");
-            } else {
+            }
+            else
+            {
                 Logger.Instance.Warning("Failed to migrate Buyer Inventory.");
             }
 
             string apiKey = ConfigurationManager.AppSettings["ApiKey"];
 
-            if (string.IsNullOrEmpty(apiKey)) {
+            if (string.IsNullOrEmpty(apiKey))
+            {
                 Logger.Instance.Warning("No Api Key set while executing products publish.");
                 return false;
             }
@@ -68,9 +73,11 @@ namespace LinkGreenODBCUtility
             var existingInventory = WebServiceHelper.GetAllInventory();
             var items = 0;
 
-            foreach (var product in products) {
+            foreach (var product in products)
+            {
                 var existingCategory = existingCategories.FirstOrDefault(c => c.Name == product.Category);
-                if (existingCategory == null) {
+                if (existingCategory == null)
+                {
                     existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
                     existingCategories.Add(existingCategory);
                 }
@@ -83,70 +90,91 @@ namespace LinkGreenODBCUtility
                 request.CategoryId = (existingCategory?.Id).GetValueOrDefault();
                 request.Description = product.Description ?? string.Empty;
 
-                if (existingProduct != null) {
+                if (existingProduct != null)
+                {
                     request.Id = existingProduct.Id;
                 }
-                if (product.Inactive.HasValue) {
+                if (product.Inactive.HasValue)
+                {
                     request.Inactive = product.Inactive.Value;
                 }
 
                 //TODO: Get the location first
-                if (product.LocationId.HasValue) {
+                if (product.LocationId.HasValue)
+                {
                     request.LocationId = product.LocationId.Value;
                 }
-                if (!string.IsNullOrEmpty(product.UPC)) {
+                if (!string.IsNullOrEmpty(product.UPC))
+                {
                     request.UPC = product.UPC;
                 }
 
-                if (product.MinOrderSpring.HasValue) {
+                if (product.MinOrderSpring.HasValue)
+                {
                     request.MinOrderSpring = product.MinOrderSpring.Value;
                 }
-                if (product.MinOrderSummer.HasValue) {
+                if (product.MinOrderSummer.HasValue)
+                {
                     request.MinOrderSummer = product.MinOrderSummer.Value;
                 }
-                if (product.FreightFactor.HasValue) {
+                if (product.FreightFactor.HasValue)
+                {
                     request.FreightFactor = product.FreightFactor.Value;
                 }
-                if (product.QuantityAvailable.HasValue) {
+                if (product.QuantityAvailable.HasValue)
+                {
                     request.QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1;
                 }
-                if (!string.IsNullOrEmpty(product.Comments)) {
+                if (!string.IsNullOrEmpty(product.Comments))
+                {
                     request.Comments = product.Comments;
                 }
-                if (product.SuggestedRetailPrice.HasValue) {
+                if (product.SuggestedRetailPrice.HasValue)
+                {
                     request.SuggestedRetailPrice = product.SuggestedRetailPrice.Value;
                 }
-                if (!string.IsNullOrEmpty(product.OpenSizeDescription)) {
+                if (!string.IsNullOrEmpty(product.OpenSizeDescription))
+                {
                     request.OpenSizeDescription = product.OpenSizeDescription;
                 }
-                if (product.NetPrice.HasValue) {
+                if (product.NetPrice.HasValue)
+                {
                     request.NetPrice = product.NetPrice;
                 }
-                if (product.SlaveQuantityPerMaster.HasValue) {
+                if (product.SlaveQuantityPerMaster.HasValue)
+                {
                     request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
                 }
-                if (!string.IsNullOrEmpty(product.SlaveQuantityDescription)) {
+                if (!string.IsNullOrEmpty(product.SlaveQuantityDescription))
+                {
                     request.SlaveQuantityDescription = product.SlaveQuantityDescription;
                 }
-                if (!string.IsNullOrEmpty(product.MasterQuantityDescription)) {
+                if (!string.IsNullOrEmpty(product.MasterQuantityDescription))
+                {
                     request.MasterQuantityDescription = product.MasterQuantityDescription;
                 }
-                if (product.RetailPrice.HasValue) {
+                if (product.RetailPrice.HasValue)
+                {
                     request.RetailPrice = product.RetailPrice;
                 }
-                if (product.RetailOrderLevel.HasValue) {
+                if (product.RetailOrderLevel.HasValue)
+                {
                     request.RetailOrderLevel = product.RetailOrderLevel;
                 }
-                if (product.AmazonSell.HasValue) {
+                if (product.AmazonSell.HasValue)
+                {
                     request.AmazonSell = product.AmazonSell;
                 }
-                if (product.OnlineSell.HasValue) {
+                if (product.OnlineSell.HasValue)
+                {
                     request.OnlineSell = product.OnlineSell;
                 }
-                if (product.SupplierId.HasValue) {
+                if (product.SupplierId.HasValue)
+                {
                     request.SupplierId = product.SupplierId;
                 }
-                if (!string.IsNullOrEmpty(product.SupplierSku)) {
+                if (!string.IsNullOrEmpty(product.SupplierSku))
+                {
                     request.SupplierSku = product.SupplierSku;
                 }
 

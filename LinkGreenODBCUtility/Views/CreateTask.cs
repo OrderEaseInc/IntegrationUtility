@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Quartz;
-using Quartz.Impl;
 
 namespace LinkGreenODBCUtility
 {
@@ -26,46 +17,20 @@ namespace LinkGreenODBCUtility
             // Tasks
             taskComboBox.DisplayMember = "Text";
             taskComboBox.ValueMember = "Value";
-            var taskCategories = new ListItem();
-            taskCategories.Text = "Sync Categories";
-            taskCategories.Value = "Categories";
-            taskComboBox.Items.Add(taskCategories);
-            var taskCustomers = new ListItem();
-            taskCustomers.Text = "Sync Customers";
-            taskCustomers.Value = "Customers";
-            taskComboBox.Items.Add(taskCustomers);
-            var taskProducts = new ListItem();
-            taskProducts.Text = "Sync Products";
-            taskProducts.Value = "Products";
-            taskComboBox.Items.Add(taskProducts);
-            var taskInventoryQuantities = new ListItem();
-            taskInventoryQuantities.Text = "Sync Inventory Quantities";
-            taskInventoryQuantities.Value = "InventoryQuantities";
-            taskComboBox.Items.Add(taskInventoryQuantities);
-            var taskPriceLevels = new ListItem();
-            taskPriceLevels.Text = "Sync Price Levels";
-            taskPriceLevels.Value = "Price Levels";
-            taskComboBox.Items.Add(taskPriceLevels);
-            var taskPricing = new ListItem();
-            taskPricing.Text = "Sync Pricing";
-            taskPricing.Value = "Pricing";
-            taskComboBox.Items.Add(taskPricing);
-            var taskSuppliers = new ListItem();
-            taskSuppliers.Text = "Sync Suppliers";
-            taskSuppliers.Value = "Suppliers";
-            taskComboBox.Items.Add(taskSuppliers);
-            var taskSupplierInventory = new ListItem();
-            taskSupplierInventory.Text = "Sync Supplier Inventory";
-            taskSupplierInventory.Value = "SupplierInventory";
-            taskComboBox.Items.Add(taskSupplierInventory);
-            var taskLinkedSkus = new ListItem();
-            taskLinkedSkus.Text = "Sync Linked Skus";
-            taskLinkedSkus.Value = "LinkedSkus";
-            taskComboBox.Items.Add(taskLinkedSkus);
-            var taskBuyerInventory = new ListItem();
-            taskBuyerInventory.Text = "Sync Buyer Inventory";
-            taskBuyerInventory.Value = "BuyerInventory";
-            taskComboBox.Items.Add(taskBuyerInventory);
+
+            taskComboBox.Items.AddRange(new object[]
+            {
+                new ListItem { Text = "Sync Categories",  Value = "Categories" },
+                new ListItem { Text = "Sync Customers", Value = "Customers" },
+                new ListItem { Text = "Sync Products", Value = "Products" },
+                new ListItem { Text = "Sync Inventory Quantities",  Value = "InventoryQuantities" },
+                new ListItem { Text = "Sync Price Levels", Value = "Price Levels" },
+                new ListItem { Text = "Sync Pricing", Value = "Pricing" },
+                new ListItem { Text = "Sync Suppliers", Value = "Suppliers" },
+                new ListItem { Text = "Sync Supplier Inventory", Value = "SupplierInventory" },
+                new ListItem { Text = "Sync Linked Skus", Value = "LinkedSkus" },
+                new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" }
+            });
 
             // Start Date/Time
             startDateTime.Value = DateTime.Now;
@@ -73,42 +38,21 @@ namespace LinkGreenODBCUtility
             // Repeat intervals
             repeatComboBox.DisplayMember = "Text";
             repeatComboBox.ValueMember = "Value";
-            var repeatFiveMin = new ListItem();
-            repeatFiveMin.Text = "Every 5 Minutes";
-            repeatFiveMin.Value = "5";
-            repeatComboBox.Items.Add(repeatFiveMin);
-            var repeatFifteenMin = new ListItem();
-            repeatFifteenMin.Text = "Every 15 Minutes";
-            repeatFifteenMin.Value = "15";
-            repeatComboBox.Items.Add(repeatFifteenMin);
-            var repeatThirtyMin = new ListItem();
-            repeatThirtyMin.Text = "Every 30 Minutes";
-            repeatThirtyMin.Value = "30";
-            repeatComboBox.Items.Add(repeatThirtyMin);
-            var repeatOneHour = new ListItem();
-            repeatOneHour.Text = "Every Hour";
-            repeatOneHour.Value = "60";
-            repeatComboBox.Items.Add(repeatOneHour);
-            var repeatTwelveHours = new ListItem();
-            repeatTwelveHours.Text = "Every 12 Hours";
-            repeatTwelveHours.Value = "720";
-            repeatComboBox.Items.Add(repeatTwelveHours);
-            var repeatOneDay = new ListItem();
-            repeatOneDay.Text = "Daily";
-            repeatOneDay.Value = "1440";
-            repeatComboBox.Items.Add(repeatOneDay);
-            var repeatOneWeek = new ListItem();
-            repeatOneWeek.Text = "Weekly";
-            repeatOneWeek.Value = "10080";
-            repeatComboBox.Items.Add(repeatOneWeek);
-            var repeatTwoWeeks = new ListItem();
-            repeatTwoWeeks.Text = "Bi-Weekly";
-            repeatTwoWeeks.Value = "20160";
-            repeatComboBox.Items.Add(repeatTwoWeeks);
-            var repeatFourWeeks = new ListItem();
-            repeatFourWeeks.Text = "Every 4 Weeks";
-            repeatFourWeeks.Value = "40320";
-            repeatComboBox.Items.Add(repeatFourWeeks);
+
+            repeatComboBox.Items.AddRange(new object[]
+            {
+                new ListItem { Text = "Every 5 Minutes", Value = "5" },
+                new ListItem { Text = "Every 15 Minutes",  Value = "15" },
+                new ListItem { Text = "Every 30 Minutes", Value = "30" },
+                new ListItem { Text = "Every Hour", Value = "60" },
+                new ListItem { Text = "Every 12 Hours", Value = "720" },
+                new ListItem { Text = "Daily", Value = "1440" },
+                new ListItem { Text = "Weekly", Value = "10080" },
+                new ListItem { Text = "Bi-Weekly", Value = "20160" },
+                new ListItem { Text = "Every 4 Weeks", Value = "40320" }
+            });
+
+
         }
 
         private void CreateTask_FormClosed(object sender, FormClosedEventArgs e)

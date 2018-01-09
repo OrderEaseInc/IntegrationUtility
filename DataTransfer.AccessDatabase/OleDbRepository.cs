@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Odbc;
+using System.Data.OleDb;
 
 namespace DataTransfer.AccessDatabase
 {
-    public abstract class AdoRepository<T> where T : class
+    public abstract class OleDbRepository<T> where T : class
     {
         private readonly string _connectionString;
 
-        protected AdoRepository(string connectionString)
+        protected OleDbRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
@@ -21,11 +21,11 @@ namespace DataTransfer.AccessDatabase
 
         public virtual void SaveTableMapping(string dsnName, string tableName, string linkGreenTableName)
         {
-            using (var command = new OdbcCommand($"DELETE * FROM `TableMappings` WHERE `TableName` = '{linkGreenTableName}'"))
+            using (var command = new OleDbCommand($"DELETE * FROM `TableMappings` WHERE `TableName` = '{linkGreenTableName}'"))
             {
                 ExecuteCommand(command);
             }
-            using (var command = new OdbcCommand($"INSERT INTO `TableMappings` (`DsnName`, `TableName`, `MappingName`) VALUES ('{dsnName}', '{linkGreenTableName}', '{tableName}')"))
+            using (var command = new OleDbCommand($"INSERT INTO `TableMappings` (`DsnName`, `TableName`, `MappingName`) VALUES ('{dsnName}', '{linkGreenTableName}', '{tableName}')"))
             {
                 ExecuteCommand(command);
             }
@@ -36,11 +36,11 @@ namespace DataTransfer.AccessDatabase
             throw new NotImplementedException();
         }
 
-        protected IEnumerable<T> GetRecords(OdbcCommand command)
+        protected IEnumerable<T> GetRecords(OleDbCommand command)
         {
             var list = new List<T>();
 
-            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection = new OleDbConnectionInstance(_connectionString).GetConnection();
             command.Connection.Open();
             try
             {
@@ -60,22 +60,22 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                ConnectionInstance.CloseConnection(_connectionString);
+                command.Connection.Close();
             }
-            
+
             return list;
         }
 
-        protected T GetRecord(OdbcCommand command)
+        protected T GetRecord(OleDbCommand command)
         {
             T record = null;
-            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection = new OleDbConnectionInstance(_connectionString).GetConnection();
             command.Connection.Open();
             try
             {
                 //var reader = command.ExecuteReader();
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
-                
+
                 try
                 {
                     while (reader.Read())
@@ -92,14 +92,14 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                ConnectionInstance.CloseConnection(_connectionString);
+                command.Connection.Close();
             }
             return record;
         }
-        protected IEnumerable<T> ExecuteStoredProc(OdbcCommand command)
+        protected IEnumerable<T> ExecuteStoredProc(OleDbCommand command)
         {
             var list = new List<T>();
-            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection = new OleDbConnectionInstance(_connectionString).GetConnection();
             command.CommandType = CommandType.StoredProcedure;
             command.Connection.Open();
             try
@@ -123,14 +123,14 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                ConnectionInstance.CloseConnection(_connectionString);
+                command.Connection.Close();
             }
             return list;
         }
 
-        protected void ExecuteCommand(OdbcCommand command)
+        protected void ExecuteCommand(OleDbCommand command)
         {
-            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+            command.Connection = new OleDbConnectionInstance(_connectionString).GetConnection();
             command.CommandType = CommandType.Text;
             command.Connection.Open();
             try
@@ -139,7 +139,7 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                ConnectionInstance.CloseConnection(_connectionString);
+                command.Connection.Close();
             }
         }
 

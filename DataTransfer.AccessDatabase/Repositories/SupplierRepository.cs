@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using LinkGreen.Applications.Common;
@@ -9,7 +9,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class SupplierRepository : AdoRepository<Supplier>
+    public class SupplierRepository : OleDbRepository<Supplier>
     {
         private const string TableName = "Suppliers";
 
@@ -35,7 +35,7 @@ namespace DataTransfer.AccessDatabase
             var lgSuppliers = WebServiceHelper.GetAllSuppliers().ToDictionary(s => s.Id);
 
             IEnumerable<Supplier> updatedSuppliers;
-            using (var command = new OdbcCommand($"SELECT * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"SELECT * FROM {TableName}")) {
                 updatedSuppliers = GetRecords(command);
             }
 
@@ -50,14 +50,14 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
                 ExecuteCommand(command);
             }
         }
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}")) {
                 ExecuteCommand(command);
             }
         }
@@ -75,7 +75,7 @@ namespace DataTransfer.AccessDatabase
                 $"Values ({supplier.Id}, {NullableString(supplier.Name)}, {NullableString(supplier.OurContactInfo?.ContactName)}, " +
                 $"{NullableString(supplier.OurContactInfo?.Email)}, {NullableString(supplier.OurContactInfo?.Phone)}, " +
                 $"{NullableString(supplier.OurContactInfo?.OurBillToNumber)}, {NullableString(supplier.OurContactInfo?.OurSupplierNumber)})";
-            using (var command = new OdbcCommand(sql)) {
+            using (var command = new OleDbCommand(sql)) {
                 ExecuteCommand(command);
             }
         }

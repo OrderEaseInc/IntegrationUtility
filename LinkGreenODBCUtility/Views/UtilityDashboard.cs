@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +36,7 @@ namespace LinkGreenODBCUtility
             {
                 Settings.SetupUserConfig(config.AppSettings.Settings["ApiKey"].Value);
             }
-            
+
             var Tasks = new Tasks();
             Tasks.RestoreTasks();
 
@@ -63,7 +65,7 @@ namespace LinkGreenODBCUtility
             var categories = new Categories();
             categories.UpdateTemporaryTables();
             categories.Empty();
-            
+
             string mappedDsnName = Mapping.GetDsnName("Categories");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Categories"))
@@ -105,39 +107,96 @@ namespace LinkGreenODBCUtility
             eventLog.ShowDialog();
         }
 
+        private void SetButtonState(bool enabled) {
+            syncCategories.Enabled = enabled;
+            syncCustomers.Enabled = enabled;
+            syncPriceLevels.Enabled = enabled;
+            syncPricing.Enabled = enabled;
+            syncProducts.Enabled = enabled;
+        }
+
         private void syncCustomers_Click(object sender, EventArgs e)
         {
-            var customers = new Customers();
-            customers.UpdateTemporaryTables();
-            customers.Empty();
-            
-            string mappedDsnName = Mapping.GetDsnName("Customers");
-            var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Customers"))
+            var bw = new BackgroundWorker();
+            lblStatus.Text = "Processing customer sync (Preparing)\n\rPlease wait";
+
+            SetButtonState(false);
+            bw.DoWork += (bwSender, bwEventArgs) =>
             {
-                if (customers.Publish())
+                var customers = new Customers();
+                customers.UpdateTemporaryTables();
+                customers.Empty();
+
+                string mappedDsnName = Mapping.GetDsnName("Customers");
+                var newMapping = new Mapping(mappedDsnName);
+                if (newMapping.MigrateData("Customers"))
                 {
-                    MessageBox.Show("Customers Synced", "Success");
-                    Logger.Instance.Info("Customers synced.");
+                    ((BackgroundWorker)bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
+                    if (customers.Publish())
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Customers Synced",
+                            Title = "Success",
+                            Error = string.Empty,
+                            InfoMessage = string.Empty
+                        };
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Customers failed to sync. Do you have your API Key set?",
+                            Title = "Sync Failure",
+                            Error = "Customers failed to sync.",
+                            InfoMessage = string.Empty
+                        };
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Customers failed to sync. Do you have your API Key set?", "Sync Failure");
-                    Logger.Instance.Error("Customers failed to sync.");
+                    if (!newMapping._validFields)
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "All required fields indicated with a * must be mapped.",
+                            Title = "Map Required Fields",
+                            Error = string.Empty,
+                            InfoMessage = string.Empty
+                        };
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Customers failed to migrate.",
+                            Title = "Unknown Error",
+                            Error = "Customers failed to migrate.",
+                            InfoMessage = string.Empty
+                        };
+                    }
                 }
-            }
-            else
+            };
+
+            bw.ProgressChanged += (bwSender, changedEventArgs) =>
             {
-                if (!newMapping._validFields)
-                {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
-                }
-                else
-                {
-                    MessageBox.Show("Customers failed to migrate.", "Unknown Error");
-                    Logger.Instance.Error("Customers failed to migrate.");
-                }
-            }
+                lblStatus.Text = changedEventArgs.UserState.ToString();
+            };
+
+            bw.RunWorkerCompleted += (bwSender, completedEventArgs) => {
+                SetButtonState(true);
+                dynamic info = completedEventArgs.Result;
+
+                lblStatus.Text = info.Message;
+                MessageBox.Show(info.Message, info.Title);
+                if (!string.IsNullOrWhiteSpace(info.Error))
+                    Logger.Instance.Error(info.Error);
+                if (!string.IsNullOrWhiteSpace(info.InfoMessage))
+                    Logger.Instance.Info(info.InfoMessage);
+            };
+
+            bw.WorkerReportsProgress = true;
+            bw.RunWorkerAsync();
         }
 
         private void syncProducts_Click(object sender, EventArgs e)
@@ -145,7 +204,7 @@ namespace LinkGreenODBCUtility
             var products = new Products();
             products.UpdateTemporaryTables();
             products.Empty();
-            
+
             string mappedDsnName = Mapping.GetDsnName("Products");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Products"))
@@ -180,7 +239,7 @@ namespace LinkGreenODBCUtility
             var priceLevels = new PriceLevels();
             priceLevels.UpdateTemporaryTables();
             priceLevels.Empty();
-            
+
             string mappedDsnName = Mapping.GetDsnName("PriceLevels");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevels"))

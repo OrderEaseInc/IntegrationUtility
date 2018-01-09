@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using LinkGreen.Applications.Common;
@@ -9,7 +9,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
 {
-    public class SupplierInventoryRepository : AdoRepository<SupplierInventory>
+    public class SupplierInventoryRepository : OleDbRepository<SupplierInventory>
     {
         private const string TableName = "SupplierInventories";
 
@@ -18,13 +18,16 @@ namespace DataTransfer.AccessDatabase
         public void DownloadSupplierInventory()
         {
             var suppliers = WebServiceHelper.GetAllSuppliers();
-            
+
             // NOTE: just pulling inventories for suppliers we have internal records for.
             //  Questionable - maybe this should be configurable?
-            foreach (var supplier in suppliers.Where(s => !string.IsNullOrEmpty(s.OurContactInfo.OurSupplierNumber))) {
+            foreach (var supplier in suppliers.Where(s => !string.IsNullOrEmpty(s.OurContactInfo.OurSupplierNumber)))
+            {
                 var inventory = WebServiceHelper.GetSupplierInventory(supplier.Id);
-                if (inventory != null) {
-                    foreach (var item in inventory) {
+                if (inventory != null)
+                {
+                    foreach (var item in inventory)
+                    {
                         Insert(item, supplier);
                     }
                 }
@@ -33,28 +36,32 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OdbcCommand command = new OdbcCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
                 ExecuteCommand(command);
             }
         }
 
         public void ClearAll()
         {
-            using (OdbcCommand command = new OdbcCommand($"DELETE * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}"))
+            {
                 ExecuteCommand(command);
             }
         }
 
         private void Insert(SupplierInventory inventory, Supplier supplier)
         {
-            var buyerLinkedSkus = inventory.BuyerLinkedSkus?.Any() == true ? inventory.BuyerLinkedSkus : new[] {default(string)};
-            foreach (var buyerLinkedSku in buyerLinkedSkus) {
+            var buyerLinkedSkus = inventory.BuyerLinkedSkus?.Any() == true ? inventory.BuyerLinkedSkus : new[] { default(string) };
+            foreach (var buyerLinkedSku in buyerLinkedSkus)
+            {
                 var sql =
                     $"INSERT INTO {TableName} (BuyerLinkedSku, CatalogPrice, Description, Inventory, ItemId, SizeDescription, SupplierSku, SupplierId, OurSupplierNumber) " +
                     $"VALUES ({NullableString(buyerLinkedSku)}, {NullableDecimal(inventory.CatalogPrice)}, " +
                     $"{NullableString(inventory.Description)}, {NullableInt(inventory.Inventory)}, {inventory.ItemId}," +
                     $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)})";
-                using (var command = new OdbcCommand(sql)) {
+                using (var command = new OleDbCommand(sql))
+                {
                     ExecuteCommand(command);
                 }
             }
@@ -67,13 +74,16 @@ namespace DataTransfer.AccessDatabase
             var suppliers = WebServiceHelper.GetAllSuppliers();
             // NOTE: just pulling inventories for suppliers we have internal records for.
             //  Questionable - maybe this should be configurable?
-            foreach (var supplier in suppliers.Where(s => !string.IsNullOrEmpty(s.OurContactInfo.OurSupplierNumber))) {
+            foreach (var supplier in suppliers.Where(s => !string.IsNullOrEmpty(s.OurContactInfo.OurSupplierNumber)))
+            {
                 var lgSupplierInventories = WebServiceHelper.GetSupplierInventory(supplier.Id).ToDictionary(si => si.ItemId);
-                var command = new OdbcCommand($"SELECT * FROM {TableName} Where SupplierId = {supplier.Id}");
+                var command = new OleDbCommand($"SELECT * FROM {TableName} Where SupplierId = {supplier.Id}");
                 var updatedSupplierInventories = GetRecords(command);
-                foreach (var inventory in updatedSupplierInventories.Where(i => !string.IsNullOrEmpty(i.BuyerLinkedSku) && lgSupplierInventories.ContainsKey(i.ItemId))) {
+                foreach (var inventory in updatedSupplierInventories.Where(i => !string.IsNullOrEmpty(i.BuyerLinkedSku) && lgSupplierInventories.ContainsKey(i.ItemId)))
+                {
                     var lgSupplierInventory = lgSupplierInventories[inventory.ItemId];
-                    if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == inventory.BuyerLinkedSku))) {
+                    if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == inventory.BuyerLinkedSku)))
+                    {
                         // this didn't come in from the web service
                         lgSupplierInventory.SupplierId = supplier.Id;
                         WebServiceHelper.UpdateSupplierInventory(lgSupplierInventory, inventory.BuyerLinkedSku);
@@ -86,12 +96,14 @@ namespace DataTransfer.AccessDatabase
 
         protected override SupplierInventory PopulateRecord(dynamic reader)
         {
-            try {
+            try
+            {
 
-                return new SupplierInventory {
+                return new SupplierInventory
+                {
                     BuyerLinkedSku = reader.BuyerLinkedSku,
                     CatalogPrice = reader.CatalogPrice,
-                    Description =  reader.Description,
+                    Description = reader.Description,
                     Inventory = reader.Inventory,
                     ItemId = reader.ItemId,
                     SizeDescription = reader.SizeDescription,
@@ -100,7 +112,9 @@ namespace DataTransfer.AccessDatabase
                     Pricing = new List<QuantityPricingBreak>()
                 };
 
-            } catch (RuntimeBinderException exception) {
+            }
+            catch (RuntimeBinderException exception)
+            {
                 Console.WriteLine(exception);
                 throw new InvalidDataException("One of the fields in the source ODBC database has an invalid column type or value", exception);
             }

@@ -12,14 +12,14 @@ namespace LinkGreenODBCUtility
 
         public SupplierInventories()
         {
-            repository = new SupplierInventoryRepository($"DSN={Settings.DsnName}");
+            repository = new SupplierInventoryRepository(Settings.ConnectionString);
         }
 
         public bool Empty()
         {
             repository.ClearAll();
             Logger.Instance.Info($"{TableName} LinkGreen transfer table emptied.");
-            Logger.Instance.Debug($"{Settings.DsnName}.{TableName} emptied.");
+            Logger.Instance.Debug($"{Settings.ConnectionString}.{TableName} emptied.");
             return true;
         }
 

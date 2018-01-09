@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdoRepository.cs" />
+    <Compile Include="OleDbConnectionInstance.cs" />
     <Compile Include="ConnectionInstance.cs" />
     <Compile Include="DynamicDataReader.cs" />
     <Compile Include="Models\ProductPrice.cs" />
@@ -50,9 +51,12 @@
     <Compile Include="Models\Task.cs" />
     <Compile Include="OdbcDataTransferObjectBase.cs" />
     <Compile Include="Models\ProductInventory.cs" />
+    <Compile Include="OleDbRepository.cs" />
     <Compile Include="Repositories\BuyerInventoryRepository.cs" />
+    <Compile Include="Repositories\CountryMappingRepository.cs" />
     <Compile Include="Repositories\InventoryQuantityRepository.cs" />
     <Compile Include="Repositories\LinkedSkusRepository.cs" />
+    <Compile Include="Repositories\ProvinceMappingRespository.cs" />
     <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Repositories\SupplierRepository.cs" />
     <Compile Include="Repositories\CustomerRepository.cs" />

@@ -10,7 +10,7 @@ namespace LinkGreenODBCUtility
 {
     class PriceLevels : IOdbcTransfer
     {
-        public string ConnectionString = $"DSN={Settings.DsnName}";
+        //public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
 
         public PriceLevels()
@@ -25,21 +25,21 @@ namespace LinkGreenODBCUtility
 
         public bool Empty()
         {
-            var priceLevelRepository = new PriceLevelRepository(ConnectionString);
+            var priceLevelRepository = new PriceLevelRepository(Settings.ConnectionString);
             priceLevelRepository.ClearAll();
             return true;
         }
 
         public void SaveTableMapping(string dsnName, string tableName)
         {
-            var priceLevelRepository = new PriceLevelRepository(ConnectionString);
+            var priceLevelRepository = new PriceLevelRepository(Settings.ConnectionString);
             priceLevelRepository.SaveTableMapping(dsnName, tableName, "PriceLevels");
             Logger.Instance.Debug($"Pricing Levels table mapping saved: (DSN: {dsnName}, Table: {tableName})");
         }
 
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
-            var priceLevelRepository = new PriceLevelRepository(ConnectionString);
+            var priceLevelRepository = new PriceLevelRepository(Settings.ConnectionString);
             priceLevelRepository.SaveFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Pricing Levels field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
@@ -60,7 +60,7 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var priceLevelRepo = new PriceLevelRepository(ConnectionString);
+                var priceLevelRepo = new PriceLevelRepository(Settings.ConnectionString);
                 var levelsToImport = priceLevelRepo.GetAll().ToList();
 
                 foreach (var level in levelsToImport)
