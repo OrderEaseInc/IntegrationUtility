@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.ComponentModel;
+using System.Configuration;
 using System.Dynamic;
 using System.Linq;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace LinkGreenODBCUtility
             Logger.Instance.Debug($"Inventory Quantities field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
-        public bool Publish()
+        public bool Publish(BackgroundWorker bw = null)
         {
             // clear out transfer table
             Empty();

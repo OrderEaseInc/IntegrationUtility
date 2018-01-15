@@ -1,4 +1,5 @@
-﻿using DataTransfer.AccessDatabase;
+﻿using System.ComponentModel;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -42,7 +43,7 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public bool Publish()
+        public bool Publish(BackgroundWorker bw = null)
         {
             Empty();
             // Download from LinkGreen to Access

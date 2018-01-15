@@ -132,7 +132,7 @@ namespace LinkGreenODBCUtility
                 if (newMapping.MigrateData("Customers"))
                 {
                     ((BackgroundWorker)bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
-                    if (customers.Publish())
+                    if (customers.Publish((BackgroundWorker)bwSender))
                     {
                         bwEventArgs.Result = new
                         {

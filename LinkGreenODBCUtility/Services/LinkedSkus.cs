@@ -1,4 +1,5 @@
-﻿using DataTransfer.AccessDatabase;
+﻿using System.ComponentModel;
+using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
@@ -33,7 +34,7 @@ namespace LinkGreenODBCUtility
             Logger.Instance.Debug($"Linked Skus field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
-        public bool Publish()
+        public bool Publish(BackgroundWorker bw = null)
         {
             // clear out transfer table
             Empty();
