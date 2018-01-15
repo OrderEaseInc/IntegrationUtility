@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.ComponentModel;
+using System.Configuration;
 using System.Dynamic;
 using System.Linq;
 using DataTransfer.AccessDatabase;
@@ -43,7 +44,7 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        public bool Publish()
+        public bool Publish(BackgroundWorker bw = null)
         {
             Empty();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Windows.Forms;
@@ -55,7 +56,7 @@ namespace LinkGreenODBCUtility
                 Batch.Exec(cmd);
             }
         }
-        public bool Publish()
+        public bool Publish(BackgroundWorker bw = null)
         {
             // string apiKey = ConfigurationManager.AppSettings["ApiKey"];
             string apiKey = Settings.GetApiKey();
@@ -73,6 +74,7 @@ namespace LinkGreenODBCUtility
                 {
                     var batch = customers.Skip(skip).Take(take).ToList();
                     total += batch.Count;
+                    bw?.ReportProgress(0, $"Processing customer sync (Pushing {total}/{customers.Count})\n\rPlease wait");
 
                     try
                     {

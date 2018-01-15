@@ -1,4 +1,6 @@
-﻿namespace LinkGreenODBCUtility
+﻿using System.ComponentModel;
+
+namespace LinkGreenODBCUtility
 {
     interface IOdbcTransfer
     {
@@ -6,6 +8,6 @@
 
         void SaveTableMapping(string dsnName, string tableName);
 
-        bool Publish();
+        bool Publish(BackgroundWorker bw);
     }
 }
