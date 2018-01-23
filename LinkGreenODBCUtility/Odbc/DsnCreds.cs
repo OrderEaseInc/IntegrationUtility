@@ -28,10 +28,13 @@ namespace LinkGreenODBCUtility
             {
                 Connection = _connection
             };
-            var insertCommand = new OleDbCommand($"INSERT INTO DsnCredentials (DsnName, Username, Password) VALUES ('{dsn}', '{user}', '{pass}')")
+            var insertCommand = new OleDbCommand($"INSERT INTO DsnCredentials ([DsnName], [Username], [Password]) VALUES (?,?,?)")
             {
                 Connection = _connection
             };
+            insertCommand.Parameters.AddWithValue("Dsn", dsn);
+            insertCommand.Parameters.AddWithValue("Username", user);
+            insertCommand.Parameters.AddWithValue("Password", pass);
 
             _connection.Open();
             try
@@ -42,6 +45,7 @@ namespace LinkGreenODBCUtility
             catch (Exception e)
             {
                 Logger.Instance.Error($"An error occured while saving Dsn Credentials.");
+                Logger.Instance.Error(e.GetBaseException().Message);
             }
             finally
             {
