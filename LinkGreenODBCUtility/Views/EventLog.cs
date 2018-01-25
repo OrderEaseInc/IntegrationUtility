@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LinkGreenODBCUtility
@@ -19,8 +13,8 @@ namespace LinkGreenODBCUtility
 
         private void EventLog_Load(object sender, EventArgs e)
         {
-            Log log = new Log();
-            DataTable logTable = log.LoadLog();
+            var log = new Log();
+            var logTable = log.LoadLog();
 
             eventLogDataGrid.DataSource = logTable.DefaultView;
             eventLogDataGrid.AutoGenerateColumns = true;

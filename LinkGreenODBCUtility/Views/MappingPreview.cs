@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LinkGreenODBCUtility
 {
     public partial class MappingPreview : Form
     {
-        private string TableName;
-        private string DsnName;
+        private readonly string _tableName;
+        private readonly string _dsnName;
 
         public MappingPreview(string tableName, string dsnName)
         {
             InitializeComponent();
-            TableName = tableName;
-            DsnName = dsnName;
+            _tableName = tableName;
+            _dsnName = dsnName;
         }
 
         private void MappingPreview_Load(object sender, EventArgs e)
         {
-            var mapping = new Mapping(DsnName);
-            DataTable previewTable = mapping.PreviewMapping(TableName);
+            var mapping = new Mapping(_dsnName);
+            var previewTable = mapping.PreviewMapping(_tableName);
 
             previewDataGridView.DataSource = previewTable.DefaultView;
             previewDataGridView.AutoGenerateColumns = true;

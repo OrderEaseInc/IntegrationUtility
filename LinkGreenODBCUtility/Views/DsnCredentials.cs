@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LinkGreenODBCUtility
@@ -30,7 +23,7 @@ namespace LinkGreenODBCUtility
             if (!string.IsNullOrEmpty(username.Text) && !string.IsNullOrEmpty(password.Text))
             {
                 DsnCreds.SaveDsnCreds(_dsn, username.Text, password.Text);
-                ActiveForm.Close();
+                Close();
             }
             else
             {
@@ -40,7 +33,7 @@ namespace LinkGreenODBCUtility
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            ActiveForm.Close();
+            Close();
         }
     }
 }

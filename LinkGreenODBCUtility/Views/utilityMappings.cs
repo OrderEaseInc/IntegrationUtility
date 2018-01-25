@@ -180,290 +180,119 @@ namespace LinkGreenODBCUtility
             return dsnNames;
         }
 
-        private void DisplayActiveTableMapping()
+        private void DisplayTableMapping(string tableMappingName, string dsnMappingName, Control activeValueLabel, Control mappedFieldsLabel, ListBox listTableName = null)
         {
             var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("Categories");
-            string mappedDsnName = mapping.GetDsnName("Categories");
+            var mappedTableName = mapping.GetTableMapping(tableMappingName);
+            var mappedDsnName = mapping.GetDsnName(dsnMappingName);
+            // ReSharper disable once InvertIf
             if (!string.IsNullOrEmpty(mappedTableName))
             {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeCategoriesTableMappingValue.Text = activeTableMapping;
-                mappedTableFieldsLabel.Text = activeTableMapping;
+                var activeTableMapping = mappedDsnName + " > " + mappedTableName;
+                activeValueLabel.Text = activeTableMapping;
+                mappedFieldsLabel.Text = activeTableMapping;
+            }
+
+            var tableItem = listTableName?.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
+            if (tableItem != null)
+            {
+                listTableName.SelectedItem = tableItem;
             }
         }
 
-        private void DisplayActiveCustomerTableMapping()
+        #region DisplayTableMapping - Specific cases
+        private void DisplayActiveTableMapping() =>
+            DisplayTableMapping("Categories", "Categories",
+                activeCategoriesTableMappingValue, mappedTableFieldsLabel);
+
+
+        private void DisplayActiveCustomerTableMapping() =>
+            DisplayTableMapping("Customers", "Customers",
+                activeCustomerTableMappingValue, mappedCustomerTableFieldsLabel);
+
+
+        private void DisplayActiveProductTableMapping() =>
+            DisplayTableMapping("Products", "Products",
+                activeProductTableMappingValue, mappedProductTableFieldsLabel);
+
+        private void DisplayActiveBuyerInventoryTableMapping() =>
+            DisplayTableMapping("BuyerInventories", "BuyerInventories",
+                activeBuyerInventoryFieldMappingValue, mappedBuyerInventoryTableFieldsLabel);
+
+
+        private void DisplayActivePricingTableMapping() =>
+            DisplayTableMapping("PriceLevelPrices", "PriceLevelPrices",
+                activePricingTableMappingValue, mappedPricingTableFieldsLabel);
+
+        private void DisplayActivePriceLevelsTableMapping() =>
+            DisplayTableMapping("PriceLevels", "PriceLevels",
+                activePriceLevelsTableMappingValue, mappedPriceLevelsTableFieldsLabel);
+
+        private void DisplayActiveSupplierTableMapping() =>
+            DisplayTableMapping("Suppliers", "Suppliers",
+                activeSupplierTableMappingValue, mappedSuppliersTableFieldsLabel, suppliersTableName);
+
+        private void DisplayActiveSupplierInventoryTableMapping() =>
+            DisplayTableMapping("SupplierInventories", "SupplierInventories",
+                activeSupplierInventoryTableMappingValue, mappedSupplierInventoryTableFieldsLabel,
+                supplierInventoryTableName);
+
+        private void DisplayActiveLinkedSkusTableMapping() =>
+            DisplayTableMapping("LinkedSkus", "LinkedSkus",
+                activeLinkedSkusTableMappingValue, mappedLinkedSkusTableFieldsLabel,
+                linkedSkusTableName);
+
+        private void DisplayActiveInventoryQuantityTableMapping() =>
+            DisplayTableMapping("InventoryQuantities", "InventoryQuantities",
+                activeInventoryQuantityTableMappingValue, mappedInventoryQuantityTableFieldsLabel,
+                inventoryQuantityTableName);
+
+        #endregion
+
+        private static void DisplayFieldMapping(string tableName, string displayName, string fieldName, Control activeFieldLabel, Control activeFieldValue)
         {
-            var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("Customers");
-            string mappedDsnName = mapping.GetDsnName("Customers");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeCustomerTableMappingValue.Text = activeTableMapping;
-                mappedCustomerTableFieldsLabel.Text = activeTableMapping;
-            }
+            var mappedFieldName = Mapping.GetFieldMapping(tableName, fieldName);
+            activeFieldLabel.Text = displayName + @" : ";
+            activeFieldValue.Text = string.IsNullOrWhiteSpace(mappedFieldName) ? "N/A" : mappedFieldName;
         }
 
-        private void DisplayActiveProductTableMapping()
-        {
-            string mappedTableName = Mapping.GetTableMapping("Products");
-            string mappedDsnName = Mapping.GetDsnName("Products");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeProductTableMappingValue.Text = activeTableMapping;
-                mappedProductTableFieldsLabel.Text = activeTableMapping;
-            }
-        }
+        private void DisplayActiveFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("Categories", displayName, fieldName,
+                activeFieldMappingLabel, activeFieldMappingValue);
 
-        private void DisplayActiveBuyerInventoryTableMapping()
-        {
-            string mappedTableName = Mapping.GetTableMapping("BuyerInventories");
-            string mappedDsnName = Mapping.GetDsnName("BuyerInventories");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeBuyerInventoryFieldMappingValue.Text = activeTableMapping;
-                mappedBuyerInventoryTableFieldsLabel.Text = activeTableMapping;
-            }
-        }
+        private void DisplayActiveCustomerFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("Customers", displayName, fieldName, 
+                activeCustomerFieldMappingLabel, activeCustomerFieldMappingValue);
 
-        private void DisplayActivePricingTableMapping()
-        {
-            string mappedTableName = Mapping.GetTableMapping("PriceLevelPrices");
-            string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activePricingTableMappingValue.Text = activeTableMapping;
-                mappedPricingTableFieldsLabel.Text = activeTableMapping;
-            }
-        }
+        private void DisplayActiveSupplierFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("Suppliers", displayName, fieldName, 
+                activeSupplierFieldMappingLabel, activeSupplierFieldMappingValue);
+      
 
-        private void DisplayActivePriceLevelsTableMapping()
-        {
-            string mappedTableName = Mapping.GetTableMapping("PriceLevels");
-            string mappedDsnName = Mapping.GetDsnName("PriceLevels");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activePriceLevelsTableMappingValue.Text = activeTableMapping;
-                mappedPriceLevelsTableFieldsLabel.Text = activeTableMapping;
-            }
-        }
+        private void DisplayActiveLinkedSkusFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("LinkedSkus", displayName, fieldName, 
+                activeLinkedSkuFieldMappingLabel, activeLinkedSkuFieldMappingValue);
 
-        private void DisplayActiveSupplierTableMapping()
-        {
-            var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("Suppliers");
-            string mappedDsnName = mapping.GetDsnName("Suppliers");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeSupplierTableMappingValue.Text = activeTableMapping;
-                mappedSuppliersTableFieldsLabel.Text = activeTableMapping;
-            }
+        private void DisplayActiveInventoryQuantityFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("InventoryQuantities", displayName, fieldName,
+                activeInventoryQuantityFieldMappingLabel, activeInventoryQuantityFieldMappingValue);
+      
 
-            var suppliersTableItem = suppliersTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (suppliersTableItem != null)
-            {
-                suppliersTableName.SelectedItem = suppliersTableItem;
-            }
-        }
+        private void DisplayActiveSupplierInventoryFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("SupplierInventories", displayName, fieldName,
+                activeSupplierInventoryFieldMappingLabel, activeSupplierInventoryFieldMappingValue);
 
-        private void DisplayActiveSupplierInventoryTableMapping()
-        {
-            var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("SupplierInventories");
-            string mappedDsnName = mapping.GetDsnName("SupplierInventories");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeSupplierInventoryTableMappingValue.Text = activeTableMapping;
-                mappedSupplierInventoryTableFieldsLabel.Text = activeTableMapping;
-            }
+        private void DisplayActiveProductFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("Products", displayName, fieldName,
+                activeProductFieldMappingLabel, activeProductFieldMappingValue);
 
-            var supplierInventoryTableItem = supplierInventoryTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (supplierInventoryTableItem != null)
-            {
-                supplierInventoryTableName.SelectedItem = supplierInventoryTableItem;
-            }
-        }
+        private void DisplayActivePricingFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("PriceLevelPrices", displayName, fieldName,
+                activePricingFieldMappingLabel, activePricingFieldMappingValue);
 
-        private void DisplayActiveLinkedSkusTableMapping()
-        {
-            var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("LinkedSkus");
-            string mappedDsnName = mapping.GetDsnName("LinkedSkus");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeLinkedSkusTableMappingValue.Text = activeTableMapping;
-                mappedLinkedSkusTableFieldsLabel.Text = activeTableMapping;
-            }
-
-            var linkedSkuTableItem = linkedSkusTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (linkedSkuTableItem != null)
-            {
-                linkedSkusTableName.SelectedItem = linkedSkuTableItem;
-            }
-        }
-
-        private void DisplayActiveInventoryQuantityTableMapping()
-        {
-            var mapping = new Mapping(DsnName);
-            string mappedTableName = mapping.GetTableMapping("InventoryQuantities");
-            string mappedDsnName = mapping.GetDsnName("InventoryQuantities");
-            if (!string.IsNullOrEmpty(mappedTableName))
-            {
-                string activeTableMapping = mappedDsnName + " > " + mappedTableName;
-                activeInventoryQuantityTableMappingValue.Text = activeTableMapping;
-                mappedInventoryQuantityTableFieldsLabel.Text = activeTableMapping;
-            }
-
-            var inventoryQuantityTableItem = inventoryQuantityTableName.Items.Cast<string>().FirstOrDefault(i => i == mappedTableName);
-            if (inventoryQuantityTableItem != null)
-            {
-                inventoryQuantityTableName.SelectedItem = inventoryQuantityTableItem;
-            }
-        }
-
-        private void DisplayActiveFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("Categories", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeFieldMappingLabel.Text = displayName + " : ";
-                activeFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeFieldMappingLabel.Text = displayName + " : ";
-                activeFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveCustomerFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("Customers", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeCustomerFieldMappingLabel.Text = displayName + " : ";
-                activeCustomerFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeCustomerFieldMappingLabel.Text = displayName + " : ";
-                activeCustomerFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveSupplierFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("Suppliers", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeSupplierFieldMappingLabel.Text = displayName + " : ";
-                activeSupplierFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeSupplierFieldMappingLabel.Text = displayName + " : ";
-                activeSupplierFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveLinkedSkusFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("LinkedSkus", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeLinkedSkuFieldMappingLabel.Text = displayName + " : ";
-                activeLinkedSkuFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeLinkedSkuFieldMappingLabel.Text = displayName + " : ";
-                activeLinkedSkuFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveInventoryQuantityFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("InventoryQuantities", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeInventoryQuantityFieldMappingLabel.Text = displayName + " : ";
-                activeInventoryQuantityFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeInventoryQuantityFieldMappingLabel.Text = displayName + " : ";
-                activeInventoryQuantityFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveSupplierInventoryFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("SupplierInventories", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeSupplierInventoryFieldMappingLabel.Text = displayName + " : ";
-                activeSupplierInventoryFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeSupplierInventoryFieldMappingLabel.Text = displayName + " : ";
-                activeSupplierInventoryFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActiveProductFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("Products", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activeProductFieldMappingLabel.Text = displayName + " : ";
-                activeProductFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activeProductFieldMappingLabel.Text = displayName + " : ";
-                activeProductFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActivePricingFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("PriceLevelPrices", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activePricingFieldMappingLabel.Text = displayName + " : ";
-                activePricingFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activePricingFieldMappingLabel.Text = displayName + " : ";
-                activePricingFieldMappingValue.Text = "N/A";
-            }
-        }
-
-        private void DisplayActivePriceLevelsFieldMapping(string displayName, string fieldName)
-        {
-            string mappedFieldName = Mapping.GetFieldMapping("PriceLevels", fieldName);
-            if (!string.IsNullOrEmpty(mappedFieldName))
-            {
-                activePriceLevelsFieldMappingLabel.Text = displayName + " : ";
-                activePriceLevelsFieldMappingValue.Text = mappedFieldName;
-            }
-            else
-            {
-                activePriceLevelsFieldMappingLabel.Text = displayName + " : ";
-                activePriceLevelsFieldMappingValue.Text = "N/A";
-            }
-        }
+        private void DisplayActivePriceLevelsFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("PriceLevels", displayName, fieldName,
+                activePriceLevelsFieldMappingLabel, activePriceLevelsFieldMappingValue);
 
         private void DisplayFieldDescription(string tableName, string fieldName)
         {
@@ -1263,7 +1092,7 @@ namespace LinkGreenODBCUtility
             if (customerFields.SelectedItem != null && mappingCustomerFields.SelectedItem != null)
             {
                 var lastMappedItem = mappingCustomerFields.SelectedIndex;
-                var lastMappingField =customerFields.SelectedIndex;
+                var lastMappingField = customerFields.SelectedIndex;
                 var customers = new Customers();
 
                 customers.SaveFieldMapping((customerFields.SelectedItem as ListItem).Value, mappingCustomerFields.SelectedItem.ToString());
