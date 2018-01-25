@@ -138,7 +138,8 @@ namespace LinkGreenODBCUtility
 
                     WebServiceHelper.PushInventoryItem(request);
 
-                    Logger.Instance.Debug($"Finished importing product {++items} of {products.Count}. Id: {product.Id}");
+                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
                 }
 
                 WebServiceHelper.PostInventoryImport();

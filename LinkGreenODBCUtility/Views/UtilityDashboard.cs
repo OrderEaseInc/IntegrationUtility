@@ -107,7 +107,8 @@ namespace LinkGreenODBCUtility
             eventLog.ShowDialog();
         }
 
-        private void SetButtonState(bool enabled) {
+        private void SetButtonState(bool enabled)
+        {
             syncCategories.Enabled = enabled;
             syncCustomers.Enabled = enabled;
             syncPriceLevels.Enabled = enabled;
@@ -178,60 +179,98 @@ namespace LinkGreenODBCUtility
                 }
             };
 
-            bw.ProgressChanged += (bwSender, changedEventArgs) =>
-            {
-                lblStatus.Text = changedEventArgs.UserState.ToString();
-            };
-
-            bw.RunWorkerCompleted += (bwSender, completedEventArgs) => {
-                SetButtonState(true);
-                dynamic info = completedEventArgs.Result;
-
-                lblStatus.Text = info.Message;
-                MessageBox.Show(info.Message, info.Title);
-                if (!string.IsNullOrWhiteSpace(info.Error))
-                    Logger.Instance.Error(info.Error);
-                if (!string.IsNullOrWhiteSpace(info.InfoMessage))
-                    Logger.Instance.Info(info.InfoMessage);
-            };
+            bw.ProgressChanged += Status_BackgroundWorker_ProgressChanged;
+            bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
 
             bw.WorkerReportsProgress = true;
             bw.RunWorkerAsync();
         }
 
+        private void Status_BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            lblStatus.Text = e.UserState.ToString();
+        }
+
+        private void Status_BackgroundWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetButtonState(true);
+            dynamic info = e.Result;
+
+            lblStatus.Text = info.Message;
+            MessageBox.Show(info.Message, info.Title);
+            if (!string.IsNullOrWhiteSpace(info.Error))
+                Logger.Instance.Error(info.Error);
+            if (!string.IsNullOrWhiteSpace(info.InfoMessage))
+                Logger.Instance.Info(info.InfoMessage);
+        }
+
         private void syncProducts_Click(object sender, EventArgs e)
         {
-            var products = new Products();
-            products.UpdateTemporaryTables();
-            products.Empty();
+            var bw = new BackgroundWorker();
+            lblStatus.Text = "Processing product sync (Preparing)\n\rPlease wait";
 
-            string mappedDsnName = Mapping.GetDsnName("Products");
-            var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Products"))
+            SetButtonState(false);
+            bw.DoWork += (bwSender, bwEventArgs) =>
             {
-                if (products.Publish())
+                var products = new Products();
+                products.UpdateTemporaryTables();
+                products.Empty();
+
+                string mappedDsnName = Mapping.GetDsnName("Products");
+                var newMapping = new Mapping(mappedDsnName);
+                if (newMapping.MigrateData("Products"))
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-                    Logger.Instance.Info("Products synced.");
+                    if (products.Publish(bw))
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Your products have been pushed",
+                            Title = "Emptied Successfully",
+                            Error = string.Empty,
+                            InfoMessage = string.Empty
+                        };
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Please select your suppliers table!",
+                            Title = "Emptied Successfully",
+                            Error = "Products failed to sync.",
+                            InfoMessage = string.Empty
+                        };
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-                    Logger.Instance.Error("Products failed to sync.");
+                    if (!newMapping._validFields)
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Please select your suppliers table!",
+                            Title = "Emptied Successfully",
+                            Error = string.Empty,
+                            InfoMessage = string.Empty
+                        };
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Please select your suppliers table!",
+                            Title = "Emptied Successfully",
+                            Error = "Products failed to migrate.",
+                            InfoMessage = string.Empty
+                        };
+                    }
                 }
-            }
-            else
-            {
-                if (!newMapping._validFields)
-                {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-                }
-                else
-                {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-                    Logger.Instance.Error("Products failed to migrate.");
-                }
-            }
+            };
+
+            bw.ProgressChanged += Status_BackgroundWorker_ProgressChanged;
+            bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
+
+            bw.WorkerReportsProgress = true;
+            bw.RunWorkerAsync();
         }
 
         private void syncPriceLevels_Click(object sender, EventArgs e)
