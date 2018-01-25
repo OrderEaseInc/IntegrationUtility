@@ -58,7 +58,6 @@ namespace LinkGreenODBCUtility
         }
         public bool Publish(BackgroundWorker bw = null)
         {
-            // string apiKey = ConfigurationManager.AppSettings["ApiKey"];
             string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))

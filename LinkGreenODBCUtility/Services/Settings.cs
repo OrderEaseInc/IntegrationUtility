@@ -15,9 +15,8 @@ namespace LinkGreenODBCUtility
     {
         public static string ConnectViaDsnName = "LinkGreenDataTransfer";
         public static bool DebugMode = false;
-        private static readonly string LogDbName = AppDomain.CurrentDomain.BaseDirectory + $"{Logger._loggerDsnName}.mdb";
-        public static readonly string ConnectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LinkGreenDataTransfer.mdb;Persist Security Info=True";
-     
+        public static readonly string ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LinkGreenDataTransfer.mdb;Persist Security Info=True";
+
 
         public static void Init()
         {
@@ -79,27 +78,10 @@ namespace LinkGreenODBCUtility
                 var _connection = cInstance.GetConnection();
                 var command = new OleDbCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
                 _connection.Open();
-                var reader = command.ExecuteReader();
                 try
                 {
-                    while (reader.Read())
-                    {
-                        //                    if (!string.IsNullOrEmpty(reader[0].ToString()))
-                        //                    {
-                        //                        return reader[0].ToString();
-                        //                    }
-                        return reader[0].ToString();
-                    }
-
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    string apiKey = config.AppSettings.Settings["ApiKey"].Value;
-
-                    if (string.IsNullOrEmpty(apiKey))
-                    {
-                        Logger.Instance.Warning($"Retrieved a null ApiKey.");
-                    }
-
-                    return apiKey;
+                    var key = command.ExecuteScalar();
+                    return key?.ToString() ?? "";
                 }
                 catch (Exception e)
                 {
@@ -107,7 +89,6 @@ namespace LinkGreenODBCUtility
                 }
                 finally
                 {
-                    reader.Close();
                     cInstance.CloseConnection();
                 }
             }

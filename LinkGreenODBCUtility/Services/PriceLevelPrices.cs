@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
@@ -56,7 +55,7 @@ namespace LinkGreenODBCUtility
 
         public bool Publish(BackgroundWorker bw = null)
         {
-            string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {

@@ -50,7 +50,7 @@ namespace LinkGreenODBCUtility
                 {
                     Logger.Instance.Error($"Failed to connect using connection string {connection.ConnectionString}.");
                     Logger.Instance.Error(e.GetBaseException().Message);
-                    MessageBox.Show($"Failed to connect to DSN {DsnName}. Are your credentials set?", "Failed to Connect");
+                    MessageBox.Show($@"Failed to connect to DSN {DsnName}. Are your credentials set?", @"Emptied Successfully");
                     ConnectionInstance.CloseConnection($"DSN={DsnName}");
                     return new List<string>();
                 }
@@ -1227,11 +1227,12 @@ namespace LinkGreenODBCUtility
             var columns = GetColumns(tableMappingName, DsnName);
             var mappingColumns = new List<string>();
 
-            foreach (var column in columns)
-            {
-                var field = GetMappingField(tableName, column);
-                var fieldDisplayName = GetFieldProperty(tableName, field, "DisplayName");
-                var combinedColumnName = "`" + column + "`" + " AS \"" + fieldDisplayName + " : " + column + "\"";
+            var mappedColumns = GetMappedFields(tableName);
+
+            foreach (var column in columns) {
+                var field = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.FieldName;
+                var fieldDisplayName = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.DisplayName;
+                var combinedColumnName = $"`{column}`  AS \"{fieldDisplayName} : {column}\"";
                 if (!string.IsNullOrEmpty(field))
                 {
                     mappingColumns.Add(combinedColumnName);
@@ -1245,7 +1246,7 @@ namespace LinkGreenODBCUtility
                 using (var dnsConnection = new ActiveDbConnection(DsnName))
                 {
 
-                    var query = $"SELECT {columnNames} FROM `{tableMappingName}`";
+                    var query = $"SELECT TOP 20 {columnNames} FROM `{tableMappingName}`";
                     var command = new OdbcCommand(query, dnsConnection.Connection);
 
                     try
@@ -1274,7 +1275,8 @@ namespace LinkGreenODBCUtility
                         {
                             adapter.Fill(table);
                             var rowCount = table.Rows.Count;
-                            for (var i = 20; i < rowCount; i++)
+
+                            for (var i = rowCount - 1; i > 20; i--)
                             {
                                 table.Rows.RemoveAt(i);
                             }

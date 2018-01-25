@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using System.Data.Odbc;
@@ -22,9 +18,9 @@ namespace LinkGreenODBCUtility
         private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
-        private static Logger instance = null;
+        private static Logger instance;
         private static readonly object padlock = new object();
-        private static Dictionary<SeverityLevel, string> LevelNames = new Dictionary<SeverityLevel, string>()
+        private static readonly Dictionary<SeverityLevel, string> LevelNames = new Dictionary<SeverityLevel, string>()
         {
             { SeverityLevel.Information, "INFO" },
             { SeverityLevel.Verbose, "DEBUG" },
@@ -60,12 +56,13 @@ namespace LinkGreenODBCUtility
         {
             DatetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            string apiKey = config.AppSettings.Settings["ApiKey"].Value;
-            string clientName = config.AppSettings.Settings["ClientName"].Value;
-            string userName = config.AppSettings.Settings["UserName"].Value;
-            string emailAddress = config.AppSettings.Settings["EmailAddress"].Value;
-            string phoneNumber = config.AppSettings.Settings["PhoneNumber"].Value;
-            string installationId = config.AppSettings.Settings["InstallationId"].Value;
+            var apiKey = Settings.GetApiKey();
+            var clientName = config.AppSettings.Settings["ClientName"].Value;
+            var userName = config.AppSettings.Settings["UserName"].Value;
+            var emailAddress = config.AppSettings.Settings["EmailAddress"].Value;
+            var phoneNumber = config.AppSettings.Settings["PhoneNumber"].Value;
+            var installationId = config.AppSettings.Settings["InstallationId"].Value;
+
             _loggerModel = new LoggerModel()
             {
                 ApiKey = !string.IsNullOrEmpty(apiKey) ? apiKey : null,
@@ -145,9 +142,9 @@ namespace LinkGreenODBCUtility
 
             // Send Log to Azure application insights
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            bool ApplicationInsights = Convert.ToInt32(config.AppSettings.Settings["ApplicationInsights"].Value) == 1;
+            var applicationInsights = Convert.ToInt32(config.AppSettings.Settings["ApplicationInsights"].Value) == 1;
 
-            if (ApplicationInsights)
+            if (applicationInsights)
             {
                 tc.TrackTrace(
                     formattedLogText,
@@ -191,7 +188,7 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private string FormattedLog(SeverityLevel level, string text)
+        private static string FormattedLog(SeverityLevel level, string text)
         {
             string pretext;
             switch (level)

@@ -101,7 +101,7 @@ namespace LinkGreenODBCUtility
                 catch (Exception ex)
                 {
                     Logger.Instance.Error($"An error occured while creating task {jobName}: {ex}");
-                    MessageBox.Show($"An error occured while creating task {jobName}. Does the task already exist?", "Error");
+                    MessageBox.Show($@"An error occured while creating task {jobName}. Does the task already exist?", @"Emptied Successfully");
                 }
             }
 

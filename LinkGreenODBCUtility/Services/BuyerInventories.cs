@@ -59,7 +59,7 @@ namespace LinkGreenODBCUtility
                 Logger.Instance.Warning("Failed to migrate Buyer Inventory.");
             }
 
-            string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+            var apiKey = Settings.GetApiKey(); 
 
             if (string.IsNullOrEmpty(apiKey))
             {

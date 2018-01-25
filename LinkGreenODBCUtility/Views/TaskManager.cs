@@ -141,22 +141,22 @@ namespace LinkGreenODBCUtility
                 {
                     if (JobManager.ResumeJob(jobName))
                     {
-                        MessageBox.Show($"Task {jobName} resumed.", "Success");
+                        MessageBox.Show($@"Task {jobName} resumed.", @"Emptied Successfully");
                     }
                     else
                     {
-                        MessageBox.Show($"Task {jobName} failed to resume.", "Failed");
+                        MessageBox.Show($@"Task {jobName} failed to resume.", @"Emptied Successfully");
                     }
                 }
                 else
                 {
                     if (JobManager.PauseJob(jobName))
                     {
-                        MessageBox.Show($"Task {jobName} paused.", "Success");
+                        MessageBox.Show($@"Task {jobName} paused.", @"Emptied Successfully");
                     }
                     else
                     {
-                        MessageBox.Show($"Task {jobName} failed to pause.", "Failed");
+                        MessageBox.Show($@"Task {jobName} failed to pause.", @"Emptied Successfully");
                     }
                 }
                 
@@ -176,18 +176,18 @@ namespace LinkGreenODBCUtility
                     {
                         var Tasks = new Tasks();
                         Tasks.DeleteTask(jobName);
-                        MessageBox.Show($"Task {jobName} deleted.", "Success");
+                        MessageBox.Show($@"Task {jobName} deleted.", @"Emptied Successfully");
                     }
                     else
                     {
-                        MessageBox.Show($"Task {jobName} failed to delete.", "Failed");
+                        MessageBox.Show($@"Task {jobName} failed to delete.", @"Emptied Successfully");
                     }
 
                     LoadTasks();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"An error occured while deleting the task.", "Delete Error");
+                    MessageBox.Show($@"An error occured while deleting the task.", @"Emptied Successfully");
                 }
             }
         }

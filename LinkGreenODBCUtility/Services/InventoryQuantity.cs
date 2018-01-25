@@ -51,7 +51,7 @@ namespace LinkGreenODBCUtility
             {
                 Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
 
-                string apiKey = ConfigurationManager.AppSettings["ApiKey"];
+                string apiKey = Settings.GetApiKey();
 
                 if (string.IsNullOrEmpty(apiKey))
                 {

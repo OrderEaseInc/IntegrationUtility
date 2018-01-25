@@ -72,12 +72,12 @@ namespace LinkGreenODBCUtility
             {
                 if (categories.Publish())
                 {
-                    MessageBox.Show("Categories Synced", "Success");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Info("Categories synced.");
                 }
                 else
                 {
-                    MessageBox.Show("Categories failed to sync. Do you have your API Key set?", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Categories failed to sync.");
                 }
             }
@@ -85,11 +85,11 @@ namespace LinkGreenODBCUtility
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Categories failed to migrate.", "Unknown Error");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Categories failed to migrate.");
                 }
             }
@@ -211,12 +211,12 @@ namespace LinkGreenODBCUtility
             {
                 if (products.Publish())
                 {
-                    MessageBox.Show("Products Synced", "Success");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Info("Products synced.");
                 }
                 else
                 {
-                    MessageBox.Show("Products failed to sync. Do you have your API Key set?", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Products failed to sync.");
                 }
             }
@@ -224,11 +224,11 @@ namespace LinkGreenODBCUtility
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Products failed to migrate.", "Unknown Error");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Products failed to migrate.");
                 }
             }
@@ -246,12 +246,12 @@ namespace LinkGreenODBCUtility
             {
                 if (priceLevels.Publish())
                 {
-                    MessageBox.Show("Price Levels Synced", "Success");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Info("Price Levels synced.");
                 }
                 else
                 {
-                    MessageBox.Show("Price Levels failed to sync. Do you have your API Key set?", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Price Levels failed to sync.");
                 }
             }
@@ -259,11 +259,11 @@ namespace LinkGreenODBCUtility
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Price Levels failed to migrate.", "Unknown Error");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Price Levels failed to migrate.");
                 }
             }
@@ -281,12 +281,12 @@ namespace LinkGreenODBCUtility
             {
                 if (priceLevelPrices.Publish())
                 {
-                    MessageBox.Show("Pricing Synced", "Success");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Info("Pricing synced.");
                 }
                 else
                 {
-                    MessageBox.Show("Pricing failed to sync. Do you have your API Key set?", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Pricing failed to sync.");
                 }
             }
@@ -294,11 +294,11 @@ namespace LinkGreenODBCUtility
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Pricing failed to migrate.", "Unknown Error");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Pricing failed to migrate.");
                 }
             }

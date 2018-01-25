@@ -34,7 +34,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Username & Password must be set.", "Missing Username or Password");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 

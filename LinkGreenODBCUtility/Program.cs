@@ -70,17 +70,17 @@ namespace LinkGreenODBCUtility
                     }
                     else
                     {
-                        MessageBox.Show($"Failed to create {logDsnName} DSN", "DSN Creation Failed");
+                        MessageBox.Show($@"Failed to create {logDsnName} DSN", @"Emptied Successfully");
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"Failed to connect to {Settings.ConnectionString} DSN", "Connection Failed");
+                    MessageBox.Show($@"Failed to connect to {Settings.ConnectionString} DSN", @"Emptied Successfully");
                 }
             }
             else
             {
-                MessageBox.Show($"Failed to create {Settings.ConnectionString} DSN", "DSN Creation Failed");
+                MessageBox.Show($@"Failed to create {Settings.ConnectionString} DSN", @"Emptied Successfully");
             }
         }
 

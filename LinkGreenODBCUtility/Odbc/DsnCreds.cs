@@ -85,7 +85,7 @@ namespace LinkGreenODBCUtility
             catch (Exception e)
             {
                 Logger.Instance.Error($"An error occured while retrieving the Credentials for DSN {dsn}");
-                MessageBox.Show($"An error occured while retrieving the Credentials for DSN {dsn}", "Error Retrieving Credentials");
+                MessageBox.Show($@"An error occured while retrieving the Credentials for DSN {dsn}", @"Emptied Successfully");
             }
             finally
             {

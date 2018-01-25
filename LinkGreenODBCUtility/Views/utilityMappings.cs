@@ -147,7 +147,7 @@ namespace LinkGreenODBCUtility
                     DisplayActiveBuyerInventoryTableMapping();
                     break;
                 default:
-                    MessageBox.Show("Invalid tab selected", "Invalid Tab");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     break;
             }
         }
@@ -946,7 +946,7 @@ namespace LinkGreenODBCUtility
                 var categories = new Categories();
                 if (categories.Empty())
                 {
-                    MessageBox.Show("Categories transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -956,11 +956,11 @@ namespace LinkGreenODBCUtility
             var categories = new Categories();
             if (categories.Publish())
             {
-                MessageBox.Show("Categories Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Categories failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -998,7 +998,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your categories table!", "No Category Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1023,7 +1023,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1033,18 +1033,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Categories"))
             {
-                MessageBox.Show("Categories migrated successfully.", "Categories Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Categories migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate categories.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate categories.");
                 }
             }
@@ -1060,7 +1060,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1130,7 +1130,7 @@ namespace LinkGreenODBCUtility
                 var customers = new Customers();
                 if (customers.Empty())
                 {
-                    MessageBox.Show("Customers transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1143,7 +1143,7 @@ namespace LinkGreenODBCUtility
                 var suppliers = new Suppliers();
                 if (suppliers.Empty())
                 {
-                    MessageBox.Show("Suppliers transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1156,7 +1156,7 @@ namespace LinkGreenODBCUtility
                 var buyerInventories = new BuyerInventories();
                 if (buyerInventories.Empty())
                 {
-                    MessageBox.Show("Buyer Inventory transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1169,7 +1169,7 @@ namespace LinkGreenODBCUtility
                 var supplierInventories = new SupplierInventories();
                 if (supplierInventories.Empty())
                 {
-                    MessageBox.Show("Supplier Inventories transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1188,7 +1188,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your customers table!", "No Customers Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1206,7 +1206,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your suppliers table!", "No Suppliers Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1224,7 +1224,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your supplier inventory table!", "No Supplier Inventory Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1275,7 +1275,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1290,7 +1290,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1305,7 +1305,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1320,7 +1320,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1334,7 +1334,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1348,7 +1348,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1362,7 +1362,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1376,7 +1376,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1386,18 +1386,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Customers"))
             {
-                MessageBox.Show("Customers migrated successfully.", "Customers Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Customers migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate customers.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate customers.");
                 }
             }
@@ -1409,18 +1409,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Suppliers"))
             {
-                MessageBox.Show("Suppliers migrated successfully.", "Suppliers Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Suppliers migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate suppliers.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate suppliers.");
                 }
             }
@@ -1431,11 +1431,11 @@ namespace LinkGreenODBCUtility
             var customers = new Customers();
             if (customers.Publish())
             {
-                MessageBox.Show("Customers Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Customers failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1445,17 +1445,17 @@ namespace LinkGreenODBCUtility
             var result = suppliers.Publish();
             if (result)
             {
-                MessageBox.Show("Suppliers Synced", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
                 if (!suppliers._validPushFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Suppliers failed to sync. No API Key was found", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1466,17 +1466,17 @@ namespace LinkGreenODBCUtility
             var result = supplierInventories.Publish();
             if (result)
             {
-                MessageBox.Show("Supplier Inventories Synced", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
                 if (!supplierInventories._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Supplier Inventories failed to sync. No API Key was found", "Sync Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1487,17 +1487,17 @@ namespace LinkGreenODBCUtility
             var result = supplierInventories.PushMatchedSkus();
             if (result)
             {
-                MessageBox.Show("Matched Supplier Inventories Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
                 if (!supplierInventories._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Supplier Inventories failed to Publish. Is your API key set?", "Publish Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1508,11 +1508,11 @@ namespace LinkGreenODBCUtility
             var result = suppliers.Download();
             if (result)
             {
-                MessageBox.Show("Suppliers Downloaded", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Suppliers failed to download. No API Key was found", "Download Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1522,11 +1522,11 @@ namespace LinkGreenODBCUtility
             var result = supplierInventories.Download();
             if (result)
             {
-                MessageBox.Show("Supplier Inventories Downloaded", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Supplier Inventories failed to download. No API Key was found", "Download Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1583,7 +1583,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your products table!", "No Products Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1601,7 +1601,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your buyer inventory table!", "No Buyer Inventory Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1625,7 +1625,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1640,7 +1640,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1652,7 +1652,7 @@ namespace LinkGreenODBCUtility
                 var products = new Products();
                 if (products.Empty())
                 {
-                    MessageBox.Show("Products transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1667,18 +1667,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Products"))
             {
-                MessageBox.Show("Products migrated successfully.", "Products Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Products migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate products.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate products.");
                 }
             }
@@ -1694,18 +1694,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("BuyerInventories"))
             {
-                MessageBox.Show("Buyer Inventory migrated successfully.", "Buyer Inventory Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Buyer inventory migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate buyer inventory.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate inventory.");
                 }
             }
@@ -1716,11 +1716,11 @@ namespace LinkGreenODBCUtility
             var products = new Products();
             if (products.Publish())
             {
-                MessageBox.Show("Products Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Products failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1729,11 +1729,11 @@ namespace LinkGreenODBCUtility
             var buyerInventories = new BuyerInventories();
             if (buyerInventories.Publish())
             {
-                MessageBox.Show("Buyer Inventory Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Buyer Inventory failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1771,7 +1771,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your pricing table!", "No Pricing Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1795,7 +1795,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1810,7 +1810,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1822,7 +1822,7 @@ namespace LinkGreenODBCUtility
                 var pricing = new PriceLevelPrices();
                 if (pricing.Empty())
                 {
-                    MessageBox.Show("Pricing transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1836,18 +1836,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevelPrices"))
             {
-                MessageBox.Show("Pricing migrated successfully.", "Pricing Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Pricing migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate pricing.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate pricing.");
                 }
             }
@@ -1858,11 +1858,11 @@ namespace LinkGreenODBCUtility
             var pricing = new PriceLevelPrices();
             if (pricing.Publish())
             {
-                MessageBox.Show("Pricing Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Pricing failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1900,7 +1900,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your price levels table!", "No Price Levels Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1924,7 +1924,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1939,7 +1939,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1951,7 +1951,7 @@ namespace LinkGreenODBCUtility
                 var priceLevels = new PriceLevels();
                 if (priceLevels.Empty())
                 {
-                    MessageBox.Show("Price Levels transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -1965,18 +1965,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevels"))
             {
-                MessageBox.Show("Price Levels migrated successfully.", "Price Levels Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Price Levels migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate price levels.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate price levels.");
                 }
             }
@@ -1987,11 +1987,11 @@ namespace LinkGreenODBCUtility
             var priceLevels = new PriceLevels();
             if (priceLevels.Publish())
             {
-                MessageBox.Show("Price Levels Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Price levels failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2004,7 +2004,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2017,7 +2017,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2030,7 +2030,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2043,7 +2043,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2056,7 +2056,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2069,7 +2069,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2082,7 +2082,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2095,7 +2095,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2132,7 +2132,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your supplier inventory table!", "No Supplier Inventory Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2145,7 +2145,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2169,7 +2169,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2184,7 +2184,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2196,7 +2196,7 @@ namespace LinkGreenODBCUtility
                 var linkedSkus = new LinkedSkus();
                 if (linkedSkus.Empty())
                 {
-                    MessageBox.Show("Linked Skus transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -2208,17 +2208,17 @@ namespace LinkGreenODBCUtility
             if (result)
             {
                 linkedSkus.Empty();
-                MessageBox.Show("Linked Skus Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
                 if (!linkedSkus._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Linked Skus failed to Publish. Is your API key set?", "Publish Failure");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -2256,7 +2256,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select your supplier inventory table!", "No Supplier Inventory Table Selected");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2269,7 +2269,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("No data source is selected", "No Data Source");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2293,7 +2293,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please setup a table mapping.", "No Table Mapping");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2308,7 +2308,7 @@ namespace LinkGreenODBCUtility
             }
             else
             {
-                MessageBox.Show("Please select a required field followed by one of your fields.", "Both Fields Are Required");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -2320,7 +2320,7 @@ namespace LinkGreenODBCUtility
                 var inventoryQuantity = new InventoryQuantity();
                 if (inventoryQuantity.Empty())
                 {
-                    MessageBox.Show("Inventory Quantities transfer table emptied.", "Emptied Successfully");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
             }
         }
@@ -2331,18 +2331,18 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("InventoryQuantities"))
             {
-                MessageBox.Show("Inventory Quantities migrated successfully.", "Inventory Quantities Migrated");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show("All required fields indicated with a * must be mapped.", "Map Required Fields");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                 }
                 else
                 {
-                    MessageBox.Show("Failed to migrate inventory quantities.", "Migration Failed");
+                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Warning("Failed to migrate inventory quantities.");
                 }
             }
@@ -2353,11 +2353,11 @@ namespace LinkGreenODBCUtility
             var inventoryQuantities = new InventoryQuantity();
             if (inventoryQuantities.Publish())
             {
-                MessageBox.Show("Inventory Quantities Published", "Success");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
             else
             {
-                MessageBox.Show("Inventory Quantities failed to publish. No API Key was found", "Publish Failure");
+                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
