@@ -426,7 +426,7 @@
             this.mappingCategoryFields.Size = new System.Drawing.Size(225, 134);
             this.mappingCategoryFields.Sorted = true;
             this.mappingCategoryFields.TabIndex = 15;
-            this.mappingCategoryFields.DoubleClick += new System.EventHandler(this.mappingCategoryFields_DoubleClick);
+            this.mappingCategoryFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // requiredCategoryFields
             // 
@@ -690,7 +690,7 @@
             this.mappingCustomerFields.Size = new System.Drawing.Size(225, 134);
             this.mappingCustomerFields.Sorted = true;
             this.mappingCustomerFields.TabIndex = 37;
-            this.mappingCustomerFields.DoubleClick += new System.EventHandler(this.mappingCustomerFields_DoubleClick);
+            this.mappingCustomerFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // customerFields
             // 
@@ -951,7 +951,7 @@
             this.mappingProductFields.Size = new System.Drawing.Size(225, 134);
             this.mappingProductFields.Sorted = true;
             this.mappingProductFields.TabIndex = 59;
-            this.mappingProductFields.DoubleClick += new System.EventHandler(this.mappingProductFields_DoubleClick);
+            this.mappingProductFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // productFields
             // 
@@ -1221,7 +1221,7 @@
             this.mappingInventoryQuantityFields.Size = new System.Drawing.Size(225, 134);
             this.mappingInventoryQuantityFields.Sorted = true;
             this.mappingInventoryQuantityFields.TabIndex = 130;
-            this.mappingInventoryQuantityFields.DoubleClick += new System.EventHandler(this.mappingInventoryQuantityFields_DoubleClick);
+            this.mappingInventoryQuantityFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // inventoryQuantityFields
             // 
@@ -1472,7 +1472,7 @@
             this.mappingPriceLevelFields.Size = new System.Drawing.Size(225, 134);
             this.mappingPriceLevelFields.Sorted = true;
             this.mappingPriceLevelFields.TabIndex = 103;
-            this.mappingPriceLevelFields.DoubleClick += new System.EventHandler(this.mappingPriceLevelFields_DoubleClick);
+            this.mappingPriceLevelFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // priceLevelFields
             // 
@@ -1733,7 +1733,7 @@
             this.mappingPricingFields.Size = new System.Drawing.Size(225, 134);
             this.mappingPricingFields.Sorted = true;
             this.mappingPricingFields.TabIndex = 81;
-            this.mappingPricingFields.DoubleClick += new System.EventHandler(this.mappingPricingFields_DoubleClick);
+            this.mappingPricingFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // pricingFields
             // 
@@ -2004,7 +2004,7 @@
             this.mappingSupplierFields.Size = new System.Drawing.Size(225, 134);
             this.mappingSupplierFields.Sorted = true;
             this.mappingSupplierFields.TabIndex = 37;
-            this.mappingSupplierFields.DoubleClick += new System.EventHandler(this.mappingSupplierFields_DoubleClick);
+            this.mappingSupplierFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // supplierFields
             // 
@@ -2265,7 +2265,7 @@
             this.mappingSupplierInventoryFields.Size = new System.Drawing.Size(225, 134);
             this.mappingSupplierInventoryFields.Sorted = true;
             this.mappingSupplierInventoryFields.TabIndex = 59;
-            this.mappingSupplierInventoryFields.DoubleClick += new System.EventHandler(this.mappingSupplierInventoryFields_DoubleClick);
+            this.mappingSupplierInventoryFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // requiredSupplierInventoryFields
             // 
@@ -2524,7 +2524,7 @@
             this.mappingLinkedSkuFields.Size = new System.Drawing.Size(225, 134);
             this.mappingLinkedSkuFields.Sorted = true;
             this.mappingLinkedSkuFields.TabIndex = 129;
-            this.mappingLinkedSkuFields.DoubleClick += new System.EventHandler(this.mappingLinkedSkuFields_DoubleClick);
+            this.mappingLinkedSkuFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // linkedSkuFields
             // 
@@ -2784,7 +2784,7 @@
             this.mappingBuyerInventoryFields.Size = new System.Drawing.Size(225, 134);
             this.mappingBuyerInventoryFields.Sorted = true;
             this.mappingBuyerInventoryFields.TabIndex = 80;
-            this.mappingBuyerInventoryFields.DoubleClick += new System.EventHandler(this.mappingBuyerInventoryFields_DoubleClick);
+            this.mappingBuyerInventoryFields.DoubleClick += new System.EventHandler(this.MappedListDoubleClick);
             // 
             // requiredBuyerInventoryFields
             // 

@@ -14,6 +14,7 @@ namespace LinkGreenODBCUtility
         public UtilityMappings()
         {
             InitializeComponent();
+            InitDoubleClickMaps();
         }
 
         private void UtilityLoad(object sender, EventArgs e)
@@ -261,22 +262,22 @@ namespace LinkGreenODBCUtility
                 activeFieldMappingLabel, activeFieldMappingValue);
 
         private void DisplayActiveCustomerFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("Customers", displayName, fieldName, 
+            DisplayFieldMapping("Customers", displayName, fieldName,
                 activeCustomerFieldMappingLabel, activeCustomerFieldMappingValue);
 
         private void DisplayActiveSupplierFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("Suppliers", displayName, fieldName, 
+            DisplayFieldMapping("Suppliers", displayName, fieldName,
                 activeSupplierFieldMappingLabel, activeSupplierFieldMappingValue);
-      
+
 
         private void DisplayActiveLinkedSkusFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("LinkedSkus", displayName, fieldName, 
+            DisplayFieldMapping("LinkedSkus", displayName, fieldName,
                 activeLinkedSkuFieldMappingLabel, activeLinkedSkuFieldMappingValue);
 
         private void DisplayActiveInventoryQuantityFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("InventoryQuantities", displayName, fieldName,
                 activeInventoryQuantityFieldMappingLabel, activeInventoryQuantityFieldMappingValue);
-      
+
 
         private void DisplayActiveSupplierInventoryFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("SupplierInventories", displayName, fieldName,
@@ -2190,64 +2191,29 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void mappingCategoryFields_DoubleClick(object sender, EventArgs e)
+        private Tuple<ListBox, Action<object, EventArgs>>[] _doubleClickMaps;
+
+        private void InitDoubleClickMaps()
         {
-            if (mappingCategoryFields.SelectedIndex > -1)
-                mapCategoryFields_Click(sender, e);
+            _doubleClickMaps = new[] {
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingCategoryFields, mapCategoryFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingCustomerFields, mapCustomerFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingProductFields, mapProductFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingInventoryQuantityFields, mapInventoryQuantityFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingPriceLevelFields, mapPriceLevelsFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingPricingFields, mapPricingFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingSupplierFields, mapSupplierFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingSupplierInventoryFields, mapSupplierInventoryFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingLinkedSkuFields, mapLinkedSkuFields_Click),
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingBuyerInventoryFields, mapBuyerInventoryFields_Click)
+            };
         }
 
-        private void mappingCustomerFields_DoubleClick(object sender, EventArgs e)
+        private void MappedListDoubleClick(object sender, EventArgs e)
         {
-            if (mappingCustomerFields.SelectedIndex > -1)
-                mapCustomerFields_Click(sender, e);
-        }
-
-        private void mappingProductFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingProductFields.SelectedIndex > -1)
-                mapProductFields_Click(sender, e);
-        }
-
-        private void mappingInventoryQuantityFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingInventoryQuantityFields.SelectedIndex > -1)
-                mapInventoryQuantityFields_Click(sender, e);
-        }
-
-        private void mappingPriceLevelFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingPriceLevelFields.SelectedIndex > -1)
-                mapPriceLevelsFields_Click(sender, e);
-        }
-
-        private void mappingPricingFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingPricingFields.SelectedIndex > -1)
-                mapPricingFields_Click(sender, e);
-        }
-
-        private void mappingSupplierFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingSupplierFields.SelectedIndex > -1)
-                mapSupplierFields_Click(sender, e);
-        }
-
-        private void mappingSupplierInventoryFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingSupplierInventoryFields.SelectedIndex > -1)
-                mapSupplierInventoryFields_Click(sender, e);
-        }
-
-        private void mappingLinkedSkuFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingLinkedSkuFields.SelectedIndex > -1)
-                mapLinkedSkuFields_Click(sender, e);
-        }
-
-        private void mappingBuyerInventoryFields_DoubleClick(object sender, EventArgs e)
-        {
-            if (mappingBuyerInventoryFields.SelectedIndex > -1)
-                mapBuyerInventoryFields_Click(sender, e);
+            if (((ListBox)sender).SelectedIndex > -1)
+                if (_doubleClickMaps.FirstOrDefault(m => m.Item1 == (ListBox)sender) != null)
+                    _doubleClickMaps.First(m => m.Item1 == (ListBox)sender).Item2(sender, e);
         }
     }
 }
