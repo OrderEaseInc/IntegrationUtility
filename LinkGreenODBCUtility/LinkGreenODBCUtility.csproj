@@ -260,6 +260,10 @@
       <Project>{a7519764-b219-44e4-9535-211b7fca3b11}</Project>
       <Name>LinkGreen.Applications.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LinkGreen.Mail\LinkGreen.Mail.csproj">
+      <Project>{ff5e42c5-c4ce-4240-badc-488f00ab5c6c}</Project>
+      <Name>LinkGreen.Mail</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo.png" />

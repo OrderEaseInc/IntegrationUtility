@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+
 using DataTransfer.AccessDatabase;
+
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 
@@ -23,15 +21,15 @@ namespace LinkGreenODBCUtility
             try
             {
                 var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                string encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
+                var encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
                 if (string.IsNullOrEmpty(encryptionKey))
                 {
-                    Guid g = Guid.NewGuid();
-                    string GuidString = Convert.ToBase64String(g.ToByteArray());
-                    GuidString = GuidString.Replace("=", "");
-                    GuidString = GuidString.Replace("+", "");
+                    var g = Guid.NewGuid();
+                    var guidString = Convert.ToBase64String(g.ToByteArray());
+                    guidString = guidString.Replace("=", "");
+                    guidString = guidString.Replace("+", "");
 
-                    config.AppSettings.Settings["EncryptionKey"].Value = GuidString;
+                    config.AppSettings.Settings["EncryptionKey"].Value = guidString;
                     config.Save(ConfigurationSaveMode.Modified);
                 }
 
@@ -71,298 +69,143 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public static string GetApiKey()
+        public static T GetSettingValue<T>(string settingName, bool isEncrypted = false)
         {
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                var _connection = cInstance.GetConnection();
-                var command = new OleDbCommand($"SELECT `ApiKey` FROM `Settings` WHERE `Id` = 1", _connection);
-                _connection.Open();
+                var command = new OleDbCommand($"SELECT `{settingName}` FROM `Settings` WHERE `Id` = 1", cInstance.GetConnection());
+                command.Connection.Open();
                 try
                 {
                     var key = command.ExecuteScalar();
-                    return key?.ToString() ?? "";
+                    if (key == null) return default(T);
+                    return (T)Convert.ChangeType(key, typeof(T));
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occurred while retrieving the ApiKey: {e.Message}");
+                    Logger.Instance.Error($"An error occurred while retrieving the {settingName}: {e.Message}");
                 }
                 finally
                 {
+                    command.Connection.Close();
                     cInstance.CloseConnection();
                 }
             }
 
-            return null;
+            return default(T);
         }
 
-        public static void SaveApiKey(string apiKey)
+        public static void SaveSettingValue(string dbSettingName, string appSettingName, object value, bool isEncrypted = false)
         {
+            if (string.IsNullOrEmpty(appSettingName)) appSettingName = dbSettingName;
+
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                var _connection = cInstance.GetConnection();
-                var command = new OleDbCommand($"UPDATE `Settings` SET `ApiKey` = '{apiKey}' WHERE `ID` = 1",
-                    _connection);
+                var command = new OleDbCommand($"UPDATE `Settings` SET `{dbSettingName}` = '{value}' WHERE `ID` = 1",
+                    cInstance.GetConnection());
 
-                _connection.Open();
+                command.Connection.Open();
                 try
                 {
                     command.ExecuteNonQuery();
 
                     var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    config.AppSettings.Settings["ApiKey"].Value = apiKey;
+                    config.AppSettings.Settings[appSettingName].Value = value.ToString();
                     config.Save(ConfigurationSaveMode.Modified);
 
-                    Logger.Instance.Debug($"ApiKey saved: '{apiKey}'");
+                    Logger.Instance.Debug($"{dbSettingName} saved: '{value}'");
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occured while updating the ApiKey.");
+                    Logger.Instance.Error($"An error occured while updating {dbSettingName}. {e.Message}");
                 }
                 finally
                 {
+                    command.Connection.Close();
                     cInstance.CloseConnection();
                 }
             }
         }
 
+        public static string GetApiKey() =>
+            GetSettingValue<string>("ApiKey") ?? string.Empty;
+
+        public static void SaveApiKey(string apiKey) =>
+            SaveSettingValue("ApiKey", "ApiKey", apiKey);
+
+        public static string GetNotificationEmail() =>
+            GetSettingValue<string>("NotificationEmail") ?? string.Empty;
+
+        public static void SaveNotificationEmail(string emailAddress) =>
+            SaveSettingValue("NotificationEmail", null, emailAddress);
+
+        internal static string GetSendwithusApiKey() =>
+            GetSettingValue<string>("SendwithusApiKey", true);
+
+        internal static void SaveSendwithusApiKey(string value) =>
+            SaveSettingValue("SendwithusApiKey", null, value, true);
+
         public static string GetInstallationId()
         {
-            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
-            {
-                var _connection = cInstance.GetConnection();
-                var command = new OleDbCommand($"SELECT `InstallationId` FROM `Settings` WHERE `Id` = 1", _connection);
-                _connection.Open();
-                OleDbDataReader reader = command.ExecuteReader();
-                try
-                {
-                    string installationId = null;
-                    while (reader.Read())
-                    {
-                        installationId = reader[0].ToString();
-                    }
+            var installationId = GetSettingValue<string>("InstallationId");
+            if (!string.IsNullOrEmpty(installationId)) return installationId;
 
-                    if (string.IsNullOrEmpty(installationId))
-                    {
-                        var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                        installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
-                            ? config.AppSettings.Settings["InstallationId"].Value
-                            : null;
-                    }
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
+                ? config.AppSettings.Settings["InstallationId"].Value
+                : null;
 
-                    return installationId;
-                }
-                catch (Exception e)
-                {
-                    Logger.Instance.Error($"An error occured while retrieving the InstallationId: {e.Message}");
-                }
-                finally
-                {
-                    reader.Close();
-                    cInstance.CloseConnection();
-                }
-            }
-
-            return null;
+            return installationId;
         }
 
         public static void SaveInstallationId()
         {
             var guid = Guid.NewGuid();
-            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
-            {
-                var _connection = cInstance.GetConnection();
-                var command = new OleDbCommand($"UPDATE `Settings` SET `InstallationId` = '{guid}' WHERE `ID` = 1", _connection);
-
-                _connection.Open();
-                try
-                {
-                    command.ExecuteNonQuery();
-
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    config.AppSettings.Settings["InstallationId"].Value = guid.ToString();
-                    config.Save(ConfigurationSaveMode.Modified);
-
-                    Logger.Instance.Debug(
-                        $"InstallationId set to: {config.AppSettings.Settings["InstallationId"].Value}");
-                }
-                catch (Exception e)
-                {
-                    Logger.Instance.Error($"An error occured while creating the InstallationId: {e.Message}");
-                }
-                finally
-                {
-                    cInstance.CloseConnection();
-                }
-            }
+            SaveSettingValue("InstallationId", null, guid.ToString());
         }
 
         public static bool GetUpdateCategories()
         {
-            using (var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection())
-            {
-                var command = new OleDbCommand($"SELECT `UpdateCategories` FROM `Settings` WHERE `Id` = 1", _connection);
-                _connection.Open();
-                OleDbDataReader reader = command.ExecuteReader();
-                try
-                {
-                    bool? updateCategories = null;
-                    while (reader.Read())
-                    {
-                        updateCategories = Convert.ToInt32(reader[0].ToString()) == 1;
-                    }
+            var dbUpdateCategories = GetSettingValue<int?>("UpdateCategories");
 
-                    if (updateCategories == null)
-                    {
-                        var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                        updateCategories = Convert.ToInt32(config.AppSettings.Settings["UpdateCategories"].Value) == 1;
-                    }
+            if (dbUpdateCategories.HasValue)
+                return dbUpdateCategories == 1;
 
-                    return updateCategories ?? true;
-                }
-                catch (Exception e)
-                {
-                    Logger.Instance.Error(
-                        $"An error occurred while retrieving the setting UpdateCategories: {e.Message}");
-                }
-                finally
-                {
-                    reader.Close();
-                    _connection.Close();
-                }
-            }
-
-            return true;
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appConfigUpdateCategories = config.AppSettings.Settings["UpdateCategories"].Value;
+            return appConfigUpdateCategories == null || appConfigUpdateCategories == "1";
         }
 
-        public static void SaveUpdateCategories(string updateCategories)
-        {
-
-            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
-            var command = new OleDbCommand($"UPDATE `Settings` SET `UpdateCategories` = '{updateCategories}' WHERE `ID` = 1")
-            {
-                Connection = _connection
-            };
-
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
-
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["UpdateCategories"].Value = updateCategories;
-                config.Save(ConfigurationSaveMode.Modified);
-
-                Logger.Instance.Debug($"Setting UpdateCategories saved: '{updateCategories}'");
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while updating the setting UpdateCategories.");
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
+        public static void SaveUpdateCategories(bool updateCategories) =>
+            SaveSettingValue("UpdateCategories", null, updateCategories ? "1" : "0");
 
         public static bool GetSanitizeLog()
         {
-            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
-            var command = new OleDbCommand($"SELECT `SanitizeLog` FROM `Settings` WHERE `Id` = 1", _connection);
-            _connection.Open();
-            OleDbDataReader reader = command.ExecuteReader();
-            try
-            {
-                bool? sanitizeLog = null;
-                while (reader.Read())
-                {
-                    sanitizeLog = Convert.ToInt32(reader[0].ToString()) == 1;
-                }
+            var dbSanitizeLog = GetSettingValue<int?>("SanitizeLog");
 
-                if (sanitizeLog == null)
-                {
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    sanitizeLog = Convert.ToInt32(config.AppSettings.Settings["SanitizeLog"].Value) == 1;
-                }
+            if (dbSanitizeLog.HasValue)
+                return dbSanitizeLog == 1;
 
-                return sanitizeLog ?? false;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occurred while retrieving the setting SanitizeLog: {e.Message}");
-            }
-            finally
-            {
-                reader.Close();
-                _connection.Close();
-            }
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appConfigSanitizeLog = config.AppSettings.Settings["SanitizeLog"].Value;
+            return appConfigSanitizeLog != null && appConfigSanitizeLog == "1";
 
-            return false;
         }
 
         public static bool GetSandboxMode()
         {
-            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
-            var command = new OleDbCommand($"SELECT `SandboxMode` FROM `Settings` WHERE `Id` = 1", _connection);
-            _connection.Open();
-            OleDbDataReader reader = command.ExecuteReader();
-            try
-            {
-                bool? sandboxMode = null;
-                while (reader.Read())
-                {
-                    sandboxMode = Convert.ToInt32(reader[0].ToString()) == 1;
-                }
+            var dbSandboxMode = GetSettingValue<int?>("SandboxMode");
 
-                if (sandboxMode == null)
-                {
-                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    sandboxMode = Convert.ToInt32(config.AppSettings.Settings["SandboxMode"].Value) == 1;
-                }
+            if (dbSandboxMode.HasValue)
+                return dbSandboxMode == 1;
 
-                return sandboxMode ?? true;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occurred while retrieving the setting SandboxMode: {e.Message}");
-            }
-            finally
-            {
-                reader.Close();
-                _connection.Close();
-            }
-
-            return true;
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appConfigSandboxMode = config.AppSettings.Settings["SandboxMode"].Value;
+            return appConfigSandboxMode == null || appConfigSandboxMode == "1";
         }
 
-        public static void SaveSandboxMode(string sandboxMode)
-        {
-            var _connection = new OleDbConnectionInstance(ConnectionString).GetConnection();
-            var command = new OleDbCommand($"UPDATE `Settings` SET `SandboxMode` = '{sandboxMode}' WHERE `ID` = 1")
-            {
-                Connection = _connection
-            };
-
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
-
-                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["SandboxMode"].Value = sandboxMode;
-                config.Save(ConfigurationSaveMode.Modified);
-
-                Logger.Instance.Debug($"Setting SandboxMode saved: '{sandboxMode}'");
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while updating the setting SandboxMode.");
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
+        public static void SaveSandboxMode(bool sandboxMode) =>
+            SaveSettingValue("SandboxMode", null, sandboxMode ? "1" : "0");
 
         public static void SetupUserConfig(string apiKey)
         {

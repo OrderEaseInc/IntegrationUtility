@@ -1232,6 +1232,7 @@ namespace LinkGreenODBCUtility
             foreach (var column in columns) {
                 var field = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.FieldName;
                 var fieldDisplayName = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.DisplayName;
+                if (string.IsNullOrEmpty(fieldDisplayName)) fieldDisplayName = column;
                 var combinedColumnName = $"`{column}`  AS \"{fieldDisplayName} : {column}\"";
                 if (!string.IsNullOrEmpty(field))
                 {
@@ -1266,10 +1267,10 @@ namespace LinkGreenODBCUtility
                         var table = new DataTable();
 
                         var items = GetUnmappedFields(tableName);
-                        foreach (var item in items)
-                        {
-                            table.Columns.Add(item.DisplayName);
-                        }
+                        //foreach (var item in items)
+                        //{
+                        //    table.Columns.Add(item.DisplayName);
+                        //}
 
                         try
                         {

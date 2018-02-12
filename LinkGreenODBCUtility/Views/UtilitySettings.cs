@@ -14,6 +14,7 @@ namespace LinkGreenODBCUtility
         private void UtilitySettings_Load(object sender, EventArgs e)
         {
             apiKey.Text = Settings.GetApiKey();
+            txtNotificationEmail.Text = Settings.GetNotificationEmail();
             var link = new LinkLabel.Link { LinkData = "https://app.linkgreen.ca/Login/Manage" };
             apiKeyDetailLink.Links.Add(link);
 
@@ -34,9 +35,10 @@ namespace LinkGreenODBCUtility
         private void saveSettings_Click(object sender, EventArgs e)
         {
             Settings.SaveApiKey(apiKey.Text);
-            Settings.SaveUpdateCategories(updateCategories.Checked ? "1" : "0");
-            Settings.SaveSandboxMode(sandboxMode.Checked ? "1" : "0");
+            Settings.SaveUpdateCategories(updateCategories.Checked);
+            Settings.SaveSandboxMode(sandboxMode.Checked);
             Settings.DebugMode = debugMode.Checked;
+            Settings.SaveNotificationEmail(txtNotificationEmail.Text);
             Close();
             Logger.Instance.Debug($"Settings saved: (ApiKey: '{apiKey.Text}', DebugMode: {debugMode.Checked}, SandboxMode: {sandboxMode.Checked}, UpdateCategories: {updateCategories.Checked})");
         }

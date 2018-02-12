@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkGreenODBCUtility", "LinkGreenODBCUtility\LinkGreenODBCUtility.csproj", "{9C107EDF-7949-456C-B09E-1C4E807D9AA6}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransfer.OdbcSource", "DataTransfer.AccessDatabase\DataTransfer.OdbcSource.csproj", "{592DB8E5-CDB3-413D-969F-3488CB9DF1A3}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupLinkGreenOdbcUtility", "SetupLinkGreenOdbcUtility\SetupLinkGreenOdbcUtility.vdproj", "{09B5394A-1D7B-450B-B0EA-C544D79E1678}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkGreen.Mail", "LinkGreen.Mail\LinkGreen.Mail.csproj", "{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,26 @@ Global
 		{09B5394A-1D7B-450B-B0EA-C544D79E1678}.UAT|Any CPU.Build.0 = Release
 		{09B5394A-1D7B-450B-B0EA-C544D79E1678}.UAT|x86.ActiveCfg = Release
 		{09B5394A-1D7B-450B-B0EA-C544D79E1678}.UAT|x86.Build.0 = Release
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.DBOnly|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.DBOnly|Any CPU.Build.0 = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.DBOnly|x86.ActiveCfg = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.DBOnly|x86.Build.0 = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.No Db|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.No Db|Any CPU.Build.0 = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.No Db|x86.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.No Db|x86.Build.0 = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.Release|x86.Build.0 = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.UAT|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.UAT|Any CPU.Build.0 = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.UAT|x86.ActiveCfg = Release|Any CPU
+		{FF5E42C5-C4CE-4240-BADC-488F00AB5C6C}.UAT|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

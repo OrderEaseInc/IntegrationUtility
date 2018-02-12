@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LinkGreen.Email;
 
 namespace LinkGreenODBCUtility
 {
@@ -347,6 +348,14 @@ namespace LinkGreenODBCUtility
         {
             var TaskManager = new TaskManager();
             TaskManager.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Mail.Test();
+            Settings.SaveSendwithusApiKey("test_b003bd3edf41de5571e10a243c77375256f55b74");
+
+            var value = Settings.GetSendwithusApiKey();
         }
     }
 }

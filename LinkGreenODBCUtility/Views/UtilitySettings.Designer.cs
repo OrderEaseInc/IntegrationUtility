@@ -39,6 +39,8 @@
             this.updateCategories = new System.Windows.Forms.CheckBox();
             this.sandboxMode = new System.Windows.Forms.CheckBox();
             this.sandboxLabelDetail = new System.Windows.Forms.Label();
+            this.lblNotificationEmail = new System.Windows.Forms.Label();
+            this.txtNotificationEmail = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // apiKey
@@ -62,7 +64,7 @@
             // 
             // saveSettings
             // 
-            this.saveSettings.Location = new System.Drawing.Point(268, 181);
+            this.saveSettings.Location = new System.Drawing.Point(268, 228);
             this.saveSettings.Name = "saveSettings";
             this.saveSettings.Size = new System.Drawing.Size(75, 23);
             this.saveSettings.TabIndex = 2;
@@ -72,7 +74,7 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(187, 181);
+            this.cancel.Location = new System.Drawing.Point(187, 228);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 3;
@@ -104,7 +106,7 @@
             // debugMode
             // 
             this.debugMode.AutoSize = true;
-            this.debugMode.Location = new System.Drawing.Point(12, 122);
+            this.debugMode.Location = new System.Drawing.Point(12, 169);
             this.debugMode.Name = "debugMode";
             this.debugMode.Size = new System.Drawing.Size(88, 17);
             this.debugMode.TabIndex = 7;
@@ -116,7 +118,7 @@
             this.updateCategories.AutoSize = true;
             this.updateCategories.Checked = true;
             this.updateCategories.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.updateCategories.Location = new System.Drawing.Point(12, 160);
+            this.updateCategories.Location = new System.Drawing.Point(12, 207);
             this.updateCategories.Name = "updateCategories";
             this.updateCategories.Size = new System.Drawing.Size(192, 17);
             this.updateCategories.TabIndex = 8;
@@ -126,7 +128,7 @@
             // sandboxMode
             // 
             this.sandboxMode.AutoSize = true;
-            this.sandboxMode.Location = new System.Drawing.Point(12, 141);
+            this.sandboxMode.Location = new System.Drawing.Point(12, 188);
             this.sandboxMode.Name = "sandboxMode";
             this.sandboxMode.Size = new System.Drawing.Size(98, 17);
             this.sandboxMode.TabIndex = 9;
@@ -136,17 +138,38 @@
             // sandboxLabelDetail
             // 
             this.sandboxLabelDetail.AutoSize = true;
-            this.sandboxLabelDetail.Location = new System.Drawing.Point(117, 141);
+            this.sandboxLabelDetail.Location = new System.Drawing.Point(117, 188);
             this.sandboxLabelDetail.Name = "sandboxLabelDetail";
             this.sandboxLabelDetail.Size = new System.Drawing.Size(224, 13);
             this.sandboxLabelDetail.TabIndex = 10;
             this.sandboxLabelDetail.Text = "( Login for viewing at http://dev.linkgreen.ca )";
             // 
+            // lblNotificationEmail
+            // 
+            this.lblNotificationEmail.AutoSize = true;
+            this.lblNotificationEmail.Location = new System.Drawing.Point(9, 120);
+            this.lblNotificationEmail.Name = "lblNotificationEmail";
+            this.lblNotificationEmail.Size = new System.Drawing.Size(91, 13);
+            this.lblNotificationEmail.TabIndex = 12;
+            this.lblNotificationEmail.Text = "Notification Email:";
+            // 
+            // txtNotificationEmail
+            // 
+            this.txtNotificationEmail.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtNotificationEmail.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNotificationEmail.Location = new System.Drawing.Point(12, 136);
+            this.txtNotificationEmail.MinimumSize = new System.Drawing.Size(4, 25);
+            this.txtNotificationEmail.Name = "txtNotificationEmail";
+            this.txtNotificationEmail.Size = new System.Drawing.Size(331, 25);
+            this.txtNotificationEmail.TabIndex = 11;
+            // 
             // UtilitySettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 216);
+            this.ClientSize = new System.Drawing.Size(359, 261);
+            this.Controls.Add(this.lblNotificationEmail);
+            this.Controls.Add(this.txtNotificationEmail);
             this.Controls.Add(this.sandboxLabelDetail);
             this.Controls.Add(this.sandboxMode);
             this.Controls.Add(this.updateCategories);
@@ -159,9 +182,9 @@
             this.Controls.Add(this.apiKey);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(375, 255);
+            this.MaximumSize = new System.Drawing.Size(375, 300);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(375, 215);
+            this.MinimumSize = new System.Drawing.Size(375, 300);
             this.Name = "UtilitySettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "General Settings";
@@ -183,5 +206,7 @@
         private System.Windows.Forms.CheckBox updateCategories;
         private System.Windows.Forms.CheckBox sandboxMode;
         private System.Windows.Forms.Label sandboxLabelDetail;
+        private System.Windows.Forms.Label lblNotificationEmail;
+        private System.Windows.Forms.TextBox txtNotificationEmail;
     }
 }
