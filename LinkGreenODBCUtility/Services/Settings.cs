@@ -147,8 +147,8 @@ namespace LinkGreenODBCUtility
             return string.IsNullOrWhiteSpace(overrideKey) ? SendWithUsLiveKey : overrideKey;
         }
 
-        internal static void SaveSendwithusApiKey(string value) =>
-            SaveSettingValue("SendwithusApiKey", null, value, true);
+        //internal static void SaveSendwithusApiKey(string value) =>
+        //    SaveSettingValue("SendwithusApiKey", null, value, true);
 
         public static string GetInstallationId()
         {
