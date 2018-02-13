@@ -186,6 +186,8 @@ namespace LinkGreenODBCUtility
                 Logger.Instance.Debug($"Finished importing inventory {++items} of {products.Count}. Id: {product.Id}");
             }
 
+            publishDetails.Insert(0, $"{items} inventory items have been pushed to LinkGreen");
+
             return true;
         }
     }

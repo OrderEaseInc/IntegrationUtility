@@ -4,7 +4,7 @@ using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
-    public class LinkedSkus: IOdbcTransfer
+    public class LinkedSkus : IOdbcTransfer
     {
         private readonly LinkedSkusRepository repository;
         private const string TableName = "LinkedSkus";
@@ -62,7 +62,8 @@ namespace LinkGreenODBCUtility
             }
 
             // Push any matched BuyerSKUs up to LinkGreen
-            repository.SyncAllLinkedSkus();
+            var updateCount = repository.SyncAllLinkedSkus();
+            publishDetails.Insert(0, $"{updateCount} linked SKUs have been updated");
 
             return true;
         }

@@ -62,7 +62,7 @@ namespace LinkGreenODBCUtility
                 // Send it up to LinkGreen
                 var result = _supplierRepository.SyncAllSuppliers();
                 Logger.Instance.Debug($"{TableName} {result} suppliers contact info updated in LinkGreen");
-
+                publishDetails.Insert(0, $"{result} suppliers contact info updated in LinkGreen");
                 return true;
             }
 

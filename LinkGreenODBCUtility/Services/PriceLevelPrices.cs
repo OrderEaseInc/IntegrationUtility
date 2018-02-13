@@ -58,6 +58,8 @@ namespace LinkGreenODBCUtility
             publishDetails = new List<string>();
             string apiKey = Settings.GetApiKey();
 
+            var updateCounter = 0;
+
             if (!string.IsNullOrEmpty(apiKey))
             {
                 var pricesToImport = new ProductPriceRepository(Settings.ConnectionString).GetAll().ToList();
@@ -71,6 +73,7 @@ namespace LinkGreenODBCUtility
 
                     if (publishedProduct == null) //this price's product doesn't exist on linkgreen so let's ignore it
                     {
+                        publishDetails.Add($"SKU {price.Id} did not exist in LinkGreen to be updated with price");
                         continue;
                     }
 
@@ -81,17 +84,19 @@ namespace LinkGreenODBCUtility
 
                     if (price.Price > 0 && price.Price < publishedProduct.NetPrice) //no point in creating a price level price if it will cost more than net 
                     {
-                        PricingLevelItemRequest item = new PricingLevelItemRequest
+                        var item = new PricingLevelItemRequest
                         {
                             PriceLevelName = price.PriceLevel,
                             SupplierInventoryItemId = publishedProduct.Id,
                             Price = price.Price.Value,
                             MinimumPurchase = price.MinimumPurchase
                         };
-
+                        updateCounter++;
                         WebServiceHelper.PushPricingLevelPrice(item);
                     }
                 }
+
+                publishDetails.Insert(0, $"{updateCounter} products have had their prices updated.");
 
                 return true;
             }

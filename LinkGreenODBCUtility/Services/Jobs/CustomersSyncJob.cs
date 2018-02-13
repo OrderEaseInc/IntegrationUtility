@@ -12,8 +12,8 @@ namespace LinkGreenODBCUtility
         {
             var notificationEmail = Settings.GetNotificationEmail();
             Logger.Instance.Info($"Job started: {GetType().Name}");
-            var Tasks = new Tasks();
-            Tasks.StartTask(JobName);
+            var tasks = new Tasks();
+            tasks.StartTask(JobName);
 
             var customers = new Customers();
             customers.UpdateTemporaryTables();
@@ -24,7 +24,7 @@ namespace LinkGreenODBCUtility
             if (newMapping.MigrateData("Customers") && customers.Publish(out var publishDetails))
             {
                 Logger.Instance.Info("Customers synced.");
-                Tasks.SetStatus(JobName, "Success");
+                tasks.SetStatus(JobName, "Success");
 
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, $"{JobName} Publish",
@@ -34,7 +34,7 @@ namespace LinkGreenODBCUtility
             else
             {
                 Logger.Instance.Error("Customers failed to sync.");
-                Tasks.SetStatus(JobName, "Failed");
+                tasks.SetStatus(JobName, "Failed");
 
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, $"{JobName} Publish failed, please check logs or contact support", $"{JobName} Publish",
@@ -42,7 +42,7 @@ namespace LinkGreenODBCUtility
 
             }
 
-            Tasks.EndTask(JobName);
+            tasks.EndTask(JobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

@@ -144,10 +144,11 @@ namespace LinkGreenODBCUtility
                 }
 
                 WebServiceHelper.PostInventoryImport();
-
+                publishDetails.Insert(0, $"{items} products published to LinkGreen");
                 return true;
             }
 
+            publishDetails.Insert(0, "No Api Key set while executing products publish.");
             Logger.Instance.Warning("No Api Key set while executing products publish.");
 
             return false;

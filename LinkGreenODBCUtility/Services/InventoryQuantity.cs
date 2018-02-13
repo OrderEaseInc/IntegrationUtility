@@ -58,6 +58,7 @@ namespace LinkGreenODBCUtility
                 if (string.IsNullOrEmpty(apiKey))
                 {
                     Logger.Instance.Warning("No Api Key set while executing inventory quantities publish.");
+                    publishDetails.Insert(0, "No Api Key set while executing inventory quantities publish");
                     return false;
                 }
 
@@ -107,13 +108,17 @@ namespace LinkGreenODBCUtility
 
                 if (items < 1)
                 {
-                    Logger.Instance.Warning($"No inventory quantity items were published. Double check your skus.");
+                    Logger.Instance.Warning("No inventory quantity items were published. Double check your skus.");
+                    publishDetails.Insert(0, "No inventory quantity items were published. Double check your skus");
                 }
+
+                publishDetails.Insert(0, $"{items} inventory quantity items were published.");
 
                 return true;
             }
 
             Logger.Instance.Warning("Failed to migrate Inventory Quantities.");
+            publishDetails.Insert(0, "Failed to migrate Inventory Quantities");
             return false;
         }
     }

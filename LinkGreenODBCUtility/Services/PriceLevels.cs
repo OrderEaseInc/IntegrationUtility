@@ -64,6 +64,7 @@ namespace LinkGreenODBCUtility
             {
                 var priceLevelRepo = new PriceLevelRepository(Settings.ConnectionString);
                 var levelsToImport = priceLevelRepo.GetAll().ToList();
+                var importCounter = 0;
 
                 foreach (var level in levelsToImport)
                 {
@@ -82,7 +83,10 @@ namespace LinkGreenODBCUtility
                     };
 
                     WebServiceHelper.PushPricingLevel(request);
+                    importCounter++;
                 }
+
+                publishDetails.Insert(0, $"{importCounter} price levels have been pushed to LinkGreen");
 
                 return true;
             }

@@ -95,6 +95,8 @@ namespace LinkGreenODBCUtility
                     // MessageBox.Show("No customers were published.", "No Customers published.");
                 }
 
+                publishDetails.Insert(0, $"{total} customers published to LinkGreen");
+
                 Logger.Instance.Info($"{total} Customers published.");
                 Logger.Instance.Debug($"{total} Customers published. ApiKey: {apiKey}");
 

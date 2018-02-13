@@ -88,6 +88,7 @@ namespace LinkGreenODBCUtility
             if (newMapping.PushData(TableName, TableKey, true))
             {
                 Logger.Instance.Debug("Supplier Inventory migrated from utility to mapped production database.");
+                publishDetails.Insert(0, "Supplier Inventory migrated from utility to mapped production database.");
                 return true;
             }
 
@@ -97,6 +98,7 @@ namespace LinkGreenODBCUtility
             }
 
             Logger.Instance.Error("Failed to migrate Supplier Inventory from utility to mapped production database.");
+            publishDetails.Insert(0, "Failed to migrate Supplier Inventory from utility to mapped production database.");
 
             return false;
         }

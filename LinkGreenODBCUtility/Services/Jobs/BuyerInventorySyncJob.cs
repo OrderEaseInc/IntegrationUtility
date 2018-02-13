@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LinkGreen.Email;
+﻿using LinkGreen.Email;
 using Quartz;
 
 namespace LinkGreenODBCUtility.Services.Jobs
@@ -16,14 +11,14 @@ namespace LinkGreenODBCUtility.Services.Jobs
         {
             var notificationEmail = Settings.GetNotificationEmail();
             Logger.Instance.Info($"Job started: {GetType().Name}");
-            var Tasks = new Tasks();
-            Tasks.StartTask(JobName);
+            var tasks = new Tasks();
+            tasks.StartTask(JobName);
 
             var buyerInventories = new BuyerInventories();
             if (buyerInventories.Publish(out var publishDetails))
             {
                 Logger.Instance.Info("Buyer Inventory Published");
-                Tasks.SetStatus(JobName, "Success");
+                tasks.SetStatus(JobName, "Success");
 
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, $"{JobName} Publish",
@@ -32,14 +27,14 @@ namespace LinkGreenODBCUtility.Services.Jobs
             else
             {
                 Logger.Instance.Error("Buyer Inventory failed to publish. No API Key was found");
-                Tasks.SetStatus(JobName, "Failed");
+                tasks.SetStatus(JobName, "Failed");
 
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, $"{JobName} Publish failed, please check logs or contact support", $"{JobName} Publish",
                         response => Logger.Instance.Info(response));
             }
 
-            Tasks.EndTask(JobName);
+            tasks.EndTask(JobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

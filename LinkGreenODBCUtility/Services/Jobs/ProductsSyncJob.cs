@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LinkGreen.Email;
+﻿using LinkGreen.Email;
 using Quartz;
 
 namespace LinkGreenODBCUtility
@@ -17,8 +12,8 @@ namespace LinkGreenODBCUtility
         {
             var notificationEmail = Settings.GetNotificationEmail();
             Logger.Instance.Info($"Job started: {GetType().Name}");
-            var Tasks = new Tasks();
-            Tasks.StartTask(JobName);
+            var tasks = new Tasks();
+            tasks.StartTask(JobName);
 
             var products = new Products();
             products.UpdateTemporaryTables();
@@ -29,7 +24,7 @@ namespace LinkGreenODBCUtility
             if (newMapping.MigrateData("Products") && products.Publish(out var publishDetails))
             {
                 Logger.Instance.Info("Products synced.");
-                Tasks.SetStatus(JobName, "Success");
+                tasks.SetStatus(JobName, "Success");
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, $"{JobName} Publish",
                         response => Logger.Instance.Info(response));
@@ -38,7 +33,7 @@ namespace LinkGreenODBCUtility
             else
             {
                 Logger.Instance.Error("Products failed to sync.");
-                Tasks.SetStatus(JobName, "Failed");
+                tasks.SetStatus(JobName, "Failed");
 
                 if (!string.IsNullOrWhiteSpace(notificationEmail))
                     Mail.SendProcessCompleteEmail(notificationEmail, $"{JobName} Publish failed, please check logs or contact support", $"{JobName} Publish",
@@ -46,7 +41,7 @@ namespace LinkGreenODBCUtility
 
             }
 
-            Tasks.EndTask(JobName);
+            tasks.EndTask(JobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }
