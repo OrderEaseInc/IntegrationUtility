@@ -1970,8 +1970,8 @@ namespace LinkGreenODBCUtility
         {
             if (linkedSkusDataSource.SelectedItem != null)
             {
-                var DsnCredentials = new DsnCredentials(linkedSkusDataSource.SelectedItem.ToString());
-                DsnCredentials.ShowDialog();
+                var dsnCredentials = new DsnCredentials(linkedSkusDataSource.SelectedItem.ToString());
+                dsnCredentials.ShowDialog();
             }
             else
             {
@@ -2038,17 +2038,17 @@ namespace LinkGreenODBCUtility
             if (result)
             {
                 linkedSkus.Empty();
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                MessageBox.Show(@"Linked SKUs have been pubished", @"Published Successfully");
             }
             else
             {
                 if (!linkedSkus._validFields)
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Please validate your field mappings", @"Publish Failed");
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"An unexpected error has occured, please view your logs or contact support", @"Publish Failed");
                 }
             }
         }
@@ -2057,7 +2057,7 @@ namespace LinkGreenODBCUtility
         {
             if (inventoryQuantityDataSource.SelectedItem != null)
             {
-                string dsnName = inventoryQuantityDataSource.SelectedItem.ToString();
+                var dsnName = inventoryQuantityDataSource.SelectedItem.ToString();
                 var mapping = new Mapping(dsnName);
                 var tableNames = mapping.GetTableNames();
 

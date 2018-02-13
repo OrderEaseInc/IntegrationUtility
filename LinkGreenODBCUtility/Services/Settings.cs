@@ -11,6 +11,8 @@ namespace LinkGreenODBCUtility
 {
     public static class Settings
     {
+        private const string SendWithUsLiveKey = "live_78b03caa9c4e1284a1191bb1e8ddf2dcd9c3469f";
+
         public static string ConnectViaDsnName = "LinkGreenDataTransfer";
         public static bool DebugMode = false;
         public static readonly string ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=LinkGreenDataTransfer.mdb;Persist Security Info=True";
@@ -139,8 +141,11 @@ namespace LinkGreenODBCUtility
         public static void SaveNotificationEmail(string emailAddress) =>
             SaveSettingValue("NotificationEmail", null, emailAddress);
 
-        internal static string GetSendwithusApiKey() =>
-            GetSettingValue<string>("SendwithusApiKey", true);
+        internal static string GetSendwithusApiKey()
+        {
+            var overrideKey = GetSettingValue<string>("SendwithusApiKey", true);
+            return string.IsNullOrWhiteSpace(overrideKey) ? SendWithUsLiveKey : overrideKey;
+        }
 
         internal static void SaveSendwithusApiKey(string value) =>
             SaveSettingValue("SendwithusApiKey", null, value, true);

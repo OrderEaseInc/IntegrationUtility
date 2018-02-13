@@ -40,6 +40,7 @@ namespace DataTransfer.AccessDatabase
                 var command = new OleDbCommand($"SELECT * FROM {TableName} Where SupplierId = {supplier.Id}");
                 var skusToLink = GetRecords(command);
                 foreach (var link in skusToLink.Where(i => !string.IsNullOrEmpty(i.BuyerSku) && lgSupplierInventories.ContainsKey(i.SupplierSku))) {
+                    if (link.Processed) continue;
                     var lgSupplierInventory = lgSupplierInventories[link.SupplierSku];
                     if (!string.IsNullOrEmpty(link.BuyerSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == link.BuyerSku))) {
                         // this didn't come in from the web service
