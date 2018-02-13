@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Dynamic;
 using System.Linq;
@@ -9,7 +10,7 @@ using LinkGreen.Applications.Common.Model;
 
 namespace LinkGreenODBCUtility
 {
-    public class InventoryQuantity: IOdbcTransfer
+    public class InventoryQuantity : IOdbcTransfer
     {
         private readonly InventoryQuantityRepository repository;
         private const string TableName = "InventoryQuantities";
@@ -40,8 +41,9 @@ namespace LinkGreenODBCUtility
             Logger.Instance.Debug($"Inventory Quantities field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             // clear out transfer table
             Empty();
 

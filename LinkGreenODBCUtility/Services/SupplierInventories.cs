@@ -74,8 +74,9 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             // clear out transfer table
             Empty();
             // populate transfer table with LinkGreen data

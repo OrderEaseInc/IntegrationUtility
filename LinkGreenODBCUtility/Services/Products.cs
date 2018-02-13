@@ -58,8 +58,9 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))

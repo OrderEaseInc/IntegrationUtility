@@ -1,37 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LinkGreen.Email;
 using Quartz;
 
 namespace LinkGreenODBCUtility.Services.Jobs
 {
-    public class LinkedSKusSyncJob: IJob
+    public class LinkedSKusSyncJob : IJob
     {
-        private static string jobName = "LinkedSkus";
+        private const string JobName = "LinkedSkus";
 
         public void Execute(IJobExecutionContext context)
         {
+            var notificationEmail = Settings.GetNotificationEmail();
             Logger.Instance.Info($"Job started: {GetType().Name}");
             var Tasks = new Tasks();
-            Tasks.StartTask(jobName);
+            Tasks.StartTask(JobName);
 
             var linkedSkus = new LinkedSkus();
-            var result = linkedSkus.Publish();
+            var result = linkedSkus.Publish(out var publishDetails);
             if (result)
             {
                 linkedSkus.Empty();
                 Logger.Instance.Info("Linked Skus Published");
-                Tasks.SetStatus(jobName, "Success");
+                Tasks.SetStatus(JobName, "Success");
+                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                    Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, $"{JobName} Publish",
+                        response => Logger.Instance.Info(response));
             }
             else
             {
                 Logger.Instance.Error("Linked Skus failed to Publish. Is your API key set?");
-                Tasks.SetStatus(jobName, "Failed");
+                Tasks.SetStatus(JobName, "Failed");
+
+                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                    Mail.SendProcessCompleteEmail(notificationEmail, "Supplier Publish failed, please check logs or contact support", $"{JobName} Publish",
+                        response => Logger.Instance.Info(response));
             }
 
-            Tasks.EndTask(jobName);
+            Tasks.EndTask(JobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

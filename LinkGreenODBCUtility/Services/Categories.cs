@@ -56,9 +56,11 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
-            string apiKey = Settings.GetApiKey();
+            publishDetails = new List<string>();
+
+            var apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {
@@ -67,15 +69,14 @@ namespace LinkGreenODBCUtility
                 var existingCategories = WebServiceHelper.GetAllCategories();
 
                 //create all categories if they don't exist
-                int numOfPublishedCategories = 0;
+                var numOfPublishedCategories = 0;
                 foreach (var category in categoriesToImport)
                 {
-                    var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == category.Category);
-
-                    if (existingCategory == null)
+                    if (existingCategories.All(s => s?.Name != category.Category))
                     {
                         existingCategories.Add(
                             WebServiceHelper.PushCategory(new PrivateCategory { Name = category.Category, Depth = 0 }));
+                        publishDetails.Add($"Added category: {category.Category}");
                         numOfPublishedCategories++;
                     }
                 }
@@ -84,6 +85,8 @@ namespace LinkGreenODBCUtility
                 {
                     Logger.Instance.Warning("No categories were found to import.");
                 }
+
+                publishDetails.Insert(0, $"{numOfPublishedCategories} Categories published.");
 
                 Logger.Instance.Info($"{numOfPublishedCategories} Categories published.");
                 Logger.Instance.Debug($"{numOfPublishedCategories} Categories published. ApiKey: {apiKey}");

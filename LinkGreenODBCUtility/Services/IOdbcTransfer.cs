@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace LinkGreenODBCUtility
 {
-    interface IOdbcTransfer
+    internal interface IOdbcTransfer
     {
         bool Empty();
 
         void SaveTableMapping(string dsnName, string tableName);
 
-        bool Publish(BackgroundWorker bw);
+        bool Publish(out List<string> processDetails, BackgroundWorker bw);
     }
 }

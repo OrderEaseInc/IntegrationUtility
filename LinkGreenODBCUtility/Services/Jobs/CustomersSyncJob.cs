@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LinkGreen.Email;
 using Quartz;
 
 namespace LinkGreenODBCUtility
 {
     public class CustomersSyncJob : IJob
     {
-        private static string jobName = "Customers";
-        private static Mapping Mapping = new Mapping();
+        private const string JobName = "Customers";
+        private static readonly Mapping Mapping = new Mapping();
 
         public void Execute(IJobExecutionContext context)
         {
+            var notificationEmail = Settings.GetNotificationEmail();
             Logger.Instance.Info($"Job started: {GetType().Name}");
             var Tasks = new Tasks();
-            Tasks.StartTask(jobName);
+            Tasks.StartTask(JobName);
 
             var customers = new Customers();
             customers.UpdateTemporaryTables();
@@ -24,18 +21,28 @@ namespace LinkGreenODBCUtility
 
             string mappedDsnName = Mapping.GetDsnName("Customers");
             var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("Customers") && customers.Publish())
+            if (newMapping.MigrateData("Customers") && customers.Publish(out var publishDetails))
             {
                 Logger.Instance.Info("Customers synced.");
-                Tasks.SetStatus(jobName, "Success");
+                Tasks.SetStatus(JobName, "Success");
+
+                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                    Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, $"{JobName} Publish",
+                        response => Logger.Instance.Info(response));
+
             }
             else
             {
                 Logger.Instance.Error("Customers failed to sync.");
-                Tasks.SetStatus(jobName, "Failed");
+                Tasks.SetStatus(JobName, "Failed");
+
+                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                    Mail.SendProcessCompleteEmail(notificationEmail, $"{JobName} Publish failed, please check logs or contact support", $"{JobName} Publish",
+                        response => Logger.Instance.Info(response));
+
             }
 
-            Tasks.EndTask(jobName);
+            Tasks.EndTask(JobName);
             Logger.Instance.Info($"Job finished: {GetType().Name}");
         }
     }

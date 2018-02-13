@@ -662,7 +662,7 @@ namespace LinkGreenODBCUtility
                                                 if (!string.IsNullOrEmpty(text) && useSanitizeLog && original != text)
                                                 {
                                                     File.AppendAllText(@"log-sanitized.txt",
-                                                        $"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
+                                                        $@"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
                                                 }
 
                                                 if (string.IsNullOrEmpty(text))

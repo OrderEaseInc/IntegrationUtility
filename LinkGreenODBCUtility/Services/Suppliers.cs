@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
@@ -43,8 +44,9 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             Empty();
             // Download from LinkGreen to Access
             Download();

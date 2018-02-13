@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Sendwithus;
 
 namespace LinkGreen.Email
@@ -21,7 +22,7 @@ namespace LinkGreen.Email
         }
 
 
-        public static async void SendMessage(string destination, EmailTemplate template, Dictionary<string, object> mailParameters)
+        public static async void SendMessage(string destination, EmailTemplate template, Dictionary<string, object> mailParameters, Action<string> callback)
         {
             SendwithusClient.ApiKey = testApiKey;
 
@@ -33,24 +34,21 @@ namespace LinkGreen.Email
 
             var email = new Sendwithus.Email(template.Value, mailParameters, recipient);
             var response = await email.Send();
+            callback?.Invoke(response.status + ":" + response.receipt_id);
         }
 
-        public static void Test()
+        public static void SendProcessCompleteEmail(string destination, List<string> details, string processName, Action<string> callback = null)
         {
             var data = new Dictionary<string, object> {
-                {"processType", "Product Import"},
-                {"processEndTime", DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture)},
-                {
-                    "details", new[] {
-                        "Successfully Imported: 1567",
-                        "Unable to import: Product 1 - No Price",
-                        "Unable to import: Product 5 - No Price"
-                    }
-                }
+                {"processType", processName},
+                {"processEndTime", DateTime.Now},
+                {"details", details.ToArray()}
             };
-
-            SendMessage("trevor.watson@linkgreen.ca", EmailTemplate.ProcessCompleteTemplate, data);
+            SendMessage(destination, EmailTemplate.ProcessCompleteTemplate, data, callback);
         }
+
+        public static void SendProcessCompleteEmail(string destination, string message, string processName, Action<string> callback) =>
+            SendProcessCompleteEmail(destination, new List<string> { message }, processName, callback);
 
     }
 }

@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
-using System.Drawing;
-using System.Dynamic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 using LinkGreen.Email;
 
 namespace LinkGreenODBCUtility
@@ -63,6 +55,7 @@ namespace LinkGreenODBCUtility
 
         private void syncCategories_Click(object sender, EventArgs e)
         {
+            var notificationEmail = Settings.GetNotificationEmail();
             var categories = new Categories();
             categories.UpdateTemporaryTables();
             categories.Empty();
@@ -71,26 +64,40 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Categories"))
             {
-                if (categories.Publish())
+                if (categories.Publish(out var messageDetails))
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(Resources.Text.Resource_en_US.Categories_have_been_successfully_published, Resources.Text.Resource_en_US.Published_Successfully);
                     Logger.Instance.Info("Categories synced.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, messageDetails, "Category Publish",
+                            response => Logger.Instance.Info(response));
                 }
                 else
                 {
                     MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     Logger.Instance.Error("Categories failed to sync.");
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, messageDetails, "Category Publish",
+                            response => Logger.Instance.Info(response));
                 }
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Mapping contains invalid fields", @"Migration Failed");
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Mapping contains invalid fields", "Category Publish",
+                            response => Logger.Instance.Info(response));
+                    Logger.Instance.Error("Categories failed to migrate - Invalid Fields.");
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"There was an unexpected error.\n\r\n\rPlease contact support", @"Migration Failed");
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Unknown Error", "Category Publish",
+                            response => Logger.Instance.Info(response));
                     Logger.Instance.Error("Categories failed to migrate.");
                 }
             }
@@ -125,6 +132,7 @@ namespace LinkGreenODBCUtility
             SetButtonState(false);
             bw.DoWork += (bwSender, bwEventArgs) =>
             {
+                var notificationEmail = Settings.GetNotificationEmail();
                 var customers = new Customers();
                 customers.UpdateTemporaryTables();
                 customers.Empty();
@@ -134,7 +142,7 @@ namespace LinkGreenODBCUtility
                 if (newMapping.MigrateData("Customers"))
                 {
                     ((BackgroundWorker)bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
-                    if (customers.Publish((BackgroundWorker)bwSender))
+                    if (customers.Publish(out List<string> publishDetails, (BackgroundWorker)bwSender))
                     {
                         bwEventArgs.Result = new
                         {
@@ -143,6 +151,11 @@ namespace LinkGreenODBCUtility
                             Error = string.Empty,
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Customers Publish",
+                                response => Logger.Instance.Info(response));
+
                     }
                     else
                     {
@@ -153,6 +166,11 @@ namespace LinkGreenODBCUtility
                             Error = "Customers failed to sync.",
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, "Customers Publish failed, please check logs or contact support", $"Customers Publish",
+                                response => Logger.Instance.Info(response));
+
                     }
                 }
                 else
@@ -213,6 +231,7 @@ namespace LinkGreenODBCUtility
             SetButtonState(false);
             bw.DoWork += (bwSender, bwEventArgs) =>
             {
+                var notificationEmail = Settings.GetNotificationEmail();
                 var products = new Products();
                 products.UpdateTemporaryTables();
                 products.Empty();
@@ -221,25 +240,35 @@ namespace LinkGreenODBCUtility
                 var newMapping = new Mapping(mappedDsnName);
                 if (newMapping.MigrateData("Products"))
                 {
-                    if (products.Publish(bw))
+                    if (products.Publish(out var publishDetails, bw))
                     {
                         bwEventArgs.Result = new
                         {
                             Message = "Your products have been pushed",
-                            Title = "Emptied Successfully",
+                            Title = "Published Successfully",
                             Error = string.Empty,
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Product Publish",
+                                response => Logger.Instance.Info(response));
+
                     }
                     else
                     {
                         bwEventArgs.Result = new
                         {
-                            Message = "Please select your suppliers table!",
-                            Title = "Emptied Successfully",
+                            Message = "Please select your product table!",
+                            Title = "Publish Failed",
                             Error = "Products failed to sync.",
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, "Product Publish failed, please check logs or contact support", "Product Publish",
+                                response => Logger.Instance.Info(response));
+
                     }
                 }
                 else
@@ -248,21 +277,29 @@ namespace LinkGreenODBCUtility
                     {
                         bwEventArgs.Result = new
                         {
-                            Message = "Please select your suppliers table!",
-                            Title = "Emptied Successfully",
+                            Message = "Invalid mapping fields, please validate your mapping.",
+                            Title = "Publish Failed",
                             Error = string.Empty,
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, "Product Publish failed, please validate your field mappings.", "Product Publish",
+                                response => Logger.Instance.Info(response));
                     }
                     else
                     {
                         bwEventArgs.Result = new
                         {
-                            Message = "Please select your suppliers table!",
-                            Title = "Emptied Successfully",
+                            Message = "Please select your products table",
+                            Title = "Publish Failed",
                             Error = "Products failed to migrate.",
                             InfoMessage = string.Empty
                         };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, "Product Publish failed, please check logs or contact support", "Product Publish",
+                                response => Logger.Instance.Info(response));
                     }
                 }
             };
@@ -276,6 +313,7 @@ namespace LinkGreenODBCUtility
 
         private void syncPriceLevels_Click(object sender, EventArgs e)
         {
+            var notificationEmail = Settings.GetNotificationEmail();
             var priceLevels = new PriceLevels();
             priceLevels.UpdateTemporaryTables();
             priceLevels.Empty();
@@ -284,33 +322,49 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevels"))
             {
-                if (priceLevels.Publish())
+                if (priceLevels.Publish(out var publishDetails))
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Your price levels have been published", @"Published Successfully");
                     Logger.Instance.Info("Price Levels synced.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "PriceLevel Publish",
+                            response => Logger.Instance.Info(response));
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Unable to publish your Price Levels", @"Publish Failed");
                     Logger.Instance.Error("Price Levels failed to sync.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "PriceLevel Publish failed, please check logs or contact support", "Price Level Publish",
+                            response => Logger.Instance.Info(response));
                 }
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Mapping failed, please validate your table mapping", @"Publish Failed");
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Price Level Publish failed, please check your table mapping.", "Price Level Publish",
+                            response => Logger.Instance.Info(response));
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"An unexpected error has occured, please check your logs or contact support", @"Publish Failed");
                     Logger.Instance.Error("Price Levels failed to migrate.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Price Level Publish failed, please check logs or contact support", "Price Level Publish",
+                            response => Logger.Instance.Info(response));
                 }
             }
         }
 
         private void syncPricing_Click(object sender, EventArgs e)
         {
+            var notificationEmail = Settings.GetNotificationEmail();
             var priceLevelPrices = new PriceLevelPrices();
             priceLevelPrices.UpdateTemporaryTables();
             priceLevelPrices.Empty();
@@ -319,27 +373,44 @@ namespace LinkGreenODBCUtility
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("PriceLevelPrices"))
             {
-                if (priceLevelPrices.Publish())
+                if (priceLevelPrices.Publish(out var publishDetails))
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Prices have been published successfully", @"Published Successfully");
                     Logger.Instance.Info("Pricing synced.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Pricing Publish",
+                            response => Logger.Instance.Info(response));
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Unable to publish your prices", @"Publish Failed");
                     Logger.Instance.Error("Pricing failed to sync.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Pricing Publish failed, please check logs or contact support", "Pricing Publish",
+                            response => Logger.Instance.Info(response));
                 }
             }
             else
             {
                 if (!newMapping._validFields)
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"Mapping failed, please validate your field mapping", @"Publish Failed");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Pricing Publish failed, please validate your field mapping.", "Pricing Publish",
+                            response => Logger.Instance.Info(response));
+
                 }
                 else
                 {
-                    MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                    MessageBox.Show(@"An unexepcted error has occurred, please check your logs or contct support", @"Publish Failed");
                     Logger.Instance.Error("Pricing failed to migrate.");
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Product Publish failed, please check logs or contact support", "Pricing Publish",
+                            response => Logger.Instance.Info(response));
                 }
             }
         }
@@ -348,14 +419,6 @@ namespace LinkGreenODBCUtility
         {
             var TaskManager = new TaskManager();
             TaskManager.ShowDialog();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //Mail.Test();
-            Settings.SaveSendwithusApiKey("test_b003bd3edf41de5571e10a243c77375256f55b74");
-
-            var value = Settings.GetSendwithusApiKey();
         }
     }
 }

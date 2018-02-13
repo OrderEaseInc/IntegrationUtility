@@ -784,7 +784,7 @@ namespace LinkGreenODBCUtility
         private void PublishCategories_Click(object sender, EventArgs e)
         {
             var categories = new Categories();
-            if (categories.Publish())
+            if (categories.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -1259,7 +1259,7 @@ namespace LinkGreenODBCUtility
         private void publishCustomers_Click(object sender, EventArgs e)
         {
             var customers = new Customers();
-            if (customers.Publish())
+            if (customers.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -1272,7 +1272,7 @@ namespace LinkGreenODBCUtility
         private void syncSuppliers_Click(object sender, EventArgs e)
         {
             var suppliers = new Suppliers();
-            var result = suppliers.Publish();
+            var result = suppliers.Publish(out var publishDetails);
             if (result)
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
@@ -1293,7 +1293,7 @@ namespace LinkGreenODBCUtility
         private void syncSupplierInventory_Click(object sender, EventArgs e)
         {
             var supplierInventories = new SupplierInventories();
-            var result = supplierInventories.Publish();
+            var result = supplierInventories.Publish(out var publishDetails);
             if (result)
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
@@ -1544,7 +1544,7 @@ namespace LinkGreenODBCUtility
         private void publishProducts_Click(object sender, EventArgs e)
         {
             var products = new Products();
-            if (products.Publish())
+            if (products.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -1557,7 +1557,7 @@ namespace LinkGreenODBCUtility
         private void publishBuyerInventories_Click(object sender, EventArgs e)
         {
             var buyerInventories = new BuyerInventories();
-            if (buyerInventories.Publish())
+            if (buyerInventories.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -1686,7 +1686,7 @@ namespace LinkGreenODBCUtility
         private void publishPricing_Click_1(object sender, EventArgs e)
         {
             var pricing = new PriceLevelPrices();
-            if (pricing.Publish())
+            if (pricing.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -1815,7 +1815,7 @@ namespace LinkGreenODBCUtility
         private void publishPriceLevels_Click(object sender, EventArgs e)
         {
             var priceLevels = new PriceLevels();
-            if (priceLevels.Publish())
+            if (priceLevels.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
@@ -2034,7 +2034,7 @@ namespace LinkGreenODBCUtility
         private void publishLinkedSkus_Click(object sender, EventArgs e)
         {
             var linkedSkus = new LinkedSkus();
-            var result = linkedSkus.Publish();
+            var result = linkedSkus.Publish(out var publishDetails);
             if (result)
             {
                 linkedSkus.Empty();
@@ -2181,7 +2181,7 @@ namespace LinkGreenODBCUtility
         private void publishInventoryQuantity_Click(object sender, EventArgs e)
         {
             var inventoryQuantities = new InventoryQuantity();
-            if (inventoryQuantities.Publish())
+            if (inventoryQuantities.Publish(out var publishDetails))
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }

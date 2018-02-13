@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Dynamic;
 using System.Linq;
@@ -44,8 +45,9 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             Empty();
 
             var mappedDsnName = new Mapping().GetDsnName("BuyerInventories");
@@ -59,7 +61,7 @@ namespace LinkGreenODBCUtility
                 Logger.Instance.Warning("Failed to migrate Buyer Inventory.");
             }
 
-            var apiKey = Settings.GetApiKey(); 
+            var apiKey = Settings.GetApiKey();
 
             if (string.IsNullOrEmpty(apiKey))
             {

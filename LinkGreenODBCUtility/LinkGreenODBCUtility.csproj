@@ -100,6 +100,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources\Text\Resource-en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource-en-US.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\Batch\Batch.cs" />
     <Compile Include="Services\BuyerInventories.cs" />
     <Compile Include="Services\Categories.cs" />
@@ -200,6 +205,10 @@
     <None Include="Resources\logo-transparent.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\debug-log.png" />
+    <EmbeddedResource Include="Resources\Text\Resource-en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource-en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\CreateTask.resx">
       <DependentUpon>CreateTask.cs</DependentUpon>
     </EmbeddedResource>

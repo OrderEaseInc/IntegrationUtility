@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
-using System.Windows.Forms;
+
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 
@@ -56,8 +55,9 @@ namespace LinkGreenODBCUtility
                 Batch.Exec(cmd);
             }
         }
-        public bool Publish(BackgroundWorker bw = null)
+        public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
+            publishDetails = new List<string>();
             string apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
