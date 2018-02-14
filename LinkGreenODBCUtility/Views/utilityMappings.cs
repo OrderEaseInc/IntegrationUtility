@@ -10,6 +10,19 @@ namespace LinkGreenODBCUtility
     {
         public static Mapping Mapping = new Mapping();
         public string DsnName = Settings.ConnectViaDsnName;
+        enum SettingsTab
+        {
+            Categories = 0,
+            Customers = 1,
+            Products = 2,
+            InventoryQuantities = 3,
+            PriceLevels = 4,
+            PriceLevelPrices = 5,
+            Suppliers = 6,
+            SupplierInventories = 7,
+            LinkedSkus = 8,
+            BuyerInventories = 9
+        }
 
         public UtilityMappings()
         {
@@ -50,97 +63,90 @@ namespace LinkGreenODBCUtility
             DisplayActiveTableMapping();
         }
 
+
         private void mappingTabChanged(object sender, EventArgs e)
         {
             var mapping = new Mapping(DsnName);
             int cusIdx;
 
-            switch (Tables.SelectedIndex)
+            switch ((SettingsTab)Tables.SelectedIndex)
             {
-                case 0:
-                    string mappedCategoriesDsnName = mapping.GetDsnName("Categories");
-                    cusIdx = customersDataSource.FindString(mappedCategoriesDsnName);
+                case SettingsTab.Categories:
+                    cusIdx = customersDataSource.FindString(mapping.GetDsnName("Categories"));
                     if (cusIdx != -1)
                     {
                         categoriesDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveTableMapping();
                     break;
-                case 1:
-                    string mappedCustomerDsnName = mapping.GetDsnName("Customers");
-                    cusIdx = customersDataSource.FindString(mappedCustomerDsnName);
+                case SettingsTab.Customers:
+                    cusIdx = customersDataSource.FindString(mapping.GetDsnName("Customers"));
                     if (cusIdx != -1)
                     {
                         customersDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveCustomerTableMapping();
                     break;
-                case 2:
-                    string mappedProductDsnName = mapping.GetDsnName("Products");
-                    cusIdx = productsDataSource.FindString(mappedProductDsnName);
+                case SettingsTab.Products:
+                    cusIdx = productsDataSource.FindString(mapping.GetDsnName("Products"));
                     if (cusIdx != -1)
                     {
                         productsDataSource.SetSelected(cusIdx, true);
                     }
+
+                    chkUpdateExistingProducts.Checked = Settings.GetUpdateExistingProducts();
                     DisplayActiveProductTableMapping();
                     break;
-                case 3:
-                    string mappedInventoryQuantityDsnName = mapping.GetDsnName("InventoryQuantities");
-                    cusIdx = productsDataSource.FindString(mappedInventoryQuantityDsnName);
+                case SettingsTab.InventoryQuantities:
+                    cusIdx = productsDataSource.FindString(mapping.GetDsnName("InventoryQuantities"));
                     if (cusIdx != -1)
                     {
                         inventoryQuantityDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveInventoryQuantityTableMapping();
                     break;
-                case 4:
-                    string mappedPriceLevelsDsnName = mapping.GetDsnName("PriceLevels");
-                    cusIdx = priceLevelsDataSource.FindString(mappedPriceLevelsDsnName);
+                case SettingsTab.PriceLevels:
+                    cusIdx = priceLevelsDataSource.FindString(mapping.GetDsnName("PriceLevels"));
                     if (cusIdx != -1)
                     {
                         priceLevelsDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActivePriceLevelsTableMapping();
                     break;
-                case 5:
-                    string mappedPricingDsnName = mapping.GetDsnName("PriceLevelPrices");
-                    cusIdx = pricingDataSource.FindString(mappedPricingDsnName);
+                case SettingsTab.PriceLevelPrices:
+                    cusIdx = pricingDataSource.FindString(mapping.GetDsnName("PriceLevelPrices"));
                     if (cusIdx != -1)
                     {
                         pricingDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActivePricingTableMapping();
                     break;
-                case 6:
-                    string mappedSuppliersDsnName = mapping.GetDsnName("Suppliers");
-                    cusIdx = suppliersDataSource.FindString(mappedSuppliersDsnName);
+                case SettingsTab.Suppliers:
+                    cusIdx = suppliersDataSource.FindString(mapping.GetDsnName("Suppliers"));
                     if (cusIdx != -1)
                     {
                         suppliersDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveSupplierTableMapping();
                     break;
-                case 7:
-                    string mappedSupplierInventoryDsnName = mapping.GetDsnName("SupplierInventories");
-                    cusIdx = supplierInventoryDataSource.FindString(mappedSupplierInventoryDsnName);
+                case SettingsTab.SupplierInventories:
+                    cusIdx = supplierInventoryDataSource.FindString(mapping.GetDsnName("SupplierInventories"));
                     if (cusIdx != -1)
                     {
                         supplierInventoryDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveSupplierInventoryTableMapping();
                     break;
-                case 8:
-                    string mappedLinkedSkusDsnName = mapping.GetDsnName("LinkedSkus");
-                    cusIdx = supplierInventoryDataSource.FindString(mappedLinkedSkusDsnName);
+                case SettingsTab.LinkedSkus:
+                    cusIdx = supplierInventoryDataSource.FindString(mapping.GetDsnName("LinkedSkus"));
                     if (cusIdx != -1)
                     {
                         linkedSkusDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveLinkedSkusTableMapping();
                     break;
-                case 9:
-                    var mappedBuyerInventoryDsnName = mapping.GetDsnName("BuyerInventories");
-                    cusIdx = buyerInventoryDataSource.FindString(mappedBuyerInventoryDsnName);
+                case SettingsTab.BuyerInventories:
+                    cusIdx = buyerInventoryDataSource.FindString(mapping.GetDsnName("BuyerInventories"));
                     if (cusIdx != -1)
                     {
                         buyerInventoryDataSource.SetSelected(cusIdx, true);
@@ -2214,6 +2220,11 @@ namespace LinkGreenODBCUtility
             if (((ListBox)sender).SelectedIndex > -1)
                 if (_doubleClickMaps.FirstOrDefault(m => m.Item1 == (ListBox)sender) != null)
                     _doubleClickMaps.First(m => m.Item1 == (ListBox)sender).Item2(sender, e);
+        }
+
+        private void chkUpdateExistingProducts_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.SaveUpdateExistingProducts(chkUpdateExistingProducts.Checked);
         }
     }
 }

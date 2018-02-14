@@ -88,6 +88,10 @@ namespace LinkGreenODBCUtility
                     var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
                     var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == product.Category);
 
+                    var updateExistingProducts = Settings.GetUpdateExistingProducts();
+                    if (existing != null && !updateExistingProducts)
+                        continue;
+
                     // Add
                     if (existing == null)
                     {
