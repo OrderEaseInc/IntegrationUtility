@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Data.OleDb;
 using System.Configuration;
 
@@ -71,11 +72,35 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        public static T GetSettingValue<T>(string settingName, bool isEncrypted = false)
+        internal enum SettingsTable
         {
+            Settings,
+            MigrationTableSettings
+        }
+
+        private static string GetTableName(SettingsTable settingsTable)
+        {
+            switch (settingsTable)
+            {
+                case SettingsTable.MigrationTableSettings:
+                    return "MigrationTableSettings";
+                case SettingsTable.Settings:
+                default:
+                    return "Settings";
+            }
+        }
+
+        internal static T GetSettingValue<T>(string settingName, SettingsTable settingTableName = SettingsTable.Settings)
+        {
+            if (settingTableName == SettingsTable.MigrationTableSettings)
+                return GetMappingSettingValue<T>(settingName);
+
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                var command = new OleDbCommand($"SELECT `{settingName}` FROM `Settings` WHERE `Id` = 1", cInstance.GetConnection());
+
+
+
+                var command = new OleDbCommand($"SELECT `{settingName}` FROM `{GetTableName(settingTableName)}` WHERE `Id` = 1", cInstance.GetConnection());
                 command.Connection.Open();
                 try
                 {
@@ -97,13 +122,80 @@ namespace LinkGreenODBCUtility
             return default(T);
         }
 
-        public static void SaveSettingValue(string dbSettingName, string appSettingName, object value, bool isEncrypted = false)
+
+        private static void SaveMappingSettingValue(string dbSettingName, object value)
+        {
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            {
+                var command =
+                    new OleDbCommand(
+                        $"SELECT COUNT(*) FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
+                        cInstance.GetConnection());
+                try
+                {
+                    command.Connection.Open();
+                    var rowCount = command.ExecuteScalar();
+                    var rowExists = rowCount != null && Convert.ToInt32(rowCount) > 0;
+                    command.CommandText = rowExists
+                        ? $"UPDATE `{GetTableName(SettingsTable.MigrationTableSettings)}` SET SettingValue = '{value}' WHERE SettingName = '{dbSettingName}'"
+                        : $"INSERT INTO `{GetTableName(SettingsTable.MigrationTableSettings)}` (SettingName, SettingValue) VALUES ('{dbSettingName}', '{value}')";
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Logger.Instance.Error($"An error occured while updating MappingTable {dbSettingName}. {e.Message}");
+                }
+                finally
+                {
+                    command.Connection.Close();
+                }
+            }
+        }
+
+        private static T GetMappingSettingValue<T>(string dbSettingName)
+        {
+            using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            {
+                var command =
+                    new OleDbCommand(
+                        $"SELECT SettingValue FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
+                        cInstance.GetConnection());
+                try
+                {
+                    command.Connection.Open();
+                    var value = command.ExecuteScalar();
+                    if (value == null)
+                        return default(T);
+                    else
+                        return (T)Convert.ChangeType(value, typeof(T));
+                }
+                catch (Exception e)
+                {
+                    Logger.Instance.Error($"An error occured while updating MappingTable {dbSettingName}. {e.Message}");
+                }
+                finally
+                {
+                    command.Connection.Close();
+                }
+
+                return default(T);
+            }
+        }
+
+        private static void SaveSettingValue(string dbSettingName, string appSettingName, object value, SettingsTable settingsTable = SettingsTable.Settings)
         {
             if (string.IsNullOrEmpty(appSettingName)) appSettingName = dbSettingName;
 
+            if (settingsTable == SettingsTable.MigrationTableSettings)
+            {
+                SaveMappingSettingValue(dbSettingName, value);
+                return;
+            }
+
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                var command = new OleDbCommand($"UPDATE `Settings` SET `{dbSettingName}` = '{value}' WHERE `ID` = 1",
+                var command = new OleDbCommand($"UPDATE `{GetTableName(settingsTable)}` SET `{dbSettingName}` = '{value}' WHERE `ID` = 1",
                     cInstance.GetConnection());
 
                 command.Connection.Open();
@@ -143,12 +235,22 @@ namespace LinkGreenODBCUtility
 
         internal static string GetSendwithusApiKey()
         {
-            var overrideKey = GetSettingValue<string>("SendwithusApiKey", true);
+            var overrideKey = GetSettingValue<string>("SendwithusApiKey");
             return string.IsNullOrWhiteSpace(overrideKey) ? SendWithUsLiveKey : overrideKey;
         }
 
-        internal static void SaveSendwithusApiKey(string value) =>
-            SaveSettingValue("SendwithusApiKey", null, value, true);
+        internal static bool GetUpdateExistingProducts()
+        {
+            var dbUpdateCategories = GetSettingValue<int?>("UpdateExistingProducts", SettingsTable.MigrationTableSettings);
+
+            if (dbUpdateCategories.HasValue)
+                return dbUpdateCategories == 1;
+
+            return true;
+        }
+
+        internal static void SaveUpdateExistingProducts(bool updateExistingProducts) =>
+            SaveSettingValue("UpdateExistingProducts", null, updateExistingProducts ? "1" : "0", SettingsTable.MigrationTableSettings);
 
         public static string GetInstallationId()
         {

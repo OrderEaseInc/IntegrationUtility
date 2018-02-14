@@ -79,6 +79,7 @@
             this.publishCustomers = new System.Windows.Forms.Button();
             this.emptyCustomersTransferTable = new System.Windows.Forms.Button();
             this.productsTab = new System.Windows.Forms.TabPage();
+            this.chkUpdateExistingProducts = new System.Windows.Forms.CheckBox();
             this.setProductsUsernamePW = new System.Windows.Forms.Button();
             this.previewProductsMappingOutput = new System.Windows.Forms.Button();
             this.productFieldDescriptionValue = new System.Windows.Forms.Label();
@@ -833,6 +834,7 @@
             // 
             // productsTab
             // 
+            this.productsTab.Controls.Add(this.chkUpdateExistingProducts);
             this.productsTab.Controls.Add(this.setProductsUsernamePW);
             this.productsTab.Controls.Add(this.previewProductsMappingOutput);
             this.productsTab.Controls.Add(this.productFieldDescriptionValue);
@@ -863,6 +865,19 @@
             this.productsTab.TabIndex = 3;
             this.productsTab.Text = "Products";
             this.productsTab.UseVisualStyleBackColor = true;
+            // 
+            // chkUpdateExistingProducts
+            // 
+            this.chkUpdateExistingProducts.AutoSize = true;
+            this.chkUpdateExistingProducts.Checked = true;
+            this.chkUpdateExistingProducts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUpdateExistingProducts.Location = new System.Drawing.Point(380, 464);
+            this.chkUpdateExistingProducts.Name = "chkUpdateExistingProducts";
+            this.chkUpdateExistingProducts.Size = new System.Drawing.Size(143, 17);
+            this.chkUpdateExistingProducts.TabIndex = 68;
+            this.chkUpdateExistingProducts.Text = "Update Existing Records";
+            this.chkUpdateExistingProducts.UseVisualStyleBackColor = true;
+            this.chkUpdateExistingProducts.CheckedChanged += new System.EventHandler(this.chkUpdateExistingProducts_CheckedChanged);
             // 
             // setProductsUsernamePW
             // 
@@ -3199,6 +3214,7 @@
         private System.Windows.Forms.ListBox inventoryQuantityDataSource;
         private System.Windows.Forms.Button publishInventoryQuantity;
         private System.Windows.Forms.Button emptyInventoryQuantityTransferTable;
+        private System.Windows.Forms.CheckBox chkUpdateExistingProducts;
     }
 }
 
