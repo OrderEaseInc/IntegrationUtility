@@ -50,6 +50,7 @@ namespace LinkGreenODBCUtility
 
         public static bool TryConnect()
         {
+            System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
             //var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {

@@ -1,22 +1,70 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.ServiceProcess;
 using System.Windows.Forms;
-using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
     static class Program
     {
+        public const string ServiceName = "LinkGreen ODBC Sync Service";
+        public class TaskService : ServiceBase
+        {
+            Timer _timer = new Timer();
+            public TaskService()
+            {
+                ServiceName = Program.ServiceName;
+                _timer.Interval = 10000;
+                _timer.Tick += _timer_Tick;
+                _timer.Start();
+            }
+
+            private void _timer_Tick(object sender, EventArgs e)
+            {
+                var s = "";
+            }
+
+            protected override void OnStart(string[] args)
+            {
+                var tasks = new Tasks();
+                tasks.RestoreTasks();
+
+                base.OnStart(args);
+            }
+
+            protected override void OnStop()
+            {
+                base.OnStop();
+                _timer.Stop();
+                _timer.Dispose();
+                JobManager.Dispose();
+            }
+
+            protected override void OnPause()
+            {
+                base.OnPause();
+                var tasks = new Tasks();
+                tasks.RestoreTasks();
+            }
+
+            protected override void OnContinue()
+            {
+                var tasks = new Tasks();
+                tasks.RestoreTasks();
+
+                base.OnContinue();
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Init();
+            Init(args);
         }
 
         // Use this Init if adding the DSN is handled during installation setup
@@ -34,8 +82,11 @@ namespace LinkGreenODBCUtility
         //            }
         //        }
 
-        private static void Init()
-        {
+        private static void Init(string[] args) {
+            // Uncomment next line to enable debugging of a service
+            //System.Diagnostics.Debugger.Launch();
+
+            var isService = args.Any(a => a.Equals("/service", StringComparison.OrdinalIgnoreCase));
             //            DialogResult dialogResult = MessageBox.Show("Are you running as administrator?", "Must be run as Administrator", MessageBoxButtons.YesNo);
             //            if (dialogResult == DialogResult.Yes)
             //            {
@@ -64,25 +115,52 @@ namespace LinkGreenODBCUtility
                         "DSN=" + logDsnName + "\0DBQ=" + logDsPath + "\0");
                     if (logConnectSuccess)
                     {
+                        if (isService)
+                            using (var service = new TaskService())
+                            {
+                                ServiceBase.Run(service);
+                                return;
+                            }
+
+
                         Application.EnableVisualStyles();
                         Application.SetCompatibleTextRenderingDefault(false);
                         Application.Run(new UtilityDashboard());
                     }
                     else
                     {
-                        MessageBox.Show($@"Failed to create {logDsnName} DSN", @"Emptied Successfully");
+                        if (isService)
+                            WriteToEventLog($@"Failed to create {logDsnName} DSN");
+                        else
+                            MessageBox.Show($@"Failed to create {logDsnName} DSN", @"Emptied Successfully");
                     }
                 }
                 else
                 {
-                    MessageBox.Show($@"Failed to connect to {Settings.ConnectionString} DSN", @"Emptied Successfully");
+                    if (isService)
+                        WriteToEventLog($@"Failed to connect to {Settings.ConnectionString} DSN");
+                    else
+                        MessageBox.Show($@"Failed to connect to {Settings.ConnectionString} DSN", @"Emptied Successfully");
                 }
             }
             else
             {
-                MessageBox.Show($@"Failed to create {Settings.ConnectionString} DSN", @"Emptied Successfully");
+                if (isService)
+                    WriteToEventLog($@"Failed to create {Settings.ConnectionString} DSN");
+                else
+                    MessageBox.Show($@"Failed to create {Settings.ConnectionString} DSN", @"Emptied Successfully");
             }
+
         }
+
+        private static void WriteToEventLog(string message)
+        {
+            if (!System.Diagnostics.EventLog.SourceExists(ServiceName))
+                System.Diagnostics.EventLog.CreateEventSource(ServiceName, "Application");
+
+            System.Diagnostics.EventLog.WriteEntry(ServiceName, message, EventLogEntryType.Warning);
+        }
+
 
         public static class ODBC_Request_Modes
         {

@@ -749,6 +749,36 @@ namespace LinkGreenODBCUtility
         }
 
         /// <summary>
+        /// Delete everything from the given table
+        /// </summary>
+        /// <param name="tableMappingName"></param>
+        private void ClearProductionTable(string tableMappingName)
+        {
+            using (var db = new ActiveDbConnection(DsnName))
+            {
+                using (var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}", db.Connection))
+                {
+                    try
+                    {
+                        db.Connection.Open();
+                        clearCommand.ExecuteNonQuery();
+                        Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
+                    }
+                    catch (OdbcException e)
+                    {
+                        Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
+                    }
+                    finally
+                    {
+                        ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                        if (db.Connection.State == ConnectionState.Open)
+                            db.Connection.Close();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Pushes data from the Access database into 
         /// </summary>
         /// <param name="tableName">Name of the Access table to push</param>
@@ -775,29 +805,10 @@ namespace LinkGreenODBCUtility
 
                 var chainedFromColumnNames = string.Join(",", fromColumnNames);
 
+                // Clear production table
                 if (clearProduction)
-                {
-                    using (var db = new ActiveDbConnection(DsnName))
-                    {
-                        using (var clearCommand = new OdbcCommand($"DELETE FROM {tableMappingName}", db.Connection))
-                        {
-                            try
-                            {
-                                db.Connection.Open();
-                                clearCommand.ExecuteNonQuery();
-                                Logger.Instance.Debug($"{DsnName}.{tableMappingName} cleared.");
-                            }
-                            catch (OdbcException e)
-                            {
-                                Logger.Instance.Error($"Failed to clear {DsnName}.{tableMappingName}: {e.Message}");
-                            }
-                            finally
-                            {
-                                ConnectionInstance.CloseConnection($"DSN={DsnName}");
-                            }
-                        }
-                    }
-                }
+                    ClearProductionTable(tableMappingName);
+
 
                 int fieldCount;
                 var columnIndexes = new Dictionary<string, int>();
@@ -1216,6 +1227,7 @@ namespace LinkGreenODBCUtility
                 {
                     reader.Close();
                     ConnectionInstance.CloseConnection($"DSN={TransferDsnName}");
+                    if (db.Connection.State == ConnectionState.Open) db.Connection.Close();
                 }
             }
             return true;
@@ -1229,7 +1241,8 @@ namespace LinkGreenODBCUtility
 
             var mappedColumns = GetMappedFields(tableName);
 
-            foreach (var column in columns) {
+            foreach (var column in columns)
+            {
                 var field = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.FieldName;
                 var fieldDisplayName = mappedColumns.FirstOrDefault(c => c.MappingName == column)?.DisplayName;
                 if (string.IsNullOrEmpty(fieldDisplayName)) fieldDisplayName = column;
