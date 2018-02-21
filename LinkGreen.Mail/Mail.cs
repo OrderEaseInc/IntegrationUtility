@@ -8,6 +8,7 @@ namespace LinkGreen.Email
     public class Mail
     {
         private const string testApiKey = "test_b003bd3edf41de5571e10a243c77375256f55b74";
+        private const string liveApiKey = "live_4b220eb979cc52006c356d13df6f205738e7a0c6";
 
         public class EmailTemplate
         {
@@ -24,7 +25,7 @@ namespace LinkGreen.Email
 
         public static async void SendMessage(string destination, EmailTemplate template, Dictionary<string, object> mailParameters, Action<string> callback)
         {
-            SendwithusClient.ApiKey = testApiKey;
+            SendwithusClient.ApiKey = liveApiKey;
 
             var link = new Dictionary<string, string> { { "url", "https://www.sendiwthus.com" } };
 

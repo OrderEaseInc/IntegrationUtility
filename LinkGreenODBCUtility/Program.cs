@@ -84,7 +84,7 @@ namespace LinkGreenODBCUtility
 
         private static void Init(string[] args) {
             // Uncomment next line to enable debugging of a service
-            //System.Diagnostics.Debugger.Launch();
+            System.Diagnostics.Debugger.Launch();
 
             var isService = args.Any(a => a.Equals("/service", StringComparison.OrdinalIgnoreCase));
             //            DialogResult dialogResult = MessageBox.Show("Are you running as administrator?", "Must be run as Administrator", MessageBoxButtons.YesNo);
