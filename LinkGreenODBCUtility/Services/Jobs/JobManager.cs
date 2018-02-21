@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
 using LinkGreenODBCUtility.Services.Jobs;
+
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -20,7 +20,7 @@ namespace LinkGreenODBCUtility
 
         public static string DefaultGroup = "User";
 
-        public static bool ScheduleJob(string jobName, DateTime startDateTime, int repeatInterval)
+        public static bool ScheduleJob(string jobName, DateTime startDateTime, int repeatInterval, string externalExecutable, string jobParameters)
         {
             if (!string.IsNullOrEmpty(jobName) && repeatInterval > 0)
             {
@@ -30,66 +30,77 @@ namespace LinkGreenODBCUtility
 
                     IJobDetail job;
 
-                    switch (jobName)
+                    if (Guid.TryParse(jobName, out var _))
                     {
-                        case "Categories":
-                            job = JobBuilder.Create<CategoriesSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "Customers":
-                            job = JobBuilder.Create<CustomersSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "Products":
-                            job = JobBuilder.Create<ProductsSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "InventoryQuantities":
-                            job = JobBuilder.Create<InventoryQuantitiesSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "Price Levels":
-                            job = JobBuilder.Create<PriceLevelsSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "Pricing":
-                            job = JobBuilder.Create<PricingSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "Suppliers":
-                            job = JobBuilder.Create<SuppliersSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "SupplierInventory":
-                            job = JobBuilder.Create<SupplierInventorySyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "LinkedSkus":
-                            job = JobBuilder.Create<LinkedSKusSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        case "BuyerInventory":
-                            job = JobBuilder.Create<BuyerInventorySyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
-                        default:
-                            job = JobBuilder.Create<CategoriesSyncJob>()
-                                .WithIdentity(jobName, DefaultGroup)
-                                .Build();
-                            break;
+                        job = JobBuilder.Create<ExternalExecuteJob>()
+                            .WithIdentity(jobName, DefaultGroup)
+                            .Build();
+                        job.JobDataMap["ExternalExecutable"] = externalExecutable;
+                        job.JobDataMap["JobParameters"] = jobParameters;
+                    }
+                    else
+                    {
+                        switch (jobName)
+                        {
+                            case "Categories":
+                                job = JobBuilder.Create<CategoriesSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "Customers":
+                                job = JobBuilder.Create<CustomersSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "Products":
+                                job = JobBuilder.Create<ProductsSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "InventoryQuantities":
+                                job = JobBuilder.Create<InventoryQuantitiesSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "Price Levels":
+                                job = JobBuilder.Create<PriceLevelsSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "Pricing":
+                                job = JobBuilder.Create<PricingSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "Suppliers":
+                                job = JobBuilder.Create<SuppliersSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "SupplierInventory":
+                                job = JobBuilder.Create<SupplierInventorySyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "LinkedSkus":
+                                job = JobBuilder.Create<LinkedSKusSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            case "BuyerInventory":
+                                job = JobBuilder.Create<BuyerInventorySyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                            default:
+                                job = JobBuilder.Create<CategoriesSyncJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
+                        }
                     }
 
-                    ITrigger trigger = TriggerBuilder.Create()
+                    var trigger = TriggerBuilder.Create()
                         .WithSimpleSchedule(x => x.WithIntervalInMinutes(repeatInterval).RepeatForever())
                         .StartAt(startDateTime)
                         .Build();

@@ -12,18 +12,9 @@ namespace LinkGreenODBCUtility
         public const string ServiceName = "LinkGreen ODBC Sync Service";
         public class TaskService : ServiceBase
         {
-            Timer _timer = new Timer();
             public TaskService()
             {
                 ServiceName = Program.ServiceName;
-                _timer.Interval = 10000;
-                _timer.Tick += _timer_Tick;
-                _timer.Start();
-            }
-
-            private void _timer_Tick(object sender, EventArgs e)
-            {
-                var s = "";
             }
 
             protected override void OnStart(string[] args)
@@ -37,8 +28,6 @@ namespace LinkGreenODBCUtility
             protected override void OnStop()
             {
                 base.OnStop();
-                _timer.Stop();
-                _timer.Dispose();
                 JobManager.Dispose();
             }
 
@@ -84,7 +73,7 @@ namespace LinkGreenODBCUtility
 
         private static void Init(string[] args) {
             // Uncomment next line to enable debugging of a service
-            System.Diagnostics.Debugger.Launch();
+            // System.Diagnostics.Debugger.Launch();
 
             var isService = args.Any(a => a.Equals("/service", StringComparison.OrdinalIgnoreCase));
             //            DialogResult dialogResult = MessageBox.Show("Are you running as administrator?", "Must be run as Administrator", MessageBoxButtons.YesNo);

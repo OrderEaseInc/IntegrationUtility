@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataTransfer.AccessDatabase.Models
 {
@@ -25,5 +21,9 @@ namespace DataTransfer.AccessDatabase.Models
         public DateTime? ExecutionEndDateTime { get; set; }
 
         public TimeSpan? ExecutionDuration { get; set; }
+
+        public string ExternalExecutable { get; set; }
+
+        public string JobParameters { get; set; }
     }
 }

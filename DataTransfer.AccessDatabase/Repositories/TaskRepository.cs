@@ -33,7 +33,9 @@ namespace DataTransfer.AccessDatabase
                                                  $"Status, " +
                                                  $"ExecutionStartDateTime, " +
                                                  $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration " +
+                                                 $"ExecutionDuration, " +
+                                                 $"JobParameters, " +
+                                                 $"ExternalExecutable " +
                                                  $"FROM {TableName}"))
             {
                 return GetRecords(command);
@@ -50,7 +52,9 @@ namespace DataTransfer.AccessDatabase
                                                  $"Status, " +
                                                  $"ExecutionStartDateTime, " +
                                                  $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration " +
+                                                 $"ExecutionDuration, " +
+                                                 $"JobParameters, " +
+                                                 $"ExternalExecutable " +
                                                  $"FROM {TableName} WHERE TaskName = '{taskName}'"))
             {
                 return GetRecord(command);
@@ -81,7 +85,9 @@ namespace DataTransfer.AccessDatabase
                     LastExecuteStatus = reader.Status,
                     ExecutionStartDateTime = reader.ExecutionStartDateTime,
                     ExecutionEndDateTime = reader.ExecutionEndDateTime,
-                    ExecutionDuration = TimeSpan.FromSeconds(reader.ExecutionDuration)
+                    ExecutionDuration = TimeSpan.FromSeconds(reader.ExecutionDuration),
+                    ExternalExecutable = reader.ExternalExecutable,
+                    JobParameters = reader.JobParameters
                 };
             }
             catch (RuntimeBinderException exception)

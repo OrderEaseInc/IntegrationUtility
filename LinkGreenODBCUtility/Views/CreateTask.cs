@@ -5,8 +5,6 @@ namespace LinkGreenODBCUtility
 {
     public partial class CreateTask : Form
     {
-        private TaskManager _taskManager;
-
         public CreateTask()
         {
             InitializeComponent();
@@ -29,7 +27,8 @@ namespace LinkGreenODBCUtility
                 new ListItem { Text = "Sync Suppliers", Value = "Suppliers" },
                 new ListItem { Text = "Sync Supplier Inventory", Value = "SupplierInventory" },
                 new ListItem { Text = "Sync Linked Skus", Value = "LinkedSkus" },
-                new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" }
+                new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" },
+                new ListItem { Text = "External Script", Value = "ExternalExecute" }
             });
 
             // Start Date/Time
@@ -62,51 +61,61 @@ namespace LinkGreenODBCUtility
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            ActiveForm.Close();
+            Close();
         }
 
         private void create_Click(object sender, EventArgs e)
         {
-            string jobName = (taskComboBox.SelectedItem as ListItem).Value;
-            string jobDisplayName = (taskComboBox.SelectedItem as ListItem).Text;
-            DateTime startDateTime = this.startDateTime.Value;
-            int repeatInterval = Convert.ToInt32((repeatComboBox.SelectedItem as ListItem).Value);
+            var jobName = ((ListItem)taskComboBox.SelectedItem).Value;
+            var jobDisplayName = (taskComboBox.SelectedItem as ListItem)?.Text;
+            var startDateTime = this.startDateTime.Value;
+            var repeatInterval = Convert.ToInt32((repeatComboBox.SelectedItem as ListItem).Value);
+
+            if (jobName == "ExternalExecute")
+                jobName = Guid.NewGuid().ToString();
 
             try
             {
-                var Tasks = new Tasks();
-                if (Tasks.TaskExists(jobName))
+                var tasks = new Tasks();
+                if (tasks.TaskExists(jobName))
                 {
-                    DialogResult dialogResult = MessageBox.Show($"Are you sure you want to overwrite the task {jobName}?", "Overwrite Task?", MessageBoxButtons.YesNo);
+                    var dialogResult = MessageBox.Show($"Are you sure you want to overwrite the task {jobName}?", "Overwrite Task?", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
                         if (JobManager.DeleteJob(jobName))
                         {
-                            Tasks.DeleteTask(jobName);
+                            tasks.DeleteTask(jobName);
                         }
                     }
                 }
 
-                if (JobManager.ScheduleJob(jobName, startDateTime, repeatInterval))
-                {
-                    if (Tasks.CreateTask(jobName, jobDisplayName, startDateTime, repeatInterval))
-                    {
-                        MessageBox.Show($"Task created: {jobName}");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Task {jobName} created but will be lost if application is closed.");
-                    }
-                    ActiveForm.Close();
-                    TaskManager.LoadTasks();
-                }
+                if (!JobManager.ScheduleJob(jobName, startDateTime, repeatInterval, txtExternalExecutable.Text, txtExternalParameters.Text)) return;
+
+                MessageBox.Show(tasks.CreateTask(jobName, jobDisplayName, startDateTime, repeatInterval,
+                    txtExternalExecutable.Text, txtExternalParameters.Text)
+                    ? $"Task created: {jobName}"
+                    : $@"Task {jobName} created but will be lost if application is closed.");
+
+                Close();
+                TaskManager.LoadTasks();
             }
             catch (ArgumentException ex)
             {
                 Logger.Instance.Error($"An error occured while creating the task {jobName}: {ex}");
-                MessageBox.Show($"An error occured while creating the task {jobName}");
+                MessageBox.Show($@"An error occured while creating the task {jobName}");
                 TaskManager.LoadTasks();
             }
+        }
+
+        private void taskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            txtExternalExecutable.Text = "";
+            lblExternalExecutable.Visible = ((ListItem)taskComboBox.SelectedItem).Value == "ExternalExecute";
+            txtExternalExecutable.Visible = ((ListItem)taskComboBox.SelectedItem).Value == "ExternalExecute";
+
+            txtExternalParameters.Text = "";
+            lblExternalParameters.Visible = ((ListItem)taskComboBox.SelectedItem).Value == "ExternalExecute";
+            txtExternalParameters.Visible = ((ListItem)taskComboBox.SelectedItem).Value == "ExternalExecute";
         }
     }
 }

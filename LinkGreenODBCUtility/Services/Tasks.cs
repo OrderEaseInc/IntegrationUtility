@@ -17,11 +17,11 @@ namespace LinkGreenODBCUtility
             Task = task;
         }
 
-        public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval)
+        public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval, string externalExecutable, string jobParameters)
         {
             // var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
             var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval})")
+            var command = new OleDbCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, externalExecutable, JobParameters) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval}, '{externalExecutable.Replace("'", "''")}', '{jobParameters.Replace("'", "''")}')")
             {
                 Connection = _connection
             };
@@ -190,7 +190,7 @@ namespace LinkGreenODBCUtility
 
             foreach (Task task in savedTasks)
             {
-                JobManager.ScheduleJob(task.TaskName, task.StartDateTime, task.RepeatInterval);
+                JobManager.ScheduleJob(task.TaskName, task.StartDateTime, task.RepeatInterval, task.ExternalExecutable, task.JobParameters);
             }
         }
 
