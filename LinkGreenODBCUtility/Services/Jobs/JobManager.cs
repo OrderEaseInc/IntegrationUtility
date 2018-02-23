@@ -192,7 +192,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -207,7 +207,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -222,7 +222,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

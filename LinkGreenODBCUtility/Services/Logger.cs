@@ -15,7 +15,7 @@ namespace LinkGreenODBCUtility
         private static OdbcConnection _connection;
         public static string _loggerDsnName = "LinkGreenLog";
         private static string _loggerConnectionString = $"DSN={_loggerDsnName}";
-        private static string DatetimeFormat;
+        // private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
         private static Logger instance;
@@ -54,7 +54,7 @@ namespace LinkGreenODBCUtility
 
         private static void Init()
         {
-            DatetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+            // DatetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var apiKey = Settings.GetApiKey();
             var clientName = config.AppSettings.Settings["ClientName"].Value;

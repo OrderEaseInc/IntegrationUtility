@@ -56,7 +56,7 @@ namespace LinkGreenODBCUtility
             {
                 return Decimal.Parse(value, NumberStyles.AllowCurrencySymbol | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands, new CultureInfo("en-US")).ToString();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Warning($"Failed to parse invalid currency \"{value}\"");
                 return null;

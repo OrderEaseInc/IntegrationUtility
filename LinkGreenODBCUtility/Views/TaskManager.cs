@@ -185,7 +185,7 @@ namespace LinkGreenODBCUtility
 
                     LoadTasks();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show($@"An error occured while deleting the task.", @"Emptied Successfully");
                 }

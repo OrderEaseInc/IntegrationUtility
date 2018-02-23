@@ -34,7 +34,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while creating the task {taskName}.");
             }
@@ -63,7 +63,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while updating the status of task {taskName}.");
             }
@@ -93,7 +93,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while updating the start datetime of task {taskName}.");
             }
@@ -132,7 +132,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while updating the end datetime of task {taskName}.");
             }
@@ -160,7 +160,7 @@ namespace LinkGreenODBCUtility
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while deleting the task {taskName}.");
             }

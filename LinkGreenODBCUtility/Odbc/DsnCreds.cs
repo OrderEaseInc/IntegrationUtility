@@ -82,7 +82,7 @@ namespace LinkGreenODBCUtility
                     };
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Logger.Instance.Error($"An error occured while retrieving the Credentials for DSN {dsn}");
                 MessageBox.Show($@"An error occured while retrieving the Credentials for DSN {dsn}", @"Emptied Successfully");
