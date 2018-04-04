@@ -1554,9 +1554,11 @@ namespace LinkGreenODBCUtility
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+            else {
+                var message = "Please select your suppliers table!";
+                if (publishDetails != null && publishDetails.Count > 0)
+                    message = publishDetails[0];
+                MessageBox.Show(message, @"Emptied Successfully");
             }
         }
 
@@ -2191,9 +2193,11 @@ namespace LinkGreenODBCUtility
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+            else {
+                var message = "Please select your suppliers table!";
+                if (publishDetails != null && publishDetails.Count > 0)
+                    message = publishDetails[0];
+                MessageBox.Show(message, @"Emptied Successfully");
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using LinkGreen.Applications.Common.Model;
@@ -24,9 +25,10 @@ namespace LinkGreen.Applications.Common
             Key = ConfigurationManager.AppSettings["ApiKey"];
             BaseUrl = ConfigurationManager.AppSettings["BaseUrl"];
             OrderStatuses = ConfigurationManager.AppSettings["OrderStatuses"];
-            Client = new RestClient(BaseUrl) {
-                Timeout = (int) new TimeSpan(0, 2, 0).TotalMilliseconds,
-                ReadWriteTimeout = (int) new TimeSpan(0, 2, 0).TotalMilliseconds
+            Client = new RestClient(BaseUrl)
+            {
+                Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
+                ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
             };
         }
 
@@ -312,20 +314,55 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static bool PushPricingLevelPrice(PricingLevelItemRequest item)
-        {
-            var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevelPrice/{Key}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            request.RequestFormat = DataFormat.Json;
+        //public static bool PushPricingLevelPrice(PricingLevelItemRequest item)
+        //{
+        //    var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevelPrice/{Key}";
+        //    var request = new RestRequest(requestUrl, Method.POST);
+        //    request.RequestFormat = DataFormat.Json;
 
+        //    request.AddHeader("Content-Type", "application/json");
+
+        //    var settings = new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat };
+        //    var json = JsonConvert.SerializeObject(item, settings);
+
+        //    request.AddParameter("application/json", json, null, ParameterType.RequestBody);
+
+        //    var response = Client.Execute(request);
+
+        //    return response.StatusCode == HttpStatusCode.OK;
+        //}
+
+        private static object _debugLock = new object();
+        public static bool PushPricingLevel(string pricingLevelName, PricingLevelItemRequest[] inventoryItems,
+            DateTime effectiveDate, DateTime? endDate = null)
+        {
+            var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevelItem/{Key}";
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            var body = new PricingLevelRequest
+            {
+
+                Name = pricingLevelName,
+                EffectiveDate = effectiveDate,
+                EndDate = null,
+                InventoryItems = inventoryItems
+            };
+
+            request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-Type", "application/json");
 
             var settings = new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat };
-            var json = JsonConvert.SerializeObject(item, settings);
+            var json = JsonConvert.SerializeObject(body, settings);
 
             request.AddParameter("application/json", json, null, ParameterType.RequestBody);
 
             var response = Client.Execute(request);
+            if (response.StatusCode != HttpStatusCode.OK) {
+                //lock (_debugLock) {
+                //    System.IO.File.AppendAllLines("C:\\temp\\publishlog.txt",
+                //        new[] {response.StatusCode + ":" + response.Content});
+                //}
+            }
 
             return response.StatusCode == HttpStatusCode.OK;
         }
@@ -401,7 +438,6 @@ namespace LinkGreen.Applications.Common
             var request = new RestRequest(requestUrl, Method.POST);
 
             request.AddJsonBody(category);
-
             var response = Client.Execute<ApiResult<PrivateCategory>>(request);
 
             if (response.Data.Result == null)

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Dynamic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
@@ -71,12 +72,16 @@ namespace LinkGreenODBCUtility
                 {
                     var existingProduct = existingInventory.FirstOrDefault(i => i.PrivateSKU == inventoryQuantityItem.Sku);
 
-                    var request = new InventoryItemRequest();
-                    request.PrivateSKU = inventoryQuantityItem.Sku;
+                    var request = new InventoryItemRequest { PrivateSKU = inventoryQuantityItem.Sku };
 
+                    // ReSharper disable once InvertIf
                     if (existingProduct != null)
                     {
                         items++;
+
+                        request = AutoMapper.Mapper.Map(existingProduct, request);
+                        request.PrivateSKU = inventoryQuantityItem.Sku;
+
                         request.AccountingReference = existingProduct.AccountingReference;
                         request.CategoryId = existingProduct.CategoryId;
                         request.Comments = existingProduct.Comments;
@@ -96,13 +101,19 @@ namespace LinkGreenODBCUtility
                         request.PrivateSKU = existingProduct.PrivateSKU;
                         request.SlaveQuantityPerMaster = existingProduct.SlaveQuantityPerMaster;
                         request.SuggestedRetailPrice = existingProduct.SuggestedRetailPrice;
+                        request.GoodUntil = existingProduct.GoodUntil;
+                        
                         request.UPC = existingProduct.UPC;
                         // set the quantity
                         request.QuantityAvailable = inventoryQuantityItem.Quantity >= 1 ? inventoryQuantityItem.Quantity : 1;
 
-                        WebServiceHelper.PushInventoryItem(request);
+                        new Task(() =>
+                        {
+                            WebServiceHelper.PushInventoryItem(request);
 
-                        Logger.Instance.Debug($"Set available quantity to {inventoryQuantityItem.Quantity} for Sku: {inventoryQuantityItem.Sku}");
+                            Logger.Instance.Debug(
+                                $"Set available quantity to {inventoryQuantityItem.Quantity} for Sku: {inventoryQuantityItem.Sku}");
+                        }).Start();
                     }
                 }
 
@@ -110,6 +121,7 @@ namespace LinkGreenODBCUtility
                 {
                     Logger.Instance.Warning("No inventory quantity items were published. Double check your skus.");
                     publishDetails.Insert(0, "No inventory quantity items were published. Double check your skus");
+                    return false;
                 }
 
                 publishDetails.Insert(0, $"{items} inventory quantity items were published.");

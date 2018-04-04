@@ -320,6 +320,7 @@ namespace LinkGreenODBCUtility
 
             string mappedDsnName = Mapping.GetDsnName("PriceLevels");
             var newMapping = new Mapping(mappedDsnName);
+
             if (newMapping.MigrateData("PriceLevels"))
             {
                 if (priceLevels.Publish(out var publishDetails))
@@ -337,7 +338,9 @@ namespace LinkGreenODBCUtility
                     Logger.Instance.Error("Price Levels failed to sync.");
 
                     if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "PriceLevel Publish failed, please check logs or contact support", "Price Level Publish",
+                        Mail.SendProcessCompleteEmail(notificationEmail,
+                            "PriceLevel Publish failed, please check logs or contact support",
+                            "Price Level Publish",
                             response => Logger.Instance.Info(response));
                 }
             }
@@ -347,16 +350,20 @@ namespace LinkGreenODBCUtility
                 {
                     MessageBox.Show(@"Mapping failed, please validate your table mapping", @"Publish Failed");
                     if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Price Level Publish failed, please check your table mapping.", "Price Level Publish",
+                        Mail.SendProcessCompleteEmail(notificationEmail,
+                            "Price Level Publish failed, please check your table mapping.", "Price Level Publish",
                             response => Logger.Instance.Info(response));
                 }
                 else
                 {
-                    MessageBox.Show(@"An unexpected error has occured, please check your logs or contact support", @"Publish Failed");
+                    MessageBox.Show(@"An unexpected error has occured, please check your logs or contact support",
+                        @"Publish Failed");
                     Logger.Instance.Error("Price Levels failed to migrate.");
 
                     if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Price Level Publish failed, please check logs or contact support", "Price Level Publish",
+                        Mail.SendProcessCompleteEmail(notificationEmail,
+                            "Price Level Publish failed, please check logs or contact support",
+                            "Price Level Publish",
                             response => Logger.Instance.Info(response));
                 }
             }
@@ -364,55 +371,100 @@ namespace LinkGreenODBCUtility
 
         private void syncPricing_Click(object sender, EventArgs e)
         {
-            var notificationEmail = Settings.GetNotificationEmail();
-            var priceLevelPrices = new PriceLevelPrices();
-            priceLevelPrices.UpdateTemporaryTables();
-            priceLevelPrices.Empty();
+            var bw = new BackgroundWorker();
 
-            string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
-            var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("PriceLevelPrices"))
+
+            bw.DoWork += (bwSender, bwEventArgs) =>
             {
-                if (priceLevelPrices.Publish(out var publishDetails))
-                {
-                    MessageBox.Show(@"Prices have been published successfully", @"Published Successfully");
-                    Logger.Instance.Info("Pricing synced.");
+                var notificationEmail = Settings.GetNotificationEmail();
+                var priceLevelPrices = new PriceLevelPrices();
+                priceLevelPrices.UpdateTemporaryTables();
+                priceLevelPrices.Empty();
 
-                    if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Pricing Publish",
-                            response => Logger.Instance.Info(response));
+                bw.ReportProgress(0, "Populating Local Repository\r\nPlease Wait");
+
+                string mappedDsnName = Mapping.GetDsnName("PriceLevelPrices");
+                var newMapping = new Mapping(mappedDsnName);
+                if (newMapping.MigrateData("PriceLevelPrices"))
+                {
+                    bw.ReportProgress(0, "Preparing to publish to LinkGreen\r\nPlease Wait");
+                    if (priceLevelPrices.Publish(out var publishDetails, bw))
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Prices have been published successfully",
+                            Title = "Published Successfully",
+                            Error = "",
+                            InfoMessage = string.Empty
+                        };
+
+                        Logger.Instance.Info("Pricing synced.");
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Pricing Publish",
+                                response => Logger.Instance.Info(response));
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Unable to publish your prices",
+                            Title = "Publish Failed",
+                            Error = "Unable to publish your prices",
+                            InfoMessage = string.Empty
+                        };
+
+                        Logger.Instance.Error("Pricing failed to sync.");
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail,
+                                "Pricing Publish failed, please check logs or contact support", "Pricing Publish",
+                                response => Logger.Instance.Info(response));
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(@"Unable to publish your prices", @"Publish Failed");
-                    Logger.Instance.Error("Pricing failed to sync.");
+                    if (!newMapping._validFields)
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Mapping failed, please validate your field mapping",
+                            Title = "Publish Failed",
+                            Error = "Mapping failed, please validate your field mapping",
+                            InfoMessage = string.Empty
+                        };
 
-                    if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Pricing Publish failed, please check logs or contact support", "Pricing Publish",
-                            response => Logger.Instance.Info(response));
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail,
+                                "Pricing Publish failed, please validate your field mapping.", "Pricing Publish",
+                                response => Logger.Instance.Info(response));
+
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "An unexepcted error has occurred, please check your logs or contct support",
+                            Title = "Publish Failed",
+                            Error = "An unexepcted error has occurred, please check your logs or contct support",
+                            InfoMessage = string.Empty
+                        };
+
+                        Logger.Instance.Error("Pricing failed to migrate.");
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail,
+                                "Product Publish failed, please check logs or contact support", "Pricing Publish",
+                                response => Logger.Instance.Info(response));
+                    }
                 }
-            }
-            else
-            {
-                if (!newMapping._validFields)
-                {
-                    MessageBox.Show(@"Mapping failed, please validate your field mapping", @"Publish Failed");
+            };
 
-                    if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Pricing Publish failed, please validate your field mapping.", "Pricing Publish",
-                            response => Logger.Instance.Info(response));
+            bw.ProgressChanged += Status_BackgroundWorker_ProgressChanged;
+            bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
 
-                }
-                else
-                {
-                    MessageBox.Show(@"An unexepcted error has occurred, please check your logs or contct support", @"Publish Failed");
-                    Logger.Instance.Error("Pricing failed to migrate.");
-
-                    if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Product Publish failed, please check logs or contact support", "Pricing Publish",
-                            response => Logger.Instance.Info(response));
-                }
-            }
+            bw.WorkerReportsProgress = true;
+            bw.RunWorkerAsync();
         }
 
         private void taskManagerToolStripMenuItem_Click(object sender, EventArgs e)
