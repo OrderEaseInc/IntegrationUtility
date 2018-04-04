@@ -22,6 +22,8 @@ namespace DataTransfer.AccessDatabase
     public class ProductCategory : OdbcDataTransferObjectBase
     {
         public string Category { get; set; }
+
+        public string ParentCategoryName { get; set; }
     }
 
     public class Customer : OdbcDataTransferObjectBase

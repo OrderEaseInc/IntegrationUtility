@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.ComponentModel;
 using System.Data.OleDb;
 using System.Configuration;
 
@@ -39,6 +40,7 @@ namespace LinkGreenODBCUtility
                 if (GetSandboxMode())
                 {
                     config.AppSettings.Settings["BaseUrl"].Value = "http://dev.linkgreen.ca/";
+                    //config.AppSettings.Settings["BaseUrl"].Value = "http://local.linkgreen.ca/";
                     config.Save(ConfigurationSaveMode.Modified);
                 }
             }
@@ -98,16 +100,14 @@ namespace LinkGreenODBCUtility
 
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-
-
-
                 var command = new OleDbCommand($"SELECT `{settingName}` FROM `{GetTableName(settingTableName)}` WHERE `Id` = 1", cInstance.GetConnection());
                 command.Connection.Open();
                 try
                 {
                     var key = command.ExecuteScalar();
-                    if (key == null) return default(T);
-                    return (T)Convert.ChangeType(key, typeof(T));
+                    if (key == null || key == DBNull.Value) return default(T);
+                    var conv = TypeDescriptor.GetConverter(typeof(T));
+                    return (T)conv.ConvertFrom(key);
                 }
                 catch (Exception e)
                 {
@@ -242,10 +242,10 @@ namespace LinkGreenODBCUtility
 
         internal static bool GetUpdateExistingProducts()
         {
-            var dbUpdateCategories = GetSettingValue<int?>("UpdateExistingProducts", SettingsTable.MigrationTableSettings);
+            var dbUpdateCategories = GetSettingValue<string>("UpdateExistingProducts", SettingsTable.MigrationTableSettings);
 
-            if (dbUpdateCategories.HasValue)
-                return dbUpdateCategories == 1;
+            if (!string.IsNullOrWhiteSpace(dbUpdateCategories))
+                return dbUpdateCategories == "1";
 
             return true;
         }
@@ -274,10 +274,10 @@ namespace LinkGreenODBCUtility
 
         public static bool GetUpdateCategories()
         {
-            var dbUpdateCategories = GetSettingValue<int?>("UpdateCategories");
+            var dbUpdateCategories = GetSettingValue<string>("UpdateCategories");
 
-            if (dbUpdateCategories.HasValue)
-                return dbUpdateCategories == 1;
+            if (string.IsNullOrWhiteSpace(dbUpdateCategories))
+                return dbUpdateCategories == "1";
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var appConfigUpdateCategories = config.AppSettings.Settings["UpdateCategories"].Value;
@@ -289,10 +289,10 @@ namespace LinkGreenODBCUtility
 
         public static bool GetSanitizeLog()
         {
-            var dbSanitizeLog = GetSettingValue<int?>("SanitizeLog");
+            var dbSanitizeLog = GetSettingValue<string>("SanitizeLog");
 
-            if (dbSanitizeLog.HasValue)
-                return dbSanitizeLog == 1;
+            if (!string.IsNullOrWhiteSpace(dbSanitizeLog))
+                return dbSanitizeLog == "1";
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var appConfigSanitizeLog = config.AppSettings.Settings["SanitizeLog"].Value;
@@ -304,8 +304,10 @@ namespace LinkGreenODBCUtility
         {
             var dbSandboxMode = GetSettingValue<int?>("SandboxMode");
 
+            //if (!string.IsNullOrWhiteSpace(dbSandboxMode))
+            //    return dbSandboxMode == "1";
             if (dbSandboxMode.HasValue)
-                return dbSandboxMode == 1;
+                return dbSandboxMode.Value == 1;
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var appConfigSandboxMode = config.AppSettings.Settings["SandboxMode"].Value;

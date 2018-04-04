@@ -570,6 +570,36 @@ namespace LinkGreenODBCUtility
             return new List<string>();
         }
 
+        public string SanitizeFieldValue(string value, string tableName, string fieldName, int fieldIndex, OdbcConnection transferConnection, bool useSanitizeLog)
+        {
+            var text = value.Replace("'", "''").Replace("\"", "\\\"");
+            var original = text;
+            text = SanitizeField(tableName, fieldName, text, transferConnection, false);
+            if (!string.IsNullOrEmpty(text) && useSanitizeLog && original != text)
+            {
+                File.AppendAllText(@"log-sanitized.txt",
+                    $@"{DateTime.Now} {tableName}:{fieldIndex} [{original} -> {text}] {Environment.NewLine}");
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                text = "NULL";
+                return text;
+            }
+
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
+            if (text.ToLower() == "true" || text.ToLower() == "yes")
+            {
+                text = "1";
+            }
+            else if (text.ToLower() == "false" || text.ToLower() == "no")
+            {
+                text = "0";
+            }
+
+            return "'" + text + "'";
+        }
+
         public bool MigrateData(string tableName, bool nuke = true)
         {
             if (ValidateRequiredFields(tableName))
@@ -634,9 +664,9 @@ namespace LinkGreenODBCUtility
 
                                     try
                                     {
+                                        transferConnection.Open();
                                         if (nuke)
                                         {
-                                            transferConnection.Open();
                                             nukeCommand.ExecuteNonQuery();
                                             Logger.Instance.Debug($"{Settings.ConnectViaDsnName}.{tableName} nuked.");
                                         }
@@ -647,64 +677,64 @@ namespace LinkGreenODBCUtility
                                             $"Failed to nuke {Settings.ConnectViaDsnName}{tableName}: {e.Message}");
                                     }
 
-                                    while (reader.Read())
+                                    using (var comm = transferConnection.CreateCommand())
                                     {
-                                        if (columnIndexes.Count == toColumnNames.Count)
+                                        var insertCommands = new List<string>();
+
+                                        while (reader.Read())
                                         {
-                                            var readerColumns = new List<string>();
-
-                                            foreach (var colIndex in columnIndexes)
+                                            if (columnIndexes.Count == toColumnNames.Count)
                                             {
-                                                var text = reader[colIndex.Value].ToString();
-                                                text = text.Replace("'", "''").Replace("\"", "\\\"");
-                                                var original = text;
-                                                text = SanitizeField(tableName, colIndex.Key, text, transferConnection);
-                                                if (!string.IsNullOrEmpty(text) && useSanitizeLog && original != text)
+                                                var readerColumns = new List<string>();
+
+                                                foreach (var colIndex in columnIndexes)
                                                 {
-                                                    File.AppendAllText(@"log-sanitized.txt",
-                                                        $@"{DateTime.Now} {tableName}:{colIndex} [{original} -> {text}] {Environment.NewLine}");
+                                                    var text = reader[colIndex.Value].ToString();
+                                                    readerColumns.Add(SanitizeFieldValue(text, tableName, colIndex.Key,
+                                                        colIndex.Value, transferConnection, useSanitizeLog));
                                                 }
 
-                                                if (string.IsNullOrEmpty(text))
-                                                {
-                                                    text = "NULL";
-                                                    readerColumns.Add(text);
-                                                }
-                                                else
-                                                {
-                                                    if (text.ToLower() == "true" || text.ToLower() == "yes")
-                                                    {
-                                                        text = "1";
-                                                    }
-                                                    else if (text.ToLower() == "false" || text.ToLower() == "no")
-                                                    {
-                                                        text = "0";
-                                                    }
+                                                var readerColumnValues = string.Join(",", readerColumns);
+                                                var stmt =
+                                                    $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
 
-                                                    readerColumns.Add("'" + text + "'");
+                                                try
+                                                {
+                                                    insertCommands.Add(stmt);
+                                                    rowCount++;
                                                 }
+                                                catch (OdbcException e)
+                                                {
+                                                    Logger.Instance.Error(
+                                                        $"Failed to insert record into {Settings.ConnectViaDsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
+                                                }
+
                                             }
+                                        }
 
-                                            var readerColumnValues = string.Join(",", readerColumns);
-                                            var stmt =
-                                                $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
-
-                                            var comm = new OdbcCommand(stmt)
-                                            {
-                                                Connection = transferConnection
-                                            };
-
+                                        comm.Transaction = transferConnection.BeginTransaction();
+                                        foreach (var t in insertCommands)
+                                        {
                                             try
                                             {
+                                                comm.CommandText = t;
                                                 comm.ExecuteNonQuery();
-                                                rowCount++;
                                             }
                                             catch (OdbcException e)
                                             {
                                                 Logger.Instance.Error(
                                                     $"Failed to insert record into {Settings.ConnectViaDsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
                                             }
+                                        }
 
+                                        try
+                                        {
+                                            comm.Transaction.Commit();
+                                        }
+                                        catch (OdbcException e)
+                                        {
+                                            Logger.Instance.Error(
+                                                $"Failed to insert record into {Settings.ConnectViaDsnName}.{tableName}: {e.Message} \n\nCommand: {comm.CommandText}");
                                         }
                                     }
 
@@ -1146,10 +1176,14 @@ namespace LinkGreenODBCUtility
             return string.IsNullOrEmpty(value) ? "null" : $"{delimiter}{value.Replace("'", "''").Replace("\"", "\\\"")}{delimiter}";
         }
 
-        private string SanitizeField(string tableName, string field, string text, OdbcConnection connection)
+        private string SanitizeField(string tableName, string field, string text, OdbcConnection connection, bool resetTransaction = true)
         {
-            connection.Close();
-            connection.Open();
+            if (resetTransaction)
+            {
+                connection.Close();
+                connection.Open();
+            }
+
             var sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly", connection);
             var sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail", connection);
             var sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice", connection);

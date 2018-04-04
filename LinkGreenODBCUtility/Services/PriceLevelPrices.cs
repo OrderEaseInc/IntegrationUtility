@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using DataTransfer.AccessDatabase;
@@ -67,6 +68,8 @@ namespace LinkGreenODBCUtility
 
                 var prices = pricesToImport;
 
+                var allPrices = new Dictionary<string, List<PricingLevelItemRequest>>();
+
                 foreach (var price in prices)
                 {
                     var publishedProduct = existingInventory.FirstOrDefault(s => s.PrivateSKU == price.Id);
@@ -86,14 +89,38 @@ namespace LinkGreenODBCUtility
                     {
                         var item = new PricingLevelItemRequest
                         {
-                            PriceLevelName = price.PriceLevel,
                             SupplierInventoryItemId = publishedProduct.Id,
                             Price = price.Price.Value,
                             MinimumPurchase = price.MinimumPurchase
                         };
                         updateCounter++;
-                        WebServiceHelper.PushPricingLevelPrice(item);
+                        if (allPrices.ContainsKey(price.PriceLevel))
+                            allPrices[price.PriceLevel].Add(item);
+                        else
+                            allPrices.Add(price.PriceLevel, new List<PricingLevelItemRequest> { item });
                     }
+                }
+
+                List<List<T>> ChunkBy<T>(IEnumerable<T> source, int chunkSize)
+                {
+                    return source
+                        .Select((x, i) => new { Index = i, Value = x })
+                        .GroupBy(x => x.Index / chunkSize)
+                        .Select(x => x.Select(v => v.Value).ToList())
+                        .ToList();
+                }
+
+                foreach (var kvp in allPrices)
+                {
+                    bw?.ReportProgress(0, $"Preparing to push {kvp.Key}");
+                    var chunks = ChunkBy(kvp.Value, 50);
+                    var iCountChunks = 0;
+                    System.Threading.Tasks.Parallel.ForEach(chunks, (chunk) =>
+                    {
+                        bw?.ReportProgress(0, $"Pushing {kvp.Key} Part {++iCountChunks} of {chunks.Count}");
+                        WebServiceHelper.PushPricingLevel(kvp.Key, chunk.ToArray(),
+                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+                    });
                 }
 
                 publishDetails.Insert(0, $"{updateCounter} products have had their prices updated.");

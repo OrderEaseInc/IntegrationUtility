@@ -56,6 +56,26 @@ namespace LinkGreenODBCUtility
             }
         }
 
+
+        private int GetParentCategoryID(ICollection<PrivateCategory> existingCategories, ProductCategory category)
+        {
+            var parentCategory = existingCategories.FirstOrDefault(p =>
+                p.Name == category.ParentCategoryName && p.Depth == 0);
+            if (parentCategory == null)
+            {
+                var newParentCategory = WebServiceHelper.PushCategory(new PrivateCategory
+                {
+                    Name = category.ParentCategoryName,
+                    Depth = 0
+                });
+
+                existingCategories.Add(newParentCategory);
+                parentCategory = newParentCategory;
+            }
+
+            return parentCategory.Id;
+        }
+
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
@@ -74,8 +94,16 @@ namespace LinkGreenODBCUtility
                 {
                     if (existingCategories.All(s => s?.Name != category.Category))
                     {
-                        existingCategories.Add(
-                            WebServiceHelper.PushCategory(new PrivateCategory { Name = category.Category, Depth = 0 }));
+                        var pushableCategory = new PrivateCategory { Name = category.Category };
+                        //if (!string.IsNullOrWhiteSpace(category.ParentCategoryName))
+                        //{
+                        //    pushableCategory.ParentCategoryId = GetParentCategoryID(existingCategories, category);
+                        //}
+                        //else
+                        //{
+                            pushableCategory.Depth = 0;
+                        //}
+                        existingCategories.Add(WebServiceHelper.PushCategory(pushableCategory));
                         publishDetails.Add($"Added category: {category.Category}");
                         numOfPublishedCategories++;
                     }
