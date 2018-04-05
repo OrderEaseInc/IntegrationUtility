@@ -9,7 +9,6 @@
         public int? ParentCategoryId { get; set; }
 
         public int Depth { get; set; }
-
-    
+   
     }
 }

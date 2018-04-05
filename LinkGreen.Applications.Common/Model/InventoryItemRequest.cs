@@ -1,3 +1,5 @@
+using System;
+
 namespace LinkGreen.Applications.Common.Model
 {
     public class InventoryItemRequest
@@ -45,5 +47,7 @@ namespace LinkGreen.Applications.Common.Model
         public bool IsDirectDelivery { get; set; }
 
         public string AccountingReference { get; set; }
+
+        public DateTime? GoodUntil { get; set; }
     }
 }

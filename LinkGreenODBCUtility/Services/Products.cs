@@ -141,6 +141,7 @@ namespace LinkGreenODBCUtility
                         request.Id = existing.Id;
                     }
 
+
                     WebServiceHelper.PushInventoryItem(request);
 
                     bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");

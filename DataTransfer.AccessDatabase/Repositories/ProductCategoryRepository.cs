@@ -56,7 +56,8 @@ namespace DataTransfer.AccessDatabase
             {
                 return new ProductCategory
                 {
-                    Category = reader.Name
+                    Category = reader.Name,
+                    ParentCategoryName = reader.ParentCategoryName
                 };
             }
             catch (RuntimeBinderException exception)
