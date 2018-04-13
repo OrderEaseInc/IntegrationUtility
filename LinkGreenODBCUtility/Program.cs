@@ -76,15 +76,8 @@ namespace LinkGreenODBCUtility
             // System.Diagnostics.Debugger.Launch();
 
             var isService = args.Any(a => a.Equals("/service", StringComparison.OrdinalIgnoreCase));
-            //            DialogResult dialogResult = MessageBox.Show("Are you running as administrator?", "Must be run as Administrator", MessageBoxButtons.YesNo);
-            //            if (dialogResult == DialogResult.Yes)
-            //            {
-            //                // do something
-            //            }
-            //            else if (dialogResult == DialogResult.No)
-            //            {
-            //                Environment.Exit(0);
-            //            }
+
+            Utility.Mapper.InitMapper();
 
             string dsnName = Settings.ConnectViaDsnName;
             string dsPath = AppDomain.CurrentDomain.BaseDirectory + $"{Settings.ConnectViaDsnName}.mdb";

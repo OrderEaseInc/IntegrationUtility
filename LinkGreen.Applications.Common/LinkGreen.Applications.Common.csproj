@@ -65,6 +65,7 @@
     <Compile Include="Model\ApiResult.cs" />
     <Compile Include="Model\BuyerInventory.cs" />
     <Compile Include="Model\CountryMapping.cs" />
+    <Compile Include="Model\IdSkuQuantity.cs" />
     <Compile Include="Model\InventoryQuantity.cs" />
     <Compile Include="Model\ProviceMapping.cs" />
     <Compile Include="Model\Supplier.cs" />

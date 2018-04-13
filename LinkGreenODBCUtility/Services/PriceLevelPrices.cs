@@ -5,6 +5,7 @@ using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using LinkGreenODBCUtility.Utility;
 
 namespace LinkGreenODBCUtility
 {
@@ -101,19 +102,10 @@ namespace LinkGreenODBCUtility
                     }
                 }
 
-                List<List<T>> ChunkBy<T>(IEnumerable<T> source, int chunkSize)
-                {
-                    return source
-                        .Select((x, i) => new { Index = i, Value = x })
-                        .GroupBy(x => x.Index / chunkSize)
-                        .Select(x => x.Select(v => v.Value).ToList())
-                        .ToList();
-                }
-
                 foreach (var kvp in allPrices)
                 {
                     bw?.ReportProgress(0, $"Preparing to push {kvp.Key}");
-                    var chunks = ChunkBy(kvp.Value, 50);
+                    var chunks = kvp.Value.ChunkBy(50);
                     var iCountChunks = 0;
                     System.Threading.Tasks.Parallel.ForEach(chunks, (chunk) =>
                     {

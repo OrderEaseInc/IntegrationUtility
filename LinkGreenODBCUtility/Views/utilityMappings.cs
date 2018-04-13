@@ -2191,7 +2191,7 @@ namespace LinkGreenODBCUtility
             var inventoryQuantities = new InventoryQuantity();
             if (inventoryQuantities.Publish(out var publishDetails))
             {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                MessageBox.Show(publishDetails[0], @"Migrated Successfully");
             }
             else {
                 var message = "Please select your suppliers table!";

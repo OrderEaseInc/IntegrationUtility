@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using LinkGreenODBCUtility.Utility;
+using Mapper = AutoMapper.Mapper;
 
 namespace LinkGreenODBCUtility
 {
@@ -54,7 +56,7 @@ namespace LinkGreenODBCUtility
             {
                 Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
 
-                string apiKey = Settings.GetApiKey();
+                var apiKey = Settings.GetApiKey();
 
                 if (string.IsNullOrEmpty(apiKey))
                 {
@@ -68,53 +70,29 @@ namespace LinkGreenODBCUtility
                 var existingInventory = WebServiceHelper.GetAllInventory();
                 var items = 0;
 
+                var request = new List<IdSkuQuantity>();
+
                 foreach (var inventoryQuantityItem in inventoryQuantityItems)
                 {
                     var existingProduct = existingInventory.FirstOrDefault(i => i.PrivateSKU == inventoryQuantityItem.Sku);
 
-                    var request = new InventoryItemRequest { PrivateSKU = inventoryQuantityItem.Sku };
+                    //var request = new InventoryItemRequest { PrivateSKU = inventoryQuantityItem.Sku };
 
                     // ReSharper disable once InvertIf
                     if (existingProduct != null)
                     {
                         items++;
 
-                        request = AutoMapper.Mapper.Map(existingProduct, request);
-                        request.PrivateSKU = inventoryQuantityItem.Sku;
-
-                        request.AccountingReference = existingProduct.AccountingReference;
-                        request.CategoryId = existingProduct.CategoryId;
-                        request.Comments = existingProduct.Comments;
-                        request.Description = existingProduct.Description;
-                        request.DirectDeliveryCode = existingProduct.DirectDeliveryCode;
-                        request.FreightFactor = existingProduct.FreightFactor;
-                        request.DirectDeliveryMinQuantity = existingProduct.DirectDeliveryMinQuantity;
-                        request.Id = existingProduct.Id;
-                        request.Inactive = existingProduct.Inactive;
-                        request.IsDirectDelivery = existingProduct.IsDirectDelivery;
-                        request.LocationId = existingProduct.LocationId;
-                        request.MasterQuantityDescription = existingProduct.MasterQuantityDescription;
-                        request.MinOrderSpring = existingProduct.MinOrderSpring;
-                        request.MinOrderSummer = existingProduct.MinOrderSummer;
-                        request.NetPrice = existingProduct.NetPrice;
-                        request.OpenSizeDescription = existingProduct.OpenSizeDescription;
-                        request.PrivateSKU = existingProduct.PrivateSKU;
-                        request.SlaveQuantityPerMaster = existingProduct.SlaveQuantityPerMaster;
-                        request.SuggestedRetailPrice = existingProduct.SuggestedRetailPrice;
-                        request.GoodUntil = existingProduct.GoodUntil;
-                        
-                        request.UPC = existingProduct.UPC;
-                        // set the quantity
-                        request.QuantityAvailable = inventoryQuantityItem.Quantity >= 1 ? inventoryQuantityItem.Quantity : 1;
-
-                        new Task(() =>
-                        {
-                            WebServiceHelper.PushInventoryItem(request);
-
-                            Logger.Instance.Debug(
-                                $"Set available quantity to {inventoryQuantityItem.Quantity} for Sku: {inventoryQuantityItem.Sku}");
-                        }).Start();
+                        request.Add(Mapper.Map<IdSkuQuantity>(inventoryQuantityItem));
                     }
+                }
+
+
+                if (items > 0)
+                {
+                    var chunks = request.ChunkBy(500);
+                    foreach (var chunk in chunks)
+                        WebServiceHelper.PushInventoryQuantity(chunk);
                 }
 
                 if (items < 1)

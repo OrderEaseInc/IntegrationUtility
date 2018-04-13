@@ -357,7 +357,8 @@ namespace LinkGreen.Applications.Common
             request.AddParameter("application/json", json, null, ParameterType.RequestBody);
 
             var response = Client.Execute(request);
-            if (response.StatusCode != HttpStatusCode.OK) {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
                 //lock (_debugLock) {
                 //    System.IO.File.AppendAllLines("C:\\temp\\publishlog.txt",
                 //        new[] {response.StatusCode + ":" + response.Content});
@@ -375,6 +376,17 @@ namespace LinkGreen.Applications.Common
 
             request.AddJsonBody(item);
 
+            var response = Client.Execute(request);
+
+            return response.StatusCode == HttpStatusCode.OK;
+        }
+
+        public static bool PushInventoryQuantity(List<IdSkuQuantity> items)
+        {
+            var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantityBulk/{Key}";
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            request.AddJsonBody(items);
             var response = Client.Execute(request);
 
             return response.StatusCode == HttpStatusCode.OK;

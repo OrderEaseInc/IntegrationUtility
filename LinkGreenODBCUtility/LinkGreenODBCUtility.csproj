@@ -122,6 +122,8 @@
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Services\InventoryQuantity.cs" />
+    <Compile Include="Utility\ChunkExtensions.cs" />
+    <Compile Include="Utility\Mapper.cs" />
     <Compile Include="Views\CreateTask.cs">
       <SubType>Form</SubType>
     </Compile>
