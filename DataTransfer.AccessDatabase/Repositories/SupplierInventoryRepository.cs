@@ -56,10 +56,10 @@ namespace DataTransfer.AccessDatabase
             foreach (var buyerLinkedSku in buyerLinkedSkus)
             {
                 var sql =
-                    $"INSERT INTO {TableName} (BuyerLinkedSku, CatalogPrice, Description, Inventory, ItemId, SizeDescription, SupplierSku, SupplierId, OurSupplierNumber) " +
+                    $"INSERT INTO {TableName} (BuyerLinkedSku, CatalogPrice, Description, Inventory, ItemId, SizeDescription, SupplierSku, SupplierId, OurSupplierNumber, ModifiedDate) " +
                     $"VALUES ({NullableString(buyerLinkedSku)}, {NullableDecimal(inventory.CatalogPrice)}, " +
                     $"{NullableString(inventory.Description)}, {NullableInt(inventory.Inventory)}, {inventory.ItemId}," +
-                    $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)})";
+                    $"{NullableString(inventory.SizeDescription)}, {NullableString(inventory.SupplierSku)}, {NullableInt(supplier.Id)}, {NullableString(supplier.OurContactInfo.OurSupplierNumber)}, {NullableString(inventory.ModifiedDate?.ToString("yyyy-MM-dd hh:mm:ss"))})";
                 using (var command = new OleDbCommand(sql))
                 {
                     ExecuteCommand(command);

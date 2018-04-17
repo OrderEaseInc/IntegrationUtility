@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LinkGreen.Applications.Common.Model
 {
@@ -16,6 +17,7 @@ namespace LinkGreen.Applications.Common.Model
         public int? SupplierId { get; set; }
         public string OurSupplierNumber { get; set; }
         public string BuyerLinkedSku { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         public SupplierInventory Clone()
         {
