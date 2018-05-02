@@ -109,7 +109,8 @@ namespace DataTransfer.AccessDatabase
                     SizeDescription = reader.SizeDescription,
                     SupplierId = reader.SupplierId,
                     OurSupplierNumber = reader.OurSupplierNumber,
-                    Pricing = new List<QuantityPricingBreak>()
+                    Pricing = new List<QuantityPricingBreak>(),
+                    ModifiedDate = reader.ModifiedDate
                 };
 
             }
