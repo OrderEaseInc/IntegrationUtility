@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Linq;
 using LinkGreen.Email;
 
 namespace LinkGreenODBCUtility
@@ -105,7 +106,7 @@ namespace LinkGreenODBCUtility
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UtilitySettings utilitySettings = new UtilitySettings();
+            UtilitySettings utilitySettings = new UtilitySettings {Owner = this};
             utilitySettings.ShowDialog();
         }
 
@@ -122,6 +123,7 @@ namespace LinkGreenODBCUtility
             syncPriceLevels.Enabled = enabled;
             syncPricing.Enabled = enabled;
             syncProducts.Enabled = enabled;
+            downloadOrders.Enabled = enabled;
         }
 
         private void syncCustomers_Click(object sender, EventArgs e)
@@ -471,6 +473,52 @@ namespace LinkGreenODBCUtility
         {
             var TaskManager = new TaskManager();
             TaskManager.ShowDialog();
+        }
+
+        private void downloadOrders_Click(object sender, EventArgs e)
+        {
+            var bw = new BackgroundWorker();
+            lblStatus.Text = "Processing order download";
+            
+            SetButtonState(false);
+
+            bw.DoWork += (bwSender, bwEventArgs) => {
+                var notificationEmail = Settings.GetNotificationEmail();
+                var orders = new OrdersFromLinkGreen();
+                orders.Empty();
+                var published = orders.Publish(out var publishDetails, bw);
+                if (published) {
+                    bwEventArgs.Result = new {
+                        Message = "Orders have been downloaded",
+                        Title = "Downloaded Successfully",
+                        Error = string.Empty,
+                        InfoMessage = publishDetails.FirstOrDefault()
+                    };
+
+                    if (!string.IsNullOrEmpty(notificationEmail)) {
+                        Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Order Download",
+                            response => Logger.Instance.Info(response));
+                    }
+                } else {
+                    bwEventArgs.Result = new
+                    {
+                        Message = "Orders were not downloaded",
+                        Title = "Download Failed",
+                        Error = publishDetails.FirstOrDefault() ?? "Orders failed to download.",
+                        InfoMessage = string.Empty
+                    };
+
+                    if (!string.IsNullOrWhiteSpace(notificationEmail))
+                        Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
+                            response => Logger.Instance.Error(response));
+                }
+            };
+
+            bw.ProgressChanged += Status_BackgroundWorker_ProgressChanged;
+            bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
+
+            bw.WorkerReportsProgress = true;
+            bw.RunWorkerAsync();
         }
     }
 }

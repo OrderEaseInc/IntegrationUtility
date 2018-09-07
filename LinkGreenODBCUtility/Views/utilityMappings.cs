@@ -21,7 +21,9 @@ namespace LinkGreenODBCUtility
             Suppliers = 6,
             SupplierInventories = 7,
             LinkedSkus = 8,
-            BuyerInventories = 9
+            BuyerInventories = 9,
+            DownloadOrders = 10,
+            DownloadOrderItems = 11
         }
 
         public UtilityMappings()
@@ -48,6 +50,8 @@ namespace LinkGreenODBCUtility
                     supplierInventoryDataSource.Items.Add(sourceName);
                     linkedSkusDataSource.Items.Add(sourceName);
                     buyerInventoryDataSource.Items.Add(sourceName);
+                    downloadOrdersDataSource.Items.Add(sourceName);
+                    downloadOrderItemsDataSource.Items.Add(sourceName);
                 }
             }
 
@@ -153,6 +157,20 @@ namespace LinkGreenODBCUtility
                     }
                     DisplayActiveBuyerInventoryTableMapping();
                     break;
+                case SettingsTab.DownloadOrders:
+                    cusIdx = downloadOrdersDataSource.FindString(mapping.GetDsnName("Orders_FromLinkGreen"));
+                    if (cusIdx != -1) {
+                        downloadOrdersDataSource.SetSelected(cusIdx, true);
+                    }
+                    DisplayActiveDownloadOrdersTableMapping();
+                    break;
+                case SettingsTab.DownloadOrderItems:
+                    cusIdx = downloadOrderItemsDataSource.FindString(mapping.GetDsnName("OrderItem_FromLinkGreen"));
+                    if (cusIdx != -1) {
+                        downloadOrderItemsDataSource.SetSelected(cusIdx, true);
+                    }
+                    DisplayActiveDownloadOrderItemsTableMapping();
+                    break;
                 default:
                     MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
                     break;
@@ -226,6 +244,15 @@ namespace LinkGreenODBCUtility
             DisplayTableMapping("BuyerInventories", "BuyerInventories",
                 activeBuyerInventoryFieldMappingValue, mappedBuyerInventoryTableFieldsLabel);
 
+        private void DisplayActiveDownloadOrdersTableMapping() =>
+            DisplayTableMapping("Orders_FromLinkGreen", "Orders_FromLinkGreen",
+                activeDownloadOrdersFieldMappingValue, mappedDownloadOrdersTableFieldsLabel,
+                downloadOrdersTableName);
+
+        private void DisplayActiveDownloadOrderItemsTableMapping() =>
+            DisplayTableMapping("OrderItem_FromLinkGreen", "OrderItem_FromLinkGreen",
+                activeDownloadOrderItemsFieldMappingValue, mappedDownloadOrderItemsTableFieldsLabel,
+                downloadOrderItemsTableName);
 
         private void DisplayActivePricingTableMapping() =>
             DisplayTableMapping("PriceLevelPrices", "PriceLevelPrices",
@@ -275,6 +302,13 @@ namespace LinkGreenODBCUtility
             DisplayFieldMapping("Suppliers", displayName, fieldName,
                 activeSupplierFieldMappingLabel, activeSupplierFieldMappingValue);
 
+        private void DisplayDownloadOrdersFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("Orders_FromLinkGreen", displayName, fieldName,
+                activeDownloadOrdersFieldMappingLabel, activeDownloadOrdersFieldMappingValue);
+
+        private void DisplayDownloadOrderItemsFieldMapping(string displayName, string fieldName) =>
+            DisplayFieldMapping("OrderItem_FromLinkGreen", displayName, fieldName,
+                activeDownloadOrderItemsFieldMappingLabel, activeDownloadOrderItemsFieldMappingValue);
 
         private void DisplayActiveLinkedSkusFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("LinkedSkus", displayName, fieldName,
@@ -358,6 +392,26 @@ namespace LinkGreenODBCUtility
             if (!string.IsNullOrEmpty(description))
             {
                 supplierInventoryFieldDescription.Text = description + " (" + dataType + ")";
+            }
+        }
+
+        private void DisplayDownloadOrdersFieldDescription(string tableName, string fieldName)
+        {
+            string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
+            string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
+            if (!string.IsNullOrEmpty(description))
+            {
+                downloadOrdersFieldDescriptionValue.Text = description + " (" + dataType + ")";
+            }
+        }
+
+        private void DisplayDownloadOrderItemsFieldDescription(string tableName, string fieldName)
+        {
+            string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
+            string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
+            if (!string.IsNullOrEmpty(description))
+            {
+                downloadOrderItemsFieldDescriptionValue.Text = description + " (" + dataType + ")";
             }
         }
 
@@ -690,6 +744,82 @@ namespace LinkGreenODBCUtility
                     foreach (string column in columns)
                     {
                         mappingBuyerInventoryFields.Items.Add(column);
+                    }
+                }
+            }
+        }
+
+        private void SetupDownloadOrdersMappingFields()
+        {
+            //Set the required fields from access db
+            var tableFields = Mapping.GetTableFields("Orders_FromLinkGreen");
+            downloadOrdersFields.Items.Clear();
+            foreach (var tableField in tableFields)
+            {
+                var item = new ListItem();
+                string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
+                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
+                if (tableField.Required)
+                {
+                    item.Text = "* " + item.Text;
+                }
+                item.Value = tableField.FieldName;
+                item.Display = nameToShow;
+                downloadOrdersFields.DisplayMember = "Text";
+                downloadOrdersFields.Items.Add(item);
+            }
+
+            //Set the available fields to map
+            if (downloadOrdersDataSource.SelectedItem != null)
+            {
+                var mappedTableName = Mapping.GetTableMapping("Orders_FromLinkGreen");
+                var mappedDsnName = Mapping.GetDsnName("Orders_FromLinkGreen");
+
+                mappingDownloadOrdersFields.Items.Clear();
+                if (!string.IsNullOrEmpty(mappedTableName))
+                {
+                    var columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
+                    foreach (var column in columns)
+                    {
+                        mappingDownloadOrdersFields.Items.Add(column);
+                    }
+                }
+            }
+        }
+
+        private void SetupDownloadOrderItemsMappingFields()
+        {
+            //Set the required fields from access db
+            var tableFields = Mapping.GetTableFields("OrderItem_FromLinkGreen");
+            downloadOrderItemsFields.Items.Clear();
+            foreach (var tableField in tableFields)
+            {
+                var item = new ListItem();
+                var nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
+                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
+                if (tableField.Required) {
+                    item.Text = "* " + item.Text;
+                }
+
+                item.Value = tableField.FieldName;
+                item.Display = nameToShow;
+                downloadOrderItemsFields.DisplayMember = "Text";
+                downloadOrderItemsFields.Items.Add(item);
+            }
+
+            //Set the available fields to map
+            if (downloadOrderItemsDataSource.SelectedItem != null)
+            {
+                var mappedTableName = Mapping.GetTableMapping("OrderItem_FromLinkGreen");
+                var mappedDsnName = Mapping.GetDsnName("OrderItem_FromLinkGreen");
+
+                mappingDownloadOrderItemsFields.Items.Clear();
+                if (!string.IsNullOrEmpty(mappedTableName))
+                {
+                    var columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
+                    foreach (var column in columns)
+                    {
+                        mappingDownloadOrderItemsFields.Items.Add(column);
                     }
                 }
             }
@@ -1094,6 +1224,26 @@ namespace LinkGreenODBCUtility
             }
         }
 
+        private void downloadOrdersFields_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((downloadOrdersFields.SelectedItem as ListItem).Value != null)
+            {
+                DisplayDownloadOrdersFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Display, (downloadOrdersFields.SelectedItem as ListItem).Value);
+
+                DisplayDownloadOrdersFieldDescription("Orders_FromLinkGreen", (downloadOrdersFields.SelectedItem as ListItem).Value);
+            }
+        }
+
+        private void downloadOrderItemsFields_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((downloadOrderItemsFields.SelectedItem as ListItem).Value != null)
+            {
+                DisplayDownloadOrdersFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Display, (downloadOrderItemsFields.SelectedItem as ListItem).Value);
+
+                DisplayDownloadOrdersFieldDescription("OrderItem_FromLinkGreen", (downloadOrderItemsFields.SelectedItem as ListItem).Value);
+            }
+        }
+
         private void mapCustomerFields_Click(object sender, EventArgs e)
         {
             if (customerFields.SelectedItem != null && mappingCustomerFields.SelectedItem != null)
@@ -1142,6 +1292,36 @@ namespace LinkGreenODBCUtility
             else
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+            }
+        }
+
+        private void mapDownloadOrdersFields_Click(object sender, EventArgs e)
+        {
+            if (downloadOrdersFields.SelectedItem != null && mappingDownloadOrdersFields.SelectedItem != null)
+            {
+                var orders = new OrdersFromLinkGreen();
+                orders.SaveFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Value, mappingDownloadOrdersFields.SelectedItem.ToString());
+                DisplayActiveSupplierFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Display, (downloadOrdersFields.SelectedItem as ListItem).Value);
+                SetupDownloadOrdersMappingFields();
+            }
+            else
+            {
+                MessageBox.Show(@"Please select the Download Orders DSN!", @"DSN missing");
+            }
+        }
+
+        private void mapDownloadOrderItemsFields_Click(object sender, EventArgs e)
+        {
+            if (downloadOrderItemsFields.SelectedItem != null && mappingDownloadOrderItemsFields.SelectedItem != null)
+            {
+                var orders = new OrdersFromLinkGreen();
+                orders.SaveItemFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Value, mappingDownloadOrderItemsFields.SelectedItem.ToString());
+                DisplayActiveSupplierFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Display, (downloadOrderItemsFields.SelectedItem as ListItem).Value);
+                SetupDownloadOrderItemsMappingFields();
+            }
+            else
+            {
+                MessageBox.Show(@"Please select the Download Order Items DSN!", @"DSN missing");
             }
         }
 
@@ -1405,6 +1585,44 @@ namespace LinkGreenODBCUtility
             }
         }
 
+        private void downloadOrdersDataSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (downloadOrdersDataSource.SelectedItem != null)
+            {
+                string dsnName = downloadOrdersDataSource.SelectedItem.ToString();
+                var mapping = new Mapping(dsnName);
+                var tableNames = mapping.GetTableNames();
+
+                downloadOrdersTableName.Items.Clear();
+                foreach (var tableName in tableNames)
+                {
+                    downloadOrdersTableName.Items.Add(tableName);
+                }
+
+                DisplayActiveDownloadOrdersTableMapping();
+                SetupDownloadOrdersMappingFields();
+            }
+        }
+
+        private void downloadOrderItemsDataSource_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (downloadOrderItemsDataSource.SelectedItem != null)
+            {
+                string dsnName = downloadOrderItemsDataSource.SelectedItem.ToString();
+                var mapping = new Mapping(dsnName);
+                var tableNames = mapping.GetTableNames();
+
+                downloadOrderItemsTableName.Items.Clear();
+                foreach (var tableName in tableNames)
+                {
+                    downloadOrderItemsTableName.Items.Add(tableName);
+                }
+
+                DisplayActiveDownloadOrderItemsTableMapping();
+                SetupDownloadOrderItemsMappingFields();
+            }
+        }
+
         private void productsTableName_SelectedIndexChanged(object sender, EventArgs e)
         {
             var products = new Products();
@@ -1438,6 +1656,42 @@ namespace LinkGreenODBCUtility
             else
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+            }
+        }
+
+        private void downloadOrdersTableName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var orders = new OrdersFromLinkGreen();
+            if (downloadOrdersTableName.SelectedItem != null)
+            {
+                string dsnName = downloadOrdersDataSource.SelectedItem.ToString();
+                string tableName = downloadOrdersTableName.SelectedItem.ToString();
+                orders.SaveTableMapping(dsnName, tableName);
+
+                DisplayActiveDownloadOrdersTableMapping();
+                SetupDownloadOrdersMappingFields();
+            }
+            else
+            {
+                MessageBox.Show(@"Please select the table!", @"Table missing");
+            }
+        }
+
+        private void downloadOrderItemsTableName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var orders = new OrdersFromLinkGreen();
+            if (downloadOrderItemsTableName.SelectedItem != null)
+            {
+                string dsnName = downloadOrderItemsDataSource.SelectedItem.ToString();
+                string tableName = downloadOrderItemsTableName.SelectedItem.ToString();
+                orders.SaveItemsTableMapping(dsnName, tableName);
+
+                DisplayActiveDownloadOrderItemsTableMapping();
+                SetupDownloadOrderItemsMappingFields();
+            }
+            else
+            {
+                MessageBox.Show(@"Please select the table!", @"Table missing");
             }
         }
 
@@ -1937,6 +2191,19 @@ namespace LinkGreenODBCUtility
             }
         }
 
+        private void setOrderDownloadUsernamePW_Click(object sender, EventArgs e)
+        {
+            if (downloadOrdersDataSource.SelectedItem != null)
+            {
+                var DsnCredentials = new DsnCredentials(downloadOrdersDataSource.SelectedItem.ToString());
+                DsnCredentials.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(@"Please select your Download Orders DSN!", @"DSN not selected");
+            }
+        }
+
         private void linkedSkusDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (linkedSkusDataSource.SelectedItem != null)
@@ -2229,6 +2496,65 @@ namespace LinkGreenODBCUtility
         private void chkUpdateExistingProducts_CheckedChanged(object sender, EventArgs e)
         {
             Settings.SaveUpdateExistingProducts(chkUpdateExistingProducts.Checked);
+        }
+
+        private void emptyDownloadOrdersTransferTable_Click(object sender, EventArgs e)
+        {
+            try {
+                var orders = new OrdersFromLinkGreen();
+                var emptied = orders.Empty();
+                if (emptied) {
+                    MessageBox.Show("Table was emptied successfully.", "Table emptied", MessageBoxButtons.OK);
+                } else {
+                    MessageBox.Show("Table was not emptied. Check the log for details", "Table not emptied", MessageBoxButtons.OK);
+                }
+
+            } catch (Exception ex) {
+                Logger.Instance.Error($"Error emptying the Download Orders table: {ex.GetBaseException().Message}");
+                MessageBox.Show($"There was an error emptying the Download Orders table: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
+            }
+        }
+
+        private void downloadDownloadOrders_Click(object sender, EventArgs e)
+        {
+            try {
+                var orders = new OrdersFromLinkGreen();
+                var emptied = orders.Empty();
+                if (!emptied) {
+                    MessageBox.Show("Table was not emptied. Check the log for details", "Table not emptied", MessageBoxButtons.OK);
+                }
+
+                var downloaded = orders.Download();
+                if (downloaded) {
+                    MessageBox.Show("Orders downloaded successfully.", "Orders downloaded", MessageBoxButtons.OK);
+                } else {
+                    MessageBox.Show("Orders were not downloaded. Check the log for details", "Download failed", MessageBoxButtons.OK);
+                }
+
+            } catch (Exception ex) {
+                Logger.Instance.Error($"Error Downloading the orders: {ex.GetBaseException().Message}");
+                MessageBox.Show($"There was an error downloading the orders: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
+            }
+        }
+
+        private void syncDownloadOrders_Click(object sender, EventArgs e)
+        {
+            try {
+
+                var orders = new OrdersFromLinkGreen();
+                var published = orders.Publish(out var processDetails);
+
+                if (published) {
+                    MessageBox.Show("Orders synced successfully", "Success", MessageBoxButtons.OK);
+                } else {
+                    var message = processDetails.FirstOrDefault() ?? "Check the log for details";
+                    MessageBox.Show($"Orders were not synced: {message}");
+                }
+
+            } catch (Exception ex) {
+                Logger.Instance.Error($"Error Syncing the orders: {ex.GetBaseException().Message}");
+                MessageBox.Show($"There was an error syncing the orders: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
+            }
         }
     }
 }

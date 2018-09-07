@@ -271,6 +271,47 @@
             this.buyerInventoryDataSource = new System.Windows.Forms.ListBox();
             this.publishBuyerInventory = new System.Windows.Forms.Button();
             this.emptyBuyerInventoryTransferTable = new System.Windows.Forms.Button();
+            this.orderDownloads = new System.Windows.Forms.TabPage();
+            this.label36 = new System.Windows.Forms.Label();
+            this.setOrderDownloadUsernamePW = new System.Windows.Forms.Button();
+            this.downloadOrdersFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.label58 = new System.Windows.Forms.Label();
+            this.downloadDownloadOrders = new System.Windows.Forms.Button();
+            this.activeDownloadOrdersFieldMappingValue = new System.Windows.Forms.Label();
+            this.activeDownloadOrdersFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapDownloadOrdersFields = new System.Windows.Forms.Button();
+            this.mappingDownloadOrdersFields = new System.Windows.Forms.ListBox();
+            this.downloadOrdersFields = new System.Windows.Forms.ListBox();
+            this.mappedDownloadOrdersTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label75 = new System.Windows.Forms.Label();
+            this.label76 = new System.Windows.Forms.Label();
+            this.activeDownloadOrdersTableMappingValue = new System.Windows.Forms.Label();
+            this.label78 = new System.Windows.Forms.Label();
+            this.label79 = new System.Windows.Forms.Label();
+            this.label80 = new System.Windows.Forms.Label();
+            this.label81 = new System.Windows.Forms.Label();
+            this.downloadOrdersTableName = new System.Windows.Forms.ListBox();
+            this.downloadOrdersDataSource = new System.Windows.Forms.ListBox();
+            this.syncDownloadOrders = new System.Windows.Forms.Button();
+            this.emptyDownloadOrdersTransferTable = new System.Windows.Forms.Button();
+            this.orderItemDownloads = new System.Windows.Forms.TabPage();
+            this.downloadOrderItemsFieldDescriptionValue = new System.Windows.Forms.Label();
+            this.label61 = new System.Windows.Forms.Label();
+            this.activeDownloadOrderItemsFieldMappingValue = new System.Windows.Forms.Label();
+            this.activeDownloadOrderItemsFieldMappingLabel = new System.Windows.Forms.Label();
+            this.mapDownloadOrderItemsFields = new System.Windows.Forms.Button();
+            this.mappingDownloadOrderItemsFields = new System.Windows.Forms.ListBox();
+            this.downloadOrderItemsFields = new System.Windows.Forms.ListBox();
+            this.mappedDownloadOrderItemsTableFieldsLabel = new System.Windows.Forms.Label();
+            this.label82 = new System.Windows.Forms.Label();
+            this.label83 = new System.Windows.Forms.Label();
+            this.activeDownloadOrderItemsTableMappingValue = new System.Windows.Forms.Label();
+            this.label85 = new System.Windows.Forms.Label();
+            this.label86 = new System.Windows.Forms.Label();
+            this.label87 = new System.Windows.Forms.Label();
+            this.label88 = new System.Windows.Forms.Label();
+            this.downloadOrderItemsTableName = new System.Windows.Forms.ListBox();
+            this.downloadOrderItemsDataSource = new System.Windows.Forms.ListBox();
             this.Tables.SuspendLayout();
             this.categories.SuspendLayout();
             this.customers.SuspendLayout();
@@ -282,6 +323,8 @@
             this.supplierInventory.SuspendLayout();
             this.linkedSkus.SuspendLayout();
             this.buyerInventory.SuspendLayout();
+            this.orderDownloads.SuspendLayout();
+            this.orderItemDownloads.SuspendLayout();
             this.SuspendLayout();
             // 
             // Tables
@@ -299,6 +342,8 @@
             this.Tables.Controls.Add(this.supplierInventory);
             this.Tables.Controls.Add(this.linkedSkus);
             this.Tables.Controls.Add(this.buyerInventory);
+            this.Tables.Controls.Add(this.orderDownloads);
+            this.Tables.Controls.Add(this.orderItemDownloads);
             this.Tables.Location = new System.Drawing.Point(13, 12);
             this.Tables.Name = "Tables";
             this.Tables.SelectedIndex = 0;
@@ -2929,6 +2974,446 @@
             this.emptyBuyerInventoryTransferTable.UseVisualStyleBackColor = true;
             this.emptyBuyerInventoryTransferTable.Click += new System.EventHandler(this.emptyBuyerInventoriesTransferTable_Click);
             // 
+            // orderDownloads
+            // 
+            this.orderDownloads.Controls.Add(this.label36);
+            this.orderDownloads.Controls.Add(this.setOrderDownloadUsernamePW);
+            this.orderDownloads.Controls.Add(this.downloadOrdersFieldDescriptionValue);
+            this.orderDownloads.Controls.Add(this.label58);
+            this.orderDownloads.Controls.Add(this.downloadDownloadOrders);
+            this.orderDownloads.Controls.Add(this.activeDownloadOrdersFieldMappingValue);
+            this.orderDownloads.Controls.Add(this.activeDownloadOrdersFieldMappingLabel);
+            this.orderDownloads.Controls.Add(this.mapDownloadOrdersFields);
+            this.orderDownloads.Controls.Add(this.mappingDownloadOrdersFields);
+            this.orderDownloads.Controls.Add(this.downloadOrdersFields);
+            this.orderDownloads.Controls.Add(this.mappedDownloadOrdersTableFieldsLabel);
+            this.orderDownloads.Controls.Add(this.label75);
+            this.orderDownloads.Controls.Add(this.label76);
+            this.orderDownloads.Controls.Add(this.activeDownloadOrdersTableMappingValue);
+            this.orderDownloads.Controls.Add(this.label78);
+            this.orderDownloads.Controls.Add(this.label79);
+            this.orderDownloads.Controls.Add(this.label80);
+            this.orderDownloads.Controls.Add(this.label81);
+            this.orderDownloads.Controls.Add(this.downloadOrdersTableName);
+            this.orderDownloads.Controls.Add(this.downloadOrdersDataSource);
+            this.orderDownloads.Controls.Add(this.syncDownloadOrders);
+            this.orderDownloads.Controls.Add(this.emptyDownloadOrdersTransferTable);
+            this.orderDownloads.Location = new System.Drawing.Point(4, 22);
+            this.orderDownloads.Name = "orderDownloads";
+            this.orderDownloads.Size = new System.Drawing.Size(544, 532);
+            this.orderDownloads.TabIndex = 10;
+            this.orderDownloads.Text = "Download Orders";
+            this.orderDownloads.UseVisualStyleBackColor = true;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label36.Location = new System.Drawing.Point(26, 468);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(53, 13);
+            this.label36.TabIndex = 139;
+            this.label36.Text = "Actions:";
+            // 
+            // setOrderDownloadUsernamePW
+            // 
+            this.setOrderDownloadUsernamePW.BackgroundImage = global::LinkGreenODBCUtility.Properties.Resources.key;
+            this.setOrderDownloadUsernamePW.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.setOrderDownloadUsernamePW.Location = new System.Drawing.Point(228, 40);
+            this.setOrderDownloadUsernamePW.Name = "setOrderDownloadUsernamePW";
+            this.setOrderDownloadUsernamePW.Size = new System.Drawing.Size(23, 17);
+            this.setOrderDownloadUsernamePW.TabIndex = 138;
+            this.setOrderDownloadUsernamePW.UseVisualStyleBackColor = true;
+            this.setOrderDownloadUsernamePW.Click += new System.EventHandler(this.setOrderDownloadUsernamePW_Click);
+            // 
+            // downloadOrdersFieldDescriptionValue
+            // 
+            this.downloadOrdersFieldDescriptionValue.AutoSize = true;
+            this.downloadOrdersFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.downloadOrdersFieldDescriptionValue.Location = new System.Drawing.Point(92, 445);
+            this.downloadOrdersFieldDescriptionValue.Name = "downloadOrdersFieldDescriptionValue";
+            this.downloadOrdersFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.downloadOrdersFieldDescriptionValue.TabIndex = 136;
+            this.downloadOrdersFieldDescriptionValue.Text = "N/A";
+            // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(23, 445);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(63, 13);
+            this.label58.TabIndex = 135;
+            this.label58.Text = "Description:";
+            // 
+            // downloadDownloadOrders
+            // 
+            this.downloadDownloadOrders.Location = new System.Drawing.Point(227, 494);
+            this.downloadDownloadOrders.Name = "downloadDownloadOrders";
+            this.downloadDownloadOrders.Size = new System.Drawing.Size(88, 23);
+            this.downloadDownloadOrders.TabIndex = 134;
+            this.downloadDownloadOrders.Text = "Download Orders";
+            this.downloadDownloadOrders.UseVisualStyleBackColor = true;
+            this.downloadDownloadOrders.Click += new System.EventHandler(this.downloadDownloadOrders_Click);
+            // 
+            // activeDownloadOrdersFieldMappingValue
+            // 
+            this.activeDownloadOrdersFieldMappingValue.AutoSize = true;
+            this.activeDownloadOrdersFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeDownloadOrdersFieldMappingValue.Location = new System.Drawing.Point(138, 428);
+            this.activeDownloadOrdersFieldMappingValue.Name = "activeDownloadOrdersFieldMappingValue";
+            this.activeDownloadOrdersFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeDownloadOrdersFieldMappingValue.TabIndex = 133;
+            this.activeDownloadOrdersFieldMappingValue.Text = "N/A";
+            // 
+            // activeDownloadOrdersFieldMappingLabel
+            // 
+            this.activeDownloadOrdersFieldMappingLabel.AutoSize = true;
+            this.activeDownloadOrdersFieldMappingLabel.Location = new System.Drawing.Point(23, 428);
+            this.activeDownloadOrdersFieldMappingLabel.Name = "activeDownloadOrdersFieldMappingLabel";
+            this.activeDownloadOrdersFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeDownloadOrdersFieldMappingLabel.TabIndex = 132;
+            this.activeDownloadOrdersFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapDownloadOrdersFields
+            // 
+            this.mapDownloadOrdersFields.Location = new System.Drawing.Point(296, 423);
+            this.mapDownloadOrdersFields.Name = "mapDownloadOrdersFields";
+            this.mapDownloadOrdersFields.Size = new System.Drawing.Size(87, 23);
+            this.mapDownloadOrdersFields.TabIndex = 131;
+            this.mapDownloadOrdersFields.Text = "Map Selected";
+            this.mapDownloadOrdersFields.UseVisualStyleBackColor = true;
+            this.mapDownloadOrdersFields.Click += new System.EventHandler(this.mapDownloadOrdersFields_Click);
+            // 
+            // mappingDownloadOrdersFields
+            // 
+            this.mappingDownloadOrdersFields.FormattingEnabled = true;
+            this.mappingDownloadOrdersFields.Location = new System.Drawing.Point(296, 282);
+            this.mappingDownloadOrdersFields.Name = "mappingDownloadOrdersFields";
+            this.mappingDownloadOrdersFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingDownloadOrdersFields.Sorted = true;
+            this.mappingDownloadOrdersFields.TabIndex = 130;
+            // 
+            // downloadOrdersFields
+            // 
+            this.downloadOrdersFields.FormattingEnabled = true;
+            this.downloadOrdersFields.Location = new System.Drawing.Point(24, 282);
+            this.downloadOrdersFields.Name = "downloadOrdersFields";
+            this.downloadOrdersFields.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrdersFields.Sorted = true;
+            this.downloadOrdersFields.TabIndex = 129;
+            this.downloadOrdersFields.SelectedIndexChanged += new System.EventHandler(this.downloadOrdersFields_SelectedIndexChanged);
+            // 
+            // mappedDownloadOrdersTableFieldsLabel
+            // 
+            this.mappedDownloadOrdersTableFieldsLabel.AutoSize = true;
+            this.mappedDownloadOrdersTableFieldsLabel.Location = new System.Drawing.Point(296, 265);
+            this.mappedDownloadOrdersTableFieldsLabel.Name = "mappedDownloadOrdersTableFieldsLabel";
+            this.mappedDownloadOrdersTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedDownloadOrdersTableFieldsLabel.TabIndex = 128;
+            this.mappedDownloadOrdersTableFieldsLabel.Text = "N/A:";
+            // 
+            // label75
+            // 
+            this.label75.AutoSize = true;
+            this.label75.Location = new System.Drawing.Point(26, 265);
+            this.label75.Name = "label75";
+            this.label75.Size = new System.Drawing.Size(37, 13);
+            this.label75.TabIndex = 127;
+            this.label75.Text = "Fields:";
+            // 
+            // label76
+            // 
+            this.label76.AutoSize = true;
+            this.label76.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label76.Location = new System.Drawing.Point(29, 237);
+            this.label76.Name = "label76";
+            this.label76.Size = new System.Drawing.Size(96, 13);
+            this.label76.TabIndex = 126;
+            this.label76.Text = "Field Mappings:";
+            // 
+            // activeDownloadOrdersTableMappingValue
+            // 
+            this.activeDownloadOrdersTableMappingValue.AutoSize = true;
+            this.activeDownloadOrdersTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeDownloadOrdersTableMappingValue.Location = new System.Drawing.Point(143, 205);
+            this.activeDownloadOrdersTableMappingValue.Name = "activeDownloadOrdersTableMappingValue";
+            this.activeDownloadOrdersTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeDownloadOrdersTableMappingValue.TabIndex = 125;
+            this.activeDownloadOrdersTableMappingValue.Text = "N/A";
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(23, 205);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(114, 13);
+            this.label78.TabIndex = 124;
+            this.label78.Text = "Active Table Mapping:";
+            // 
+            // label79
+            // 
+            this.label79.AutoSize = true;
+            this.label79.Location = new System.Drawing.Point(293, 44);
+            this.label79.Name = "label79";
+            this.label79.Size = new System.Drawing.Size(68, 13);
+            this.label79.TabIndex = 123;
+            this.label79.Text = "Table Name:";
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.Location = new System.Drawing.Point(26, 44);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(64, 13);
+            this.label80.TabIndex = 121;
+            this.label80.Text = "DSN Name:";
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label81.Location = new System.Drawing.Point(26, 16);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(95, 13);
+            this.label81.TabIndex = 120;
+            this.label81.Text = "Table Mapping:";
+            // 
+            // downloadOrdersTableName
+            // 
+            this.downloadOrdersTableName.FormattingEnabled = true;
+            this.downloadOrdersTableName.HorizontalScrollbar = true;
+            this.downloadOrdersTableName.Location = new System.Drawing.Point(296, 60);
+            this.downloadOrdersTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.downloadOrdersTableName.Name = "downloadOrdersTableName";
+            this.downloadOrdersTableName.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrdersTableName.Sorted = true;
+            this.downloadOrdersTableName.TabIndex = 118;
+            this.downloadOrdersTableName.SelectedIndexChanged += new System.EventHandler(this.downloadOrdersTableName_SelectedIndexChanged);
+            // 
+            // downloadOrdersDataSource
+            // 
+            this.downloadOrdersDataSource.FormattingEnabled = true;
+            this.downloadOrdersDataSource.HorizontalScrollbar = true;
+            this.downloadOrdersDataSource.Location = new System.Drawing.Point(26, 60);
+            this.downloadOrdersDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.downloadOrdersDataSource.Name = "downloadOrdersDataSource";
+            this.downloadOrdersDataSource.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrdersDataSource.Sorted = true;
+            this.downloadOrdersDataSource.TabIndex = 117;
+            this.downloadOrdersDataSource.SelectedIndexChanged += new System.EventHandler(this.downloadOrdersDataSource_SelectedIndexChanged);
+            // 
+            // syncDownloadOrders
+            // 
+            this.syncDownloadOrders.Location = new System.Drawing.Point(321, 494);
+            this.syncDownloadOrders.Name = "syncDownloadOrders";
+            this.syncDownloadOrders.Size = new System.Drawing.Size(126, 23);
+            this.syncDownloadOrders.TabIndex = 122;
+            this.syncDownloadOrders.Text = "Sync";
+            this.syncDownloadOrders.UseVisualStyleBackColor = true;
+            this.syncDownloadOrders.Click += new System.EventHandler(this.syncDownloadOrders_Click);
+            // 
+            // emptyDownloadOrdersTransferTable
+            // 
+            this.emptyDownloadOrdersTransferTable.Location = new System.Drawing.Point(94, 494);
+            this.emptyDownloadOrdersTransferTable.Name = "emptyDownloadOrdersTransferTable";
+            this.emptyDownloadOrdersTransferTable.Size = new System.Drawing.Size(126, 23);
+            this.emptyDownloadOrdersTransferTable.TabIndex = 119;
+            this.emptyDownloadOrdersTransferTable.Text = "Empty Transfer Table";
+            this.emptyDownloadOrdersTransferTable.UseVisualStyleBackColor = true;
+            this.emptyDownloadOrdersTransferTable.Click += new System.EventHandler(this.emptyDownloadOrdersTransferTable_Click);
+            // 
+            // orderItemDownloads
+            // 
+            this.orderItemDownloads.Controls.Add(this.mapDownloadOrderItemsFields);
+            this.orderItemDownloads.Controls.Add(this.downloadOrderItemsFieldDescriptionValue);
+            this.orderItemDownloads.Controls.Add(this.label61);
+            this.orderItemDownloads.Controls.Add(this.activeDownloadOrderItemsFieldMappingValue);
+            this.orderItemDownloads.Controls.Add(this.activeDownloadOrderItemsFieldMappingLabel);
+            this.orderItemDownloads.Controls.Add(this.mappingDownloadOrderItemsFields);
+            this.orderItemDownloads.Controls.Add(this.downloadOrderItemsFields);
+            this.orderItemDownloads.Controls.Add(this.mappedDownloadOrderItemsTableFieldsLabel);
+            this.orderItemDownloads.Controls.Add(this.label82);
+            this.orderItemDownloads.Controls.Add(this.label83);
+            this.orderItemDownloads.Controls.Add(this.activeDownloadOrderItemsTableMappingValue);
+            this.orderItemDownloads.Controls.Add(this.label85);
+            this.orderItemDownloads.Controls.Add(this.label86);
+            this.orderItemDownloads.Controls.Add(this.label87);
+            this.orderItemDownloads.Controls.Add(this.label88);
+            this.orderItemDownloads.Controls.Add(this.downloadOrderItemsTableName);
+            this.orderItemDownloads.Controls.Add(this.downloadOrderItemsDataSource);
+            this.orderItemDownloads.Location = new System.Drawing.Point(4, 22);
+            this.orderItemDownloads.Name = "orderItemDownloads";
+            this.orderItemDownloads.Size = new System.Drawing.Size(544, 532);
+            this.orderItemDownloads.TabIndex = 11;
+            this.orderItemDownloads.Text = "Order Item Downloads";
+            this.orderItemDownloads.UseVisualStyleBackColor = true;
+            // 
+            // downloadOrderItemsFieldDescriptionValue
+            // 
+            this.downloadOrderItemsFieldDescriptionValue.AutoSize = true;
+            this.downloadOrderItemsFieldDescriptionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.downloadOrderItemsFieldDescriptionValue.Location = new System.Drawing.Point(90, 454);
+            this.downloadOrderItemsFieldDescriptionValue.Name = "downloadOrderItemsFieldDescriptionValue";
+            this.downloadOrderItemsFieldDescriptionValue.Size = new System.Drawing.Size(24, 13);
+            this.downloadOrderItemsFieldDescriptionValue.TabIndex = 155;
+            this.downloadOrderItemsFieldDescriptionValue.Text = "N/A";
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.Location = new System.Drawing.Point(21, 454);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(63, 13);
+            this.label61.TabIndex = 154;
+            this.label61.Text = "Description:";
+            // 
+            // activeDownloadOrderItemsFieldMappingValue
+            // 
+            this.activeDownloadOrderItemsFieldMappingValue.AutoSize = true;
+            this.activeDownloadOrderItemsFieldMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeDownloadOrderItemsFieldMappingValue.Location = new System.Drawing.Point(136, 437);
+            this.activeDownloadOrderItemsFieldMappingValue.Name = "activeDownloadOrderItemsFieldMappingValue";
+            this.activeDownloadOrderItemsFieldMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeDownloadOrderItemsFieldMappingValue.TabIndex = 153;
+            this.activeDownloadOrderItemsFieldMappingValue.Text = "N/A";
+            // 
+            // activeDownloadOrderItemsFieldMappingLabel
+            // 
+            this.activeDownloadOrderItemsFieldMappingLabel.AutoSize = true;
+            this.activeDownloadOrderItemsFieldMappingLabel.Location = new System.Drawing.Point(21, 437);
+            this.activeDownloadOrderItemsFieldMappingLabel.Name = "activeDownloadOrderItemsFieldMappingLabel";
+            this.activeDownloadOrderItemsFieldMappingLabel.Size = new System.Drawing.Size(109, 13);
+            this.activeDownloadOrderItemsFieldMappingLabel.TabIndex = 152;
+            this.activeDownloadOrderItemsFieldMappingLabel.Text = "Active Field Mapping:";
+            // 
+            // mapDownloadOrderItemsFields
+            // 
+            this.mapDownloadOrderItemsFields.Location = new System.Drawing.Point(294, 432);
+            this.mapDownloadOrderItemsFields.Name = "mapDownloadOrderItemsFields";
+            this.mapDownloadOrderItemsFields.Size = new System.Drawing.Size(87, 23);
+            this.mapDownloadOrderItemsFields.TabIndex = 151;
+            this.mapDownloadOrderItemsFields.Text = "Map Selected";
+            this.mapDownloadOrderItemsFields.UseVisualStyleBackColor = true;
+            this.mapDownloadOrderItemsFields.Click += new System.EventHandler(this.mapDownloadOrderItemsFields_Click);
+            // 
+            // mappingDownloadOrderItemsFields
+            // 
+            this.mappingDownloadOrderItemsFields.FormattingEnabled = true;
+            this.mappingDownloadOrderItemsFields.Location = new System.Drawing.Point(294, 291);
+            this.mappingDownloadOrderItemsFields.Name = "mappingDownloadOrderItemsFields";
+            this.mappingDownloadOrderItemsFields.Size = new System.Drawing.Size(225, 134);
+            this.mappingDownloadOrderItemsFields.Sorted = true;
+            this.mappingDownloadOrderItemsFields.TabIndex = 150;
+            // 
+            // downloadOrderItemsFields
+            // 
+            this.downloadOrderItemsFields.FormattingEnabled = true;
+            this.downloadOrderItemsFields.Location = new System.Drawing.Point(22, 291);
+            this.downloadOrderItemsFields.Name = "downloadOrderItemsFields";
+            this.downloadOrderItemsFields.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrderItemsFields.Sorted = true;
+            this.downloadOrderItemsFields.TabIndex = 149;
+            this.downloadOrderItemsFields.SelectedIndexChanged += new System.EventHandler(this.downloadOrderItemsFields_SelectedIndexChanged);
+            // 
+            // mappedDownloadOrderItemsTableFieldsLabel
+            // 
+            this.mappedDownloadOrderItemsTableFieldsLabel.AutoSize = true;
+            this.mappedDownloadOrderItemsTableFieldsLabel.Location = new System.Drawing.Point(294, 274);
+            this.mappedDownloadOrderItemsTableFieldsLabel.Name = "mappedDownloadOrderItemsTableFieldsLabel";
+            this.mappedDownloadOrderItemsTableFieldsLabel.Size = new System.Drawing.Size(30, 13);
+            this.mappedDownloadOrderItemsTableFieldsLabel.TabIndex = 148;
+            this.mappedDownloadOrderItemsTableFieldsLabel.Text = "N/A:";
+            // 
+            // label82
+            // 
+            this.label82.AutoSize = true;
+            this.label82.Location = new System.Drawing.Point(24, 274);
+            this.label82.Name = "label82";
+            this.label82.Size = new System.Drawing.Size(37, 13);
+            this.label82.TabIndex = 147;
+            this.label82.Text = "Fields:";
+            // 
+            // label83
+            // 
+            this.label83.AutoSize = true;
+            this.label83.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label83.Location = new System.Drawing.Point(27, 246);
+            this.label83.Name = "label83";
+            this.label83.Size = new System.Drawing.Size(96, 13);
+            this.label83.TabIndex = 146;
+            this.label83.Text = "Field Mappings:";
+            // 
+            // activeDownloadOrderItemsTableMappingValue
+            // 
+            this.activeDownloadOrderItemsTableMappingValue.AutoSize = true;
+            this.activeDownloadOrderItemsTableMappingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.activeDownloadOrderItemsTableMappingValue.Location = new System.Drawing.Point(141, 214);
+            this.activeDownloadOrderItemsTableMappingValue.Name = "activeDownloadOrderItemsTableMappingValue";
+            this.activeDownloadOrderItemsTableMappingValue.Size = new System.Drawing.Size(27, 13);
+            this.activeDownloadOrderItemsTableMappingValue.TabIndex = 145;
+            this.activeDownloadOrderItemsTableMappingValue.Text = "N/A";
+            // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Location = new System.Drawing.Point(21, 214);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(114, 13);
+            this.label85.TabIndex = 144;
+            this.label85.Text = "Active Table Mapping:";
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Location = new System.Drawing.Point(291, 53);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(68, 13);
+            this.label86.TabIndex = 143;
+            this.label86.Text = "Table Name:";
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.Location = new System.Drawing.Point(24, 53);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(64, 13);
+            this.label87.TabIndex = 142;
+            this.label87.Text = "DSN Name:";
+            // 
+            // label88
+            // 
+            this.label88.AutoSize = true;
+            this.label88.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label88.Location = new System.Drawing.Point(24, 25);
+            this.label88.Name = "label88";
+            this.label88.Size = new System.Drawing.Size(95, 13);
+            this.label88.TabIndex = 141;
+            this.label88.Text = "Table Mapping:";
+            // 
+            // downloadOrderItemsTableName
+            // 
+            this.downloadOrderItemsTableName.FormattingEnabled = true;
+            this.downloadOrderItemsTableName.HorizontalScrollbar = true;
+            this.downloadOrderItemsTableName.Location = new System.Drawing.Point(294, 69);
+            this.downloadOrderItemsTableName.Margin = new System.Windows.Forms.Padding(5);
+            this.downloadOrderItemsTableName.Name = "downloadOrderItemsTableName";
+            this.downloadOrderItemsTableName.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrderItemsTableName.Sorted = true;
+            this.downloadOrderItemsTableName.TabIndex = 140;
+            this.downloadOrderItemsTableName.SelectedIndexChanged += new System.EventHandler(this.downloadOrderItemsTableName_SelectedIndexChanged);
+            // 
+            // downloadOrderItemsDataSource
+            // 
+            this.downloadOrderItemsDataSource.FormattingEnabled = true;
+            this.downloadOrderItemsDataSource.HorizontalScrollbar = true;
+            this.downloadOrderItemsDataSource.Location = new System.Drawing.Point(24, 69);
+            this.downloadOrderItemsDataSource.Margin = new System.Windows.Forms.Padding(5);
+            this.downloadOrderItemsDataSource.Name = "downloadOrderItemsDataSource";
+            this.downloadOrderItemsDataSource.Size = new System.Drawing.Size(225, 134);
+            this.downloadOrderItemsDataSource.Sorted = true;
+            this.downloadOrderItemsDataSource.TabIndex = 139;
+            this.downloadOrderItemsDataSource.SelectedIndexChanged += new System.EventHandler(this.downloadOrderItemsDataSource_SelectedIndexChanged);
+            // 
             // UtilityMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2967,6 +3452,10 @@
             this.linkedSkus.PerformLayout();
             this.buyerInventory.ResumeLayout(false);
             this.buyerInventory.PerformLayout();
+            this.orderDownloads.ResumeLayout(false);
+            this.orderDownloads.PerformLayout();
+            this.orderItemDownloads.ResumeLayout(false);
+            this.orderItemDownloads.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3215,6 +3704,47 @@
         private System.Windows.Forms.Button publishInventoryQuantity;
         private System.Windows.Forms.Button emptyInventoryQuantityTransferTable;
         private System.Windows.Forms.CheckBox chkUpdateExistingProducts;
+        private System.Windows.Forms.TabPage orderDownloads;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Button setOrderDownloadUsernamePW;
+        private System.Windows.Forms.Label downloadOrdersFieldDescriptionValue;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.Button downloadDownloadOrders;
+        private System.Windows.Forms.Label activeDownloadOrdersFieldMappingValue;
+        private System.Windows.Forms.Label activeDownloadOrdersFieldMappingLabel;
+        private System.Windows.Forms.Button mapDownloadOrdersFields;
+        private System.Windows.Forms.ListBox mappingDownloadOrdersFields;
+        private System.Windows.Forms.ListBox downloadOrdersFields;
+        private System.Windows.Forms.Label mappedDownloadOrdersTableFieldsLabel;
+        private System.Windows.Forms.Label label75;
+        private System.Windows.Forms.Label label76;
+        private System.Windows.Forms.Label activeDownloadOrdersTableMappingValue;
+        private System.Windows.Forms.Label label78;
+        private System.Windows.Forms.Label label79;
+        private System.Windows.Forms.Label label80;
+        private System.Windows.Forms.Label label81;
+        private System.Windows.Forms.ListBox downloadOrdersTableName;
+        private System.Windows.Forms.ListBox downloadOrdersDataSource;
+        private System.Windows.Forms.Button syncDownloadOrders;
+        private System.Windows.Forms.Button emptyDownloadOrdersTransferTable;
+        private System.Windows.Forms.TabPage orderItemDownloads;
+        private System.Windows.Forms.Label downloadOrderItemsFieldDescriptionValue;
+        private System.Windows.Forms.Label label61;
+        private System.Windows.Forms.Label activeDownloadOrderItemsFieldMappingValue;
+        private System.Windows.Forms.Label activeDownloadOrderItemsFieldMappingLabel;
+        private System.Windows.Forms.Button mapDownloadOrderItemsFields;
+        private System.Windows.Forms.ListBox mappingDownloadOrderItemsFields;
+        private System.Windows.Forms.ListBox downloadOrderItemsFields;
+        private System.Windows.Forms.Label mappedDownloadOrderItemsTableFieldsLabel;
+        private System.Windows.Forms.Label label82;
+        private System.Windows.Forms.Label label83;
+        private System.Windows.Forms.Label activeDownloadOrderItemsTableMappingValue;
+        private System.Windows.Forms.Label label85;
+        private System.Windows.Forms.Label label86;
+        private System.Windows.Forms.Label label87;
+        private System.Windows.Forms.Label label88;
+        private System.Windows.Forms.ListBox downloadOrderItemsTableName;
+        private System.Windows.Forms.ListBox downloadOrderItemsDataSource;
     }
 }
 

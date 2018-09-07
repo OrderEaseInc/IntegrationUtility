@@ -41,6 +41,8 @@
             this.sandboxLabelDetail = new System.Windows.Forms.Label();
             this.lblNotificationEmail = new System.Windows.Forms.Label();
             this.txtNotificationEmail = new System.Windows.Forms.TextBox();
+            this.lblDownloadOrderStatus = new System.Windows.Forms.Label();
+            this.cboDownloadOrderStatus = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // apiKey
@@ -52,6 +54,7 @@
             this.apiKey.Name = "apiKey";
             this.apiKey.Size = new System.Drawing.Size(331, 21);
             this.apiKey.TabIndex = 0;
+            this.apiKey.TextChanged += new System.EventHandler(this.apiKey_TextChanged);
             // 
             // apiKeyLabel
             // 
@@ -64,7 +67,8 @@
             // 
             // saveSettings
             // 
-            this.saveSettings.Location = new System.Drawing.Point(268, 228);
+            this.saveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveSettings.Location = new System.Drawing.Point(268, 303);
             this.saveSettings.Name = "saveSettings";
             this.saveSettings.Size = new System.Drawing.Size(75, 23);
             this.saveSettings.TabIndex = 2;
@@ -74,7 +78,9 @@
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(187, 228);
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancel.Location = new System.Drawing.Point(187, 303);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 3;
@@ -160,14 +166,37 @@
             this.txtNotificationEmail.Location = new System.Drawing.Point(12, 136);
             this.txtNotificationEmail.MinimumSize = new System.Drawing.Size(4, 25);
             this.txtNotificationEmail.Name = "txtNotificationEmail";
-            this.txtNotificationEmail.Size = new System.Drawing.Size(331, 25);
+            this.txtNotificationEmail.Size = new System.Drawing.Size(331, 21);
             this.txtNotificationEmail.TabIndex = 11;
+            // 
+            // lblDownloadOrderStatus
+            // 
+            this.lblDownloadOrderStatus.AutoSize = true;
+            this.lblDownloadOrderStatus.Location = new System.Drawing.Point(9, 237);
+            this.lblDownloadOrderStatus.Name = "lblDownloadOrderStatus";
+            this.lblDownloadOrderStatus.Size = new System.Drawing.Size(149, 13);
+            this.lblDownloadOrderStatus.TabIndex = 13;
+            this.lblDownloadOrderStatus.Text = "Order Status for Downloading:";
+            // 
+            // cboDownloadOrderStatus
+            // 
+            this.cboDownloadOrderStatus.DisplayMember = "Status";
+            this.cboDownloadOrderStatus.FormattingEnabled = true;
+            this.cboDownloadOrderStatus.Location = new System.Drawing.Point(12, 254);
+            this.cboDownloadOrderStatus.Name = "cboDownloadOrderStatus";
+            this.cboDownloadOrderStatus.Size = new System.Drawing.Size(329, 21);
+            this.cboDownloadOrderStatus.TabIndex = 14;
+            this.cboDownloadOrderStatus.ValueMember = "Id";
             // 
             // UtilitySettings
             // 
+            this.AcceptButton = this.saveSettings;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(359, 261);
+            this.CancelButton = this.cancel;
+            this.ClientSize = new System.Drawing.Size(359, 336);
+            this.Controls.Add(this.cboDownloadOrderStatus);
+            this.Controls.Add(this.lblDownloadOrderStatus);
             this.Controls.Add(this.lblNotificationEmail);
             this.Controls.Add(this.txtNotificationEmail);
             this.Controls.Add(this.sandboxLabelDetail);
@@ -182,11 +211,11 @@
             this.Controls.Add(this.apiKey);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(375, 300);
+            this.MaximumSize = new System.Drawing.Size(375, 375);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(375, 300);
+            this.MinimumSize = new System.Drawing.Size(375, 375);
             this.Name = "UtilitySettings";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "General Settings";
             this.Load += new System.EventHandler(this.UtilitySettings_Load);
             this.ResumeLayout(false);
@@ -208,5 +237,7 @@
         private System.Windows.Forms.Label sandboxLabelDetail;
         private System.Windows.Forms.Label lblNotificationEmail;
         private System.Windows.Forms.TextBox txtNotificationEmail;
+        private System.Windows.Forms.Label lblDownloadOrderStatus;
+        private System.Windows.Forms.ComboBox cboDownloadOrderStatus;
     }
 }

@@ -60,7 +60,7 @@ namespace LinkGreen.Applications.Common.Model
 
         public string Name { get; set; }
 
-        public decimal OrderTotalBeforeSubmitting => Details.Sum(o => o.DiscountedPrice * o.QuantityRequested * o.Units);
+        public decimal OrderTotalBeforeSubmitting => Details.Sum(o => o.DiscountedPrice * o.QuantityRequested.GetValueOrDefault() * o.Units);
         
         public decimal OrderTotal => Details.Sum(o => o.Amount);
 

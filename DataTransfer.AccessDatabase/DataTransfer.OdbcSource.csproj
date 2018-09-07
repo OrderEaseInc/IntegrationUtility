@@ -56,6 +56,7 @@
     <Compile Include="Repositories\CountryMappingRepository.cs" />
     <Compile Include="Repositories\InventoryQuantityRepository.cs" />
     <Compile Include="Repositories\LinkedSkusRepository.cs" />
+    <Compile Include="Repositories\OrdersFromLinkGreenRepository.cs" />
     <Compile Include="Repositories\ProvinceMappingRespository.cs" />
     <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="Repositories\SupplierRepository.cs" />

@@ -146,5 +146,8 @@ namespace DataTransfer.AccessDatabase
         public static string NullableString(string value) => value == null ? "null" : $"'{value.Replace("'", "''").Replace("\"", "\\\"")}'";
         public static string NullableInt(int? value) => value.HasValue ? value.ToString() : "null";
         public static string NullableDecimal(decimal? value) => value.HasValue ? value.ToString() : "null";
+        public static string Date(DateTime value) => $"'{value:yyyy-MM-dd}'";
+        public static string NullableDate(DateTime? value) => value.HasValue ? Date(value.Value) : "null";
+        public static string Boolean(bool value) => value ? "1" : "0";
     }
 }
