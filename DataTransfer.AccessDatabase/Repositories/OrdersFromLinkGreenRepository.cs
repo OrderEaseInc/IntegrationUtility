@@ -27,9 +27,14 @@ namespace DataTransfer.AccessDatabase
             var orders = WebServiceHelper.GetOrdersForStatus(status);
 
             foreach (var order in orders) {
-                Insert(order);
-
                 var detail = WebServiceHelper.DownloadOrderDetails(order.Id);
+                if (detail.BuyerCompany != null) {
+                    order.OurCompanyNumber = detail.BuyerCompany.OurCompanyNumber;
+                    order.OurBillToNumber = detail.BuyerCompany.OurBillToNumber;
+                }
+
+                Insert(order);
+                
                 foreach (var item in detail.Details) {
                     InsertItem(item);
                 }
@@ -56,14 +61,16 @@ namespace DataTransfer.AccessDatabase
                 $"INSERT INTO {TableName} (Id, CreatedDate, ShippingDate, RequestedShippingDate, AnticipatedShipDate, " +
                 "Status, SupplierStatus, PaymentTerm, PaymentTermId, SupplierStatusId, BuyerStatusId, BuyerComment, " +
                 "Freight, SupplierPO, BuyerPO, OrderNumber, ContactName, IsDirectDelivery, SupplierCanExport, " +
-                "SupplierCompanyId, BuyerCompanyId, Name, UseAlternateAddress, AlternateProvince, AlternateReceiverName, " +
+                "SupplierCompanyId, BuyerCompanyId, BuyerCompanyName, OurCompanyNumber, OurBillToNumber, Name, " +
+                "UseAlternateAddress, AlternateProvince, AlternateReceiverName, " +
                 "AlternateAddress, AlternateCity, AlternatePostalCode, AlternatePhone, AlternateSpecialInstructions) " +
                 $"VALUES ({order.Id}, {Date(order.CreatedDate)}, {NullableDate(order.ShippingDate)}, {NullableDate(order.RequestedShippingDate)}, " +
                 $"{NullableDate(order.AnticipatedShipDate)}, {NullableString(order.Status)}, {NullableString(order.SupplierStatus)}, " +
                 $"{NullableString(order.PaymentTerm)}, {NullableInt(order.PaymentTermId)}, {NullableInt(order.SupplierStatusId)}, " +
                 $"{NullableInt(order.BuyerStatusId)}, {NullableString(order.BuyerComment)}, {NullableDecimal(order.Freight)}, {NullableString(order.SupplierPO)}, " +
                 $"{NullableString(order.BuyerPO)}, {NullableString(order.OrderNumber)}, {NullableString(order.ContactName)}, {Boolean(order.IsDirectDelivery)}, " +
-                $"{Boolean(order.SupplierCanExport)}, {NullableInt(order.SupplierCompanyId)}, {NullableInt(order.BuyerCompanyId)}, {NullableString(order.Name)}, " +
+                $"{Boolean(order.SupplierCanExport)}, {NullableInt(order.SupplierCompanyId)}, {NullableInt(order.BuyerCompanyId)}, {NullableString(order.BuyerCompanyName)}, " +
+                $"{NullableString(order.OurCompanyNumber)}, {NullableString(order.OurBillToNumber)}, {NullableString(order.Name)}, " +
                 $"{Boolean(order.UseAlternateAddress)}, {NullableString(order.AlternateProvince)}, {NullableString(order.AlternateReceiverName)}, " +
                 $"{NullableString(order.AlternateAddress)}, {NullableString(order.AlternateCity)}, {NullableString(order.AlternatePostalCode)}, " +
                 $"{NullableString(order.AlternatePhone)}, {NullableString(order.AlternateSpecialInstructions)})";

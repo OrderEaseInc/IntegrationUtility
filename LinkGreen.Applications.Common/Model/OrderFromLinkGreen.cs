@@ -25,6 +25,9 @@ namespace LinkGreen.Applications.Common.Model
         public bool SupplierCanExport { get; set; }
         public int? SupplierCompanyId { get; set; }
         public int? BuyerCompanyId { get; set; }
+        public string BuyerCompanyName { get; set; }        
+        public string OurCompanyNumber { get; set; }
+        public string OurBillToNumber { get; set; }
         public string Name { get; set; }
         public bool UseAlternateAddress { get; set; }
         public string AlternateProvince { get; set; }

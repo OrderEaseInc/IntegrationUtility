@@ -66,6 +66,10 @@ namespace LinkGreen.Applications.Common.Model
 
         public string CompanyType { get; set; }
 
+        public string OurCompanyNumber { get; set; }
+        
+        public string OurBillToNumber { get; set; }
+
         public string FullPhone1
         {
             get
