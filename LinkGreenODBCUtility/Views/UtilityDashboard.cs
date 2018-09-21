@@ -477,40 +477,134 @@ namespace LinkGreenODBCUtility
 
         private void downloadOrders_Click(object sender, EventArgs e)
         {
+            var syncCustomerResponse = MessageBox.Show(this, "Would you like to do a Customer sync before downloading the Orders?", "Customer Sync?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (syncCustomerResponse == DialogResult.Cancel) return;
+
+            var skipCustomers = syncCustomerResponse == DialogResult.No;
+
             var bw = new BackgroundWorker();
-            lblStatus.Text = "Processing order download";
-            
+            lblStatus.Text = "Processing customer sync (Preparing)\n\rPlease wait";
+
+            var notificationEmail = Settings.GetNotificationEmail();
+
             SetButtonState(false);
+            bw.DoWork += (bwSender, bwEventArgs) =>
+            {
 
-            bw.DoWork += (bwSender, bwEventArgs) => {
-                var notificationEmail = Settings.GetNotificationEmail();
-                var orders = new OrdersFromLinkGreen();
-                orders.Empty();
-                var published = orders.Publish(out var publishDetails, bw);
-                if (published) {
-                    bwEventArgs.Result = new {
-                        Message = "Orders have been downloaded",
-                        Title = "Downloaded Successfully",
-                        Error = string.Empty,
-                        InfoMessage = publishDetails.FirstOrDefault()
-                    };
+                var customers = new Customers();
 
-                    if (!string.IsNullOrEmpty(notificationEmail)) {
-                        Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Order Download",
-                            response => Logger.Instance.Info(response));
+                if (!skipCustomers) {
+                    customers.UpdateTemporaryTables();
+                    customers.Empty();
+                }
+
+                string mappedDsnName = Mapping.GetDsnName("Customers");
+                var newMapping = new Mapping(mappedDsnName);
+                if (skipCustomers || newMapping.MigrateData("Customers"))
+                {
+                    if (!skipCustomers) {
+                        ((BackgroundWorker) bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
                     }
-                } else {
-                    bwEventArgs.Result = new
-                    {
-                        Message = "Orders were not downloaded",
-                        Title = "Download Failed",
-                        Error = publishDetails.FirstOrDefault() ?? "Orders failed to download.",
-                        InfoMessage = string.Empty
-                    };
 
-                    if (!string.IsNullOrWhiteSpace(notificationEmail))
-                        Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
-                            response => Logger.Instance.Error(response));
+                    var publishDetails = new List<string>();
+                    if (skipCustomers || customers.Publish(out publishDetails, (BackgroundWorker)bwSender))
+                    {
+                        if (!skipCustomers && !string.IsNullOrWhiteSpace(notificationEmail)) {
+                            Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Customers Publish",
+                                response => Logger.Instance.Info(response));
+                        }
+
+                        ((BackgroundWorker)bwSender).ReportProgress(0, "Processing order download\n\rPlease wait");
+
+                        try {
+
+                            var orders = new OrdersFromLinkGreen();
+                            orders.Empty();
+                            var published = orders.Publish(out var orderPublishDetails);
+                            if (published) {
+
+                                if (!string.IsNullOrEmpty(notificationEmail)) {
+                                    Mail.SendProcessCompleteEmail(notificationEmail, orderPublishDetails, "Order Download",
+                                        response => Logger.Instance.Info(response));
+                                }
+
+                                bwEventArgs.Result = new
+                                    {
+                                        Message = "Orders Downloaded",
+                                        Title = "Success",
+                                        Error = string.Empty,
+                                        InfoMessage = string.Empty
+                                    };
+
+                            } else {
+                                MessageBox.Show("Orders were not downloaded", $"Download Failed: \n\n{orderPublishDetails.FirstOrDefault()}", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                bwEventArgs.Result = new
+                                {
+                                    Message = "Orders were not downloaded. Do you have your API Key set?",
+                                    Title = "Download Failure",
+                                    Error = "Orders were not downloaded.",
+                                    InfoMessage = string.Empty
+                                };
+
+                                if (!string.IsNullOrWhiteSpace(notificationEmail))
+                                    Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
+                                        response => Logger.Instance.Error(response));
+                            }
+
+                        } catch (Exception ex) {
+
+                            bwEventArgs.Result = new
+                            {
+                                Message = "Orders were not downloaded. Do you have your API Key set?",
+                                Title = "Download Failure",
+                                Error = "Orders were not downloaded.",
+                                InfoMessage = ex.GetBaseException().Message
+                            };
+
+                            if (!string.IsNullOrWhiteSpace(notificationEmail))
+                                Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
+                                    response => Logger.Instance.Error(response));
+                        }
+
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Customers failed to sync. Do you have your API Key set?",
+                            Title = "Sync Failure",
+                            Error = "Customers failed to sync.",
+                            InfoMessage = string.Empty
+                        };
+
+                        if (!string.IsNullOrWhiteSpace(notificationEmail))
+                            Mail.SendProcessCompleteEmail(notificationEmail, "Customers Publish failed, please check logs or contact support", $"Customers Publish",
+                                response => Logger.Instance.Info(response));
+                    }
+                }
+                else
+                {
+                    if (!newMapping._validFields)
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "All required fields indicated with a * must be mapped.",
+                            Title = "Map Required Fields",
+                            Error = string.Empty,
+                            InfoMessage = string.Empty
+                        };
+                    }
+                    else
+                    {
+                        bwEventArgs.Result = new
+                        {
+                            Message = "Customers failed to migrate.",
+                            Title = "Unknown Error",
+                            Error = "Customers failed to migrate.",
+                            InfoMessage = string.Empty
+                        };
+                    }
                 }
             };
 
@@ -518,7 +612,7 @@ namespace LinkGreenODBCUtility
             bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
 
             bw.WorkerReportsProgress = true;
-            bw.RunWorkerAsync();
+            bw.RunWorkerAsync();            
         }
     }
 }
