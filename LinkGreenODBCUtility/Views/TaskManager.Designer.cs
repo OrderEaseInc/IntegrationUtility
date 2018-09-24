@@ -51,6 +51,9 @@
             // 
             this.tasksGridView.AllowUserToAddRows = false;
             this.tasksGridView.AllowUserToDeleteRows = false;
+            this.tasksGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tasksGridView.Location = new System.Drawing.Point(12, 49);
             this.tasksGridView.Name = "tasksGridView";

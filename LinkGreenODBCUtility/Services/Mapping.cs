@@ -1172,8 +1172,16 @@ namespace LinkGreenODBCUtility
 
         private static string ValueOrNull(string value, string fieldType = "Short Text")
         {
+            if (fieldType == "Yes/No") return Boolean(value);
+
             var delimiter = (fieldType == "Number" || fieldType == "Decimal") ? "" : "'";
             return string.IsNullOrEmpty(value) ? "null" : $"{delimiter}{value.Replace("'", "''").Replace("\"", "\\\"")}{delimiter}";
+        }
+
+        private static string Boolean(string value)
+        {
+            bool.TryParse(value, out var parsed);
+            return parsed ? "-1" : "0";
         }
 
         private string SanitizeField(string tableName, string field, string text, OdbcConnection connection, bool resetTransaction = true)

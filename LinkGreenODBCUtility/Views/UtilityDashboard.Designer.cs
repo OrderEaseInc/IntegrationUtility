@@ -42,6 +42,7 @@
             this.syncPricing = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.downloadOrders = new System.Windows.Forms.Button();
             this.mainMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -172,12 +173,23 @@
             this.lblStatus.TabIndex = 7;
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // downloadOrders
+            // 
+            this.downloadOrders.Location = new System.Drawing.Point(13, 199);
+            this.downloadOrders.Name = "downloadOrders";
+            this.downloadOrders.Size = new System.Drawing.Size(102, 23);
+            this.downloadOrders.TabIndex = 8;
+            this.downloadOrders.Text = "Download Orders";
+            this.downloadOrders.UseVisualStyleBackColor = true;
+            this.downloadOrders.Click += new System.EventHandler(this.downloadOrders_Click);
+            // 
             // UtilityDashboard
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 226);
+            this.Controls.Add(this.downloadOrders);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.syncPricing);
             this.Controls.Add(this.syncPriceLevels);
@@ -219,5 +231,6 @@
         private System.Windows.Forms.Button syncPricing;
         private System.Windows.Forms.ToolStripMenuItem taskManagerToolStripMenuItem;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Button downloadOrders;
     }
 }

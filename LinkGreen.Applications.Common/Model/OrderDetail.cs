@@ -8,9 +8,11 @@
 
         public string ItemName { get; set; }
 
+        public bool IsQtyLocked { get; set; }
+
         public bool HasImage { get; set; }
 
-        public decimal SortOrder { get; set; }
+        public int SortOrder { get; set; }
 
         public string Size { get; set; }
 
@@ -20,7 +22,7 @@
 
         public int ItemId { get; set; }
 
-        public int QuantityRequested { get; set; }
+        public int? QuantityRequested { get; set; }
 
         public int? QuantityConfirmed { get; set; }
 
@@ -38,7 +40,7 @@
 
         public decimal AdditionalDiscount { get; set; }
 
-        public int QuantityAvailable { get; set; }
+        public int? QuantityAvailable { get; set; }
 
         public bool AddedBySupplier { get; set; }
 
@@ -50,7 +52,7 @@
 
         public int AdjustedSlaveQuantityPerMaster => SlaveQuantityPerMaster == null || SlaveQuantityPerMaster == 0 ? 1 : SlaveQuantityPerMaster.Value;
 
-        public int QuantityToUse => QuantitySent ?? QuantityConfirmed ?? QuantityRequested;
+        public int QuantityToUse => QuantitySent ?? QuantityConfirmed ?? QuantityRequested ?? 0;
 
         public int ExtendedQuantity => QuantityToUse * AdjustedSlaveQuantityPerMaster;
         

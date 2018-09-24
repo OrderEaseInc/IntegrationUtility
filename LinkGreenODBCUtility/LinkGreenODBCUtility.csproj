@@ -119,9 +119,11 @@
     <Compile Include="Services\Jobs\ExternalExecuteJob.cs" />
     <Compile Include="Services\Jobs\InventoryQuantitiesSyncJob.cs" />
     <Compile Include="Services\Jobs\LinkedSkusSyncJob.cs" />
+    <Compile Include="Services\Jobs\OrderDownloadJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Services\InventoryQuantity.cs" />
+    <Compile Include="Services\OrdersFromLinkGreen.cs" />
     <Compile Include="Utility\ChunkExtensions.cs" />
     <Compile Include="Utility\Mapper.cs" />
     <Compile Include="Views\CreateTask.cs">

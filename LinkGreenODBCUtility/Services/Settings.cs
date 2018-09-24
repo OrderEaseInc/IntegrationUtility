@@ -25,7 +25,7 @@ namespace LinkGreenODBCUtility
             try
             {
                 var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var encryptionKey = config.AppSettings.Settings["EncryptionKey"].Value;
+                var encryptionKey = config.AppSettings.Settings[Keys.EncryptionKey].Value;
                 if (string.IsNullOrEmpty(encryptionKey))
                 {
                     var g = Guid.NewGuid();
@@ -33,13 +33,13 @@ namespace LinkGreenODBCUtility
                     guidString = guidString.Replace("=", "");
                     guidString = guidString.Replace("+", "");
 
-                    config.AppSettings.Settings["EncryptionKey"].Value = guidString;
+                    config.AppSettings.Settings[Keys.EncryptionKey].Value = guidString;
                     config.Save(ConfigurationSaveMode.Modified);
                 }
 
                 if (GetSandboxMode())
                 {
-                    config.AppSettings.Settings["BaseUrl"].Value = "http://dev.linkgreen.ca/";
+                    config.AppSettings.Settings[Keys.BaseUrl].Value = "http://dev.linkgreen.ca/";
                     //config.AppSettings.Settings["BaseUrl"].Value = "http://local.linkgreen.ca/";
                     config.Save(ConfigurationSaveMode.Modified);
                 }
@@ -223,26 +223,34 @@ namespace LinkGreenODBCUtility
         }
 
         public static string GetApiKey() =>
-            GetSettingValue<string>("ApiKey") ?? string.Empty;
+            GetSettingValue<string>(Keys.ApiKey) ?? string.Empty;
 
         public static void SaveApiKey(string apiKey) =>
-            SaveSettingValue("ApiKey", "ApiKey", apiKey);
+            SaveSettingValue(Keys.ApiKey, Keys.ApiKey, apiKey);
 
         public static string GetNotificationEmail() =>
-            GetSettingValue<string>("NotificationEmail") ?? string.Empty;
+            GetSettingValue<string>(Keys.NotificationEmail) ?? string.Empty;
 
         public static void SaveNotificationEmail(string emailAddress) =>
-            SaveSettingValue("NotificationEmail", null, emailAddress);
+            SaveSettingValue(Keys.NotificationEmail, null, emailAddress);
+
+        public static int? GetStatusIdForOrderDownload() =>
+            GetSettingValue<int?>(Keys.StatusIdForOrderDownload);
+
+        public static void SaveStatusIdForOrderDownload(int id)
+        {
+            SaveSettingValue(Keys.StatusIdForOrderDownload, Keys.StatusIdForOrderDownload, id);
+        }
 
         internal static string GetSendwithusApiKey()
         {
-            var overrideKey = GetSettingValue<string>("SendwithusApiKey");
+            var overrideKey = GetSettingValue<string>(Keys.SendwithusApiKey);
             return string.IsNullOrWhiteSpace(overrideKey) ? SendWithUsLiveKey : overrideKey;
         }
 
         internal static bool GetUpdateExistingProducts()
         {
-            var dbUpdateCategories = GetSettingValue<string>("UpdateExistingProducts", SettingsTable.MigrationTableSettings);
+            var dbUpdateCategories = GetSettingValue<string>(Keys.UpdateExistingProducts, SettingsTable.MigrationTableSettings);
 
             if (!string.IsNullOrWhiteSpace(dbUpdateCategories))
                 return dbUpdateCategories == "1";
@@ -251,16 +259,16 @@ namespace LinkGreenODBCUtility
         }
 
         internal static void SaveUpdateExistingProducts(bool updateExistingProducts) =>
-            SaveSettingValue("UpdateExistingProducts", null, updateExistingProducts ? "1" : "0", SettingsTable.MigrationTableSettings);
+            SaveSettingValue(Keys.UpdateExistingProducts, null, updateExistingProducts ? "1" : "0", SettingsTable.MigrationTableSettings);
 
         public static string GetInstallationId()
         {
-            var installationId = GetSettingValue<string>("InstallationId");
+            var installationId = GetSettingValue<string>(Keys.InstallationId);
             if (!string.IsNullOrEmpty(installationId)) return installationId;
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            installationId = !string.IsNullOrEmpty(config.AppSettings.Settings["InstallationId"].Value)
-                ? config.AppSettings.Settings["InstallationId"].Value
+            installationId = !string.IsNullOrEmpty(config.AppSettings.Settings[Keys.InstallationId].Value)
+                ? config.AppSettings.Settings[Keys.InstallationId].Value
                 : null;
 
             return installationId;
@@ -269,40 +277,40 @@ namespace LinkGreenODBCUtility
         public static void SaveInstallationId()
         {
             var guid = Guid.NewGuid();
-            SaveSettingValue("InstallationId", null, guid.ToString());
+            SaveSettingValue(Keys.InstallationId, null, guid.ToString());
         }
 
         public static bool GetUpdateCategories()
         {
-            var dbUpdateCategories = GetSettingValue<string>("UpdateCategories");
+            var dbUpdateCategories = GetSettingValue<string>(Keys.UpdateCategories);
 
             if (string.IsNullOrWhiteSpace(dbUpdateCategories))
                 return dbUpdateCategories == "1";
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var appConfigUpdateCategories = config.AppSettings.Settings["UpdateCategories"].Value;
+            var appConfigUpdateCategories = config.AppSettings.Settings[Keys.UpdateCategories].Value;
             return appConfigUpdateCategories == null || appConfigUpdateCategories == "1";
         }
 
         public static void SaveUpdateCategories(bool updateCategories) =>
-            SaveSettingValue("UpdateCategories", null, updateCategories ? "1" : "0");
+            SaveSettingValue(Keys.UpdateCategories, null, updateCategories ? "1" : "0");
 
         public static bool GetSanitizeLog()
         {
-            var dbSanitizeLog = GetSettingValue<string>("SanitizeLog");
+            var dbSanitizeLog = GetSettingValue<string>(Keys.SanitizeLog);
 
             if (!string.IsNullOrWhiteSpace(dbSanitizeLog))
                 return dbSanitizeLog == "1";
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var appConfigSanitizeLog = config.AppSettings.Settings["SanitizeLog"].Value;
+            var appConfigSanitizeLog = config.AppSettings.Settings[Keys.SanitizeLog].Value;
             return appConfigSanitizeLog != null && appConfigSanitizeLog == "1";
 
         }
 
         public static bool GetSandboxMode()
         {
-            var dbSandboxMode = GetSettingValue<int?>("SandboxMode");
+            var dbSandboxMode = GetSettingValue<int?>(Keys.SandboxMode);
 
             //if (!string.IsNullOrWhiteSpace(dbSandboxMode))
             //    return dbSandboxMode == "1";
@@ -310,12 +318,12 @@ namespace LinkGreenODBCUtility
                 return dbSandboxMode.Value == 1;
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var appConfigSandboxMode = config.AppSettings.Settings["SandboxMode"].Value;
+            var appConfigSandboxMode = config.AppSettings.Settings[Keys.SandboxMode].Value;
             return appConfigSandboxMode == null || appConfigSandboxMode == "1";
         }
 
         public static void SaveSandboxMode(bool sandboxMode) =>
-            SaveSettingValue("SandboxMode", null, sandboxMode ? "1" : "0");
+            SaveSettingValue(Keys.SandboxMode, null, sandboxMode ? "1" : "0");
 
         public static void SetupUserConfig(string apiKey)
         {
@@ -349,6 +357,21 @@ namespace LinkGreenODBCUtility
             {
                 Logger.Instance.Error($"An error occured while setting up the user config: {e.Message}");
             }
+        }
+
+        private static class Keys
+        {
+            internal static readonly string ApiKey = nameof(ApiKey);
+            internal static readonly string BaseUrl = nameof(BaseUrl);
+            internal static readonly string StatusIdForOrderDownload = nameof(StatusIdForOrderDownload);
+            internal static readonly string EncryptionKey = nameof(EncryptionKey);
+            internal static readonly string InstallationId = nameof(InstallationId);
+            internal static readonly string NotificationEmail = nameof(NotificationEmail);
+            internal static readonly string SandboxMode = nameof(SandboxMode);
+            internal static readonly string SanitizeLog = nameof(SanitizeLog);
+            internal static readonly string SendwithusApiKey = nameof(SendwithusApiKey);
+            internal static readonly string UpdateCategories = nameof(UpdateCategories);
+            internal static readonly string UpdateExistingProducts = nameof(UpdateExistingProducts);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace LinkGreen.Applications.Common
     public class WebServiceHelper
     {
         protected static RestClient Client;
-        protected static string Key;
+        public static string Key { get; set; }
         protected static string BaseUrl;
         protected static string OrderStatuses;
 
@@ -78,7 +78,7 @@ namespace LinkGreen.Applications.Common
             return response.Data.Item;
         }
 
-        public static Order Download(int id)
+        public static Order DownloadOrderDetails(int id)
         {
             var requestUrl = $"orderservice/rest/OrderDetails/{Key}/{id}";
             var request = new RestRequest(requestUrl, Method.GET);
@@ -461,6 +461,36 @@ namespace LinkGreen.Applications.Common
         public static void PostInventoryImport()
         {
             Client.Execute(new RestRequest($"/SupplierInventoryService/rest/PostInventoryImport/{Key}", Method.POST));
+        }
+
+        public static List<OrderStatus> GetAllOrderStatuses()
+        {
+            var requestUrl = $"/OrderService/rest/Status/{Key}";
+            var request = new RestRequest(requestUrl, Method.GET);
+
+            var response = Client.Execute<ApiResult<List<OrderStatus>>>(request);
+
+            if (response.Data?.Result == null) return null;
+
+            return response.Data.Item;
+        }
+
+        public static List<OrderFromLinkGreen> GetOrdersForStatus(int status)
+        {
+            var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/{status}";
+            var request = new RestRequest(requestUrl, Method.POST);
+            var statuses = new[] {status};
+            var json = JsonConvert.SerializeObject(statuses);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+
+            var response = Client.Execute<ApiResult<List<OrderFromLinkGreen>>>(request);
+
+            if (!response.IsSuccessful || response.Data?.Result == null) {
+                throw new Exception("Error retrieving orders: " + response.ErrorException?.Message);
+            }
+
+            return response.Data.Item;
         }
     }
 }
