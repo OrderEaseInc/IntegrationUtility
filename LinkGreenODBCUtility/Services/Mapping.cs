@@ -572,7 +572,7 @@ namespace LinkGreenODBCUtility
 
         public string SanitizeFieldValue(string value, string tableName, string fieldName, int fieldIndex, OdbcConnection transferConnection, bool useSanitizeLog)
         {
-            var text = value.Replace("'", "''").Replace("\"", "\\\"");
+            var text = value.Replace("'", "''").Replace("\"", "\"");
             var original = text;
             text = SanitizeField(tableName, fieldName, text, transferConnection, false);
             if (!string.IsNullOrEmpty(text) && useSanitizeLog && original != text)
