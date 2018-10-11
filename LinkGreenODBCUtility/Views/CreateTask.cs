@@ -28,6 +28,7 @@ namespace LinkGreenODBCUtility
                 new ListItem { Text = "Sync Supplier Inventory", Value = "SupplierInventory" },
                 new ListItem { Text = "Sync Linked Skus", Value = "LinkedSkus" },
                 new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" },
+                new ListItem { Text = "Download Orders", Value = "DownloadOrders" },
                 new ListItem { Text = "External Script", Value = "ExternalExecute" }
             });
 
