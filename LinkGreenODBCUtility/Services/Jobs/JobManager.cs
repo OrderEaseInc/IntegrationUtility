@@ -92,6 +92,11 @@ namespace LinkGreenODBCUtility
                                     .WithIdentity(jobName, DefaultGroup)
                                     .Build();
                                 break;
+                            case "DownloadOrders":
+                                job = JobBuilder.Create<OrderDownloadJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
                             default:
                                 job = JobBuilder.Create<CategoriesSyncJob>()
                                     .WithIdentity(jobName, DefaultGroup)
