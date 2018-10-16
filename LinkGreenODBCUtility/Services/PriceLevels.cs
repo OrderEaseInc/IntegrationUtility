@@ -64,10 +64,18 @@ namespace LinkGreenODBCUtility
             {
                 var priceLevelRepo = new PriceLevelRepository(Settings.ConnectionString);
                 var levelsToImport = priceLevelRepo.GetAll().ToList();
+                var existingLevels = WebServiceHelper.GetExistingPricingLevels();
                 var importCounter = 0;
+                var existingCounter = 0;
 
                 foreach (var level in levelsToImport)
                 {
+                    if (existingLevels.Any(lvl => lvl.Name == level.Name))
+                    {
+                        existingCounter++;
+                        continue;
+                    }
+
                     var effectiveDate = level.EffectiveDate ?? DateTime.Now.ToUniversalTime();
                     if (level.EndDate < effectiveDate)
                     {
@@ -86,6 +94,8 @@ namespace LinkGreenODBCUtility
                     importCounter++;
                 }
 
+                publishDetails.Insert(0,
+                    $"{existingCounter} price levels already existing in LinkGreen and were not pushed.");
                 publishDetails.Insert(0, $"{importCounter} price levels have been pushed to LinkGreen");
 
                 return true;

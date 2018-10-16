@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
@@ -105,14 +106,14 @@ namespace LinkGreenODBCUtility
                 foreach (var kvp in allPrices)
                 {
                     bw?.ReportProgress(0, $"Preparing to push {kvp.Key}");
-                    var chunks = kvp.Value.ChunkBy(50);
+                    var chunks = kvp.Value.ChunkBy(25);
                     var iCountChunks = 0;
-                    System.Threading.Tasks.Parallel.ForEach(chunks, (chunk) =>
-                    {
-                        bw?.ReportProgress(0, $"Pushing {kvp.Key} Part {++iCountChunks} of {chunks.Count}");
-                        WebServiceHelper.PushPricingLevel(kvp.Key, chunk.ToArray(),
-                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-                    });
+                    Parallel.ForEach(chunks, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (chunk) =>
+                       {
+                           bw?.ReportProgress(0, $"Pushing {kvp.Key} Part {++iCountChunks} of {chunks.Count}");
+                           WebServiceHelper.PushPricingLevel(kvp.Key, chunk.ToArray(),
+                               new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+                       });
                 }
 
                 publishDetails.Insert(0, $"{updateCounter} products have had their prices updated.");

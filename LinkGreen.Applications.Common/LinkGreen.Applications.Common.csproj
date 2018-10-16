@@ -68,6 +68,7 @@
     <Compile Include="Model\IdSkuQuantity.cs" />
     <Compile Include="Model\InventoryQuantity.cs" />
     <Compile Include="Model\OrderFromLinkGreen.cs" />
+    <Compile Include="Model\PricingLevel.cs" />
     <Compile Include="Model\ProviceMapping.cs" />
     <Compile Include="Model\Supplier.cs" />
     <Compile Include="Model\SupplierContact.cs" />

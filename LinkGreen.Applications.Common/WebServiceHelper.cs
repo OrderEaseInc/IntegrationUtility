@@ -296,6 +296,18 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
+        public static List<PricingLevel> GetExistingPricingLevels()
+        {
+            var requestUrl = $"/SupplierInventoryService/rest/GetPricingLevels/{Key}";
+            var request = new RestRequest(requestUrl, Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddHeader("Content-Type", "application/json");
+
+
+            var response = Client.Execute<ApiResult<List<PricingLevel>>>(request);
+
+            return response.Data?.Result == null ? null : response.Data.Item;
+        }
+
         public static bool PushPricingLevel(PricingLevelRequest item)
         {
             var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevel/{Key}";
@@ -479,14 +491,15 @@ namespace LinkGreen.Applications.Common
         {
             var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/{status}";
             var request = new RestRequest(requestUrl, Method.POST);
-            var statuses = new[] {status};
+            var statuses = new[] { status };
             var json = JsonConvert.SerializeObject(statuses);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
 
             var response = Client.Execute<ApiResult<List<OrderFromLinkGreen>>>(request);
 
-            if (!response.IsSuccessful || response.Data?.Result == null) {
+            if (!response.IsSuccessful || response.Data?.Result == null)
+            {
                 throw new Exception("Error retrieving orders: " + response.ErrorException?.Message);
             }
 
