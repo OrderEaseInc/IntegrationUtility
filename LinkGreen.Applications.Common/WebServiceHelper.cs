@@ -393,6 +393,19 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
+        public static bool PushBulkUpdateInventoryItem(InventoryItemRequest[] item)
+        {
+            var requestUrl = $"/SupplierInventoryService/rest/UpdateItems/{Key}";
+
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            request.AddJsonBody(item);
+
+            var response = Client.Execute(request);
+
+            return response.StatusCode == HttpStatusCode.OK;
+        }
+
         public static bool PushInventoryQuantity(List<IdSkuQuantity> items)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantityBulk/{Key}";

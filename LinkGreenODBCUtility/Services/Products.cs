@@ -71,77 +71,31 @@ namespace LinkGreenODBCUtility
                 var existingInventory = WebServiceHelper.GetAllInventory();
                 var items = 0;
 
-                foreach (var product in products)
+                var bulkPushRequest = new List<InventoryItemRequest>();
+
+                // Update existing items
+                foreach (var product in products.Where(p => existingInventory.Any(ei => ei.PrivateSKU == p.Id)))
                 {
-                    Trace.TraceInformation(product.Description);
-
-                    var request = new InventoryItemRequest
-                    {
-                        Description = product.Description ?? "",
-                        PrivateSKU = product.Id,
-                        Inactive = product.Inactive,
-                        QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
-                    };
-
-                    bool updateCategories = Settings.GetUpdateCategories();
-                    //lets check if this item already exists, if so just update qty, else
-                    var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
-                    var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == product.Category);
-
-                    var updateExistingProducts = Settings.GetUpdateExistingProducts();
-                    if (existing != null && !updateExistingProducts)
-                        continue;
-
-                    // Add
-                    if (existing == null)
-                    {
-                        if (existingCategory == null)
-                        {
-                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                            existingCategories.Add(existingCategory);
-                        }
-                    }
-                    // Update
-                    else
-                    {
-                        if (existingCategory == null && updateCategories)
-                        {
-                            existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                            existingCategories.Add(existingCategory);
-                        }
+                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
+                    bulkPushRequest.Add(request);
+                    if (bulkPushRequest.Count > 10) {
+                        WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
+                        bulkPushRequest.Clear();
                     }
 
+                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                }
 
-                    if (existingCategory != null && (updateCategories || existing == null))
-                    {
-                        request.CategoryId = existingCategory.Id;
-                    }
-                    else if (existing != null)
-                    {
-                        request.CategoryId = existing.CategoryId;
-                    }
+                if (bulkPushRequest.Count > 0) {
+                    WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
+                }
 
-                    request.NetPrice = product.NetPrice;
-                    request.OpenSizeDescription = product.OpenSizeDescription ?? "";
-                    request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
-                    request.Comments = product.Comments ?? "";
-                    request.DirectDeliveryCode = product.DirectDeliveryCode ?? "";
-                    request.DirectDeliveryMinQuantity = product.DirectDeliveryMinQuantity;
-                    request.FreightFactor = product.FreightFactor;
-                    request.IsDirectDelivery = product.IsDirectDelivery;
-                    request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
-                    request.MinOrderSpring = product.MinOrderSpring;
-                    request.MinOrderSummer = product.MinOrderSummer;
-                    request.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
-                    request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
-                    request.SuggestedRetailPrice = product.SuggestedRetailPrice;
-
-                    if (existing != null)
-                    {
-                        request.Id = existing.Id;
-                    }
-
-
+                var productsToAdd = products.Where(p => existingInventory.All(ei => ei.PrivateSKU != p.Id));
+                // Add new items
+                foreach (var product in productsToAdd)
+                {
+                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
                     WebServiceHelper.PushInventoryItem(request);
 
                     bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
@@ -157,6 +111,79 @@ namespace LinkGreenODBCUtility
             Logger.Instance.Warning("No Api Key set while executing products publish.");
 
             return false;
+        }
+
+        private static InventoryItemRequest AddOrUpdateSupplierItem(ProductInventory product, List<InventoryItemResponse> existingInventory, ref List<PrivateCategory> existingCategories)
+        {
+            Trace.TraceInformation(product.Description);
+
+            var request = new InventoryItemRequest
+            {
+                Description = product.Description ?? "",
+                PrivateSKU = product.Id,
+                Inactive = product.Inactive,
+                QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
+            };
+
+            bool updateCategories = Settings.GetUpdateCategories();
+            //lets check if this item already exists, if so just update qty, else
+            var existing = existingInventory.FirstOrDefault(s => s.PrivateSKU == product.Id);
+            var existingCategory = existingCategories.FirstOrDefault(s => s?.Name == product.Category);
+
+            var updateExistingProducts = Settings.GetUpdateExistingProducts();
+            if (existing != null && !updateExistingProducts)
+                return null;
+
+            // Add
+            if (existing == null)
+            {
+                if (existingCategory == null)
+                {
+                    existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                    existingCategories.Add(existingCategory);
+                }
+            }
+            // Update
+            else
+            {
+                if (existingCategory == null && updateCategories)
+                {
+                    existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                    existingCategories.Add(existingCategory);
+                }
+            }
+
+
+            if (existingCategory != null && (updateCategories || existing == null))
+            {
+                request.CategoryId = existingCategory.Id;
+            }
+            else if (existing != null)
+            {
+                request.CategoryId = existing.CategoryId;
+            }
+
+            request.NetPrice = product.NetPrice;
+            request.OpenSizeDescription = product.OpenSizeDescription ?? "";
+            request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
+            request.Comments = product.Comments ?? "";
+            request.DirectDeliveryCode = product.DirectDeliveryCode ?? "";
+            request.DirectDeliveryMinQuantity = product.DirectDeliveryMinQuantity;
+            request.FreightFactor = product.FreightFactor;
+            request.IsDirectDelivery = product.IsDirectDelivery;
+            request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
+            request.MinOrderSpring = product.MinOrderSpring;
+            request.MinOrderSummer = product.MinOrderSummer;
+            request.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
+            request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
+            request.SuggestedRetailPrice = product.SuggestedRetailPrice;
+
+            if (existing != null)
+            {
+                request.Id = existing.Id;
+            }
+
+            return request;
         }
     }
 }
