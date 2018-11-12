@@ -273,9 +273,12 @@ namespace LinkGreen.Applications.Common
             }
         }
 
-        public static void UpdateInventoryItemQuantity(string sku, int newQty)
+        public static void UpdateInventoryItemQuantity(string sku, int newQty, string catalog)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantity/{Key}/{sku}/{newQty}";
+            if (!string.IsNullOrEmpty(catalog)) {
+                requestUrl += $"/{catalog}";
+            }
             var request = new RestRequest(requestUrl, Method.POST);
 
             var response = Client.Execute(request);
