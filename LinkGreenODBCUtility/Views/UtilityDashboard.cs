@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Linq;
 using LinkGreen.Email;
+using LinkGreenODBCUtility.RunnableActivities;
 
 namespace LinkGreenODBCUtility
 {
@@ -106,7 +107,7 @@ namespace LinkGreenODBCUtility
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UtilitySettings utilitySettings = new UtilitySettings {Owner = this};
+            UtilitySettings utilitySettings = new UtilitySettings { Owner = this };
             utilitySettings.ShowDialog();
         }
 
@@ -493,7 +494,8 @@ namespace LinkGreenODBCUtility
 
                 var customers = new Customers();
 
-                if (!skipCustomers) {
+                if (!skipCustomers)
+                {
                     customers.UpdateTemporaryTables();
                     customers.Empty();
                 }
@@ -502,70 +504,21 @@ namespace LinkGreenODBCUtility
                 var newMapping = new Mapping(mappedDsnName);
                 if (skipCustomers || newMapping.MigrateData("Customers"))
                 {
-                    if (!skipCustomers) {
-                        ((BackgroundWorker) bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
+                    if (!skipCustomers)
+                    {
+                        ((BackgroundWorker)bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
                     }
 
                     var publishDetails = new List<string>();
                     if (skipCustomers || customers.Publish(out publishDetails, (BackgroundWorker)bwSender))
                     {
-                        if (!skipCustomers && !string.IsNullOrWhiteSpace(notificationEmail)) {
+                        if (!skipCustomers && !string.IsNullOrWhiteSpace(notificationEmail))
+                        {
                             Mail.SendProcessCompleteEmail(notificationEmail, publishDetails, "Customers Publish",
                                 response => Logger.Instance.Info(response));
                         }
 
-                        ((BackgroundWorker)bwSender).ReportProgress(0, "Processing order download\n\rPlease wait");
-
-                        try {
-
-                            var orders = new OrdersFromLinkGreen();
-                            orders.Empty();
-                            var published = orders.Publish(out var orderPublishDetails);
-                            if (published) {
-
-                                if (!string.IsNullOrEmpty(notificationEmail)) {
-                                    Mail.SendProcessCompleteEmail(notificationEmail, orderPublishDetails, "Order Download",
-                                        response => Logger.Instance.Info(response));
-                                }
-
-                                bwEventArgs.Result = new
-                                    {
-                                        Message = "Orders Downloaded",
-                                        Title = "Success",
-                                        Error = string.Empty,
-                                        InfoMessage = string.Empty
-                                    };
-
-                            } else {
-                                MessageBox.Show("Orders were not downloaded", $"Download Failed: \n\n{orderPublishDetails.FirstOrDefault()}", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                                bwEventArgs.Result = new
-                                {
-                                    Message = "Orders were not downloaded. Do you have your API Key set?",
-                                    Title = "Download Failure",
-                                    Error = "Orders were not downloaded.",
-                                    InfoMessage = string.Empty
-                                };
-
-                                if (!string.IsNullOrWhiteSpace(notificationEmail))
-                                    Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
-                                        response => Logger.Instance.Error(response));
-                            }
-
-                        } catch (Exception ex) {
-
-                            bwEventArgs.Result = new
-                            {
-                                Message = "Orders were not downloaded. Do you have your API Key set?",
-                                Title = "Download Failure",
-                                Error = "Orders were not downloaded.",
-                                InfoMessage = ex.GetBaseException().Message
-                            };
-
-                            if (!string.IsNullOrWhiteSpace(notificationEmail))
-                                Mail.SendProcessCompleteEmail(notificationEmail, "Order Download failed, please check logs or contact support", "Order Download",
-                                    response => Logger.Instance.Error(response));
-                        }
+                        bwEventArgs.Result = new DownloadOrderRunner().Run((BackgroundWorker)bwSender);
 
                     }
                     else
@@ -612,7 +565,7 @@ namespace LinkGreenODBCUtility
             bw.RunWorkerCompleted += Status_BackgroundWorker_Completed;
 
             bw.WorkerReportsProgress = true;
-            bw.RunWorkerAsync();            
+            bw.RunWorkerAsync();
         }
     }
 }
