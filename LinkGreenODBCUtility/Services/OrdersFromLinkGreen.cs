@@ -3,20 +3,21 @@ using System.ComponentModel;
 using System.Configuration;
 using DataTransfer.AccessDatabase;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public class OrdersFromLinkGreen : IOdbcTransfer
     {
-        private readonly OrdersFromLinkGreenRepository repository;
+        private readonly OrdersFromLinkGreenRepository _repository;
 
         public OrdersFromLinkGreen()
         {
-            repository = new OrdersFromLinkGreenRepository(Settings.ConnectionString);
+            _repository = new OrdersFromLinkGreenRepository(Settings.ConnectionString);
         }
 
         public bool Empty()
         {            
-            repository.ClearAll();
+            _repository.ClearAll();
             Logger.Instance.Info("Orders from LinkGreen table emptied");
             Logger.Instance.Debug($"{Settings.ConnectionString}.{OrdersFromLinkGreenRepository.TableName} emptied");
             return true;
@@ -24,25 +25,25 @@ namespace LinkGreenODBCUtility
 
         public void SaveTableMapping(string dsnName, string tableName)
         {
-            repository.SaveTableMapping(dsnName, tableName, OrdersFromLinkGreenRepository.TableName);
+            _repository.SaveTableMapping(dsnName, tableName, OrdersFromLinkGreenRepository.TableName);
             Logger.Instance.Debug($"Orders from LinkGreen table mapping saved: (DSN: {dsnName}, Table: {OrdersFromLinkGreenRepository.TableName})");
         }
 
         public void SaveItemsTableMapping(string dsnName, string tableName)
         {
-            repository.SaveTableMapping(dsnName, tableName, OrdersFromLinkGreenRepository.ItemsTableName);
+            _repository.SaveTableMapping(dsnName, tableName, OrdersFromLinkGreenRepository.ItemsTableName);
             Logger.Instance.Debug($"Order items from LinkGreen table mapping saved: (DSN: {dsnName}, Table: {OrdersFromLinkGreenRepository.ItemsTableName})");
         }
 
         public void SaveFieldMapping(string fieldName, string mappingName)
         {
-            repository.SaveFieldMapping(fieldName, mappingName);
+            _repository.SaveFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Orders from LinkGreen field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
         public void SaveItemFieldMapping(string fieldName, string mappingName)
         {
-            repository.SaveItemFieldMapping(fieldName, mappingName);
+            _repository.SaveItemFieldMapping(fieldName, mappingName);
             Logger.Instance.Debug($"Order items from LinkGreen field mapping saved: (Field: {fieldName}, MappingField: {mappingName})");
         }
 
@@ -54,7 +55,7 @@ namespace LinkGreenODBCUtility
                 return false;
             }
 
-            repository.Download(status.Value);
+            _repository.Download(status.Value);
             Logger.Instance.Debug($"Downloaded from LinkGreen to Transfer table {OrdersFromLinkGreenRepository.TableName}");
             return true;
         }

@@ -73,6 +73,18 @@ namespace LinkGreenODBCUtility
 
                 var bulkPushRequest = new List<InventoryItemRequest>();
 
+
+                var productsToAdd = products.Where(p => existingInventory.All(ei => ei.PrivateSKU != p.Id));
+                // Add new items
+                foreach (var product in productsToAdd)
+                {
+                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
+                    WebServiceHelper.PushInventoryItem(request);
+
+                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                }
+
                 // Update existing items
                 foreach (var product in products.Where(p => existingInventory.Any(ei => ei.PrivateSKU == p.Id)))
                 {
@@ -91,16 +103,6 @@ namespace LinkGreenODBCUtility
                     WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
                 }
 
-                var productsToAdd = products.Where(p => existingInventory.All(ei => ei.PrivateSKU != p.Id));
-                // Add new items
-                foreach (var product in productsToAdd)
-                {
-                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                    WebServiceHelper.PushInventoryItem(request);
-
-                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
-                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
-                }
 
                 WebServiceHelper.PostInventoryImport();
                 publishDetails.Insert(0, $"{items} products published to LinkGreen");

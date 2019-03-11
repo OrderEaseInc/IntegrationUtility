@@ -110,6 +110,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource-en-US.resx</DependentUpon>
     </Compile>
+    <Compile Include="RunnableActivities\DownloadOrderRunner.cs" />
+    <Compile Include="RunnableActivities\IRunnableActivity.cs" />
     <Compile Include="Services\Batch\Batch.cs" />
     <Compile Include="Services\BuyerInventories.cs" />
     <Compile Include="Services\Categories.cs" />

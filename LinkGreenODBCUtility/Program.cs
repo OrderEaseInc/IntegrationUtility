@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Windows.Forms;
+using LinkGreenODBCUtility.RunnableActivities;
 
 namespace LinkGreenODBCUtility
 {
@@ -71,11 +74,14 @@ namespace LinkGreenODBCUtility
         //            }
         //        }
 
-        private static void Init(string[] args) {
+        private static void Init(string[] args)
+        {
             // Uncomment next line to enable debugging of a service
             // System.Diagnostics.Debugger.Launch();
 
             var isService = args.Any(a => a.Equals("/service", StringComparison.OrdinalIgnoreCase));
+
+            var isCommandLine = args.Any(a => a.ToLower().StartsWith("/run="));
 
             Utility.Mapper.InitMapper();
 
@@ -98,11 +104,19 @@ namespace LinkGreenODBCUtility
                     if (logConnectSuccess)
                     {
                         if (isService)
+                        {
                             using (var service = new TaskService())
                             {
                                 ServiceBase.Run(service);
                                 return;
                             }
+                        }
+
+                        if (isCommandLine)
+                        {
+                            RunAsCommandLine(args);
+                            return;
+                        }
 
 
                         Application.EnableVisualStyles();
@@ -135,6 +149,60 @@ namespace LinkGreenODBCUtility
 
         }
 
+        private static void RunAsCommandLine(IEnumerable<string> args)
+        {
+            var cli = args.First(a => a.ToLower().StartsWith("/run="));
+            var split = cli.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+            if (split.Length < 2)
+                return;
+            var toRun = split[1].Trim().ToLower();
+
+            IRunnableActivity cliActivity = null;
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (toRun)
+            {
+                case "orders":
+                    cliActivity = new DownloadOrderRunner();
+                    break;
+                case "products":
+                    break;
+                case "customers":
+                    break;
+                // ReSharper disable once StringLiteralTypo
+                case "pricelevels":
+                    break;
+                case "prices":
+                    break;
+            }
+
+            var bw = new BackgroundWorker
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = false
+            };
+
+            bw.ProgressChanged += (bwSender, bwEventArgs) =>
+            {
+                Console.WriteLine(bwEventArgs.UserState.ToString());
+            };
+
+            if (cliActivity != null)
+            {
+                var result = cliActivity.Run(bw);
+                Console.WriteLine(result.Message);
+                WriteToEventLog(result.Message);
+                if (result.Error != null)
+                {
+                    WriteToEventLog(result.Error);
+                    Console.WriteLine(result.Error);
+                }
+            }
+            else
+            {
+                Console.WriteLine(@"This CLI command is not enabled yet.");
+            }
+        }
+
         private static void WriteToEventLog(string message)
         {
             if (!System.Diagnostics.EventLog.SourceExists(ServiceName))
@@ -144,6 +212,8 @@ namespace LinkGreenODBCUtility
         }
 
 
+        // ReSharper disable InconsistentNaming
+        // ReSharper disable UnusedMember.Global
         public static class ODBC_Request_Modes
         {
             public static int ODBC_ADD_DSN = 1;
@@ -153,15 +223,20 @@ namespace LinkGreenODBCUtility
             public static int ODBC_CONFIG_SYS_DSN = 5;
             public static int ODBC_REMOVE_SYS_DSN = 6;
         }
+        // ReSharper restore InconsistentNaming
+        // ReSharper restore UnusedMember.Global
 
         private static class Utils
         {
             /// <summary>
             /// Win32 API Imports
             /// </summary>
+            // ReSharper disable once StringLiteralTypo
             [DllImport("ODBCCP32.dll")]
+            // ReSharper disable once IdentifierTypo
             private static extern bool SQLConfigDataSource(IntPtr hwndParent, int fRequest, string lpszDriver, string lpszAttributes);
 
+            // ReSharper disable once IdentifierTypo
             public static bool CreateDataSource(IntPtr hwndParent,
                 int fRequest,
                 string lpszDriver,
