@@ -212,7 +212,7 @@ namespace LinkGreen.Applications.Common
 
         public static List<SupplierInventory> GetSupplierInventory(int supplierId)
         {
-            var requestUrl = $"buyersupplierservice/rest/supplierinventory/{Key}/{supplierId}";
+            var requestUrl = $"buyersupplierservice/rest/supplierinventoryavailable/{Key}/{supplierId}";
             var request = new RestRequest(requestUrl, Method.GET);
             var response = Client.Execute<ApiResult<List<SupplierInventory>>>(request);
 
