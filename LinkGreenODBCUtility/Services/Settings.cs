@@ -325,6 +325,14 @@ namespace LinkGreenODBCUtility
         public static void SaveSandboxMode(bool sandboxMode) =>
             SaveSettingValue(Keys.SandboxMode, null, sandboxMode ? "1" : "0");
 
+        public static bool DetailedLogging()
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appConfigDetailedLogging = config.AppSettings.Settings[Keys.DetailedLogging].Value;
+            return appConfigDetailedLogging != null && appConfigDetailedLogging == "1";
+        }
+
+
         public static void SetupUserConfig(string apiKey)
         {
             try
@@ -361,17 +369,18 @@ namespace LinkGreenODBCUtility
 
         private static class Keys
         {
-            internal static readonly string ApiKey = nameof(ApiKey);
-            internal static readonly string BaseUrl = nameof(BaseUrl);
-            internal static readonly string StatusIdForOrderDownload = nameof(StatusIdForOrderDownload);
-            internal static readonly string EncryptionKey = nameof(EncryptionKey);
-            internal static readonly string InstallationId = nameof(InstallationId);
-            internal static readonly string NotificationEmail = nameof(NotificationEmail);
-            internal static readonly string SandboxMode = nameof(SandboxMode);
-            internal static readonly string SanitizeLog = nameof(SanitizeLog);
-            internal static readonly string SendwithusApiKey = nameof(SendwithusApiKey);
-            internal static readonly string UpdateCategories = nameof(UpdateCategories);
-            internal static readonly string UpdateExistingProducts = nameof(UpdateExistingProducts);
+            internal const string ApiKey = nameof(ApiKey);
+            internal const string BaseUrl = nameof(BaseUrl);
+            internal const string StatusIdForOrderDownload = nameof(StatusIdForOrderDownload);
+            internal const string EncryptionKey = nameof(EncryptionKey);
+            internal const string InstallationId = nameof(InstallationId);
+            internal const string NotificationEmail = nameof(NotificationEmail);
+            internal const string SandboxMode = nameof(SandboxMode);
+            internal const string SanitizeLog = nameof(SanitizeLog);
+            internal const string SendwithusApiKey = nameof(SendwithusApiKey);
+            internal const string UpdateCategories = nameof(UpdateCategories);
+            internal const string UpdateExistingProducts = nameof(UpdateExistingProducts);
+            internal const string DetailedLogging = nameof(DetailedLogging);
         }
     }
 }

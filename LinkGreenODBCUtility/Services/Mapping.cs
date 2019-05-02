@@ -602,6 +602,8 @@ namespace LinkGreenODBCUtility
 
         public bool MigrateData(string tableName, bool nuke = true)
         {
+            var detailedLogging = Settings.DetailedLogging();
+
             if (ValidateRequiredFields(tableName))
             {
                 var tableMappingName = GetTableMapping(tableName);
@@ -657,6 +659,9 @@ namespace LinkGreenODBCUtility
                                     columnIndexes.Add(columnIndex);
                                 }
 
+                                if (detailedLogging) Logger.Instance.Debug($"{columnIndexes.Count} ColumnIndexes");
+                                if (detailedLogging) Logger.Instance.Debug($"{toColumnNames.Count} toColumnNames");
+
                                 using (var dbTransfer = new ActiveDbConnection(TransferDsnName))
                                 {
                                     var transferConnection = dbTransfer.Connection;
@@ -664,6 +669,8 @@ namespace LinkGreenODBCUtility
 
                                     try
                                     {
+                                        if (detailedLogging) Logger.Instance.Debug(nukeCommand.CommandText);
+
                                         transferConnection.Open();
                                         if (nuke)
                                         {
@@ -679,10 +686,13 @@ namespace LinkGreenODBCUtility
 
                                     using (var comm = transferConnection.CreateCommand())
                                     {
+                                        if (detailedLogging) Logger.Instance.Debug("Transfer command created");
                                         var insertCommands = new List<string>();
 
                                         while (reader.Read())
                                         {
+                                            if (detailedLogging) Logger.Instance.Debug("Reader Read");
+                                            if (detailedLogging) Logger.Instance.Debug($"Insert columns match destination columns {columnIndexes.Count == toColumnNames.Count}");
                                             if (columnIndexes.Count == toColumnNames.Count)
                                             {
                                                 var readerColumns = new List<string>();
@@ -697,11 +707,12 @@ namespace LinkGreenODBCUtility
                                                 var readerColumnValues = string.Join(",", readerColumns);
                                                 var stmt =
                                                     $"INSERT INTO {tableName} ({chainedToColumnNames}) VALUES ({readerColumnValues})";
-
+                                                if (detailedLogging) Logger.Instance.Debug(stmt);
                                                 try
                                                 {
                                                     insertCommands.Add(stmt);
                                                     rowCount++;
+                                                    if (detailedLogging) Logger.Instance.Debug($"{rowCount} insert commands added");
                                                 }
                                                 catch (OdbcException e)
                                                 {
@@ -712,11 +723,14 @@ namespace LinkGreenODBCUtility
                                             }
                                         }
 
+                                        if (detailedLogging) Logger.Instance.Debug("Transaction Start");
                                         comm.Transaction = transferConnection.BeginTransaction();
+                                        if (detailedLogging) Logger.Instance.Debug("Transaction Started");
                                         foreach (var t in insertCommands)
                                         {
                                             try
                                             {
+                                                if (detailedLogging) Logger.Instance.Debug(comm.CommandText);
                                                 comm.CommandText = t;
                                                 comm.ExecuteNonQuery();
                                             }
@@ -729,7 +743,9 @@ namespace LinkGreenODBCUtility
 
                                         try
                                         {
+                                            if (detailedLogging) Logger.Instance.Debug("Transaction committing");
                                             comm.Transaction.Commit();
+                                            if (detailedLogging) Logger.Instance.Debug("Transaction committed");
                                         }
                                         catch (OdbcException e)
                                         {
