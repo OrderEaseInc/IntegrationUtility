@@ -41,7 +41,8 @@ namespace DataTransfer.AccessDatabase
 
                 return new InventoryQuantity {
                     Sku = reader.Sku,
-                    Quantity = reader.QuantityAvailable
+                    Quantity = reader.QuantityAvailable,
+                    CatalogName = reader.CatalogName
                 };
 
             } catch (RuntimeBinderException exception) {

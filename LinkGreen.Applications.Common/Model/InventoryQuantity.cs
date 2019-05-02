@@ -6,5 +6,6 @@ namespace LinkGreen.Applications.Common.Model
     {
         public string Sku { get; set; }
         public int Quantity { get; set; }
+        public string CatalogName { get; set; }
     }
 }

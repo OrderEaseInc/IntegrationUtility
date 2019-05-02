@@ -88,11 +88,14 @@ namespace LinkGreenODBCUtility
                 }
 
 
-                if (items > 0)
-                {
+                if (items > 0 && request.All(i => string.IsNullOrEmpty(i.CatalogName))) {
                     var chunks = request.ChunkBy(500);
                     foreach (var chunk in chunks)
                         WebServiceHelper.PushInventoryQuantity(chunk);
+                } else if (items > 0) {
+                    foreach (var item in request) {
+                        WebServiceHelper.UpdateInventoryItemQuantity(item.SKU, item.Quantity, item.CatalogName);
+                    }
                 }
 
                 if (items < 1)
