@@ -89,8 +89,10 @@ namespace LinkGreenODBCUtility
                 foreach (var product in products.Where(p => existingInventory.Any(ei => ei.PrivateSKU == p.Id)))
                 {
                     var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                    bulkPushRequest.Add(request);
-                    if (bulkPushRequest.Count > 10) {
+                    if (request != null)
+                        bulkPushRequest.Add(request);
+                    if (bulkPushRequest.Count > 10)
+                    {
                         WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
                         bulkPushRequest.Clear();
                     }
@@ -99,7 +101,8 @@ namespace LinkGreenODBCUtility
                     Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
                 }
 
-                if (bulkPushRequest.Count > 0) {
+                if (bulkPushRequest.Count > 0)
+                {
                     WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
                 }
 

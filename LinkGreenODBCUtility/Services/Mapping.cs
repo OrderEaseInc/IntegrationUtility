@@ -23,6 +23,9 @@ namespace LinkGreenODBCUtility
 
         private readonly Dictionary<string, string> _fieldProperties = new Dictionary<string, string>();
 
+        private readonly Dictionary<string, SanitizeFieldModel> _newFieldProperties =
+            new Dictionary<string, SanitizeFieldModel>();
+
         public Mapping()
         {
             DsnName = TransferDsnName;
@@ -111,6 +114,27 @@ namespace LinkGreenODBCUtility
                     {
                         reader.Close();
 
+                    }
+                }
+            }
+        }
+
+        public void GetAllFieldMappings(OdbcConnection connection)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT * FROM `FieldMappings`";
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    _newFieldProperties.Add($"{reader["TableName"]}.{reader["FieldName"]}",
+                        new SanitizeFieldModel(reader));
+                    if (reader["MappingName"] != null && reader["MappingName"] != DBNull.Value &&
+                        !string.IsNullOrWhiteSpace(reader["MappingName"].ToString()))
+                    {
+                        if (!_newFieldProperties.ContainsKey($"{reader["TableName"]}.{reader["MappingName"]}"))
+                            _newFieldProperties.Add($"{reader["TableName"]}.{reader["MappingName"]}",
+                                new SanitizeFieldModel(reader));
                     }
                 }
             }
@@ -672,6 +696,9 @@ namespace LinkGreenODBCUtility
                                         if (detailedLogging) Logger.Instance.Debug(nukeCommand.CommandText);
 
                                         transferConnection.Open();
+                                        GetAllFieldMappings(transferConnection);
+
+
                                         if (nuke)
                                         {
                                             nukeCommand.ExecuteNonQuery();
@@ -1208,45 +1235,33 @@ namespace LinkGreenODBCUtility
                 connection.Open();
             }
 
-            var sanitizeNumbersOnly = GetFieldProperty(tableName, field, "SanitizeNumbersOnly", connection);
-            var sanitizeEmail = GetFieldProperty(tableName, field, "SanitizeEmail", connection);
-            var sanitizePrice = GetFieldProperty(tableName, field, "SanitizePrice", connection);
-            var sanitizeAlphanumeric = GetFieldProperty(tableName, field, "SanitizeAlphaNumeric", connection);
-            var sanitizeUniqueId = GetFieldProperty(tableName, field, "SanitizeUniqueId", connection);
-            var sanitizeCountry = GetFieldProperty(tableName, field, "SanitizeCountry", connection);
-            var sanitizeProvince = GetFieldProperty(tableName, field, "SanitizeProvince", connection);
+            var fieldProps = _newFieldProperties[$"{tableName}.{field}"];
+            if (fieldProps == null)
+                // ReSharper disable once RedundantNameQualifier
+                throw new System.Exception($"Unable to find sanitize record for {tableName}.{field}");
 
-            if (string.IsNullOrEmpty(text)) return text;
+            if (string.IsNullOrEmpty(text))
+                return text;
 
-            if (Convert.ToBoolean(sanitizeNumbersOnly))
-            {
+            if (fieldProps.SanitizeNumbersOnly)
                 text = Tools.CleanStringOfNonDigits(text);
-            }
 
-            if (Convert.ToBoolean(sanitizeEmail))
-            {
+            if (fieldProps.SanitizeEmail)
                 text = Tools.CleanEmail(text);
-            }
 
-            if (Convert.ToBoolean(sanitizePrice))
-            {
+            if (fieldProps.SanitizePrice)
                 text = Tools.FormatDecimal(text);
-            }
 
-            if (Convert.ToBoolean(sanitizeAlphanumeric))
-            {
+            if (fieldProps.SanitizeAlphaNumeric)
                 text = Tools.CleanAlphanumeric(text);
-            }
 
-            if (Convert.ToBoolean(sanitizeUniqueId))
-            {
+            if (fieldProps.SanitizeUniqueId)
                 text = Tools.CleanUniqueId(text);
-            }
 
-            if (Convert.ToBoolean(sanitizeCountry))
+            if (fieldProps.SanitizeCountry)
                 text = Tools.CleanCountry(text, connection.ConnectionString);
 
-            if (Convert.ToBoolean(sanitizeProvince))
+            if (fieldProps.SanitizeProvince)
                 text = Tools.CleanProvince(text, connection.ConnectionString);
 
             return !string.IsNullOrEmpty(text) ? Tools.CleanStringForSql(text) : "";
