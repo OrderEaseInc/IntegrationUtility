@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Text.RegularExpressions;
 
 using DataTransfer.AccessDatabase;
@@ -78,10 +79,10 @@ namespace LinkGreenODBCUtility
             return _allCountries.FirstOrDefault(c => c.Source.Equals(s, StringComparison.InvariantCultureIgnoreCase))?.Destination ?? "Other";
         }
 
-        public static string CleanProvince(string s, string connectionString)
+        public static string CleanProvince(string s, string connectionString, OdbcConnection connection)
         {
             if (_allProvinces == null)
-                _allProvinces = new ProvinceMappingRepository(connectionString).GetAll().ToArray();
+                _allProvinces = new ProvinceMappingRepository(connectionString, connection).GetAll().ToArray();
             // Country is already a "destination" country
             if (_allProvinces.Any(c => c.Destination.Equals(s, StringComparison.InvariantCultureIgnoreCase))) return s;
             // Get map country, otherwise it's "Other"

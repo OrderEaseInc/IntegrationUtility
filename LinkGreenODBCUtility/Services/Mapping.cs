@@ -751,6 +751,7 @@ namespace LinkGreenODBCUtility
                                         }
 
                                         if (detailedLogging) Logger.Instance.Debug("Transaction Start");
+                                        if (transferConnection.State == ConnectionState.Closed) transferConnection.Open();
                                         comm.Transaction = transferConnection.BeginTransaction();
                                         if (detailedLogging) Logger.Instance.Debug("Transaction Started");
                                         foreach (var t in insertCommands)
@@ -1262,7 +1263,7 @@ namespace LinkGreenODBCUtility
                 text = Tools.CleanCountry(text, connection.ConnectionString);
 
             if (fieldProps.SanitizeProvince)
-                text = Tools.CleanProvince(text, connection.ConnectionString);
+                text = Tools.CleanProvince(text, connection.ConnectionString, connection);
 
             return !string.IsNullOrEmpty(text) ? Tools.CleanStringForSql(text) : "";
 

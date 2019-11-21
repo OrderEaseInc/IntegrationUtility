@@ -435,7 +435,7 @@ namespace LinkGreen.Applications.Common
 
         public static string InviteBuyers(List<CompanyAndRelationshipResult> buyers)
         {
-            var requestUrl = $"/RelationshipService/rest/Import/{Key}";
+            var requestUrl = $"/RelationshipService/rest/Import/{Key}?suppressMessages=true&mode=1";
             var request = new RestRequest(requestUrl, Method.POST);
             var companies = buyers.Select(b => new
             {
@@ -460,6 +460,7 @@ namespace LinkGreen.Applications.Common
             }).ToArray();
 
             request.AddJsonBody(companies);
+            var body = Newtonsoft.Json.JsonConvert.SerializeObject(companies);
 
             var response = Client.Execute(request);
 

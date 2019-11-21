@@ -36,12 +36,20 @@ namespace DataTransfer.AccessDatabase
             throw new NotImplementedException();
         }
 
-        protected IEnumerable<T> GetRecords(OdbcCommand command)
+        protected IEnumerable<T> GetRecords(OdbcCommand command, OdbcConnection connection = null)
         {
             var list = new List<T>();
 
-            command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
-            command.Connection.Open();
+            if (connection == null)
+            {
+                command.Connection = ConnectionInstance.Instance.GetConnection(_connectionString);
+                command.Connection.Open();
+            }
+            else
+            {
+                command.Connection = connection;
+            }
+
             try
             {
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
@@ -60,9 +68,11 @@ namespace DataTransfer.AccessDatabase
             }
             finally
             {
-                ConnectionInstance.CloseConnection(_connectionString);
+                // using connection string - means we opened the connection, so we should close id
+                if (connection != null)
+                    ConnectionInstance.CloseConnection(_connectionString);
             }
-            
+
             return list;
         }
 
@@ -75,7 +85,7 @@ namespace DataTransfer.AccessDatabase
             {
                 //var reader = command.ExecuteReader();
                 dynamic reader = new DynamicDataReader(command.ExecuteReader());
-                
+
                 try
                 {
                     while (reader.Read())

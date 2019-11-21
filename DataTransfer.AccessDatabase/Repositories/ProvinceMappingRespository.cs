@@ -7,12 +7,17 @@ namespace DataTransfer.AccessDatabase
     public class ProvinceMappingRepository : AdoRepository<ProvinceMapping>
     {
         private const string TableName = "ProvinceMappings";
+        private readonly OdbcConnection _connection;
 
         /// <summary>
         /// Create a new instance of CountryMappingRepository
         /// </summary>
         /// <param name="connectionString"></param>
-        public ProvinceMappingRepository(string connectionString) : base(connectionString) { }
+        public ProvinceMappingRepository(string connectionString, OdbcConnection connection = null) : base(
+            connectionString)
+        {
+            _connection = connection;
+        }
 
         /// <summary>
         /// Get all country mapping rules
@@ -21,7 +26,7 @@ namespace DataTransfer.AccessDatabase
         public IEnumerable<ProvinceMapping> GetAll()
         {
             using (var command = new OdbcCommand($"SELECT * FROM {TableName}"))
-                return GetRecords(command);
+                return GetRecords(command, _connection);
         }
 
         protected override ProvinceMapping PopulateRecord(dynamic reader)
