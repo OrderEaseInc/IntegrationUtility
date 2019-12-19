@@ -164,7 +164,11 @@ namespace DataTransfer.AccessDatabase
                     Contact1 = CleanNull(reader.Contact1),
                     Contact2 = CleanNull(reader.Contact2),
                     Web = CleanNull(reader.Web),
-                    BuyerGroup = CleanNull(reader.BuyerGroup)
+                    BuyerGroup = CleanNull(reader.BuyerGroup),
+                    UserDefinedField1 = CleanNull(reader.UserDefinedField1),
+                    UserDefinedField2 = CleanNull(reader.UserDefinedField2),
+                    UserDefinedField3 = CleanNull(reader.UserDefinedField3),
+                    UserDefinedField4 = CleanNull(reader.UserDefinedField4)
                 };
             }
             catch (RuntimeBinderException exception)
