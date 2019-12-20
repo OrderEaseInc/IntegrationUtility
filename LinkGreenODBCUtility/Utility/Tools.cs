@@ -69,14 +69,16 @@ namespace LinkGreenODBCUtility
             return Regex.Replace(s, @"[^a-zA-Z0-9_-]+", string.Empty);
         }
 
-        public static string CleanCountry(string s, string connectionString)
+        public static string CleanCountry(string s, string connectionString, OdbcConnection connection)
         {
             if (_allCountries == null)
-                _allCountries = new CountryMappingRepository(connectionString).GetAll().ToArray();
+                _allCountries = new CountryMappingRepository(connectionString, connection).GetAll().ToArray();
+            if (s.Equals("CANADA", StringComparison.InvariantCultureIgnoreCase)) s = "Canada";
             // Country is already a "destination" country
             if (_allCountries.Any(c => c.Destination.Equals(s, StringComparison.InvariantCultureIgnoreCase))) return s;
             // Get map country, otherwise it's "Other"
-            return _allCountries.FirstOrDefault(c => c.Source.Equals(s, StringComparison.InvariantCultureIgnoreCase))?.Destination ?? "Other";
+            var cleanCountry = _allCountries.FirstOrDefault(c => c.Source.Equals(s, StringComparison.InvariantCultureIgnoreCase))?.Destination ?? "Other";
+            return cleanCountry;
         }
 
         public static string CleanProvince(string s, string connectionString, OdbcConnection connection)

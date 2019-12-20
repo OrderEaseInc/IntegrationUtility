@@ -63,13 +63,13 @@ namespace DataTransfer.AccessDatabase
                 finally
                 {
                     // Always call Close when done reading.
+                    // using connection string - means we opened the connection, so we should close id
                     reader.Close();
                 }
             }
             finally
             {
-                // using connection string - means we opened the connection, so we should close id
-                if (connection != null)
+                if (connection == null)
                     ConnectionInstance.CloseConnection(_connectionString);
             }
 

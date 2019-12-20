@@ -1260,7 +1260,7 @@ namespace LinkGreenODBCUtility
                 text = Tools.CleanUniqueId(text);
 
             if (fieldProps.SanitizeCountry)
-                text = Tools.CleanCountry(text, connection.ConnectionString);
+                text = Tools.CleanCountry(text, connection.ConnectionString, connection);
 
             if (fieldProps.SanitizeProvince)
                 text = Tools.CleanProvince(text, connection.ConnectionString, connection);
