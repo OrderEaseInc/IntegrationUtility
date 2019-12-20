@@ -69,5 +69,13 @@
         public string Web { get; set; }
 
         public string BuyerGroup { get; set; }
+
+        public string UserDefinedField1 { get; set; }
+
+        public string UserDefinedField2 { get; set; }
+        
+        public string UserDefinedField3 { get; set; }
+        
+        public string UserDefinedField4 { get; set; }
     }
 }
