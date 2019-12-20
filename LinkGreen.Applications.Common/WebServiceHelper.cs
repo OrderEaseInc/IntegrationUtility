@@ -456,7 +456,11 @@ namespace LinkGreen.Applications.Common
 
                 PrivateContactName = b.ContactName,
                 PrivateContactEmail = b.ContactEmail,
-                PrivateContactPhone = b.ContactPhone
+                PrivateContactPhone = b.ContactPhone,
+                b.UserDefinedField1,
+                b.UserDefinedField2,
+                b.UserDefinedField3,
+                b.UserDefinedField4
             }).ToArray();
 
             request.AddJsonBody(companies);
