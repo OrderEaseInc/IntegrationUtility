@@ -642,7 +642,7 @@ namespace LinkGreenODBCUtility
                     fromColumnNames.Add(fromColumn.MappingName);
                 }
 
-                var chainedToColumnNames = string.Join(",", toColumnNames);
+                var chainedToColumnNames = "[" + string.Join("],[", toColumnNames) + "]";
 
                 var chainedFromColumnNames = string.Join(",", fromColumnNames);
 

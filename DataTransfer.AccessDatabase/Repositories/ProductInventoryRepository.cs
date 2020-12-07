@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Objects;
 using System.Data.OleDb;
 using System.IO;
+using System.Net.NetworkInformation;
+using System.Reflection;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace DataTransfer.AccessDatabase
@@ -65,7 +67,7 @@ namespace DataTransfer.AccessDatabase
         {
             try
             {
-                return new ProductInventory
+                var pi = new ProductInventory
                 {
                     Id = reader.PrivateSKU.ToString(),
                     Inactive = reader.Inactive != null && (reader.Inactive.Equals(true) || Convert.ToString(reader.Inactive).ToLower() == "true" || Convert.ToString(reader.Inactive).ToLower() == "1" || Convert.ToString(reader.Inactive).ToLower() == "y" || Convert.ToString(reader.Inactive).ToLower() == "yes"),
@@ -88,6 +90,34 @@ namespace DataTransfer.AccessDatabase
                     SuggestedRetailPrice = reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
                     UPC = reader.UPC
                 };
+
+                var t = (Type)reader.GetType();
+                var prop = t.GetProperty("ProductFeature_1_Name")?.GetValue(reader);
+
+                pi.ProductFeatures = new List<KeyValuePair<string, object>>();
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_1_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_1_Name, reader.ProductFeature_1_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_2_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_2_Name, reader.ProductFeature_2_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_3_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_3_Name, reader.ProductFeature_3_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_4_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_4_Name, reader.ProductFeature_4_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_5_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_5_Name, reader.ProductFeature_5_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_6_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_6_Name, reader.ProductFeature_6_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_7_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_7_Name, reader.ProductFeature_7_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_8_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_8_Name, reader.ProductFeature_8_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_9_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_9_Name, reader.ProductFeature_9_Value));
+                if (!string.IsNullOrWhiteSpace(reader.ProductFeature_10_Name))
+                    pi.ProductFeatures.Add(new KeyValuePair<string, object>(reader.ProductFeature_10_Name, reader.ProductFeature_10_Value));
+
+
+                return pi;
             }
             catch (RuntimeBinderException exception)
             {

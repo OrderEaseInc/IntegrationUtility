@@ -65,11 +65,14 @@
     <Compile Include="Model\ApiResult.cs" />
     <Compile Include="Model\BuyerInventory.cs" />
     <Compile Include="Model\CountryMapping.cs" />
+    <Compile Include="Model\FulfillmentMethod.cs" />
     <Compile Include="Model\IdSkuQuantity.cs" />
     <Compile Include="Model\InventoryQuantity.cs" />
     <Compile Include="Model\OrderFromLinkGreen.cs" />
     <Compile Include="Model\PricingLevel.cs" />
+    <Compile Include="Model\ProductFeatureRequest.cs" />
     <Compile Include="Model\ProviceMapping.cs" />
+    <Compile Include="Model\RetailPriceSource.cs" />
     <Compile Include="Model\Supplier.cs" />
     <Compile Include="Model\SupplierContact.cs" />
     <Compile Include="Model\CompanyAndRelationshipResult.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Dynamic;
 using System.Linq;
 using System.Net;
 using LinkGreen.Applications.Common.Model;
@@ -276,7 +275,8 @@ namespace LinkGreen.Applications.Common
         public static void UpdateInventoryItemQuantity(string sku, int newQty, string catalog)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantity/{Key}/{sku}/{newQty}";
-            if (!string.IsNullOrEmpty(catalog)) {
+            if (!string.IsNullOrEmpty(catalog))
+            {
                 requestUrl += $"/{catalog}";
             }
             var request = new RestRequest(requestUrl, Method.POST);
@@ -383,7 +383,7 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static bool PushInventoryItem(InventoryItemRequest item)
+        public static bool PushInventoryItem(InventoryItemRequest item, out int statusCode, out string responseContent)
         {
             var requestUrl = $"/SupplierInventoryService/rest/{(item.Id > 0 ? "Update" : "Add")}Item/{Key}";
 
@@ -393,10 +393,13 @@ namespace LinkGreen.Applications.Common
 
             var response = Client.Execute(request);
 
+            statusCode = (int)response.StatusCode;
+            responseContent = response.Content ?? "No Content";
+
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static bool PushBulkUpdateInventoryItem(InventoryItemRequest[] item)
+        public static bool PushBulkUpdateInventoryItem(InventoryItemRequest[] item, out int statusCode, out string content)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateItems/{Key}";
 
@@ -405,6 +408,9 @@ namespace LinkGreen.Applications.Common
             request.AddJsonBody(item);
 
             var response = Client.Execute(request);
+
+            statusCode = (int)response.StatusCode;
+            content = response.Content ?? "";
 
             return response.StatusCode == HttpStatusCode.OK;
         }

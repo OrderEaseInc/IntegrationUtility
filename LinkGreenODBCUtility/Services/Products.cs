@@ -79,10 +79,12 @@ namespace LinkGreenODBCUtility
                 foreach (var product in productsToAdd)
                 {
                     var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                    WebServiceHelper.PushInventoryItem(request);
+                    WebServiceHelper.PushInventoryItem(request, out var statusCode, out var content);
 
                     bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
                     Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                    Logger.Instance.Debug($"Adding response {product.Id} {statusCode}");
+                    Logger.Instance.Debug($"Adding response {product.Id} {content}");
                 }
 
                 // Update existing items
@@ -93,7 +95,10 @@ namespace LinkGreenODBCUtility
                         bulkPushRequest.Add(request);
                     if (bulkPushRequest.Count > 10)
                     {
-                        WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
+                        WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode,
+                            out var content);
+                        Logger.Instance.Debug($"Bulk Push: Response: {statusCode}");
+                        Logger.Instance.Debug($"Bulk Push: Response Content: {content}");
                         bulkPushRequest.Clear();
                     }
 
@@ -103,7 +108,10 @@ namespace LinkGreenODBCUtility
 
                 if (bulkPushRequest.Count > 0)
                 {
-                    WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray());
+                    WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode, out var content);
+                    Logger.Instance.Debug($"Bulk Push Response {statusCode}");
+                    Logger.Instance.Debug($"Bulk Push Response {content}");
+
                 }
 
 
@@ -188,6 +196,17 @@ namespace LinkGreenODBCUtility
             {
                 request.Id = existing.Id;
             }
+
+            if (product.ProductFeatures != null && product.ProductFeatures.Any())
+            {
+                request.ProductFeatures = product.ProductFeatures.Select(p => new ProductFeatureRequest
+                {
+                    FeatureGroupName = p.Key,
+                    Value = p.Value.ToString(),
+                    FeatureId = p.Key + "_" + product.Id
+                }).ToList();
+            }
+
 
             return request;
         }
