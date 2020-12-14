@@ -39,7 +39,7 @@ namespace LinkGreenODBCUtility
 
                 if (GetSandboxMode())
                 {
-                    config.AppSettings.Settings[Keys.BaseUrl].Value = "http://dev.linkgreen.ca/";
+                    config.AppSettings.Settings[Keys.BaseUrl].Value = "https://dev.linkgreen.ca/";
                     //config.AppSettings.Settings["BaseUrl"].Value = "http://local.linkgreen.ca/";
                     config.Save(ConfigurationSaveMode.Modified);
                 }
