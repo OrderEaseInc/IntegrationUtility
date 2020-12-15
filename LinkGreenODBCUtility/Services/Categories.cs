@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using Newtonsoft.Json;
 
 namespace LinkGreenODBCUtility
 {
@@ -84,41 +86,61 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var categoriesToImport = new ProductCategoryRepository(Settings.ConnectionString).GetAll().ToList();
-
-                var existingCategories = WebServiceHelper.GetAllCategories();
-
-                //create all categories if they don't exist
-                var numOfPublishedCategories = 0;
-                foreach (var category in categoriesToImport)
+                try
                 {
-                    if (existingCategories.All(s => s?.Name != category.Category))
+                    var categoriesToImport = new ProductCategoryRepository(Settings.ConnectionString).GetAll().ToList();
+
+                    var existingCategories = WebServiceHelper.GetAllCategories();
+
+                    //create all categories if they don't exist
+                    var numOfPublishedCategories = 0;
+                    foreach (var category in categoriesToImport)
                     {
-                        var pushableCategory = new PrivateCategory { Name = category.Category };
-                        //if (!string.IsNullOrWhiteSpace(category.ParentCategoryName))
-                        //{
-                        //    pushableCategory.ParentCategoryId = GetParentCategoryID(existingCategories, category);
-                        //}
-                        //else
-                        //{
+                        if (existingCategories.All(s => s?.Name != category.Category))
+                        {
+                            var pushableCategory = new PrivateCategory { Name = category.Category };
+                            //if (!string.IsNullOrWhiteSpace(category.ParentCategoryName))
+                            //{
+                            //    pushableCategory.ParentCategoryId = GetParentCategoryID(existingCategories, category);
+                            //}
+                            //else
+                            //{
                             pushableCategory.Depth = 0;
-                        //}
-                        existingCategories.Add(WebServiceHelper.PushCategory(pushableCategory));
-                        publishDetails.Add($"Added category: {category.Category}");
-                        numOfPublishedCategories++;
+                            //}
+                            try
+                            {
+                                existingCategories.Add(WebServiceHelper.PushCategory(pushableCategory));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Instance.Error(
+                                    JsonConvert.SerializeObject(pushableCategory) + Environment.NewLine +
+                                    ex.Message + Environment.NewLine + ex.StackTrace);
+                                publishDetails.Add($"There was an error adding category: {category.Category}");
+                            }
+
+                            publishDetails.Add($"Added category: {category.Category}");
+                            numOfPublishedCategories++;
+                        }
                     }
-                }
 
-                if (numOfPublishedCategories == 0)
+
+
+                    if (numOfPublishedCategories == 0)
+                    {
+                        Logger.Instance.Warning("No categories were found to import.");
+                    }
+
+                    publishDetails.Insert(0, $"{numOfPublishedCategories} Categories published.");
+
+                    Logger.Instance.Info($"{numOfPublishedCategories} Categories published.");
+                    Logger.Instance.Debug($"{numOfPublishedCategories} Categories published. ApiKey: {apiKey}");
+
+                }
+                catch (Exception ex)
                 {
-                    Logger.Instance.Warning("No categories were found to import.");
+                    Logger.Instance.Error(ex.Message + Environment.NewLine + ex.StackTrace);
                 }
-
-                publishDetails.Insert(0, $"{numOfPublishedCategories} Categories published.");
-
-                Logger.Instance.Info($"{numOfPublishedCategories} Categories published.");
-                Logger.Instance.Debug($"{numOfPublishedCategories} Categories published. ApiKey: {apiKey}");
-
                 return true;
             }
 

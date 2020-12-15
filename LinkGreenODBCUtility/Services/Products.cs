@@ -7,6 +7,7 @@ using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using Newtonsoft.Json;
 
 namespace LinkGreenODBCUtility
 {
@@ -78,32 +79,52 @@ namespace LinkGreenODBCUtility
                 // Add new items
                 foreach (var product in productsToAdd)
                 {
-                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                    WebServiceHelper.PushInventoryItem(request, out var statusCode, out var content);
+                    try
+                    {
+                        var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
+                        WebServiceHelper.PushInventoryItem(request, out var statusCode, out var content);
 
-                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
-                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
-                    Logger.Instance.Debug($"Adding response {product.Id} {statusCode}");
-                    Logger.Instance.Debug($"Adding response {product.Id} {content}");
+                        bw?.ReportProgress(0,
+                            $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                        Logger.Instance.Debug(
+                            $"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                        Logger.Instance.Debug($"Adding response {product.Id} {statusCode}");
+                        Logger.Instance.Debug($"Adding response {product.Id} {content}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error("Adding " + JsonConvert.SerializeObject(product) + Environment.NewLine + ex.Message +
+                                              Environment.NewLine + ex.StackTrace);
+                    }
                 }
 
                 // Update existing items
                 foreach (var product in products.Where(p => existingInventory.Any(ei => ei.PrivateSKU == p.Id)))
                 {
-                    var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                    if (request != null)
-                        bulkPushRequest.Add(request);
-                    if (bulkPushRequest.Count > 10)
+                    try
                     {
-                        WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode,
-                            out var content);
-                        Logger.Instance.Debug($"Bulk Push: Response: {statusCode}");
-                        Logger.Instance.Debug($"Bulk Push: Response Content: {content}");
-                        bulkPushRequest.Clear();
-                    }
+                        var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
+                        if (request != null)
+                            bulkPushRequest.Add(request);
+                        if (bulkPushRequest.Count > 10)
+                        {
+                            WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode,
+                                out var content);
+                            Logger.Instance.Debug($"Bulk Push: Response: {statusCode}");
+                            Logger.Instance.Debug($"Bulk Push: Response Content: {content}");
+                            bulkPushRequest.Clear();
+                        }
 
-                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
-                    Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                        bw?.ReportProgress(0,
+                            $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                        Logger.Instance.Debug(
+                            $"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error("Updating " + JsonConvert.SerializeObject(product) + Environment.NewLine + ex.Message +
+                                              Environment.NewLine + ex.StackTrace);
+                    }
                 }
 
                 if (bulkPushRequest.Count > 0)
@@ -152,8 +173,18 @@ namespace LinkGreenODBCUtility
             {
                 if (existingCategory == null)
                 {
-                    existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                    existingCategories.Add(existingCategory);
+                    try
+                    {
+                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                        existingCategories.Add(existingCategory);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error("Product push - adding category" + Environment.NewLine +
+                                              JsonConvert.SerializeObject(product.Category) + Environment.NewLine +
+                                              ex.Message + Environment.NewLine + ex.StackTrace);
+                        throw;
+                    }
                 }
             }
             // Update
@@ -161,8 +192,18 @@ namespace LinkGreenODBCUtility
             {
                 if (existingCategory == null && updateCategories)
                 {
-                    existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
-                    existingCategories.Add(existingCategory);
+                    try
+                    {
+                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                        existingCategories.Add(existingCategory);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error("Product push - updating category" + Environment.NewLine +
+                                              JsonConvert.SerializeObject(product.Category) + Environment.NewLine +
+                                              ex.Message + Environment.NewLine + ex.StackTrace);
+                        throw;
+                    }
                 }
             }
 

@@ -484,17 +484,25 @@ namespace LinkGreen.Applications.Common
 
         public static PrivateCategory PushCategory(PrivateCategory category)
         {
-            var requestUrl = $"/CategoryService/rest/Add/{Key}";
+            try
+            {
 
-            var request = new RestRequest(requestUrl, Method.POST);
+                var requestUrl = $"/CategoryService/rest/Add/{Key}";
 
-            request.AddJsonBody(category);
-            var response = Client.Execute<ApiResult<PrivateCategory>>(request);
+                var request = new RestRequest(requestUrl, Method.POST);
 
-            if (response.Data.Result == null)
-                return null;
+                request.AddJsonBody(category);
+                var response = Client.Execute<ApiResult<PrivateCategory>>(request);
 
-            return response.Data.Item;
+                if (response.Data.Result == null)
+                    return null;
+
+                return response.Data.Item;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(JsonConvert.SerializeObject(category), ex);
+            }
         }
 
         public static void PostInventoryImport()
