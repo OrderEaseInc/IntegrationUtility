@@ -76,7 +76,7 @@ namespace LinkGreenODBCUtility
                 {
                     var publishedProduct = existingInventory.FirstOrDefault(s => s.PrivateSKU == price.Id);
 
-                    if (publishedProduct == null) //this price's product doesn't exist on linkgreen so let's ignore it
+                    if (publishedProduct == null) // this price's product doesn't exist on linkgreen so let's ignore it
                     {
                         publishDetails.Add($"SKU {price.Id} did not exist in LinkGreen to be updated with price");
                         continue;
@@ -87,7 +87,7 @@ namespace LinkGreenODBCUtility
                         price.MinimumPurchase = 1;
                     }
 
-                    if (price.Price > 0 && price.Price < publishedProduct.NetPrice) //no point in creating a price level price if it will cost more than net 
+                    if (price.Price > 0) 
                     {
                         var item = new PricingLevelItemRequest
                         {
