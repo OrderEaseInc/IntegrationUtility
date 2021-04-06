@@ -5,10 +5,12 @@ using System.Linq;
 
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
+using LinkGreen.Applications.Common.Model;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
-    class Customers : IOdbcTransfer
+    internal class Customers : IOdbcTransfer
     {
         //public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
@@ -48,8 +50,8 @@ namespace LinkGreenODBCUtility
 
         public void UpdateTemporaryTables()
         {
-            BatchTaskManager batchTaskManager = new BatchTaskManager("Customers");
-            List<string> commands = batchTaskManager.GetCommandsByTrigger();
+            var batchTaskManager = new BatchTaskManager("Customers");
+            var commands = batchTaskManager.GetCommandsByTrigger();
             foreach (string cmd in commands)
             {
                 Batch.Exec(cmd);
@@ -58,47 +60,45 @@ namespace LinkGreenODBCUtility
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
-            string apiKey = Settings.GetApiKey();
+            var apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {
                 var customers = new CustomerRepository(Settings.ConnectionString).GetAll().ToList();
 
-                var skip = 0;
-                var take = 4; //was experiencing timeouts with > 4 customers at a time
-                int total = 0;
-
-                int numOfPublishedCustomers = 0;
-                while (skip < customers.Count)
+                var total = 0;
+                var numOfPublishedCustomers = 0;
+                foreach (var customer in customers)
                 {
-                    var batch = customers.Skip(skip).Take(take).ToList();
-                    total += batch.Count;
-                    bw?.ReportProgress(0, $"Processing customer sync (Pushing {total}/{customers.Count})\n\rPlease wait");
-
+                    total += 1;
+                    bw?.ReportProgress(0,
+                        $"Processing customer sync (Pushing {total} / {customers.Count}\r\nPlease wait");
                     try
                     {
-                        var response = WebServiceHelper.InviteBuyers(batch);
+                        var response = string.IsNullOrWhiteSpace(customer.OurCompanyNumber)
+                            ? WebServiceHelper.InviteBuyers(new List<CompanyAndRelationshipResult> { customer })
+                            : WebServiceHelper.AddOrUpdateBuyer(customer);
                         Logger.Instance.Info(response);
-                        numOfPublishedCustomers++;
+
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Logger.Instance.Error(e.Message);
+                        Logger.Instance.Error(ex.Message);
                     }
 
-                    skip += take;
+                    numOfPublishedCustomers++;
                 }
 
                 if (numOfPublishedCustomers == 0)
                 {
                     Logger.Instance.Warning("No customers were found to import.");
-                    // MessageBox.Show("No customers were published.", "No Customers published.");
                 }
 
                 publishDetails.Insert(0, $"{total} customers published to LinkGreen");
 
                 Logger.Instance.Info($"{total} Customers published.");
                 Logger.Instance.Debug($"{total} Customers published. ApiKey: {apiKey}");
+
 
                 return true;
             }

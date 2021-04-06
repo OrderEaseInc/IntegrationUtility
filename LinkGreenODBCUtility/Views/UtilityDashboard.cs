@@ -140,12 +140,12 @@ namespace LinkGreenODBCUtility
                 customers.UpdateTemporaryTables();
                 customers.Empty();
 
-                string mappedDsnName = Mapping.GetDsnName("Customers");
+                var mappedDsnName = Mapping.GetDsnName("Customers");
                 var newMapping = new Mapping(mappedDsnName);
                 if (newMapping.MigrateData("Customers"))
                 {
                     ((BackgroundWorker)bwSender).ReportProgress(0, "Processing customer sync (Pushing)\n\rPlease wait");
-                    if (customers.Publish(out List<string> publishDetails, (BackgroundWorker)bwSender))
+                    if (customers.Publish(out var publishDetails, (BackgroundWorker)bwSender))
                     {
                         bwEventArgs.Result = new
                         {

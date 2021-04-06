@@ -12,8 +12,10 @@ namespace LinkGreen.Applications.Common
     public class WebServiceHelper
     {
         protected static RestClient Client;
+        protected static RestClient NewApiClient;
         public static string Key { get; set; }
         protected static string BaseUrl;
+        protected static string NewApiBaseUrl;
         protected static string OrderStatuses;
 
         // This line ensures that the constructor is called and the static properties are populated from the config file.
@@ -23,12 +25,21 @@ namespace LinkGreen.Applications.Common
         {
             Key = ConfigurationManager.AppSettings["ApiKey"];
             BaseUrl = ConfigurationManager.AppSettings["BaseUrl"];
+            NewApiBaseUrl = ConfigurationManager.AppSettings["NewApiBaseUrl"];
             OrderStatuses = ConfigurationManager.AppSettings["OrderStatuses"];
             Client = new RestClient(BaseUrl)
             {
                 Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
                 ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
             };
+
+            NewApiClient = new RestClient(NewApiBaseUrl)
+            {
+                Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
+                ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
+            };
+            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+
         }
 
         public static OrderSummary GetLastOrderNotDownloaded()
@@ -437,6 +448,43 @@ namespace LinkGreen.Applications.Common
             var response = Client.Execute(request);
 
             return response.StatusCode == HttpStatusCode.OK;
+        }
+
+        public static string AddOrUpdateBuyer(CompanyAndRelationshipResult buyer)
+        {
+            var requestUrl = $"/api/Relationship/AddOrUpdateCompany/{buyer.OurCompanyNumber}";
+            var request = new RestRequest(requestUrl, Method.POST);
+            var requestBody = new AddCompanyRequest
+            {
+                OurCompanyNumber = buyer.OurCompanyNumber,
+                ContactName = buyer.ContactName,
+                OurBillToNumber = buyer.OurBillToNumber,
+                Company = new CompanyViewModel
+                {
+                    Address1 = buyer.Address1,
+                    Address2 = buyer.Address2,
+                    City = buyer.City,
+                    CommonName = buyer.Name,
+                    CompanyTypeId = 1,
+                    IndustryTypeId = 1,
+                    Contact1 = buyer.Contact1,
+                    Contact2 = buyer.Contact2,
+                    Country = buyer.Country,
+                    Email1 = buyer.Email1,
+                    FormattedPhone1 = buyer.FormattedPhone1,
+                    Email2 = buyer.Email2,
+                    IsBuyer = true,
+                    PostalCode = buyer.PostalCode,
+                    ProvState = buyer.ProvState,
+                    Web = buyer.Web
+                }
+            };
+            request.AddJsonBody(requestBody);
+            var response = NewApiClient.Execute(request);
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
+
+            return response.Content;
         }
 
         public static string InviteBuyers(List<CompanyAndRelationshipResult> buyers)

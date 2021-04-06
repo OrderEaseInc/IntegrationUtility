@@ -40,7 +40,7 @@ namespace LinkGreenODBCUtility
                 if (GetSandboxMode())
                 {
                     config.AppSettings.Settings[Keys.BaseUrl].Value = "https://dev.linkgreen.ca/";
-                    //config.AppSettings.Settings["BaseUrl"].Value = "http://local.linkgreen.ca/";
+                    config.AppSettings.Settings[Keys.NewApiBaseUrl].Value = "https://linkgreen-coreapi-dev-coreapi.azurewebsites.net/";
                     config.Save(ConfigurationSaveMode.Modified);
                 }
             }
@@ -371,6 +371,7 @@ namespace LinkGreenODBCUtility
         {
             internal const string ApiKey = nameof(ApiKey);
             internal const string BaseUrl = nameof(BaseUrl);
+            internal const string NewApiBaseUrl = nameof(NewApiBaseUrl);
             internal const string StatusIdForOrderDownload = nameof(StatusIdForOrderDownload);
             internal const string EncryptionKey = nameof(EncryptionKey);
             internal const string InstallationId = nameof(InstallationId);

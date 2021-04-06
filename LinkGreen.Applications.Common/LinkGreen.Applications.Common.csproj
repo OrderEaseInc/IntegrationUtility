@@ -62,8 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AddCompanyRequest.cs" />
     <Compile Include="Model\ApiResult.cs" />
     <Compile Include="Model\BuyerInventory.cs" />
+    <Compile Include="Model\CompanyViewModel.cs" />
     <Compile Include="Model\CountryMapping.cs" />
     <Compile Include="Model\FulfillmentMethod.cs" />
     <Compile Include="Model\IdSkuQuantity.cs" />
