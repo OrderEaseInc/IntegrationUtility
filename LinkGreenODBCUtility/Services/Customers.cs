@@ -70,7 +70,16 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
-                var allBuyerGroups = WebServiceHelper.GetAllBuyerGroups();
+                List<SupplierBuyerGroupBuyerParticipationRemoteModel> allBuyerGroups;
+                try
+                {
+                    allBuyerGroups = WebServiceHelper.GetAllBuyerGroups();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Error("Could not load buyer groups " + ex.Message);
+                    return false;
+                }
 
                 var customers = new CustomerRepository(Settings.ConnectionString).GetAll().ToList();
 
