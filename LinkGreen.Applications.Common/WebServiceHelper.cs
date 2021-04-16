@@ -38,7 +38,7 @@ namespace LinkGreen.Applications.Common
                 Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
                 ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
             };
-            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            //NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
 
         }
 
@@ -450,7 +450,7 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static string AddOrUpdateBuyer(CompanyAndRelationshipResult buyer)
+        public static OperationResult<int> AddOrUpdateBuyer(CompanyAndRelationshipResult buyer)
         {
             var requestUrl = $"/api/Relationship/AddOrUpdateCompany/{buyer.OurCompanyNumber}";
             var request = new RestRequest(requestUrl, Method.POST);
@@ -480,6 +480,31 @@ namespace LinkGreen.Applications.Common
                 }
             };
             request.AddJsonBody(requestBody);
+            var response = NewApiClient.Execute<OperationResult<int>>(request);
+            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
+
+            return response.Data;
+        }
+
+        public static List<SupplierBuyerGroupBuyerParticipationRemoteModel> GetAllBuyerGroups()
+        {
+            var requestUrl = $"/api/Relationship/GetAllBuyerGroups";
+            var request = new RestRequest(requestUrl, Method.GET);
+            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            var response =
+                NewApiClient.Execute<OperationResult<List<SupplierBuyerGroupBuyerParticipationRemoteModel>>>(request);
+            return response.Data.Success ? response.Data.Result : null;
+        }
+
+        public static string AddBuyerToGroup(int buyerId, int groupId)
+        {
+            var requestUrl = $"/api/Relationship/AddBuyerToGroups/{buyerId}";
+            var body = new[] { groupId };
+            var request = new RestRequest(requestUrl, Method.POST);
+            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            request.AddJsonBody(body);
             var response = NewApiClient.Execute(request);
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);

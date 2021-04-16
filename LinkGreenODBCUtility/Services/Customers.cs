@@ -57,6 +57,12 @@ namespace LinkGreenODBCUtility
                 Batch.Exec(cmd);
             }
         }
+
+        private void GetAllBuyerGroups()
+        {
+
+        }
+
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
@@ -64,6 +70,8 @@ namespace LinkGreenODBCUtility
 
             if (!string.IsNullOrEmpty(apiKey))
             {
+                var allBuyerGroups = WebServiceHelper.GetAllBuyerGroups();
+
                 var customers = new CustomerRepository(Settings.ConnectionString).GetAll().ToList();
 
                 var total = 0;
@@ -75,10 +83,37 @@ namespace LinkGreenODBCUtility
                         $"Processing customer sync (Pushing {total} / {customers.Count}\r\nPlease wait");
                     try
                     {
-                        var response = string.IsNullOrWhiteSpace(customer.OurCompanyNumber)
-                            ? WebServiceHelper.InviteBuyers(new List<CompanyAndRelationshipResult> { customer })
-                            : WebServiceHelper.AddOrUpdateBuyer(customer);
-                        Logger.Instance.Info(response);
+                        var response = "";
+                        if (string.IsNullOrWhiteSpace(customer.OurCompanyNumber))
+                        {
+                            response = WebServiceHelper.InviteBuyers(new List<CompanyAndRelationshipResult> { customer });
+                            Logger.Instance.Info(response);
+                        }
+                        else
+                        {
+                            var buyerResponse = WebServiceHelper.AddOrUpdateBuyer(customer);
+                            Logger.Instance.Info(Newtonsoft.Json.JsonConvert.SerializeObject(buyerResponse));
+                            if (buyerResponse.Success)
+                            {
+                                if (!string.IsNullOrWhiteSpace(customer.BuyerGroup))
+                                {
+                                    var group = allBuyerGroups.FirstOrDefault(g =>
+                                        g.Name.Equals(customer.BuyerGroup, StringComparison.CurrentCultureIgnoreCase));
+                                    if (group == null)
+                                    {
+                                        Logger.Instance.Info($"Unable to find group {customer.BuyerGroup}");
+                                    }
+                                    else
+                                    {
+                                        response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result, group.Id);
+                                        Logger.Instance.Info(
+                                            $"add buyer {buyerResponse.Result} to group {group.Id}: {response}");
+                                    }
+                                }
+                            }
+
+                        }
+
 
                     }
                     catch (Exception ex)
