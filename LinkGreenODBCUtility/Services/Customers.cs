@@ -107,7 +107,8 @@ namespace LinkGreenODBCUtility
                                 if (!string.IsNullOrWhiteSpace(customer.BuyerGroup))
                                 {
                                     var group = allBuyerGroups.FirstOrDefault(g =>
-                                        g.Name.Equals(customer.BuyerGroup, StringComparison.CurrentCultureIgnoreCase));
+                                        g.Name.Trim().Equals(customer.BuyerGroup.Trim(),
+                                            StringComparison.CurrentCultureIgnoreCase));
                                     if (group == null)
                                     {
                                         Logger.Instance.Info($"Unable to find group {customer.BuyerGroup}");

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Sendwithus;
 
 namespace LinkGreen.Email
@@ -31,11 +30,21 @@ namespace LinkGreen.Email
 
             mailParameters.Add("link", link);
 
-            var recipient = new EmailRecipient(destination);
+            foreach (var address in destination.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                try
+                {
+                    var recipient = new EmailRecipient(address.Trim());
 
-            var email = new Sendwithus.Email(template.Value, mailParameters, recipient);
-            var response = await email.Send();
-            callback?.Invoke(response.status + ":" + response.receipt_id);
+                    var email = new Sendwithus.Email(template.Value, mailParameters, recipient);
+                    var response = await email.Send();
+                    callback?.Invoke(response.status + ":" + response.receipt_id);
+                }
+                catch
+                {
+                    // ignored - no email
+                }
+            }
         }
 
         public static void SendProcessCompleteEmail(string destination, List<string> details, string processName, Action<string> callback = null)
