@@ -457,31 +457,32 @@ namespace LinkGreen.Applications.Common
             var requestBody = new AddCompanyRequest
             {
                 OurCompanyNumber = buyer.OurCompanyNumber,
-                ContactName = buyer.ContactName,
+                ContactName = buyer.ContactName?.Trim(),
                 OurBillToNumber = buyer.OurBillToNumber,
                 Company = new CompanyViewModel
                 {
-                    Address1 = buyer.Address1,
-                    Address2 = buyer.Address2,
-                    City = buyer.City,
-                    CommonName = buyer.Name,
+                    Address1 = buyer.Address1.Trim(),
+                    Address2 = buyer.Address2?.Trim(),
+                    City = buyer.City?.Trim(),
+                    CommonName = buyer.Name?.Trim(),
                     CompanyTypeId = 1,
                     IndustryTypeId = 1,
-                    Contact1 = buyer.Contact1,
-                    Contact2 = buyer.Contact2,
-                    Country = buyer.Country,
-                    Email1 = buyer.Email1,
-                    FormattedPhone1 = buyer.FormattedPhone1,
-                    Email2 = buyer.Email2,
+                    Contact1 = buyer.Contact1?.Trim(),
+                    Contact2 = buyer.Contact2?.Trim(),
+                    Country = buyer.Country?.Trim(),
+                    Email1 = buyer.Email1?.Trim(),
+                    FormattedPhone1 = buyer.FormattedPhone1?.Trim(),
+                    Email2 = buyer.Email2?.Trim(),
                     IsBuyer = true,
                     PostalCode = buyer.PostalCode,
-                    ProvState = buyer.ProvState,
-                    Web = buyer.Web
+                    ProvState = buyer.ProvState?.Trim(),
+                    Web = buyer.Web?.Trim(),
+                    Name = buyer.Name?.Trim()
                 }
             };
             request.AddJsonBody(requestBody);
-            var response = NewApiClient.Execute<OperationResult<int>>(request);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            var response = NewApiClient.Execute<OperationResult<int>>(request);
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
 
