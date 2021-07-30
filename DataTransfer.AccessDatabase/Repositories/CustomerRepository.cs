@@ -168,7 +168,8 @@ namespace DataTransfer.AccessDatabase
                     UserDefinedField1 = CleanNull(reader.UserDefinedField1),
                     UserDefinedField2 = CleanNull(reader.UserDefinedField2),
                     UserDefinedField3 = CleanNull(reader.UserDefinedField3),
-                    UserDefinedField4 = CleanNull(reader.UserDefinedField4)
+                    UserDefinedField4 = CleanNull(reader.UserDefinedField4),
+                    SalesRepEmail = CleanNull(reader.SalesRepEmail)
                 };
             }
             catch (RuntimeBinderException exception)

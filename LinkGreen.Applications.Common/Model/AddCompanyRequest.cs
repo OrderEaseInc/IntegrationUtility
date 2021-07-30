@@ -16,5 +16,11 @@ namespace LinkGreen.Applications.Common.Model
 
         [DataMember]
         public string OurBillToNumber { get; set; }
+
+        [DataMember]
+        public string SalesRepEmail { get; set; }
+
+        [DataMember]
+        public bool? ReplaceSalesRep { get; set; }
     }
 }

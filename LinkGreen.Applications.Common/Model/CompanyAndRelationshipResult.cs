@@ -77,5 +77,8 @@
         public string UserDefinedField3 { get; set; }
         
         public string UserDefinedField4 { get; set; }
+
+        public string SalesRepEmail { get; set; }
+        public bool? ReplaceSalesRep { get; set; }
     }
 }

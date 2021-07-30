@@ -478,7 +478,9 @@ namespace LinkGreen.Applications.Common
                     ProvState = buyer.ProvState?.Trim(),
                     Web = buyer.Web?.Trim(),
                     Name = buyer.Name?.Trim()
-                }
+                },
+                SalesRepEmail = buyer.SalesRepEmail,
+                ReplaceSalesRep = true,
             };
             request.AddJsonBody(requestBody);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
