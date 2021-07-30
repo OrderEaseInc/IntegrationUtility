@@ -639,7 +639,7 @@ namespace LinkGreenODBCUtility
                 foreach (var fromColumn in fromColumns)
                 {
                     toColumnNames.Add(fromColumn.FieldName);
-                    fromColumnNames.Add(fromColumn.MappingName);
+                    fromColumnNames.Add($"[{fromColumn.MappingName}]");
                 }
 
                 var chainedToColumnNames = "[" + string.Join("],[", toColumnNames) + "]";
