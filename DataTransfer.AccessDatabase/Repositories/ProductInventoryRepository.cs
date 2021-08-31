@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Data.Objects;
 using System.Data.OleDb;
 using System.IO;
-using System.Net.NetworkInformation;
-using System.Reflection;
 using Microsoft.CSharp.RuntimeBinder;
 
+// ReSharper disable once CheckNamespace
 namespace DataTransfer.AccessDatabase
 {
     public class ProductInventoryRepository : OleDbRepository<ProductInventory>
@@ -88,11 +87,11 @@ namespace DataTransfer.AccessDatabase
                     SlaveQuantityDescription = reader.SlaveQuantityDescription ?? "",
                     SlaveQuantityPerMaster = reader.SlaveQuantityPerMaster ?? 0,
                     SuggestedRetailPrice = reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
-                    UPC = reader.UPC
+                    UPC = reader.UPC,
+                    RetailSell = reader.RetailSell != null && (reader.RetailSell.Equals(true) || Convert.ToString(reader.RetailSell).ToLower() == "true" || Convert.ToString(reader.RetailSell).ToLower() == "1" || Convert.ToString(reader.RetailSell).ToLower() == "y" || Convert.ToString(reader.RetailSell).ToLower() == "yes")
                 };
 
                 var t = (Type)reader.GetType();
-                var prop = t.GetProperty("ProductFeature_1_Name")?.GetValue(reader);
 
                 pi.ProductFeatures = new List<KeyValuePair<string, object>>();
                 if (!string.IsNullOrWhiteSpace(reader.ProductFeature_1_Name))

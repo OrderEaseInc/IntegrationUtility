@@ -156,7 +156,8 @@ namespace LinkGreenODBCUtility
                 Description = product.Description ?? "",
                 PrivateSKU = product.Id,
                 Inactive = product.Inactive,
-                QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1
+                QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1,
+                RetailSell =  product.RetailSell
             };
 
             bool updateCategories = Settings.GetUpdateCategories();
