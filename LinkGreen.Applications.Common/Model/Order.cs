@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 namespace LinkGreen.Applications.Common.Model
 {
     public class Order
     {
         public IEnumerable<OrderDetail> Details { get; set; }
-        
+
         public Company SupplierCompany { get; set; }
 
         public Company BuyerCompany { get; set; }
@@ -19,9 +20,9 @@ namespace LinkGreen.Applications.Common.Model
         public DateTime? ShippingDate { get; set; }
 
         public DateTime? RequestedShippingDate { get; set; }
-        
+
         public DateTime? AnticipatedShipDate { get; set; }
-        
+
         public OrderStatus Status { get; set; }
 
         public string SupplierStatus { get; set; }
@@ -47,7 +48,7 @@ namespace LinkGreen.Applications.Common.Model
         public string BuyerPO { get; set; }
 
         public string ContactName { get; set; }
-        
+
         public string OrderNumber { get; set; }
 
         public bool IsDirectDelivery { get; set; }
@@ -61,8 +62,30 @@ namespace LinkGreen.Applications.Common.Model
         public string Name { get; set; }
 
         public decimal OrderTotalBeforeSubmitting => Details.Sum(o => o.DiscountedPrice * o.QuantityRequested.GetValueOrDefault() * o.Units);
-        
+
         public decimal OrderTotal => Details.Sum(o => o.Amount);
 
+        public AllNotesToAndFromCompanyRemoteResult Notes { get; set; }
+
+        public string ConsolidatedNote
+        {
+            get
+            {
+
+                if (Notes.OurNotes == null) Notes.OurNotes = new List<NoteViewModel>();
+                if (Notes.TheirNotes == null) Notes.TheirNotes = new List<NoteViewModel>();
+                var combined = Notes.OurNotes?.Union(Notes.TheirNotes).Select(r =>
+                {
+                    r.Content = (r.CreatingCompanyId == r.SupplierId ? "Supplier: " : "Buyer: ") + r.Content;
+                    return r;
+                });
+
+                var note = string.Join(" - ", combined
+                    .OrderBy(n => n.CreatedDate)
+                    .Select(n => n.Content).ToArray());
+
+                return note;
+            }
+        }
     }
 }

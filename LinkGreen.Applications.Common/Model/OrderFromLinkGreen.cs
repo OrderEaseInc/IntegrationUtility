@@ -37,5 +37,7 @@ namespace LinkGreen.Applications.Common.Model
         public string AlternatePostalCode { get; set; }
         public string AlternatePhone { get; set; }
         public string AlternateSpecialInstructions { get; set; }
+
+        public string ConsolidatedNote { get; set; }
     }
 }

@@ -14,10 +14,12 @@ namespace DataTransfer.AccessDatabase
 
         public void ClearAll()
         {
-            using (var command = new OleDbCommand($"DELETE * FROM {ItemsTableName}")) {
+            using (var command = new OleDbCommand($"DELETE * FROM {ItemsTableName}"))
+            {
                 ExecuteCommand(command);
             }
-            using (var command = new OleDbCommand($"DELETE * FROM {TableName}")) {
+            using (var command = new OleDbCommand($"DELETE * FROM {TableName}"))
+            {
                 ExecuteCommand(command);
             }
         }
@@ -26,16 +28,22 @@ namespace DataTransfer.AccessDatabase
         {
             var orders = WebServiceHelper.GetOrdersForStatus(status);
 
-            foreach (var order in orders) {
+            foreach (var order in orders)
+            {
                 var detail = WebServiceHelper.DownloadOrderDetails(order.Id);
-                if (detail.BuyerCompany != null) {
+                if (detail.BuyerCompany != null)
+                {
                     order.OurCompanyNumber = detail.BuyerCompany.OurCompanyNumber;
                     order.OurBillToNumber = detail.BuyerCompany.OurBillToNumber;
                 }
 
+                if (!string.IsNullOrWhiteSpace(detail.ConsolidatedNote))
+                    order.ConsolidatedNote = detail.ConsolidatedNote;
+
                 Insert(order);
-                
-                foreach (var item in detail.Details) {
+
+                foreach (var item in detail.Details)
+                {
                     InsertItem(item);
                 }
             }
@@ -43,14 +51,16 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'"))
+            {
                 ExecuteCommand(command);
             }
         }
 
         public void SaveItemFieldMapping(string fieldName, string mappingName)
         {
-            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{ItemsTableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{ItemsTableName}'"))
+            {
                 ExecuteCommand(command);
             }
         }
@@ -63,7 +73,7 @@ namespace DataTransfer.AccessDatabase
                 "Freight, SupplierPO, BuyerPO, OrderNumber, ContactName, IsDirectDelivery, SupplierCanExport, " +
                 "SupplierCompanyId, BuyerCompanyId, BuyerCompanyName, OurCompanyNumber, OurBillToNumber, Name, " +
                 "UseAlternateAddress, AlternateProvince, AlternateReceiverName, " +
-                "AlternateAddress, AlternateCity, AlternatePostalCode, AlternatePhone, AlternateSpecialInstructions) " +
+                "AlternateAddress, AlternateCity, AlternatePostalCode, AlternatePhone, AlternateSpecialInstructions, ConsolidatedNote) " +
                 $"VALUES ({order.Id}, {Date(order.CreatedDate)}, {NullableDate(order.ShippingDate)}, {NullableDate(order.RequestedShippingDate)}, " +
                 $"{NullableDate(order.AnticipatedShipDate)}, {NullableString(order.Status)}, {NullableString(order.SupplierStatus)}, " +
                 $"{NullableString(order.PaymentTerm)}, {NullableInt(order.PaymentTermId)}, {NullableInt(order.SupplierStatusId)}, " +
@@ -73,9 +83,10 @@ namespace DataTransfer.AccessDatabase
                 $"{NullableString(order.OurCompanyNumber)}, {NullableString(order.OurBillToNumber)}, {NullableString(order.Name)}, " +
                 $"{Boolean(order.UseAlternateAddress)}, {NullableString(order.AlternateProvince)}, {NullableString(order.AlternateReceiverName)}, " +
                 $"{NullableString(order.AlternateAddress)}, {NullableString(order.AlternateCity)}, {NullableString(order.AlternatePostalCode)}, " +
-                $"{NullableString(order.AlternatePhone)}, {NullableString(order.AlternateSpecialInstructions)})";
+                $"{NullableString(order.AlternatePhone)}, {NullableString(order.AlternateSpecialInstructions)}, {NullableString(order.ConsolidatedNote)})";
 
-            using (var command = new OleDbCommand(sql)) {
+            using (var command = new OleDbCommand(sql))
+            {
                 ExecuteCommand(command);
             }
         }
@@ -93,7 +104,8 @@ namespace DataTransfer.AccessDatabase
                 $"{NullableString(item.PrivateSKU)}, {NullableInt(item.QuantityAvailable)}, {NullableInt(item.QuantityConfirmed)}, {NullableInt(item.QuantityRequested)}, " +
                 $"{NullableInt(item.QuantitySent)}, {NullableInt(item.RelatedProductId)}, {NullableString(item.Size)}, {NullableInt(item.SlaveQuantityPerMaster)}, " +
                 $"{NullableInt(item.SortOrder)}, {NullableInt(item.SubstitutedById)}, {NullableInt(item.SubstitutedForId)}, {NullableString(item.SupplierAccountingReference)})";
-            using (var command = new OleDbCommand(sql)) {
+            using (var command = new OleDbCommand(sql))
+            {
                 ExecuteCommand(command);
             }
         }

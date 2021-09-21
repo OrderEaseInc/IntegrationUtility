@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\AddCompanyRequest.cs" />
+    <Compile Include="Model\AllNotesToAndFromCompanyRemoteResult.cs" />
     <Compile Include="Model\ApiResult.cs" />
     <Compile Include="Model\BuyerInventory.cs" />
     <Compile Include="Model\CompanyViewModel.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Model\FulfillmentMethod.cs" />
     <Compile Include="Model\IdSkuQuantity.cs" />
     <Compile Include="Model\InventoryQuantity.cs" />
+    <Compile Include="Model\NoteViewModel.cs" />
     <Compile Include="Model\OperationResult.cs" />
     <Compile Include="Model\OrderFromLinkGreen.cs" />
     <Compile Include="Model\PricingLevel.cs" />
