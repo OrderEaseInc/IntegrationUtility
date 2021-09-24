@@ -71,12 +71,14 @@ namespace LinkGreen.Applications.Common.Model
         {
             get
             {
+                if (Notes == null) return "";
 
                 if (Notes.OurNotes == null) Notes.OurNotes = new List<NoteViewModel>();
                 if (Notes.TheirNotes == null) Notes.TheirNotes = new List<NoteViewModel>();
                 var combined = Notes.OurNotes?.Union(Notes.TheirNotes).Select(r =>
                 {
-                    r.Content = (r.CreatingCompanyId == r.SupplierId ? "Supplier: " : "Buyer: ") + r.Content;
+                    if (!r.Content.StartsWith("Supplier:") && !r.Content.StartsWith("Buyer:"))
+                        r.Content = (r.CreatingCompanyId == r.SupplierId ? "Supplier: " : "Buyer: ") + r.Content;
                     return r;
                 });
 
