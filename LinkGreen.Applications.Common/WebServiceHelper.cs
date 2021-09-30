@@ -600,7 +600,7 @@ namespace LinkGreen.Applications.Common
 
         public static List<OrderFromLinkGreen> GetOrdersForStatus(int status)
         {
-            var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/{status}";
+            var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/50";
             var request = new RestRequest(requestUrl, Method.POST);
             var statuses = new[] { status };
             var json = JsonConvert.SerializeObject(statuses);

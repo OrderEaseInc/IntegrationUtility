@@ -106,18 +106,23 @@ namespace LinkGreenODBCUtility
                             {
                                 if (!string.IsNullOrWhiteSpace(customer.BuyerGroup))
                                 {
-                                    var group = allBuyerGroups.FirstOrDefault(g =>
-                                        g.Name.Trim().Equals(customer.BuyerGroup.Trim(),
-                                            StringComparison.CurrentCultureIgnoreCase));
-                                    if (group == null)
+                                    var groups = customer.BuyerGroup.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                                    foreach (var currentGroup in groups)
                                     {
-                                        Logger.Instance.Info($"Unable to find group {customer.BuyerGroup}");
-                                    }
-                                    else
-                                    {
-                                        response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result, group.Id);
-                                        Logger.Instance.Info(
-                                            $"add buyer {buyerResponse.Result} to group {group.Id}: {response}");
+                                        var group = allBuyerGroups.FirstOrDefault(g =>
+                                            g.Name.Trim().Equals(currentGroup.Trim(),
+                                                StringComparison.CurrentCultureIgnoreCase));
+                                        if (group == null)
+                                        {
+                                            Logger.Instance.Info($"Unable to find group {customer.BuyerGroup}");
+                                        }
+                                        else
+                                        {
+                                            response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result, group.Id);
+                                            Logger.Instance.Info(
+                                                $"add buyer {buyerResponse.Result} to group {group.Id}: {response}");
+                                        }
                                     }
                                 }
                             }
