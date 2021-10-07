@@ -501,10 +501,10 @@ namespace LinkGreen.Applications.Common
             return response.Data.Success ? response.Data.Result : null;
         }
 
-        public static string AddBuyerToGroup(int buyerId, int groupId)
+        public static string AddBuyerToGroup(int buyerId, int[] groupIds)
         {
             var requestUrl = $"/api/Relationship/AddBuyerToGroups/{buyerId}";
-            var body = new[] { groupId };
+            var body = groupIds;
             var request = new RestRequest(requestUrl, Method.POST);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
             request.AddJsonBody(body);

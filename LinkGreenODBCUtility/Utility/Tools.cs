@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common.Model;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public class Tools
@@ -18,9 +19,11 @@ namespace LinkGreenODBCUtility
 
         public static string CleanStringForSql(string dirtyString)
         {
-            HashSet<char> removeChars = new HashSet<char>("|*<>,=~^();`");
-            StringBuilder result = new StringBuilder(dirtyString.Length);
-            foreach (char c in dirtyString)
+            // HashSet<char> removeChars = new HashSet<char>("|*<>,=~^();`");
+            var removeChars = new HashSet<char>("*<>,=~^();`");
+            var result = new StringBuilder(dirtyString.Length);
+            // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var c in dirtyString)
                 if (!removeChars.Contains(c)) // prevent dirty chars
                     result.Append(c);
 
@@ -55,7 +58,7 @@ namespace LinkGreenODBCUtility
         {
             try
             {
-                return Decimal.Parse(value, NumberStyles.AllowCurrencySymbol | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands, new CultureInfo("en-US")).ToString();
+                return decimal.Parse(value, NumberStyles.AllowCurrencySymbol | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands, new CultureInfo("en-US")).ToString();
             }
             catch (Exception)
             {

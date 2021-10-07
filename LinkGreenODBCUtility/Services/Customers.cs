@@ -108,6 +108,7 @@ namespace LinkGreenODBCUtility
                                 {
                                     var groups = customer.BuyerGroup.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
+                                    var toAdd = new List<int>();
                                     foreach (var currentGroup in groups)
                                     {
                                         var group = allBuyerGroups.FirstOrDefault(g =>
@@ -119,10 +120,18 @@ namespace LinkGreenODBCUtility
                                         }
                                         else
                                         {
-                                            response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result, group.Id);
+                                            toAdd.Add(group.Id);
                                             Logger.Instance.Info(
                                                 $"add buyer {buyerResponse.Result} to group {group.Id}: {response}");
                                         }
+                                    }
+
+                                    if (toAdd.Any())
+                                    {
+                                        response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result,
+                                            toAdd.ToArray());
+                                        Logger.Instance.Debug(
+                                            $"Added buyer {buyerResponse.Result} to groups {string.Join(",", toAdd)}");
                                     }
                                 }
                             }
