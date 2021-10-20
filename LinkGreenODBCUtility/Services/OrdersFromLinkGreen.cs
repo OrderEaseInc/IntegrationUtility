@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Linq;
 using DataTransfer.AccessDatabase;
 
 // ReSharper disable once CheckNamespace
@@ -50,12 +51,12 @@ namespace LinkGreenODBCUtility
         public bool Download()
         {
             var status = Settings.GetStatusIdForOrderDownload();
-            if (!status.HasValue) {
+            if (status == null || !status.Any()) {
                 Logger.Instance.Error("Status ID for Order Downloads missing");
                 return false;
             }
 
-            _repository.Download(status.Value);
+            _repository.Download(status);
             Logger.Instance.Debug($"Downloaded from LinkGreen to Transfer table {OrdersFromLinkGreenRepository.TableName}");
             return true;
         }

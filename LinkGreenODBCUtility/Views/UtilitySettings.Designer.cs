@@ -42,7 +42,7 @@
             this.lblNotificationEmail = new System.Windows.Forms.Label();
             this.txtNotificationEmail = new System.Windows.Forms.TextBox();
             this.lblDownloadOrderStatus = new System.Windows.Forms.Label();
-            this.cboDownloadOrderStatus = new System.Windows.Forms.ComboBox();
+            this.lstDownloadOrderStatus = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // apiKey
@@ -68,7 +68,7 @@
             // saveSettings
             // 
             this.saveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveSettings.Location = new System.Drawing.Point(268, 303);
+            this.saveSettings.Location = new System.Drawing.Point(268, 503);
             this.saveSettings.Name = "saveSettings";
             this.saveSettings.Size = new System.Drawing.Size(75, 23);
             this.saveSettings.TabIndex = 2;
@@ -80,7 +80,7 @@
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(187, 303);
+            this.cancel.Location = new System.Drawing.Point(187, 503);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 3;
@@ -178,15 +178,13 @@
             this.lblDownloadOrderStatus.TabIndex = 13;
             this.lblDownloadOrderStatus.Text = "Order Status for Downloading:";
             // 
-            // cboDownloadOrderStatus
+            // lstDownloadOrderStatus
             // 
-            this.cboDownloadOrderStatus.DisplayMember = "Status";
-            this.cboDownloadOrderStatus.FormattingEnabled = true;
-            this.cboDownloadOrderStatus.Location = new System.Drawing.Point(12, 254);
-            this.cboDownloadOrderStatus.Name = "cboDownloadOrderStatus";
-            this.cboDownloadOrderStatus.Size = new System.Drawing.Size(329, 21);
-            this.cboDownloadOrderStatus.TabIndex = 14;
-            this.cboDownloadOrderStatus.ValueMember = "Id";
+            this.lstDownloadOrderStatus.FormattingEnabled = true;
+            this.lstDownloadOrderStatus.Location = new System.Drawing.Point(12, 266);
+            this.lstDownloadOrderStatus.Name = "lstDownloadOrderStatus";
+            this.lstDownloadOrderStatus.Size = new System.Drawing.Size(329, 199);
+            this.lstDownloadOrderStatus.TabIndex = 15;
             // 
             // UtilitySettings
             // 
@@ -194,8 +192,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(359, 336);
-            this.Controls.Add(this.cboDownloadOrderStatus);
+            this.ClientSize = new System.Drawing.Size(359, 536);
+            this.Controls.Add(this.lstDownloadOrderStatus);
             this.Controls.Add(this.lblDownloadOrderStatus);
             this.Controls.Add(this.lblNotificationEmail);
             this.Controls.Add(this.txtNotificationEmail);
@@ -211,7 +209,7 @@
             this.Controls.Add(this.apiKey);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(375, 375);
+            this.MaximumSize = new System.Drawing.Size(375, 575);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(375, 375);
             this.Name = "UtilitySettings";
@@ -238,6 +236,6 @@
         private System.Windows.Forms.Label lblNotificationEmail;
         private System.Windows.Forms.TextBox txtNotificationEmail;
         private System.Windows.Forms.Label lblDownloadOrderStatus;
-        private System.Windows.Forms.ComboBox cboDownloadOrderStatus;
+        private System.Windows.Forms.CheckedListBox lstDownloadOrderStatus;
     }
 }

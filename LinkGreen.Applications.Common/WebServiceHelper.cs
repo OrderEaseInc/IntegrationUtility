@@ -485,7 +485,7 @@ namespace LinkGreen.Applications.Common
             request.AddJsonBody(requestBody);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
             var response = NewApiClient.Execute<OperationResult<int>>(request);
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.OK && response.Data.Result == 0)
                 throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
 
             return response.Data;
@@ -598,11 +598,11 @@ namespace LinkGreen.Applications.Common
             return response.Data.Item;
         }
 
-        public static List<OrderFromLinkGreen> GetOrdersForStatus(int status)
+        public static List<OrderFromLinkGreen> GetOrdersForStatus(int[] status)
         {
             var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/50";
             var request = new RestRequest(requestUrl, Method.POST);
-            var statuses = new[] { status };
+            var statuses = status;
             var json = JsonConvert.SerializeObject(statuses);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;

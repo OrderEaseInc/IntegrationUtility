@@ -3,7 +3,7 @@ using System.CodeDom;
 using System.ComponentModel;
 using System.Data.OleDb;
 using System.Configuration;
-
+using System.Linq;
 using DataTransfer.AccessDatabase;
 
 using LinkGreen.Applications.Common;
@@ -196,8 +196,9 @@ namespace LinkGreenODBCUtility
 
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
-                var command = new OleDbCommand($"UPDATE `{GetTableName(settingsTable)}` SET `{dbSettingName}` = '{value}' WHERE `ID` = 1",
+                var command = new OleDbCommand($"UPDATE `{GetTableName(settingsTable)}` SET `{dbSettingName}` = @value WHERE `ID` = 1",
                     cInstance.GetConnection());
+                command.Parameters.AddWithValue("@value", value);
 
                 command.Connection.Open();
                 try
@@ -234,12 +235,19 @@ namespace LinkGreenODBCUtility
         public static void SaveNotificationEmail(string emailAddress) =>
             SaveSettingValue(Keys.NotificationEmail, null, emailAddress);
 
-        public static int? GetStatusIdForOrderDownload() =>
-            GetSettingValue<int?>(Keys.StatusIdForOrderDownload);
-
-        public static void SaveStatusIdForOrderDownload(int id)
+        public static int[] GetStatusIdForOrderDownload()
         {
-            SaveSettingValue(Keys.StatusIdForOrderDownload, Keys.StatusIdForOrderDownload, id);
+            var val = GetSettingValue<string>(Keys.StatusIdForOrderDownload);
+            // ReSharper disable once ConvertIfStatementToReturnStatement
+            if (string.IsNullOrWhiteSpace(val)) return null;
+
+            return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+        }
+
+
+        public static void SaveStatusIdForOrderDownload(int[] id)
+        {
+            SaveSettingValue(Keys.StatusIdForOrderDownload, Keys.StatusIdForOrderDownload, string.Join(",", id));
         }
 
         internal static string GetSendwithusApiKey()

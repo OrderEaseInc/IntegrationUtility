@@ -24,7 +24,7 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
-        public void Download(int status)
+        public void Download(int[] status)
         {
             var orders = WebServiceHelper.GetOrdersForStatus(status);
 
