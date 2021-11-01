@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Objects;
 using System.Data.OleDb;
+using System.Dynamic;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 
@@ -61,6 +62,14 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
+        public static bool IsPropertyExist(dynamic settings, string name)
+        {
+            if (settings is ExpandoObject)
+                return ((IDictionary<string, object>)settings).ContainsKey(name);
+
+            return settings.GetType().GetProperty(name) != null;
+        }
+
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
         protected override ProductInventory PopulateRecord(dynamic reader)
         {
@@ -69,26 +78,44 @@ namespace DataTransfer.AccessDatabase
                 var pi = new ProductInventory
                 {
                     Id = reader.PrivateSKU.ToString(),
-                    Inactive = reader.Inactive != null && (reader.Inactive.Equals(true) || Convert.ToString(reader.Inactive).ToLower() == "true" || Convert.ToString(reader.Inactive).ToLower() == "1" || Convert.ToString(reader.Inactive).ToLower() == "y" || Convert.ToString(reader.Inactive).ToLower() == "yes"),
+                    Inactive = reader.Inactive != null && (reader.Inactive.Equals(true) ||
+                                                           Convert.ToString(reader.Inactive).ToLower() == "true" ||
+                                                           Convert.ToString(reader.Inactive).ToLower() == "1" ||
+                                                           Convert.ToString(reader.Inactive).ToLower() == "y" ||
+                                                           Convert.ToString(reader.Inactive).ToLower() == "yes"),
                     Category = reader.Category ?? "",
                     Description = reader.Description ?? "",
                     Comments = reader.Comments ?? "",
                     DirectDeliveryCode = reader.DirectDeliveryCode ?? "",
                     DirectDeliveryMinQuantity = reader.DirectDeliveryMinQuantity ?? 0,
                     FreightFactor = reader.FreightFactor ?? 0,
-                    IsDirectDelivery = reader.IsDirectDelivery != null && (reader.IsDirectDelivery.Equals(true) || Convert.ToString(reader.IsDirectDelivery).ToLower() == "true" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "1" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "y" || Convert.ToString(reader.IsDirectDelivery).ToLower() == "yes"),
+                    IsDirectDelivery = reader.IsDirectDelivery != null && (reader.IsDirectDelivery.Equals(true) ||
+                                                                           Convert.ToString(reader.IsDirectDelivery)
+                                                                               .ToLower() == "true" ||
+                                                                           Convert.ToString(reader.IsDirectDelivery)
+                                                                               .ToLower() == "1" ||
+                                                                           Convert.ToString(reader.IsDirectDelivery)
+                                                                               .ToLower() == "y" ||
+                                                                           Convert.ToString(reader.IsDirectDelivery)
+                                                                               .ToLower() == "yes"),
                     MasterQuantityDescription = reader.MasterQuantityDescription ?? "",
                     MinOrderSpring = reader.MinOrderSpring ?? 0,
                     MinOrderSummer = reader.MinOrderSummer ?? 0,
-                    NetPrice = reader.NetPrice != null ? (decimal)reader.NetPrice : 0,
+                    NetPrice = reader.NetPrice != null ? (decimal) reader.NetPrice : 0,
                     OpenSizeDescription = reader.OpenSizeDescription ?? "",
                     PrivateSKU = reader.PrivateSKU.ToString(),
                     QuantityAvailable = reader.QuantityAvailable ?? 0,
                     SlaveQuantityDescription = reader.SlaveQuantityDescription ?? "",
                     SlaveQuantityPerMaster = reader.SlaveQuantityPerMaster ?? 0,
-                    SuggestedRetailPrice = reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
+                    SuggestedRetailPrice =
+                        reader.SuggestedRetailPrice != null ? (decimal) reader.SuggestedRetailPrice : 0,
                     UPC = reader.UPC,
-                    RetailSell = reader.RetailSell != null && (reader.RetailSell.Equals(true) || Convert.ToString(reader.RetailSell).ToLower() == "true" || Convert.ToString(reader.RetailSell).ToLower() == "1" || Convert.ToString(reader.RetailSell).ToLower() == "y" || Convert.ToString(reader.RetailSell).ToLower() == "yes")
+                    RetailSell = IsPropertyExist(reader, "RetailSell") && reader.RetailSell != null &&
+                                 (reader.RetailSell.Equals(true) ||
+                                  Convert.ToString(reader.RetailSell).ToLower() == "true" ||
+                                  Convert.ToString(reader.RetailSell).ToLower() == "1" ||
+                                  Convert.ToString(reader.RetailSell).ToLower() == "y" ||
+                                  Convert.ToString(reader.RetailSell).ToLower() == "yes")
                 };
 
                 var t = (Type)reader.GetType();

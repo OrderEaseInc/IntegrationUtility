@@ -126,7 +126,7 @@ namespace LinkGreenODBCUtility
                 }
                 if (product.QuantityAvailable.HasValue)
                 {
-                    request.QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1;
+                    request.QuantityAvailable = product.QuantityAvailable >= 0 ? product.QuantityAvailable : 0;
                 }
                 if (!string.IsNullOrEmpty(product.Comments))
                 {
