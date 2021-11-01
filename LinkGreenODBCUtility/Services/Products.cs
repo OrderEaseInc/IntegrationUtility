@@ -157,7 +157,7 @@ namespace LinkGreenODBCUtility
                 PrivateSKU = product.Id,
                 Inactive = product.Inactive,
                 QuantityAvailable = product.QuantityAvailable >= 1 ? product.QuantityAvailable : 1,
-                RetailSell =  product.RetailSell
+                RetailSell = product.RetailSell
             };
 
             bool updateCategories = Settings.GetUpdateCategories();
@@ -176,7 +176,7 @@ namespace LinkGreenODBCUtility
                 {
                     try
                     {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
                         existingCategories.Add(existingCategory);
                     }
                     catch (Exception ex)
@@ -195,7 +195,7 @@ namespace LinkGreenODBCUtility
                 {
                     try
                     {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory {Name = product.Category});
+                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
                         existingCategories.Add(existingCategory);
                     }
                     catch (Exception ex)
@@ -241,12 +241,14 @@ namespace LinkGreenODBCUtility
 
             if (product.ProductFeatures != null && product.ProductFeatures.Any())
             {
-                request.ProductFeatures = product.ProductFeatures.Select(p => new ProductFeatureRequest
-                {
-                    FeatureGroupName = p.Key,
-                    Value = p.Value.ToString(),
-                    FeatureId = p.Key + "_" + product.Id
-                }).ToList();
+                request.ProductFeatures = product.ProductFeatures
+                    .Where(p => p.Key != null && p.Value != null)
+                    .Select(p => new ProductFeatureRequest
+                    {
+                        FeatureGroupName = p.Key,
+                        Value = p.Value == null ? "" : p.Value.ToString(),
+                        FeatureId = p.Key + "_" + product.Id
+                    }).ToList();
             }
 
 
