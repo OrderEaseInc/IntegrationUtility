@@ -17,7 +17,7 @@ namespace LinkGreenODBCUtility
         }
 
         public bool Empty()
-        {            
+        {
             _repository.ClearAll();
             Logger.Instance.Info("Orders from LinkGreen table emptied");
             Logger.Instance.Debug($"{Settings.ConnectionString}.{OrdersFromLinkGreenRepository.TableName} emptied");
@@ -51,7 +51,8 @@ namespace LinkGreenODBCUtility
         public bool Download()
         {
             var status = Settings.GetStatusIdForOrderDownload();
-            if (status == null || !status.Any()) {
+            if (status == null || !status.Any())
+            {
                 Logger.Instance.Error("Status ID for Order Downloads missing");
                 return false;
             }
@@ -64,19 +65,22 @@ namespace LinkGreenODBCUtility
         public bool Publish(out List<string> processDetails, BackgroundWorker bw = null)
         {
             processDetails = new List<string>();
-            try {
+            try
+            {
                 Empty();
                 Download();
 
                 var mappedDsnName = new Mapping().GetDsnName(OrdersFromLinkGreenRepository.TableName);
                 var newMapping = new Mapping(mappedDsnName);
                 var pushed = newMapping.PushData(OrdersFromLinkGreenRepository.TableName, OrdersFromLinkGreenRepository.TableKey, true);
-                if (pushed) {
+                if (pushed)
+                {
                     Logger.Instance.Debug("Orders migrated from utility to mapped production database.");
 
                     pushed = newMapping.PushData(OrdersFromLinkGreenRepository.ItemsTableName, OrdersFromLinkGreenRepository.TableKey, true);
 
-                    if (pushed) {
+                    if (pushed)
+                    {
                         Logger.Instance.Debug("Orders migrated from utility to mapped production database.");
                         processDetails.Add("Orders migrated from utility to mapped production database.");
                         return true;
@@ -91,7 +95,9 @@ namespace LinkGreenODBCUtility
                 processDetails.Add("Failed to migrate orders from utility to mapped production database.");
                 return false;
 
-            } catch (ConfigurationErrorsException ex) {
+            }
+            catch (ConfigurationErrorsException ex)
+            {
                 Logger.Instance.Error($"Error Publishing Orders From LinkGreen: {ex.GetBaseException().Message}");
                 processDetails.Add(ex.GetBaseException().Message);
                 return false;

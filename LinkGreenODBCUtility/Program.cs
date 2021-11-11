@@ -84,9 +84,11 @@ namespace LinkGreenODBCUtility
 
             Utility.Mapper.InitMapper();
 
-            string dsnName = Settings.ConnectViaDsnName;
-            string dsPath = AppDomain.CurrentDomain.BaseDirectory + $"{Settings.ConnectViaDsnName}.mdb";
-            bool success = Utils.CreateDataSource((IntPtr)0,
+
+            var dsnName = Settings.ConnectViaDsnName;
+            var dsPath = AppDomain.CurrentDomain.BaseDirectory + $"{Settings.ConnectViaDsnName}.mdb";
+
+            var success = Utils.CreateDataSource((IntPtr)0,
                 ODBC_Request_Modes.ODBC_ADD_SYS_DSN,
                 "Microsoft Access Driver (*.mdb)\0",
                 "DSN=" + dsnName + "\0DBQ=" + dsPath + "\0");
@@ -94,9 +96,9 @@ namespace LinkGreenODBCUtility
             {
                 if (Settings.TryConnect())
                 {
-                    string logDsnName = Logger._loggerDsnName;
-                    string logDsPath = AppDomain.CurrentDomain.BaseDirectory + $"{logDsnName}.mdb";
-                    bool logConnectSuccess = Utils.CreateDataSource((IntPtr)0,
+                    var logDsnName = Logger._loggerDsnName;
+                    var logDsPath = AppDomain.CurrentDomain.BaseDirectory + $"{logDsnName}.mdb";
+                    var logConnectSuccess = Utils.CreateDataSource((IntPtr)0,
                         ODBC_Request_Modes.ODBC_ADD_SYS_DSN,
                         "Microsoft Access Driver (*.mdb)\0",
                         "DSN=" + logDsnName + "\0DBQ=" + logDsPath + "\0");

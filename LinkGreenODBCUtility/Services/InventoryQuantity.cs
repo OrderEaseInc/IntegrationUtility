@@ -1,23 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
-using System.Dynamic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 using LinkGreenODBCUtility.Utility;
 using Mapper = AutoMapper.Mapper;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public class InventoryQuantity : IOdbcTransfer
     {
         private readonly InventoryQuantityRepository repository;
         private const string TableName = "InventoryQuantities";
-        public bool _validFields;
 
         public InventoryQuantity()
         {

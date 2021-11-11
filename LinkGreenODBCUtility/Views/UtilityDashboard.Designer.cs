@@ -73,7 +73,7 @@
             // 
             this.settingsMappingMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.logo;
             this.settingsMappingMenuItem.Name = "settingsMappingMenuItem";
-            this.settingsMappingMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.settingsMappingMenuItem.Size = new System.Drawing.Size(146, 22);
             this.settingsMappingMenuItem.Text = "Mappings";
             this.settingsMappingMenuItem.Click += new System.EventHandler(this.settingsMappingMenuItem_Click);
             // 
@@ -81,7 +81,7 @@
             // 
             this.eventLogToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.debug_log;
             this.eventLogToolStripMenuItem.Name = "eventLogToolStripMenuItem";
-            this.eventLogToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.eventLogToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.eventLogToolStripMenuItem.Text = "Event Log";
             this.eventLogToolStripMenuItem.Click += new System.EventHandler(this.eventLogToolStripMenuItem_Click);
             // 
@@ -90,7 +90,7 @@
             this.taskManagerToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.taskManagerToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.schedule_icon;
             this.taskManagerToolStripMenuItem.Name = "taskManagerToolStripMenuItem";
-            this.taskManagerToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.taskManagerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.taskManagerToolStripMenuItem.Text = "Task Manager";
             this.taskManagerToolStripMenuItem.Click += new System.EventHandler(this.taskManagerToolStripMenuItem_Click);
             // 
@@ -98,7 +98,7 @@
             // 
             this.generalToolStripMenuItem.Image = global::LinkGreenODBCUtility.Properties.Resources.gear;
             this.generalToolStripMenuItem.Name = "generalToolStripMenuItem";
-            this.generalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.generalToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.generalToolStripMenuItem.Text = "Settings";
             this.generalToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 

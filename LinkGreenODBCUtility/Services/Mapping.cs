@@ -612,11 +612,13 @@ namespace LinkGreenODBCUtility
             }
 
             // ReSharper disable once ConvertIfStatementToSwitchStatement
-            if (text.ToLower() == "true" || text.ToLower() == "yes")
+            if (text.Trim().Equals("true", StringComparison.InvariantCultureIgnoreCase) ||
+                text.Trim().Equals("yes", StringComparison.InvariantCultureIgnoreCase))
             {
                 text = "1";
             }
-            else if (text.ToLower() == "false" || text.ToLower() == "no")
+            else if (text.Trim().Equals("false", StringComparison.InvariantCultureIgnoreCase) ||
+                      text.Trim().Equals("no", StringComparison.InvariantCultureIgnoreCase))
             {
                 text = "0";
             }

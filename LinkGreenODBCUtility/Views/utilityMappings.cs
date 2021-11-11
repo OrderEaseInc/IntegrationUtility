@@ -2432,11 +2432,11 @@ namespace LinkGreenODBCUtility
 
         private void migrateInventoryQuantity_Click(object sender, EventArgs e)
         {
-            string mappedDsnName = Mapping.GetDsnName("InventoryQuantities");
+            var mappedDsnName = Mapping.GetDsnName("InventoryQuantities");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("InventoryQuantities"))
             {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
+                MessageBox.Show(@"Process complete");
                 Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
             }
             else

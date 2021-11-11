@@ -186,9 +186,9 @@ namespace LinkGreenODBCUtility
 
         public void RestoreTasks()
         {
-            IEnumerable<Task> savedTasks = GetAll();
+            var savedTasks = GetAll();
 
-            foreach (Task task in savedTasks)
+            foreach (var task in savedTasks)
             {
                 JobManager.ScheduleJob(task.TaskName, task.StartDateTime, task.RepeatInterval, task.ExternalExecutable, task.JobParameters);
             }
