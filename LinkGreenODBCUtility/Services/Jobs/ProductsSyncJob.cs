@@ -19,7 +19,7 @@ namespace LinkGreenODBCUtility
             products.UpdateTemporaryTables();
             products.Empty();
 
-            string mappedDsnName = Mapping.GetDsnName("Products");
+            var mappedDsnName = Mapping.GetDsnName("Products");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Products") && products.Publish(out var publishDetails))
             {

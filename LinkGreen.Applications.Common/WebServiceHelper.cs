@@ -18,6 +18,7 @@ namespace LinkGreen.Applications.Common
         protected static string NewApiBaseUrl;
         protected static string OrderStatuses;
 
+        // ReSharper disable once UnusedMember.Local
         // This line ensures that the constructor is called and the static properties are populated from the config file.
         private static WebServiceHelper _instance = new WebServiceHelper();
 
@@ -267,7 +268,7 @@ namespace LinkGreen.Applications.Common
 
         public static void UpdateLinkedSku(LinkedItem item, string buyerLinkedSku)
         {
-            var requestUrl = $"buyerinventoryservice/rest/linkitem/{Key}";
+            var requestUrl = $"BuyerInventoryService/rest/LinkItem/{Key}";
             var request = new RestRequest(requestUrl, Method.POST);
             var body = new
             {
@@ -481,6 +482,7 @@ namespace LinkGreen.Applications.Common
                 },
                 SalesRepEmail = buyer.SalesRepEmail,
                 ReplaceSalesRep = true,
+                ForceRemoveSalesRep = true
             };
             request.AddJsonBody(requestBody);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
@@ -546,7 +548,8 @@ namespace LinkGreen.Applications.Common
             }).ToArray();
 
             request.AddJsonBody(companies);
-            var body = Newtonsoft.Json.JsonConvert.SerializeObject(companies);
+            // ReSharper disable once UnusedVariable
+            var body = JsonConvert.SerializeObject(companies);
 
             var response = Client.Execute(request);
 

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.Linq;
 using LinkGreen.Email;
 using LinkGreenODBCUtility.RunnableActivities;
+// ReSharper disable LocalizableElement
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public partial class UtilityDashboard : Form
@@ -32,15 +33,18 @@ namespace LinkGreenODBCUtility
                 Settings.SetupUserConfig(config.AppSettings.Settings["ApiKey"].Value);
             }
 
-            var Tasks = new Tasks();
-            Tasks.RestoreTasks();
+            var tasks = new Tasks();
+            tasks.RestoreTasks();
 
             Log.PurgeLog();
         }
 
         private void UtilityDashboard_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show($"Tasks will not execute while the Integration Utility is closed. Are you sure you want to exit?", "Are you sure?", MessageBoxButtons.YesNo);
+            var dialogResult =
+                MessageBox.Show(
+                    @"Tasks will not execute while the Integration Utility is closed. Are you sure you want to exit?",
+                    @"Are you sure?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 JobManager.Dispose();
@@ -51,7 +55,7 @@ namespace LinkGreenODBCUtility
 
         private void settingsMappingMenuItem_Click(object sender, EventArgs e)
         {
-            UtilityMappings utilitySettings = new UtilityMappings();
+            var utilitySettings = new UtilityMappings();
             utilitySettings.ShowDialog();
         }
 
@@ -62,7 +66,7 @@ namespace LinkGreenODBCUtility
             categories.UpdateTemporaryTables();
             categories.Empty();
 
-            string mappedDsnName = Mapping.GetDsnName("Categories");
+            var mappedDsnName = Mapping.GetDsnName("Categories");
             var newMapping = new Mapping(mappedDsnName);
             if (newMapping.MigrateData("Categories"))
             {
@@ -107,13 +111,13 @@ namespace LinkGreenODBCUtility
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UtilitySettings utilitySettings = new UtilitySettings { Owner = this };
+            var utilitySettings = new UtilitySettings { Owner = this };
             utilitySettings.ShowDialog();
         }
 
         private void eventLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EventLog eventLog = new EventLog();
+            var eventLog = new EventLog();
             eventLog.ShowDialog();
         }
 
@@ -472,8 +476,8 @@ namespace LinkGreenODBCUtility
 
         private void taskManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var TaskManager = new TaskManager();
-            TaskManager.ShowDialog();
+            var taskManager = new TaskManager();
+            taskManager.ShowDialog();
         }
 
         private void downloadOrders_Click(object sender, EventArgs e)

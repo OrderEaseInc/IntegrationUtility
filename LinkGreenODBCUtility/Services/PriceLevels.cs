@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
-    class PriceLevels : IOdbcTransfer
+    internal class PriceLevels : IOdbcTransfer
     {
         //public string ConnectionString = $"DSN={Settings.DsnName}";
         public string ClientConnectionString;
@@ -47,9 +47,9 @@ namespace LinkGreenODBCUtility
 
         public void UpdateTemporaryTables()
         {
-            BatchTaskManager batchTaskManager = new BatchTaskManager("PriceLevels");
-            List<string> commands = batchTaskManager.GetCommandsByTrigger();
-            foreach (string cmd in commands)
+            var batchTaskManager = new BatchTaskManager("PriceLevels");
+            var commands = batchTaskManager.GetCommandsByTrigger();
+            foreach (var cmd in commands)
             {
                 Batch.Exec(cmd);
             }
@@ -58,7 +58,7 @@ namespace LinkGreenODBCUtility
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
-            string apiKey = Settings.GetApiKey();
+            var apiKey = Settings.GetApiKey();
 
             if (!string.IsNullOrEmpty(apiKey))
             {

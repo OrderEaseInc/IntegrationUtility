@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkGreen.Applications.Common.Model
 {
@@ -30,7 +26,7 @@ namespace LinkGreen.Applications.Common.Model
 
         public int? AnnouncementId { get; set; }
 
-        public bool AnnounceThis { get; set; }
+        public bool? AnnounceThis { get; set; }
 
         public string PreviewEmailAddress { get; set; }
 

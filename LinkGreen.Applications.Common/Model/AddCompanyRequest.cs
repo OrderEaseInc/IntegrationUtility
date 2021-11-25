@@ -22,5 +22,8 @@ namespace LinkGreen.Applications.Common.Model
 
         [DataMember]
         public bool? ReplaceSalesRep { get; set; }
+
+        [DataMember]
+        public bool? ForceRemoveSalesRep { get; set; }
     }
 }

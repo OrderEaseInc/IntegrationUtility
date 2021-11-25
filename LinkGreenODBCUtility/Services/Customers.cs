@@ -58,11 +58,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void GetAllBuyerGroups()
-        {
-
-        }
-
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
@@ -128,6 +123,7 @@ namespace LinkGreenODBCUtility
 
                                     if (toAdd.Any())
                                     {
+                                        // ReSharper disable once RedundantAssignment
                                         response = WebServiceHelper.AddBuyerToGroup(buyerResponse.Result,
                                             toAdd.ToArray());
                                         Logger.Instance.Debug(
