@@ -482,7 +482,7 @@ namespace LinkGreen.Applications.Common
                 },
                 SalesRepEmail = buyer.SalesRepEmail,
                 ReplaceSalesRep = true,
-                ForceRemoveSalesRep = true
+                ForceRemoveSalesRep = false
             };
             request.AddJsonBody(requestBody);
             NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
