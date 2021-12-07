@@ -44,72 +44,84 @@ namespace LinkGreenODBCUtility
         public bool Publish(out List<string> publishDetails, BackgroundWorker bw = null)
         {
             publishDetails = new List<string>();
-            // clear out transfer table
-            Empty();
 
-            var mappedDsnName = new Mapping().GetDsnName("InventoryQuantities");
-            var newMapping = new Mapping(mappedDsnName);
-            if (newMapping.MigrateData("InventoryQuantities"))
+            try
             {
-                Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
+                // clear out transfer table
+                Empty();
 
-                var apiKey = Settings.GetApiKey();
-
-                if (string.IsNullOrEmpty(apiKey))
+                var mappedDsnName = new Mapping().GetDsnName("InventoryQuantities");
+                var newMapping = new Mapping(mappedDsnName);
+                if (newMapping.MigrateData("InventoryQuantities"))
                 {
-                    Logger.Instance.Warning("No Api Key set while executing inventory quantities publish.");
-                    publishDetails.Insert(0, "No Api Key set while executing inventory quantities publish");
-                    return false;
-                }
+                    Logger.Instance.Debug($"Inventory Quantities migrated using DSN: {mappedDsnName}");
 
-                Thread.Sleep(500); // TODO: Code Smell - Figure out the real problem here
-                var inventoryQuantityItems = repository.GetAll().ToList();
-                var existingInventory = WebServiceHelper.GetAllInventory();
-                var items = 0;
+                    var apiKey = Settings.GetApiKey();
 
-                var request = new List<IdSkuQuantity>();
-
-                foreach (var inventoryQuantityItem in inventoryQuantityItems)
-                {
-                    var existingProduct = existingInventory.FirstOrDefault(i => i.PrivateSKU == inventoryQuantityItem.Sku);
-
-                    //var request = new InventoryItemRequest { PrivateSKU = inventoryQuantityItem.Sku };
-
-                    // ReSharper disable once InvertIf
-                    if (existingProduct != null)
+                    if (string.IsNullOrEmpty(apiKey))
                     {
-                        items++;
-
-                        request.Add(Mapper.Map<IdSkuQuantity>(inventoryQuantityItem));
+                        Logger.Instance.Warning("No Api Key set while executing inventory quantities publish.");
+                        publishDetails.Insert(0, "No Api Key set while executing inventory quantities publish");
+                        return false;
                     }
-                }
 
+                    Thread.Sleep(500); // TODO: Code Smell - Figure out the real problem here
+                    var inventoryQuantityItems = repository.GetAll().ToList();
+                    var existingInventory = WebServiceHelper.GetAllInventory();
+                    var items = 0;
 
-                if (items > 0 && request.All(i => string.IsNullOrEmpty(i.CatalogName))) {
-                    var chunks = request.ChunkBy(500);
-                    foreach (var chunk in chunks)
-                        WebServiceHelper.PushInventoryQuantity(chunk);
-                } else if (items > 0) {
-                    foreach (var item in request) {
-                        WebServiceHelper.UpdateInventoryItemQuantity(item.SKU, item.Quantity, item.CatalogName);
+                    var request = new List<IdSkuQuantity>();
+
+                    foreach (var inventoryQuantityItem in inventoryQuantityItems)
+                    {
+                        var existingProduct = existingInventory.FirstOrDefault(i => i.PrivateSKU == inventoryQuantityItem.Sku);
+
+                        //var request = new InventoryItemRequest { PrivateSKU = inventoryQuantityItem.Sku };
+
+                        // ReSharper disable once InvertIf
+                        if (existingProduct != null)
+                        {
+                            items++;
+
+                            request.Add(Mapper.Map<IdSkuQuantity>(inventoryQuantityItem));
+                        }
                     }
+
+
+                    if (items > 0 && request.All(i => string.IsNullOrEmpty(i.CatalogName)))
+                    {
+                        var chunks = request.ChunkBy(500);
+                        foreach (var chunk in chunks)
+                            WebServiceHelper.PushInventoryQuantity(chunk);
+                    }
+                    else if (items > 0)
+                    {
+                        foreach (var item in request)
+                        {
+                            WebServiceHelper.UpdateInventoryItemQuantity(item.SKU, item.Quantity, item.CatalogName);
+                        }
+                    }
+
+                    if (items < 1)
+                    {
+                        Logger.Instance.Warning("No inventory quantity items were published. Double check your skus.");
+                        publishDetails.Insert(0, "No inventory quantity items were published. Double check your skus");
+                        return false;
+                    }
+
+                    publishDetails.Insert(0, $"{items} inventory quantity items were published.");
+
+                    return true;
                 }
-
-                if (items < 1)
-                {
-                    Logger.Instance.Warning("No inventory quantity items were published. Double check your skus.");
-                    publishDetails.Insert(0, "No inventory quantity items were published. Double check your skus");
-                    return false;
-                }
-
-                publishDetails.Insert(0, $"{items} inventory quantity items were published.");
-
-                return true;
             }
-
-            Logger.Instance.Warning("Failed to migrate Inventory Quantities.");
-            publishDetails.Insert(0, "Failed to migrate Inventory Quantities");
-            return false;
+            catch (System.Exception ex)
+            {
+                Logger.Instance.Warning("Failed to migrate Inventory Quantities.");
+                publishDetails.Insert(0, "Failed to migrate Inventory Quantities");
+                Logger.Instance.Error("Inventory Quanity Error" + ex.Message);
+                Logger.Instance.Error(ex.StackTrace);
+                return false;
+            }
         }
     }
 }

@@ -67,12 +67,18 @@ namespace LinkGreenODBCUtility
             processDetails = new List<string>();
             try
             {
+                Logger.Instance.Debug("Publish Start");
                 Empty();
+                Logger.Instance.Debug("Publish Emptied");
                 Download();
+                Logger.Instance.Debug("Publish Downloaded");
 
                 var mappedDsnName = new Mapping().GetDsnName(OrdersFromLinkGreenRepository.TableName);
+                Logger.Instance.Debug($"Publish DSN Name {mappedDsnName}");
                 var newMapping = new Mapping(mappedDsnName);
+                Logger.Instance.Debug("Publish Starting Push");
                 var pushed = newMapping.PushData(OrdersFromLinkGreenRepository.TableName, OrdersFromLinkGreenRepository.TableKey, true);
+                Logger.Instance.Debug($"Publish Finished Push {pushed}");
                 if (pushed)
                 {
                     Logger.Instance.Debug("Orders migrated from utility to mapped production database.");
@@ -100,6 +106,21 @@ namespace LinkGreenODBCUtility
             {
                 Logger.Instance.Error($"Error Publishing Orders From LinkGreen: {ex.GetBaseException().Message}");
                 processDetails.Add(ex.GetBaseException().Message);
+
+                Logger.Instance.Error("Orders From OrderEase Error" + ex.Message);
+                Logger.Instance.Error(ex.StackTrace);
+
+
+                return false;
+            }
+            catch (System.Exception ex)
+            {
+                Logger.Instance.Error($"General Error Publishing Orders From LinkGreen: {ex.GetBaseException().Message}");
+                processDetails.Add(ex.GetBaseException().Message);
+
+                Logger.Instance.Error("General Orders From OrderEase Error" + ex.Message);
+                Logger.Instance.Error(ex.StackTrace);
+
                 return false;
             }
         }
