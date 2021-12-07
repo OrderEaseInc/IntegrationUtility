@@ -122,6 +122,10 @@ namespace LinkGreenODBCUtility
                 Logger.Instance.Error(ex.StackTrace);
                 return false;
             }
+
+            Logger.Instance.Warning("Failed to migrate Inventory Quantities Non-Error.");
+            publishDetails.Insert(0, "Failed to migrate Inventory Quantities Non-Error");
+            return false;
         }
     }
 }
