@@ -62,12 +62,27 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
-        public static bool IsPropertyExist(dynamic settings, string name)
+        /// <summary>
+        /// Try to get the RetailSell value from the reader - may not exist on reader. and will throw exception if it doesn't exist.  
+        /// So just catch and assign false if it doesn't exist
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private static bool TryGetRetailSell(dynamic reader)
         {
-            if (settings is ExpandoObject)
-                return ((IDictionary<string, object>)settings).ContainsKey(name);
-
-            return settings.GetType().GetProperty(name) != null;
+            try
+            {
+                return reader.RetailSell != null &&
+                                         (reader.RetailSell.Equals(true) ||
+                                          Convert.ToString(reader.RetailSell).ToLower() == "true" ||
+                                          Convert.ToString(reader.RetailSell).ToLower() == "1" ||
+                                          Convert.ToString(reader.RetailSell).ToLower() == "y" ||
+                                          Convert.ToString(reader.RetailSell).ToLower() == "yes");
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
@@ -101,21 +116,16 @@ namespace DataTransfer.AccessDatabase
                     MasterQuantityDescription = reader.MasterQuantityDescription ?? "",
                     MinOrderSpring = reader.MinOrderSpring ?? 0,
                     MinOrderSummer = reader.MinOrderSummer ?? 0,
-                    NetPrice = reader.NetPrice != null ? (decimal) reader.NetPrice : 0,
+                    NetPrice = reader.NetPrice != null ? (decimal)reader.NetPrice : 0,
                     OpenSizeDescription = reader.OpenSizeDescription ?? "",
                     PrivateSKU = reader.PrivateSKU.ToString(),
                     QuantityAvailable = reader.QuantityAvailable ?? 0,
                     SlaveQuantityDescription = reader.SlaveQuantityDescription ?? "",
                     SlaveQuantityPerMaster = reader.SlaveQuantityPerMaster ?? 0,
                     SuggestedRetailPrice =
-                        reader.SuggestedRetailPrice != null ? (decimal) reader.SuggestedRetailPrice : 0,
+                        reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
                     UPC = reader.UPC,
-                    RetailSell = IsPropertyExist(reader, "RetailSell") && reader.RetailSell != null &&
-                                 (reader.RetailSell.Equals(true) ||
-                                  Convert.ToString(reader.RetailSell).ToLower() == "true" ||
-                                  Convert.ToString(reader.RetailSell).ToLower() == "1" ||
-                                  Convert.ToString(reader.RetailSell).ToLower() == "y" ||
-                                  Convert.ToString(reader.RetailSell).ToLower() == "yes")
+                    RetailSell = TryGetRetailSell(reader)
                 };
 
                 var t = (Type)reader.GetType();
