@@ -58,7 +58,10 @@ namespace LinkGreenODBCUtility
         {
             try
             {
-                return decimal.Parse(value, NumberStyles.AllowCurrencySymbol | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands, new CultureInfo("en-US")).ToString();
+                return decimal
+                    .Parse(value,
+                        NumberStyles.AllowCurrencySymbol | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands,
+                        new CultureInfo("en-US")).ToString(CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {

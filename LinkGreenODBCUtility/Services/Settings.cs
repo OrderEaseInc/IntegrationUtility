@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.ComponentModel;
 using System.Data.OleDb;
 using System.Configuration;
@@ -9,6 +8,7 @@ using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public static class Settings
@@ -46,13 +46,13 @@ namespace LinkGreenODBCUtility
             }
             catch (Exception e)
             {
-                Logger.Instance.Error($"An error occured while initializing the app config: {e.Message}");
+                Logger.Instance.Error($"An error occurred while initializing the app config: {e.Message}");
             }
         }
 
         public static bool TryConnect()
         {
-            System.IO.Directory.SetCurrentDirectory(System.AppDomain.CurrentDomain.BaseDirectory);
+            System.IO.Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             //var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
             {
@@ -99,8 +99,9 @@ namespace LinkGreenODBCUtility
                 return GetMappingSettingValue<T>(settingName);
 
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            using (var command = new OleDbCommand($"SELECT `{settingName}` FROM `{GetTableName(settingTableName)}` WHERE `Id` = 1", cInstance.GetConnection()))
             {
-                var command = new OleDbCommand($"SELECT `{settingName}` FROM `{GetTableName(settingTableName)}` WHERE `Id` = 1", cInstance.GetConnection());
+
                 command.Connection.Open();
                 try
                 {
@@ -120,18 +121,17 @@ namespace LinkGreenODBCUtility
                 }
             }
 
-            return default(T);
+            return default;
         }
 
 
         private static void SaveMappingSettingValue(string dbSettingName, object value)
         {
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            using (var command = new OleDbCommand(
+                       $"SELECT COUNT(*) FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
+                       cInstance.GetConnection()))
             {
-                var command =
-                    new OleDbCommand(
-                        $"SELECT COUNT(*) FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
-                        cInstance.GetConnection());
                 try
                 {
                     command.Connection.Open();
@@ -145,7 +145,7 @@ namespace LinkGreenODBCUtility
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occured while updating MappingTable {dbSettingName}. {e.Message}");
+                    Logger.Instance.Error($"An error occurred while updating MappingTable {dbSettingName}. {e.Message}");
                 }
                 finally
                 {
@@ -157,30 +157,30 @@ namespace LinkGreenODBCUtility
         private static T GetMappingSettingValue<T>(string dbSettingName)
         {
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            using (var command = new OleDbCommand(
+                       $"SELECT SettingValue FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
+                       cInstance.GetConnection()))
             {
-                var command =
-                    new OleDbCommand(
-                        $"SELECT SettingValue FROM `{GetTableName(SettingsTable.MigrationTableSettings)}` WHERE SettingName = '{dbSettingName}'",
-                        cInstance.GetConnection());
+
                 try
                 {
                     command.Connection.Open();
                     var value = command.ExecuteScalar();
                     if (value == null)
-                        return default(T);
+                        return default;
                     else
                         return (T)Convert.ChangeType(value, typeof(T));
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occured while updating MappingTable {dbSettingName}. {e.Message}");
+                    Logger.Instance.Error($"An error occurred while updating MappingTable {dbSettingName}. {e.Message}");
                 }
                 finally
                 {
                     command.Connection.Close();
                 }
 
-                return default(T);
+                return default;
             }
         }
 
@@ -195,9 +195,10 @@ namespace LinkGreenODBCUtility
             }
 
             using (var cInstance = new OleDbConnectionInstance(ConnectionString))
+            using (var command = new OleDbCommand($"UPDATE `{GetTableName(settingsTable)}` SET `{dbSettingName}` = @value WHERE `ID` = 1",
+                       cInstance.GetConnection()))
             {
-                var command = new OleDbCommand($"UPDATE `{GetTableName(settingsTable)}` SET `{dbSettingName}` = @value WHERE `ID` = 1",
-                    cInstance.GetConnection());
+
                 command.Parameters.AddWithValue("@value", value);
 
                 command.Connection.Open();
@@ -213,7 +214,7 @@ namespace LinkGreenODBCUtility
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occured while updating {dbSettingName}. {e.Message}");
+                    Logger.Instance.Error($"An error occurred while updating {dbSettingName}. {e.Message}");
                 }
                 finally
                 {

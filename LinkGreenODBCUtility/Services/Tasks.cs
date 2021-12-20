@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-
+using System.Globalization;
 using DataTransfer.AccessDatabase;
 using DataTransfer.AccessDatabase.Models;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
-    class Tasks
+    internal class Tasks
     {
         public string Task;
         private DateTime? _executionStartDateTime;
@@ -17,89 +18,105 @@ namespace LinkGreenODBCUtility
             Task = task;
         }
 
-        public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval, string externalExecutable, string jobParameters)
+        public bool CreateTask(string taskName, string displayName, DateTime startDateTime, int repeatInterval,
+            string externalExecutable, string jobParameters)
         {
-            // var _connection = ConnectionInstance.Instance.GetConnection($"DSN={Settings.DsnName}");
-            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, externalExecutable, JobParameters) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString()}', {repeatInterval}, '{externalExecutable.Replace("'", "''")}', '{jobParameters.Replace("'", "''")}')")
-            {
-                Connection = _connection
-            };
+            var taskCreated = false;
 
-            _connection.Open();
-            try
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command = new OleDbCommand(
+                           $"INSERT INTO Tasks (TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, externalExecutable, JobParameters) VALUES ('{taskName}', '{displayName}', '{startDateTime.ToString(CultureInfo.InvariantCulture)}', {repeatInterval}, '{externalExecutable.Replace("'", "''")}', '{jobParameters.Replace("'", "''")}')")
+            { Connection = connection })
             {
-                command.ExecuteNonQuery();
-                Logger.Instance.Debug($"Task saved: '{taskName}'");
 
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.Instance.Error($"An error occured while creating the task {taskName}.");
-            }
-            finally
-            {
-                _connection.Close();
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                    Logger.Instance.Debug($"Task saved: '{taskName}'");
+
+                    taskCreated = true;
+                }
+                catch (Exception)
+                {
+                    Logger.Instance.Error($"An error occured while creating the task {taskName}.");
+                }
+                finally
+                {
+                    command.Dispose();
+
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
 
-            return false;
+            return taskCreated;
         }
 
         public bool SetStatus(string taskName, string status)
         {
-            var now = DateTime.Now.ToString();
-            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"UPDATE Tasks SET Status = '{status}' WHERE TaskName = '{taskName}'")
-            {
-                Connection = _connection
-            };
+            var statusSet = false;
 
-            _connection.Open();
-            try
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command = new OleDbCommand($"UPDATE Tasks SET Status = '{status}' WHERE TaskName = '{taskName}'")
+            { Connection = connection })
             {
-                command.ExecuteNonQuery();
-                Logger.Instance.Debug($"Task status updated: '{taskName}' {status}");
 
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.Instance.Error($"An error occured while updating the status of task {taskName}.");
-            }
-            finally
-            {
-                _connection.Close();
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                    Logger.Instance.Debug($"Task status updated: '{taskName}' {status}");
+
+                    statusSet = true;
+                }
+                catch (Exception)
+                {
+                    Logger.Instance.Error($"An error occurred while updating the status of task {taskName}.");
+                }
+                finally
+                {
+                    command.Dispose();
+
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
 
-            return false;
+            return statusSet;
         }
 
         public bool StartTask(string taskName)
         {
             var dateNow = DateTime.Now;
-            var now = dateNow.ToString();
-            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"UPDATE Tasks SET ExecutionStartDateTime = '{now}' WHERE TaskName = '{taskName}'")
+            var now = dateNow.ToString(CultureInfo.InvariantCulture);
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command =
+                   new OleDbCommand($"UPDATE Tasks SET ExecutionStartDateTime = '{now}' WHERE TaskName = '{taskName}'")
+                   {
+                       Connection = connection
+                   })
             {
-                Connection = _connection
-            };
 
-            _connection.Open();
-            try
-            {
-                _executionStartDateTime = dateNow;
-                command.ExecuteNonQuery();
+                connection.Open();
+                try
+                {
+                    _executionStartDateTime = dateNow;
+                    command.ExecuteNonQuery();
 
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.Instance.Error($"An error occured while updating the start datetime of task {taskName}.");
-            }
-            finally
-            {
-                _connection.Close();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    Logger.Instance.Error($"An error occurred while updating the start datetime of task {taskName}.");
+                }
+                finally
+                {
+                    command.Dispose();
+
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
 
             return false;
@@ -107,38 +124,42 @@ namespace LinkGreenODBCUtility
 
         public bool EndTask(string taskName)
         {
-            var now = DateTime.Now.ToString();
-            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand()
+            var now = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command = new OleDbCommand { Connection = connection })
             {
-                Connection = _connection
-            };
-            if (_executionStartDateTime != null)
-            {
-                TimeSpan executionDuration = DateTime.Now - (_executionStartDateTime ?? DateTime.Now);
-                double executionDurationSeconds = executionDuration.TotalSeconds;
+                if (_executionStartDateTime != null)
+                {
+                    var executionDuration = DateTime.Now - (_executionStartDateTime ?? DateTime.Now);
+                    var executionDurationSeconds = executionDuration.TotalSeconds;
 
-                command.CommandText = $"UPDATE Tasks SET ExecutionEndDateTime = '{now}', ExecutionDuration = {executionDurationSeconds} WHERE TaskName = '{taskName}'";
-            }
-            else
-            {
-                command.CommandText = $"UPDATE Tasks SET ExecutionEndDateTime = '{now}' WHERE TaskName = '{taskName}'";
-            }
+                    command.CommandText =
+                        $"UPDATE Tasks SET ExecutionEndDateTime = '{now}', ExecutionDuration = {executionDurationSeconds} WHERE TaskName = '{taskName}'";
+                }
+                else
+                {
+                    command.CommandText =
+                        $"UPDATE Tasks SET ExecutionEndDateTime = '{now}' WHERE TaskName = '{taskName}'";
+                }
 
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
 
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.Instance.Error($"An error occured while updating the end datetime of task {taskName}.");
-            }
-            finally
-            {
-                _connection.Close();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    Logger.Instance.Error($"An error occurred while updating the end datetime of task {taskName}.");
+                }
+                finally
+                {
+                    command.Dispose();
+
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
 
             return false;
@@ -146,27 +167,30 @@ namespace LinkGreenODBCUtility
 
         public bool DeleteTask(string taskName)
         {
-            var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command = new OleDbCommand($"DELETE FROM Tasks WHERE TaskName = '{taskName}'")
+            { Connection = connection })
             {
-                Connection = _connection
-            };
 
-            _connection.Open();
-            try
-            {
-                command.ExecuteNonQuery();
-                Logger.Instance.Debug($"Task deleted: '{taskName}'");
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                    Logger.Instance.Debug($"Task deleted: '{taskName}'");
 
-                return true;
-            }
-            catch (Exception)
-            {
-                Logger.Instance.Error($"An error occured while deleting the task {taskName}.");
-            }
-            finally
-            {
-                _connection.Close();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    Logger.Instance.Error($"An error occurred while deleting the task {taskName}.");
+                }
+                finally
+                {
+                    command.Dispose();
+
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
 
             return false;
@@ -174,14 +198,14 @@ namespace LinkGreenODBCUtility
 
         public IEnumerable<Task> GetAll()
         {
-            var TaskRepo = new TaskRepository(Settings.ConnectionString);
-            return TaskRepo.GetAll();
+            var taskRepo = new TaskRepository(Settings.ConnectionString);
+            return taskRepo.GetAll();
         }
 
         public Task GetTask(string taskName)
         {
-            var TaskRepo = new TaskRepository(Settings.ConnectionString);
-            return TaskRepo.GetTask(taskName);
+            var taskRepo = new TaskRepository(Settings.ConnectionString);
+            return taskRepo.GetTask(taskName);
         }
 
         public void RestoreTasks()
@@ -196,34 +220,42 @@ namespace LinkGreenODBCUtility
 
         public bool TaskExists(string task = null)
         {
-            if (!string.IsNullOrEmpty(task) || !string.IsNullOrEmpty(Task))
+            if (string.IsNullOrEmpty(task) && string.IsNullOrEmpty(Task)) return false;
+
+
+            if (string.IsNullOrEmpty(task))
             {
-                if (string.IsNullOrEmpty(task))
-                {
-                    task = Task;
-                }
+                task = Task;
+            }
 
-                var _connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-                var command = new OleDbCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", _connection);
-                _connection.Open();
-                var reader = command.ExecuteReader();
-                try
+            var taskExists = false;
+
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command = new OleDbCommand($"SELECT * FROM `Tasks` WHERE TaskName = '{task}'", connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+
+                    try
                     {
-                        return true;
+                        if (reader.Read())
+                            taskExists = true;
                     }
+                    finally
+                    {
+                        reader.Close();
+                        reader.Dispose();
 
-                    return false;
-                }
-                finally
-                {
-                    reader.Close();
-                    _connection.Close();
+                        command.Dispose();
+
+                        connection.Close();
+                        connection.Dispose();
+                    }
                 }
             }
 
-            return false;
+            return taskExists;
         }
     }
 }

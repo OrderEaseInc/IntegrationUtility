@@ -13,6 +13,7 @@ namespace DataTransfer.AccessDatabase
         /// Create a new instance of CountryMappingRepository
         /// </summary>
         /// <param name="connectionString"></param>
+        /// <param name="connection"></param>
         public ProvinceMappingRepository(string connectionString, OdbcConnection connection = null) : base(
             connectionString)
         {

@@ -32,16 +32,15 @@
 #endregion
 
 using System;
-using System.Reflection;
 using System.Collections;
-using System.Globalization;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using System.Text;
 
-
-namespace Westwind.Utilities
+namespace DataTransfer.AccessDatabase.Utils
 {
     /// <summary>
     /// Collection of Reflection and type conversion related utility functions

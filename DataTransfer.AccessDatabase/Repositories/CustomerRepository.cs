@@ -130,7 +130,7 @@ namespace DataTransfer.AccessDatabase
 
         private object CleanNull(object value)
         {
-            if (value == null) return value;
+            if (value == null) return null;
 
             return (value.ToString().Trim().ToLower().Equals("null") ? null : value) ?? string.Empty;
         }

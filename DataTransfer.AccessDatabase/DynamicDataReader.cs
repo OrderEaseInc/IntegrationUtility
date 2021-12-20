@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Dynamic;
-using Westwind.Utilities;
+using DataTransfer.AccessDatabase.Utils;
 
 /// <summary>
 /// This class provides an easy way to use object.property
@@ -11,12 +11,13 @@ using Westwind.Utilities;
 /// The class also automatically fixes up DbNull values
 /// (null into .NET and DbNUll)
 /// </summary>
+// ReSharper disable once CheckNamespace
 public class DynamicDataReader : DynamicObject
 {
     /// <summary>
     /// Cached Instance of DataReader passed in
     /// </summary>
-    IDataReader DataReader;
+    private readonly IDataReader _dataReader;
 
     /// <summary>
     /// Pass in a loaded DataReader
@@ -24,7 +25,7 @@ public class DynamicDataReader : DynamicObject
     /// <param name="dataReader">DataReader instance to work off</param>
     public DynamicDataReader(IDataReader dataReader)
     {
-        DataReader = dataReader;
+        _dataReader = dataReader;
     }
 
     /// <summary>
@@ -41,15 +42,15 @@ public class DynamicDataReader : DynamicObject
 
         // 'Implement' common reader properties directly
         if (binder.Name == "IsClosed")
-            result = DataReader.IsClosed;
+            result = _dataReader.IsClosed;
         else if (binder.Name == "RecordsAffected")
-            result = DataReader.RecordsAffected;
+            result = _dataReader.RecordsAffected;
         // lookup column names as fields
         else
         {
             try
             {
-                result = DataReader[binder.Name];
+                result = _dataReader[binder.Name];
                 if (result == DBNull.Value)
                     result = null;
             }
@@ -67,16 +68,16 @@ public class DynamicDataReader : DynamicObject
     {
         // Implement most commonly used method
         if (binder.Name == "Read")
-            result = DataReader.Read();
+            result = _dataReader.Read();
         else if (binder.Name == "Close")
         {
-            DataReader.Close();
+            _dataReader.Close();
             result = null;
         }
         else
             // call other DataReader methods using Reflection (slow - not recommended)
             // recommend you use full DataReader instance
-            result = ReflectionUtils.CallMethod(DataReader, binder.Name, args);
+            result = ReflectionUtils.CallMethod(_dataReader, binder.Name, args);
 
         return true;
     }

@@ -1,6 +1,7 @@
 ﻿using LinkGreen.Email;
 using Quartz;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public class CategoriesSyncJob : IJob

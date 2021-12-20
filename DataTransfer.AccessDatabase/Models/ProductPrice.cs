@@ -1,11 +1,4 @@
-﻿using LinkGreen.Applications.Common.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataTransfer.AccessDatabase
+﻿namespace DataTransfer.AccessDatabase
 {
     /// <summary>
     /// Gets turned into InventoryItemRequest for API push to LinkGreen app

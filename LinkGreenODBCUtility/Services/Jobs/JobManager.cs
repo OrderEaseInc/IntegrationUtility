@@ -9,6 +9,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public static class JobManager

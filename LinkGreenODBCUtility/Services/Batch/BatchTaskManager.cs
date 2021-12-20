@@ -18,24 +18,31 @@ namespace LinkGreenODBCUtility
 
         public List<string> GetCommandsByTrigger()
         {
-            var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection();
-            var command = new OleDbCommand($"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC", connection);
-            connection.Open();
-            var reader = command.ExecuteReader();
-            try
+            using (var connection = new OleDbConnectionInstance(Settings.ConnectionString).GetConnection())
+            using (var command =
+                   new OleDbCommand(
+                       $"SELECT `Command` FROM `BatchTasks` WHERE (`Trigger` = '{Trigger}' OR `Task` = '{Task}') AND `Priority` <> -1 ORDER BY `Priority` DESC",
+                       connection))
             {
-                List<string> commands = new List<string>();
-                while (reader.Read())
+                connection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    commands.Add(reader[0].ToString());
-                }
+                    try
+                    {
+                        List<string> commands = new List<string>();
+                        while (reader.Read())
+                        {
+                            commands.Add(reader[0].ToString());
+                        }
 
-                return commands;
-            }
-            finally
-            {
-                reader.Close();
-                connection.Close();
+                        return commands;
+                    }
+                    finally
+                    {
+                        reader.Close();
+                        connection.Close();
+                    }
+                }
             }
         }
     }

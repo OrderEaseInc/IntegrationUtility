@@ -44,23 +44,26 @@ namespace DataTransfer.AccessDatabase
             command.Connection.Open();
             try
             {
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
-                //var reader = command.ExecuteReader();
-
-                try
+                using (var dataReader = command.ExecuteReader())
                 {
-                    while (reader.Read())
-                        list.Add(PopulateRecord(reader));
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
+                    dynamic reader = new DynamicDataReader(dataReader);
+                    try
+                    {
+                        while (reader.Read())
+                            list.Add(PopulateRecord(reader));
+                    }
+                    finally
+                    {
+                        // Always call Close when done reading.
+                        reader.Close();
+                        dataReader.Close();
+                    }
                 }
             }
             finally
             {
                 command.Connection.Close();
+                command.Connection.Dispose();
             }
 
             return list;
@@ -73,26 +76,30 @@ namespace DataTransfer.AccessDatabase
             command.Connection.Open();
             try
             {
-                //var reader = command.ExecuteReader();
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
+                using (var dataReader = command.ExecuteReader())
+                {
+                    dynamic reader = new DynamicDataReader(dataReader);
 
-                try
-                {
-                    while (reader.Read())
+                    try
                     {
-                        record = PopulateRecord(reader);
-                        break;
+                        while (reader.Read())
+                        {
+                            record = PopulateRecord(reader);
+                            break;
+                        }
                     }
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
+                    finally
+                    {
+                        // Always call Close when done reading.
+                        reader.Close();
+                        dataReader.Close();
+                    }
                 }
             }
             finally
             {
                 command.Connection.Close();
+                command.Connection.Dispose();
             }
             return record;
         }
@@ -104,26 +111,30 @@ namespace DataTransfer.AccessDatabase
             command.Connection.Open();
             try
             {
-                //var reader = command.ExecuteReader();
-                dynamic reader = new DynamicDataReader(command.ExecuteReader());
+                using (var dataReader = command.ExecuteReader())
+                {
+                    dynamic reader = new DynamicDataReader(dataReader);
 
-                try
-                {
-                    while (reader.Read())
+                    try
                     {
-                        var record = PopulateRecord(reader);
-                        if (record != null) list.Add(record);
+                        while (reader.Read())
+                        {
+                            var record = PopulateRecord(reader);
+                            if (record != null) list.Add(record);
+                        }
                     }
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
+                    finally
+                    {
+                        // Always call Close when done reading.
+                        reader.Close();
+                        dataReader.Close();
+                    }
                 }
             }
             finally
             {
                 command.Connection.Close();
+                command.Connection.Dispose();
             }
             return list;
         }
@@ -140,6 +151,7 @@ namespace DataTransfer.AccessDatabase
             finally
             {
                 command.Connection.Close();
+                command.Connection.Dispose();
             }
         }
 

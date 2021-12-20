@@ -8,18 +8,19 @@ using Microsoft.ApplicationInsights.DataContracts;
 using System.Data.Odbc;
 using DataTransfer.AccessDatabase;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public class Logger
     {
         private static OdbcConnection _connection;
         public static string _loggerDsnName = "LinkGreenLog";
-        private static string _loggerConnectionString = $"DSN={_loggerDsnName}";
+        private static readonly string _loggerConnectionString = $"DSN={_loggerDsnName}";
         // private static string DatetimeFormat;
         private static TelemetryClient tc = new TelemetryClient();
         private static LoggerModel _loggerModel;
         private static Logger instance;
-        private static readonly object padlock = new object();
+        private static readonly object Padlock = new object();
         private static readonly Dictionary<SeverityLevel, string> LevelNames = new Dictionary<SeverityLevel, string>()
         {
             { SeverityLevel.Information, "INFO" },
@@ -40,7 +41,7 @@ namespace LinkGreenODBCUtility
             {
                 if (instance == null)
                 {
-                    lock (padlock)
+                    lock (Padlock)
                     {
                         if (instance == null)
                         {
@@ -166,25 +167,26 @@ namespace LinkGreenODBCUtility
             _connection = ConnectionInstance.Instance.GetConnection(_loggerConnectionString);
             text = text.Replace("'", "''");
             text = text.Replace("\"", "\\\"");
-            var command = new OdbcCommand($"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
+            using (var command = new OdbcCommand(
+                       $"INSERT INTO `Log` (`Level`, `Message`, `Timestamp`) VALUES('{LevelNames[level]}', '{text}', '{DateTime.Now}')")
+            { Connection = _connection })
             {
-                Connection = _connection
-            };
 
-            try
-            {
-                if (_connection.State == ConnectionState.Closed)
+                try
                 {
+                    if (_connection.State != ConnectionState.Closed) return;
+
+
                     _connection.Open();
                     if (_connection.State == ConnectionState.Open)
                     {
                         command.ExecuteNonQuery();
                     }
                 }
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection(_loggerConnectionString);
+                finally
+                {
+                    ConnectionInstance.CloseConnection(_loggerConnectionString);
+                }
             }
         }
 
