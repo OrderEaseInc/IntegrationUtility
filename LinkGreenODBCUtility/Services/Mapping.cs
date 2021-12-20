@@ -1393,7 +1393,7 @@ namespace LinkGreenODBCUtility
                         }
                         catch (Exception e)
                         {
-                            Logger.Instance.Error($"An error occured while populating the preview table: {e.Message}");
+                            Logger.Instance.Error($"An error occurred while populating the preview table: {e.Message}");
                         }
                         finally
                         {

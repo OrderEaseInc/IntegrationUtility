@@ -372,7 +372,7 @@ namespace LinkGreenODBCUtility
             }
             catch (Exception e)
             {
-                Logger.Instance.Error($"An error occured while setting up the user config: {e.Message}");
+                Logger.Instance.Error($"An error occurred while setting up the user config: {e.Message}");
             }
         }
 

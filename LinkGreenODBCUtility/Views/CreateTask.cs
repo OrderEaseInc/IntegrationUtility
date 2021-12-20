@@ -102,8 +102,8 @@ namespace LinkGreenODBCUtility
             }
             catch (ArgumentException ex)
             {
-                Logger.Instance.Error($"An error occured while creating the task {jobName}: {ex}");
-                MessageBox.Show($@"An error occured while creating the task {jobName}");
+                Logger.Instance.Error($"An error occurred while creating the task {jobName}: {ex}");
+                MessageBox.Show($@"An error occurred while creating the task {jobName}");
                 TaskManager.LoadTasks();
             }
         }

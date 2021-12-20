@@ -39,7 +39,7 @@ namespace LinkGreenODBCUtility
                 }
                 catch (Exception e)
                 {
-                    Logger.Instance.Error($"An error occured while saving Dsn Credentials.");
+                    Logger.Instance.Error($"An error occurred while saving Dsn Credentials.");
                     Logger.Instance.Error(e.GetBaseException().Message);
                 }
                 finally

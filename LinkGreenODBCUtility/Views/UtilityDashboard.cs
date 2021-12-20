@@ -363,7 +363,7 @@ namespace LinkGreenODBCUtility
                 }
                 else
                 {
-                    MessageBox.Show(@"An unexpected error has occured, please check your logs or contact support",
+                    MessageBox.Show(@"An unexpected error has occurred, please check your logs or contact support",
                         @"Publish Failed");
                     Logger.Instance.Error("Price Levels failed to migrate.");
 

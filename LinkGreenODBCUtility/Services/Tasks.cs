@@ -39,7 +39,7 @@ namespace LinkGreenODBCUtility
                 }
                 catch (Exception)
                 {
-                    Logger.Instance.Error($"An error occured while creating the task {taskName}.");
+                    Logger.Instance.Error($"An error occurred while creating the task {taskName}.");
                 }
                 finally
                 {
