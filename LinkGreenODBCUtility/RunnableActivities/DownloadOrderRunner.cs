@@ -39,6 +39,7 @@ namespace LinkGreenODBCUtility.RunnableActivities
                 }
                 else
                 {
+                    Logger.Instance.Debug("DownloadOrderRunner Non-Exception Error");
 
                     result = new RunnableResult
                     {
@@ -56,6 +57,8 @@ namespace LinkGreenODBCUtility.RunnableActivities
             }
             catch (Exception ex)
             {
+                Logger.Instance.Error("DownloadOrderRunner: " + ex.Message);
+                Logger.Instance.Debug(ex.StackTrace);
 
                 result = new RunnableResult
                 {

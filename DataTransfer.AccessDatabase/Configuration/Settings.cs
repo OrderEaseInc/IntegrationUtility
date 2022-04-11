@@ -251,13 +251,13 @@ namespace LinkGreenODBCUtility
             SaveSettingValue(Keys.StatusIdForOrderDownload, Keys.StatusIdForOrderDownload, string.Join(",", id));
         }
 
-        internal static string GetSendwithusApiKey()
+        public static string GetSendwithusApiKey()
         {
             var overrideKey = GetSettingValue<string>(Keys.SendwithusApiKey);
             return string.IsNullOrWhiteSpace(overrideKey) ? SendWithUsLiveKey : overrideKey;
         }
 
-        internal static bool GetUpdateExistingProducts()
+        public static bool GetUpdateExistingProducts()
         {
             var dbUpdateCategories = GetSettingValue<string>(Keys.UpdateExistingProducts, SettingsTable.MigrationTableSettings);
 
@@ -267,7 +267,7 @@ namespace LinkGreenODBCUtility
             return true;
         }
 
-        internal static void SaveUpdateExistingProducts(bool updateExistingProducts) =>
+        public static void SaveUpdateExistingProducts(bool updateExistingProducts) =>
             SaveSettingValue(Keys.UpdateExistingProducts, null, updateExistingProducts ? "1" : "0", SettingsTable.MigrationTableSettings);
 
         public static string GetInstallationId()

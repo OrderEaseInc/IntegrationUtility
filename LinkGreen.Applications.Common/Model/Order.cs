@@ -75,12 +75,14 @@ namespace LinkGreen.Applications.Common.Model
 
                 if (Notes.OurNotes == null) Notes.OurNotes = new List<NoteViewModel>();
                 if (Notes.TheirNotes == null) Notes.TheirNotes = new List<NoteViewModel>();
-                var combined = Notes.OurNotes?.Union(Notes.TheirNotes).Select(r =>
-                {
-                    if (!r.Content.StartsWith("Supplier:") && !r.Content.StartsWith("Buyer:"))
-                        r.Content = (r.CreatingCompanyId == r.SupplierId ? "Supplier: " : "Buyer: ") + r.Content;
-                    return r;
-                });
+                var combined = Notes.OurNotes?.Union(Notes.TheirNotes)
+                    .Where(n => n.Content != null)
+                    .Select(r =>
+                    {
+                        if (!r.Content.StartsWith("Supplier:") && !r.Content.StartsWith("Buyer:"))
+                            r.Content = (r.CreatingCompanyId == r.SupplierId ? "Supplier: " : "Buyer: ") + r.Content;
+                        return r;
+                    });
 
                 var note = string.Join(" - ", combined
                     .OrderBy(n => n.CreatedDate)
