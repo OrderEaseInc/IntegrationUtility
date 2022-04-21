@@ -72,7 +72,7 @@ namespace LinkGreenODBCUtility
 
         public static string CleanUniqueId(string s)
         {
-            return Regex.Replace(s, @"[^a-zA-Z0-9_-\/]+", string.Empty);
+            return Regex.Replace(s, @"[^\/a-zA-Z0-9_-]+", string.Empty);
         }
 
         public static string CleanCountry(string s, string connectionString, OdbcConnection connection)
