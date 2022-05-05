@@ -30,7 +30,7 @@ namespace LinkGreenODBCUtility
                 new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" },
                 new ListItem { Text = "Download Orders", Value = "DownloadOrders" },
                 new ListItem { Text = "External Script", Value = "ExternalExecute" },
-                new ListItem { Text = "Clean Log", Value = "CleanLog" }
+                new ListItem { Text = "Clean Log", Value = "PurgeLog" }
             });
 
             // Start Date/Time
