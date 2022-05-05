@@ -149,6 +149,7 @@
     <Compile Include="Services\Jobs\InventoryQuantitiesSyncJob.cs" />
     <Compile Include="Services\Jobs\LinkedSkusSyncJob.cs" />
     <Compile Include="Services\Jobs\OrderDownloadJob.cs" />
+    <Compile Include="Services\Jobs\PurgeLogJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Services\InventoryQuantity.cs" />

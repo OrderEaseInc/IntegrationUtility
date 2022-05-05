@@ -18,10 +18,10 @@ namespace LinkGreenODBCUtility
 
             taskComboBox.Items.AddRange(new object[]
             {
-                new ListItem { Text = "Sync Categories",  Value = "Categories" },
+                new ListItem { Text = "Sync Categories", Value = "Categories" },
                 new ListItem { Text = "Sync Customers", Value = "Customers" },
                 new ListItem { Text = "Sync Products", Value = "Products" },
-                new ListItem { Text = "Sync Inventory Quantities",  Value = "InventoryQuantities" },
+                new ListItem { Text = "Sync Inventory Quantities", Value = "InventoryQuantities" },
                 new ListItem { Text = "Sync Price Levels", Value = "Price Levels" },
                 new ListItem { Text = "Sync Pricing", Value = "Pricing" },
                 new ListItem { Text = "Sync Suppliers", Value = "Suppliers" },
@@ -29,7 +29,8 @@ namespace LinkGreenODBCUtility
                 new ListItem { Text = "Sync Linked Skus", Value = "LinkedSkus" },
                 new ListItem { Text = "Sync Buyer Inventory", Value = "BuyerInventory" },
                 new ListItem { Text = "Download Orders", Value = "DownloadOrders" },
-                new ListItem { Text = "External Script", Value = "ExternalExecute" }
+                new ListItem { Text = "External Script", Value = "ExternalExecute" },
+                new ListItem { Text = "Clean Log", Value = "CleanLog" }
             });
 
             // Start Date/Time

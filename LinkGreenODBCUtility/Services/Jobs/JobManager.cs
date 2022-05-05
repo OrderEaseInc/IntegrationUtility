@@ -98,6 +98,11 @@ namespace LinkGreenODBCUtility
                                     .WithIdentity(jobName, DefaultGroup)
                                     .Build();
                                 break;
+                            case "PurgeLog":
+                                job = JobBuilder.Create<PurgeLogJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
                             default:
                                 job = JobBuilder.Create<CategoriesSyncJob>()
                                     .WithIdentity(jobName, DefaultGroup)

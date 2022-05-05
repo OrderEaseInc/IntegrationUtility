@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using DataTransfer.AccessDatabase.Models;
 using Quartz;
@@ -123,13 +119,14 @@ namespace LinkGreenODBCUtility
                 && e.RowIndex >= 0)
             {
                 // Pause
-                DataGridViewRow row = senderGrid.CurrentCell.OwningRow;
-                string jobName = row.Cells[senderGrid.Columns["TaskName"].Index].Value.ToString();
+                var row = senderGrid.CurrentCell.OwningRow;
+                var jobName = row.Cells[senderGrid.Columns["TaskName"].Index].Value.ToString();
 
                 var job = JobManager.GetJob(jobName);
                 var runningJobContexts = JobManager.GetCurrentlyExecutingJobs();
-                List<IJobDetail> pausedJobs = new List<IJobDetail>();
-                foreach (IJobExecutionContext runningJobContext in runningJobContexts)
+                var pausedJobs = new List<IJobDetail>();
+
+                foreach (var runningJobContext in runningJobContexts)
                 {
                     if (JobManager.IsTriggerPaused(runningJobContext.Trigger.Key.Name, runningJobContext.Trigger.Key.Group))
                     {

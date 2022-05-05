@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
     class Log
     {
-        private static string LogTable = "Log";
-        private static string DsnName = Logger._loggerDsnName;
-        private static DateTime DeadDate = DateTime.Now.AddDays(-30);
+        private static readonly string LogTable = "Log";
+        private static readonly string DsnName = Logger._loggerDsnName;
+        private static DateTime _deadDate = DateTime.Now.AddDays(-15);
 
         public Log()
         {
@@ -24,7 +20,7 @@ namespace LinkGreenODBCUtility
         {
             var connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
             using (var command =
-                   new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {DeadDate.ToOADate()}")
+                   new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {_deadDate.ToOADate()}")
                    { Connection = connection })
             {
                 connection.Open();
@@ -35,13 +31,13 @@ namespace LinkGreenODBCUtility
                     if (affectedRows > 0)
                     {
                         Logger.Instance.Debug(
-                            $"Purged {affectedRows} log entries that had timestamps before {DeadDate}.");
+                            $"Purged {affectedRows} log entries that had timestamps before {_deadDate}.");
                     }
                 }
                 catch (OdbcException e)
                 {
                     Logger.Instance.Error(
-                        $"An error occurred while purging log entries with timestamps before {DeadDate}: {e.Message}");
+                        $"An error occurred while purging log entries with timestamps before {_deadDate}: {e.Message}");
                 }
                 finally
                 {
