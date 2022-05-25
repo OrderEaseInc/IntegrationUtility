@@ -233,6 +233,7 @@ namespace LinkGreenODBCUtility
             request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
             request.SuggestedRetailPrice = product.SuggestedRetailPrice;
             request.UPC = product.UPC;
+            request.DropShipSell = product.DropShipSell;
 
             if (existing != null)
             {
