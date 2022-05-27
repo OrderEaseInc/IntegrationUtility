@@ -84,9 +84,9 @@ namespace LinkGreenODBCUtility
         {
             if (Settings.DebugMode)
             {
+                SaveLog(SeverityLevel.Verbose, text);
                 SendLog(SeverityLevel.Verbose, text);
             }
-            SaveLog(SeverityLevel.Verbose, text);
         }
 
         /// <summary>
