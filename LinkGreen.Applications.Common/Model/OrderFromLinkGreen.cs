@@ -9,6 +9,7 @@ namespace LinkGreen.Applications.Common.Model
         public DateTime? ShippingDate { get; set; }
         public DateTime? RequestedShippingDate { get; set; }
         public DateTime? AnticipatedShipDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
         public string Status { get; set; }
         public string SupplierStatus { get; set; }
         public string PaymentTerm { get; set; }

@@ -73,7 +73,7 @@ namespace DataTransfer.AccessDatabase
                 "Freight, SupplierPO, BuyerPO, OrderNumber, ContactName, IsDirectDelivery, SupplierCanExport, " +
                 "SupplierCompanyId, BuyerCompanyId, BuyerCompanyName, OurCompanyNumber, OurBillToNumber, Name, " +
                 "UseAlternateAddress, AlternateProvince, AlternateReceiverName, " +
-                "AlternateAddress, AlternateCity, AlternatePostalCode, AlternatePhone, AlternateSpecialInstructions, ConsolidatedNote) " +
+                "AlternateAddress, AlternateCity, AlternatePostalCode, AlternatePhone, AlternateSpecialInstructions, ConsolidatedNote, SubmittedDate) " +
                 $"VALUES ({order.Id}, {Date(order.CreatedDate)}, {NullableDate(order.ShippingDate)}, {NullableDate(order.RequestedShippingDate)}, " +
                 $"{NullableDate(order.AnticipatedShipDate)}, {NullableString(order.Status)}, {NullableString(order.SupplierStatus)}, " +
                 $"{NullableString(order.PaymentTerm)}, {NullableInt(order.PaymentTermId)}, {NullableInt(order.SupplierStatusId)}, " +
@@ -83,7 +83,8 @@ namespace DataTransfer.AccessDatabase
                 $"{NullableString(order.OurCompanyNumber)}, {NullableString(order.OurBillToNumber)}, {NullableString(order.Name)}, " +
                 $"{Boolean(order.UseAlternateAddress)}, {NullableString(order.AlternateProvince)}, {NullableString(order.AlternateReceiverName)}, " +
                 $"{NullableString(order.AlternateAddress)}, {NullableString(order.AlternateCity)}, {NullableString(order.AlternatePostalCode)}, " +
-                $"{NullableString(order.AlternatePhone)}, {NullableString(order.AlternateSpecialInstructions)}, {NullableString(order.ConsolidatedNote)})";
+                $"{NullableString(order.AlternatePhone)}, {NullableString(order.AlternateSpecialInstructions)}, {NullableString(order.ConsolidatedNote)}, " + 
+                $"{NullableDate(order.SubmittedDate)})";
 
             using (var command = new OleDbCommand(sql))
             {
