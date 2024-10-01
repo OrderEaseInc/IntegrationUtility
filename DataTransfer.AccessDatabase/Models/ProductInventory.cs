@@ -33,8 +33,9 @@ namespace DataTransfer.AccessDatabase
         public string DirectDeliveryCode { get; set; }
         public bool IsDirectDelivery { get; set; }
         public bool RetailSell { get; set; }
+        public bool DropShipSell { get; set; }
 
-        public List<KeyValuePair<string, object>> ProductFeatures { get; set; }
+		public List<KeyValuePair<string, object>> ProductFeatures { get; set; }
     }
 
 }

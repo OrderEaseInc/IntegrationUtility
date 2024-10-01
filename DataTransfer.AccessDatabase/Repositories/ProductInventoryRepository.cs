@@ -85,8 +85,25 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
-        // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
-        protected override ProductInventory PopulateRecord(dynamic reader)
+        private static bool TryGetDropShipSell(dynamic reader)
+        {
+	        try
+	        {
+		        return reader.DropShipSell != null &&
+		               (reader.DropShipSell.Equals(true) ||
+		                Convert.ToString(reader.DropShipSell).ToLower() == "true" ||
+		                Convert.ToString(reader.DropShipSell).ToLower() == "1" ||
+		                Convert.ToString(reader.RetailSell).ToLower() == "y" ||
+		                Convert.ToString(reader.DropShipSell).ToLower() == "yes");
+	        }
+	        catch
+	        {
+		        return false;
+	        }
+        }
+
+		// NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
+		protected override ProductInventory PopulateRecord(dynamic reader)
         {
             try
             {
@@ -125,7 +142,8 @@ namespace DataTransfer.AccessDatabase
                     SuggestedRetailPrice =
                         reader.SuggestedRetailPrice != null ? (decimal)reader.SuggestedRetailPrice : 0,
                     UPC = reader.UPC,
-                    RetailSell = TryGetRetailSell(reader)
+                    RetailSell = TryGetRetailSell(reader),
+                    DropShipSell = TryGetDropShipSell(reader)
                 };
 
                 var t = (Type)reader.GetType();
