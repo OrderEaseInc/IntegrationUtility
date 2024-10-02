@@ -1,9 +1,9 @@
-﻿using System;
+﻿using LinkGreen.Applications.Common.Model;
+using Microsoft.CSharp.RuntimeBinder;
+using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using Microsoft.CSharp.RuntimeBinder;
-using LinkGreen.Applications.Common.Model;
 
 namespace DataTransfer.AccessDatabase
 {
@@ -143,7 +143,8 @@ namespace DataTransfer.AccessDatabase
                 return new CompanyAndRelationshipResult
                 {
                     //RelationshipId = reader.RelationshipId ?? null,
-                    //CompanyId = reader.CompanyId ?? null,
+                    //CompanyId = CleanNull(reader.CompanyId),
+                    Id = reader.Id,
                     ContactName = CleanNull(reader.ContactName),
                     ContactPhone = CleanNull(reader.ContactPhone),
                     ContactEmail = CleanNull(reader.ContactEmail),
@@ -158,9 +159,7 @@ namespace DataTransfer.AccessDatabase
                     PostalCode = CleanNull(reader.PostalCode),
                     Country = CleanNull(reader.Country),
                     FormattedPhone1 = CleanNull(reader.FormattedPhone1),
-                    FormattedPhone2 = CleanNull(reader.FormattedPhone2),
                     Email1 = CleanNull(reader.Email1),
-                    Email2 = CleanNull(reader.Email2),
                     Contact1 = CleanNull(reader.Contact1),
                     Contact2 = CleanNull(reader.Contact2),
                     Web = CleanNull(reader.Web),

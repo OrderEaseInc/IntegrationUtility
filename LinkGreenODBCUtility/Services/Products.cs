@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using DataTransfer.AccessDatabase;
+﻿using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 
 namespace LinkGreenODBCUtility
 {
@@ -18,7 +17,6 @@ namespace LinkGreenODBCUtility
 
         public Products()
         {
-
         }
 
         public Products(string clientDsnName)
@@ -64,94 +62,100 @@ namespace LinkGreenODBCUtility
             publishDetails = new List<string>();
             string apiKey = Settings.GetApiKey();
 
-            if (!string.IsNullOrEmpty(apiKey))
+            if (string.IsNullOrEmpty(apiKey))
             {
-                var products = new ProductInventoryRepository(Settings.ConnectionString).GetAll().ToList();
-                var existingCategories = WebServiceHelper.GetAllCategories();
+                publishDetails.Insert(0, "No Api Key set while executing products publish.");
+                Logger.Instance.Warning("No Api Key set while executing products publish.");
 
-                var existingInventory = WebServiceHelper.GetAllInventory();
-                var items = 0;
-
-                var bulkPushRequest = new List<InventoryItemRequest>();
-
-
-                var productsToAdd = products.Where(p => existingInventory.All(ei => ei.PrivateSKU != p.Id));
-                // Add new items
-                foreach (var product in productsToAdd)
-                {
-                    try
-                    {
-                        var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                        WebServiceHelper.PushInventoryItem(request, out var statusCode, out var content);
-
-                        bw?.ReportProgress(0,
-                            $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
-                        Logger.Instance.Debug(
-                            $"Finished importing product {items} of {products.Count}. Id: {product.Id}");
-                        Logger.Instance.Debug($"Adding response {product.Id} {statusCode}");
-                        Logger.Instance.Debug($"Adding response {product.Id} {content}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Instance.Error("Adding " + JsonConvert.SerializeObject(product) + Environment.NewLine + ex.Message +
-                                              Environment.NewLine + ex.StackTrace);
-                    }
-                }
-
-                // Update existing items
-                foreach (var product in products.Where(p => existingInventory.Any(ei => ei.PrivateSKU == p.Id)))
-                {
-                    try
-                    {
-                        var request = AddOrUpdateSupplierItem(product, existingInventory, ref existingCategories);
-                        if (request != null)
-                            bulkPushRequest.Add(request);
-                        if (bulkPushRequest.Count > 10)
-                        {
-                            WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode,
-                                out var content);
-                            Logger.Instance.Debug($"Bulk Push: Response: {statusCode}");
-                            Logger.Instance.Debug($"Bulk Push: Response Content: {content}");
-                            bulkPushRequest.Clear();
-                        }
-
-                        bw?.ReportProgress(0,
-                            $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
-                        Logger.Instance.Debug(
-                            $"Finished importing product {items} of {products.Count}. Id: {product.Id}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Instance.Error("Updating " + JsonConvert.SerializeObject(product) + Environment.NewLine + ex.Message +
-                                              Environment.NewLine + ex.StackTrace);
-                    }
-                }
-
-                if (bulkPushRequest.Count > 0)
-                {
-                    WebServiceHelper.PushBulkUpdateInventoryItem(bulkPushRequest.ToArray(), out var statusCode, out var content);
-                    Logger.Instance.Debug($"Bulk Push Response {statusCode}");
-                    Logger.Instance.Debug($"Bulk Push Response {content}");
-
-                }
-
-
-                WebServiceHelper.PostInventoryImport();
-                publishDetails.Insert(0, $"{items} products published to LinkGreen");
-                return true;
+                return false;
             }
 
-            publishDetails.Insert(0, "No Api Key set while executing products publish.");
-            Logger.Instance.Warning("No Api Key set while executing products publish.");
+            var products = new ProductInventoryRepository(Settings.ConnectionString).GetAll().ToList();
+            var existingCategories = WebServiceHelper.GetAllCategories();
 
-            return false;
+            var existingInventory = WebServiceHelper.GetAllInventory();
+            var items = 0;
+
+            var productsToImport = new List<SupplierInventoryItemImport>();
+
+            foreach (var product in products)
+            {
+                try
+                {
+                    var request = MapProducts(product, existingInventory, ref existingCategories);
+                    if (request != null)
+                        productsToImport.Add(request);
+
+                    if (productsToImport.Count == 400)
+                    {
+                        ProcessProductImport(productsToImport);
+                        productsToImport.Clear();
+                    }
+
+                    bw?.ReportProgress(0, $"Processing product sync (Pushing {++items}/{products.Count})\n\rPlease wait");
+                    //Logger.Instance.Debug($"Finished importing product {items} of {products.Count}. Id: {product.Id}");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance.Error("Import " + JsonConvert.SerializeObject(product) + Environment.NewLine + ex.Message +
+                                          Environment.NewLine + ex.StackTrace);
+                }
+            }
+
+            if (productsToImport.Count < 400)
+                ProcessProductImport(productsToImport);
+
+            publishDetails.Insert(0, $"{items} products published to OrderEase");
+            return true;
         }
 
-        private static InventoryItemRequest AddOrUpdateSupplierItem(ProductInventory product, List<InventoryItemResponse> existingInventory, ref List<PrivateCategory> existingCategories)
+        private static int? ProcessProductImport(List<SupplierInventoryItemImport> productsToImport)
+        {
+            var importRequest = new ProductImportRequest()
+            {
+                Products = productsToImport,
+                ImportConfig = new ProductImportConfig()
+            };
+
+            importRequest.ImportConfig.ProductImportOptions.Add(new ProductOptions()
+            {
+                Name = ProductImportOptions.CreateCategoryIfNotExists,
+                Selected = true
+            });
+
+            importRequest.ImportConfig.IntegrationKey = Guid.Parse("7201CCB7-AF24-4B16-9459-4DFCF8F9CB8A");
+
+            importRequest.ImportConfig.MappedColumns = new List<string>()
+            {
+                nameof(SupplierInventoryItemImport.PrivateSKU),
+                nameof(SupplierInventoryItemImport.Description),
+                nameof(SupplierInventoryItemImport.Comments),
+                nameof(SupplierInventoryItemImport.NetPrice),
+                nameof(SupplierInventoryItemImport.Inactive),
+                nameof(SupplierInventoryItemImport.MasterQuantityDescription),
+                nameof(SupplierInventoryItemImport.SlaveQuantityDescription),
+                nameof(SupplierInventoryItemImport.SlaveQuantityPerMaster),
+                nameof(SupplierInventoryItemImport.UPC),
+                nameof(SupplierInventoryItemImport.ProdWeight),
+                nameof(SupplierInventoryItemImport.UnitOfMeasureWeight),
+                nameof(SupplierInventoryItemImport.ExternalReference),
+                nameof(SupplierInventoryItemImport.ExternalSource),
+                nameof(SupplierInventoryItemImport.CategoryName),
+                nameof(SupplierInventoryItemImport.CatalogIntegrationReferences),
+                nameof(SupplierInventoryItemImport.ProductFeatureItems)
+            };
+
+            long timestamp = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+            importRequest.ImportConfig.FileName = $"ODBC_Products_{timestamp}_{productsToImport.Count}.json";
+
+            return WebServiceHelper.ImportProducts(importRequest);
+        }
+
+        private static SupplierInventoryItemImport MapProducts(ProductInventory product, List<InventoryItemResponse> existingInventory, ref List<PrivateCategory> existingCategories)
         {
             Trace.TraceInformation(product.Description);
 
-            var request = new InventoryItemRequest
+            var importItem = new SupplierInventoryItemImport()
             {
                 Description = product.Description ?? "",
                 PrivateSKU = product.Id,
@@ -160,6 +164,7 @@ namespace LinkGreenODBCUtility
                 RetailSell = product.RetailSell,
                 DropShipSell = product.DropShipSell
             };
+
 
             bool updateCategories = Settings.GetUpdateCategories();
             //lets check if this item already exists, if so just update qty, else
@@ -177,7 +182,7 @@ namespace LinkGreenODBCUtility
                 {
                     try
                     {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                        existingCategory = WebServiceHelper.PushCategory(new CreateCategoryRequest { data = product.Category });
                         existingCategories.Add(existingCategory);
                     }
                     catch (Exception ex)
@@ -196,7 +201,7 @@ namespace LinkGreenODBCUtility
                 {
                     try
                     {
-                        existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                        existingCategory = WebServiceHelper.PushCategory(new CreateCategoryRequest { data = product.Category });
                         existingCategories.Add(existingCategory);
                     }
                     catch (Exception ex)
@@ -212,48 +217,44 @@ namespace LinkGreenODBCUtility
 
             if (existingCategory != null && (updateCategories || existing == null))
             {
-                request.CategoryId = existingCategory.Id;
+                importItem.CategoryId = existingCategory.Id;
             }
             else if (existing != null)
             {
-                request.CategoryId = existing.CategoryId;
+                importItem.CategoryId = existing.CategoryId;
             }
 
-            request.NetPrice = product.NetPrice;
-            request.OpenSizeDescription = product.OpenSizeDescription ?? "";
-            request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
-            request.Comments = product.Comments ?? "";
-            request.DirectDeliveryCode = product.DirectDeliveryCode ?? "";
-            request.DirectDeliveryMinQuantity = product.DirectDeliveryMinQuantity;
-            request.FreightFactor = product.FreightFactor;
-            request.IsDirectDelivery = product.IsDirectDelivery;
-            request.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
-            request.MinOrderSpring = product.MinOrderSpring;
-            request.MinOrderSummer = product.MinOrderSummer;
-            request.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
-            request.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
-            request.SuggestedRetailPrice = product.SuggestedRetailPrice;
-            request.UPC = product.UPC;
+            importItem.NetPrice = product.NetPrice;
+            importItem.OpenSizeDescription = product.OpenSizeDescription ?? "";
+            importItem.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
+            importItem.Comments = product.Comments ?? "";
+            importItem.DirectDeliveryCode = product.DirectDeliveryCode ?? "";
+            importItem.DirectDeliveryMinQuantity = product.DirectDeliveryMinQuantity;
+            importItem.FreightFactor = product.FreightFactor;
+            importItem.IsDirectDelivery = product.IsDirectDelivery;
+            importItem.MasterQuantityDescription = product.MasterQuantityDescription ?? "";
+            importItem.MinOrderSpring = product.MinOrderSpring;
+            importItem.MinOrderSummer = product.MinOrderSummer;
+            importItem.SlaveQuantityDescription = product.SlaveQuantityDescription ?? "";
+            importItem.SlaveQuantityPerMaster = product.SlaveQuantityPerMaster;
+            importItem.SuggestedRetailPrice = product.SuggestedRetailPrice;
+            importItem.UPC = product.UPC;
 
-            if (existing != null)
-            {
-                request.Id = existing.Id;
-            }
 
             if (product.ProductFeatures != null && product.ProductFeatures.Any())
             {
-                request.ProductFeatures = product.ProductFeatures
+                importItem.ProductFeatureItems = product.ProductFeatures
                     .Where(p => p.Key != null && p.Value != null)
-                    .Select(p => new ProductFeatureRequest
+                    .Select(p => new ProductFeatureItem
                     {
                         FeatureGroupName = p.Key,
-                        Value = p.Value == null ? "" : p.Value.ToString(),
+                        Value_EN = p.Value == null ? "" : p.Value.ToString(),
                         FeatureId = p.Key + "_" + product.Id
                     }).ToList();
             }
 
-
-            return request;
+            return importItem;
         }
+
     }
 }

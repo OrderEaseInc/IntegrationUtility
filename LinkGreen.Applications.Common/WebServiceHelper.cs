@@ -1,11 +1,11 @@
-﻿using System;
+﻿using LinkGreen.Applications.Common.Model;
+using Newtonsoft.Json;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using LinkGreen.Applications.Common.Model;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace LinkGreen.Applications.Common
 {
@@ -13,13 +13,13 @@ namespace LinkGreen.Applications.Common
     {
         protected static RestClient Client;
         protected static RestClient NewApiClient;
+        protected static RestClient ClientIntegrationApiClient;
         public static string Key { get; set; }
         protected static string BaseUrl;
         protected static string NewApiBaseUrl;
+        protected static string ClientIntegrationApiBaseUrl;
         protected static string OrderStatuses;
 
-        // ReSharper disable once UnusedMember.Local
-        // This line ensures that the constructor is called and the static properties are populated from the config file.
         private static WebServiceHelper _instance = new WebServiceHelper();
 
         public WebServiceHelper()
@@ -27,6 +27,7 @@ namespace LinkGreen.Applications.Common
             Key = ConfigurationManager.AppSettings["ApiKey"];
             BaseUrl = ConfigurationManager.AppSettings["BaseUrl"];
             NewApiBaseUrl = ConfigurationManager.AppSettings["NewApiBaseUrl"];
+            ClientIntegrationApiBaseUrl = ConfigurationManager.AppSettings["ClientIntegrationApiBaseUrl"];
             OrderStatuses = ConfigurationManager.AppSettings["OrderStatuses"];
             Client = new RestClient(BaseUrl)
             {
@@ -39,24 +40,17 @@ namespace LinkGreen.Applications.Common
                 Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
                 ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
             };
-            //NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            NewApiClient.UserAgent = "OrderEaseAsync/1.5.0";
 
-        }
+            ClientIntegrationApiClient = new RestClient(ClientIntegrationApiBaseUrl)
+            {
+                Timeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds,
+                ReadWriteTimeout = (int)new TimeSpan(0, 2, 0).TotalMilliseconds
+            };
+            ClientIntegrationApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
+            ClientIntegrationApiClient.UserAgent = "OrderEaseAsync/1.5.0";
 
-        public static OrderSummary GetLastOrderNotDownloaded()
-        {
-            var requestUrl = $"orderservice/rest/OldestOrderNotExported/{Key}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            request.AddParameter("application/json; charset=utf-8", OrderStatuses, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
-
-            var response = Client.Execute<ApiResult<OrderSummary>>(request);
-
-            if (response.Data?.Result == null)
-                return null;
-
-            var order = response.Data.Item;
-            return order;
         }
 
         public static UserAndCompany GetUserInfoByApiKey(string apiKey)
@@ -76,156 +70,51 @@ namespace LinkGreen.Applications.Common
             return user;
         }
 
-        public static Relationship GetRelationship(int companyId)
-        {
-            var requestUrl = $"/relationshipservice/rest/GetRelationship/{Key}/{companyId}";
-            var request = new RestRequest(requestUrl, Method.GET);
-
-            var response = Client.Execute<ApiResult<Relationship>>(request);
-
-            if (response.Data.Result == null)
-                return null;
-
-            return response.Data.Item;
-        }
-
         public static Order DownloadOrderDetails(int id)
         {
-            var requestUrl = $"orderservice/rest/OrderDetails/{Key}/{id}";
+            var requestUrl = $"Order/GetForSupplierWithDetails/{id}";
             var request = new RestRequest(requestUrl, Method.GET);
 
-            var response = Client.Execute<ApiResult<Order>>(request);
+            var response = NewApiClient.Execute<ApiResult<Order>>(request);
 
-            if (response.Data.Result == null)
-                return null;
-
-            var order = response.Data.Item;
-            return order;
-        }
-
-        public static void PushTaxInfo(int relationshipId, string taxes)
-        {
-            var requestUrl = $"/relationshipservice/rest/UpdateTax/{Key}/{relationshipId}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            request.AddJsonBody(taxes);
-
-            var response = Client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error pushing taxes");
-        }
-
-        public static void PushRelationshipUpdate(Relationship relation)
-        {
-            var requestUrl = $"/relationshipservice/rest/UpdateDetails/{Key}/{relation.Id}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            request.AddJsonBody(relation);
-
-            var response = Client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error pushing relationship updates");
-        }
-
-        public static void MarkOrderExported(int orderId)
-        {
-            var requestUrl = $"/orderservice/rest/SetOrderExported/{Key}/{orderId}";
-            var request = new RestRequest(requestUrl, Method.POST);
-
-            var response = Client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error marking order as exported");
-        }
-
-        public static void UpdateOrderAccountingReference(int orderId, string accountingReference)
-        {
-            var requestUrl = $"/orderservice/rest/SetAccountingReference/{Key}/{orderId}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            var data = new { AccountingReference = accountingReference };
-            request.AddJsonBody(data);
-
-            var response = Client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error updating order accounting reference");
-        }
-
-        public static void UpdateInventoryItemAccountingReference(string sku, string accountingReference)
-        {
-            var requestUrl = $"/SupplierInventoryService/rest/UpdateAccountingReference/{Key}/{sku}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            var data = new { AccountingReference = accountingReference };
-            request.AddJsonBody(data);
-
-            var response = Client.Execute(request);
-
-            if (response.StatusCode != HttpStatusCode.OK)
-                throw new Exception("Error updating inventory item reference");
+            return response.Data.Result == null ? null : response.Data.Item;
         }
 
         public static List<InventoryItemResponse> GetAllInventory()
         {
-            var requestUrl = $"SupplierInventorySearchService/rest/{Key}";
+            var requestUrl = "SupplierInventorySearch/GetAll";
             var request = new RestRequest(requestUrl, Method.GET);
 
-            var response
-                = Client.Execute<ApiResult<List<InventoryItemResponse>>>(request);
+            var response = NewApiClient.Execute<ApiResult<List<InventoryItemResponse>>>(request);
 
-            if (response?.Data?.Result == null)
-                return new List<InventoryItemResponse>();
-
-            var inventory = response.Data.Item;
-            return inventory;
-        }
-
-        public static List<CompanyAndRelationshipResult> GetAllCompaniesAndRelationships()
-        {
-            var requestUrl = $"relationshipservice/rest/CompaniesAndRelationships/{Key}";
-            var request = new RestRequest(requestUrl, Method.GET);
-
-            var response
-                = Client.Execute<ApiResult<List<CompanyAndRelationshipResult>>>(request);
-
-            if (response?.Data?.Result == null)
-                return new List<CompanyAndRelationshipResult>();
-
-            var companies = response.Data.Item;
-            return companies;
+            return response?.Data?.Result == null ? new List<InventoryItemResponse>() : response.Data.Item;
         }
 
         public static List<PrivateCategory> GetAllCategories()
         {
-            var requestUrl = $"categoryservice/rest/getall/{Key}";
+            var requestUrl = "Category/GetAll";
             var request = new RestRequest(requestUrl, Method.GET);
 
-            var response
-                = Client.Execute<ApiResult<List<PrivateCategory>>>(request);
+            var response = NewApiClient.Execute<ApiResult<List<PrivateCategory>>>(request);
 
-            if (response?.Data?.Result == null)
-                return new List<PrivateCategory>();
-
-            var cats = response.Data.Item;
-            return cats;
+            return response?.Data?.Result == null ? new List<PrivateCategory>() : response.Data.Item;
         }
 
         public static List<Supplier> GetAllSuppliers()
         {
             var requestUrl = $"buyersupplierservice/rest/listsuppliers/{Key}";
             var request = new RestRequest(requestUrl, Method.GET);
-            var response = Client.Execute<ApiResult<List<Supplier>>>(request);
 
-            if (response?.Data?.Result == null) return new List<Supplier>();
+            var response = NewApiClient.Execute<ApiResult<List<Supplier>>>(request);
 
-            var buyers = response.Data.Item;
-            return buyers;
+            return response?.Data?.Result == null ? new List<Supplier>() : response.Data.Item;
         }
 
         public static List<SupplierInventory> GetSupplierInventory(int supplierId)
         {
-            var requestUrl = $"buyersupplierservice/rest/supplierinventoryavailable/{Key}/{supplierId}";
+            var requestUrl = $"BuyerSupplier/SupplierInventory/{Key}/{supplierId}";
             var request = new RestRequest(requestUrl, Method.GET);
-            var response = Client.Execute<ApiResult<List<SupplierInventory>>>(request);
+            var response = NewApiClient.Execute<ApiResult<List<SupplierInventory>>>(request);
 
             if (response?.Data?.Result == null) return new List<SupplierInventory>();
 
@@ -266,24 +155,6 @@ namespace LinkGreen.Applications.Common
             }
         }
 
-        public static void UpdateLinkedSku(LinkedItem item, string buyerLinkedSku)
-        {
-            var requestUrl = $"BuyerInventoryService/rest/LinkItem/{Key}";
-            var request = new RestRequest(requestUrl, Method.POST);
-            var body = new
-            {
-                BuyerSKU = buyerLinkedSku,
-                SupplierId = item.SupplierId.Value,
-                SupplierSKU = item.SupplierSku
-            };
-            request.AddJsonBody(body);
-            var response = Client.Execute<ApiResult<BuyerInventoryLinkItemResult>>(request);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception("Error linking the buyer inventory item");
-            }
-        }
-
         public static void UpdateInventoryItemQuantity(string sku, int newQty, string catalog)
         {
             var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantity/{Key}/{sku}/{newQty}";
@@ -299,36 +170,21 @@ namespace LinkGreen.Applications.Common
                 throw new Exception("Error updating inventory item quantity");
         }
 
-        public static bool PushProduct(InventoryItemRequest prod)
-        {
-            var requestUrl = $"/SupplierInventoryService/rest/AddItem/{Key}";
-            var request = new RestRequest(requestUrl, Method.POST);
-
-            request.AddJsonBody(prod);
-
-            var response = Client.Execute(request);
-
-            return response.StatusCode == HttpStatusCode.OK;
-        }
-
         public static List<PricingLevel> GetExistingPricingLevels()
         {
-            var requestUrl = $"/SupplierInventoryService/rest/GetPricingLevels/{Key}";
-            var request = new RestRequest(requestUrl, Method.GET) { RequestFormat = DataFormat.Json };
-            request.AddHeader("Content-Type", "application/json");
+            var requestUrl = "SupplierInventory/GetPricingLevels";
+            var request = new RestRequest(requestUrl, Method.GET);
 
-
-            var response = Client.Execute<ApiResult<List<PricingLevel>>>(request);
+            var response = NewApiClient.Execute<ApiResult<List<PricingLevel>>>(request);
 
             return response.Data?.Result == null ? null : response.Data.Item;
         }
 
         public static bool PushPricingLevel(PricingLevelRequest item)
         {
-            var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevel/{Key}";
+            var requestUrl = "SupplierInventory/AddPricingLevelItem";
             var request = new RestRequest(requestUrl, Method.POST);
             request.RequestFormat = DataFormat.Json;
-
             request.AddHeader("Content-Type", "application/json");
 
             var settings = new JsonSerializerSettings() { DateFormatHandling = DateFormatHandling.MicrosoftDateFormat };
@@ -336,7 +192,7 @@ namespace LinkGreen.Applications.Common
 
             request.AddParameter("application/json", json, null, ParameterType.RequestBody);
 
-            var response = Client.Execute(request);
+            var response = NewApiClient.Execute(request);
 
             return response.StatusCode == HttpStatusCode.OK;
         }
@@ -359,16 +215,14 @@ namespace LinkGreen.Applications.Common
         //    return response.StatusCode == HttpStatusCode.OK;
         //}
 
-        private static object _debugLock = new object();
         public static bool PushPricingLevel(string pricingLevelName, PricingLevelItemRequest[] inventoryItems,
             DateTime effectiveDate, DateTime? endDate = null)
         {
-            var requestUrl = $"/SupplierInventoryService/rest/AddPricingLevelItem/{Key}";
+            var requestUrl = "SupplierInventory/AddPricingLevelItem";
             var request = new RestRequest(requestUrl, Method.POST);
 
             var body = new PricingLevelRequest
             {
-
                 Name = pricingLevelName,
                 EffectiveDate = effectiveDate,
                 EndDate = null,
@@ -383,7 +237,7 @@ namespace LinkGreen.Applications.Common
 
             request.AddParameter("application/json", json, null, ParameterType.RequestBody);
 
-            var response = Client.Execute(request);
+            var response = NewApiClient.Execute(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 //lock (_debugLock) {
@@ -395,45 +249,13 @@ namespace LinkGreen.Applications.Common
             return response.StatusCode == HttpStatusCode.OK;
         }
 
-        public static bool PushInventoryItem(InventoryItemRequest item, out int statusCode, out string responseContent)
-        {
-            var requestUrl = $"/SupplierInventoryService/rest/{(item.Id > 0 ? "Update" : "Add")}Item/{Key}";
-
-            var request = new RestRequest(requestUrl, Method.POST);
-
-            request.AddJsonBody(item);
-
-            var response = Client.Execute(request);
-
-            statusCode = (int)response.StatusCode;
-            responseContent = response.Content ?? "No Content";
-
-            return response.StatusCode == HttpStatusCode.OK;
-        }
-
-        public static bool PushBulkUpdateInventoryItem(InventoryItemRequest[] item, out int statusCode, out string content)
-        {
-            var requestUrl = $"/SupplierInventoryService/rest/UpdateItems/{Key}";
-
-            var request = new RestRequest(requestUrl, Method.POST);
-
-            request.AddJsonBody(item);
-
-            var response = Client.Execute(request);
-
-            statusCode = (int)response.StatusCode;
-            content = response.Content ?? "";
-
-            return response.StatusCode == HttpStatusCode.OK;
-        }
-
         public static bool PushInventoryQuantity(List<IdSkuQuantity> items)
         {
-            var requestUrl = $"/SupplierInventoryService/rest/UpdateProductQuantityBulk/{Key}";
+            var requestUrl = "SupplierInventory/UpdateProductQuantityBulk";
             var request = new RestRequest(requestUrl, Method.POST);
 
             request.AddJsonBody(items);
-            var response = Client.Execute(request);
+            var response = NewApiClient.Execute(request);
 
             return response.StatusCode == HttpStatusCode.OK;
         }
@@ -453,7 +275,7 @@ namespace LinkGreen.Applications.Common
 
         public static OperationResult<int> AddOrUpdateBuyer(CompanyAndRelationshipResult buyer)
         {
-            var requestUrl = $"/api/Relationship/AddOrUpdateCompany/{buyer.OurCompanyNumber}";
+            var requestUrl = $"Relationship/AddOrUpdateCompany/{buyer.OurCompanyNumber}";
             var request = new RestRequest(requestUrl, Method.POST);
             var requestBody = new AddCompanyRequest
             {
@@ -473,7 +295,6 @@ namespace LinkGreen.Applications.Common
                     Country = buyer.Country?.Trim(),
                     Email1 = buyer.Email1?.Trim(),
                     FormattedPhone1 = buyer.FormattedPhone1?.Trim(),
-                    Email2 = buyer.Email2?.Trim(),
                     IsBuyer = true,
                     PostalCode = buyer.PostalCode,
                     ProvState = buyer.ProvState?.Trim(),
@@ -485,7 +306,6 @@ namespace LinkGreen.Applications.Common
                 ForceRemoveSalesRep = false
             };
             request.AddJsonBody(requestBody);
-            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
             var response = NewApiClient.Execute<OperationResult<int>>(request);
             if (response.StatusCode != HttpStatusCode.OK && response.Data.Result == 0)
                 throw new Exception("Error inviting buyers: " + response.ErrorException?.Message);
@@ -495,20 +315,17 @@ namespace LinkGreen.Applications.Common
 
         public static List<SupplierBuyerGroupBuyerParticipationRemoteModel> GetAllBuyerGroups()
         {
-            var requestUrl = $"/api/Relationship/GetAllBuyerGroups";
+            var requestUrl = "Relationship/GetAllBuyerGroups";
             var request = new RestRequest(requestUrl, Method.GET);
-            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
-            var response =
-                NewApiClient.Execute<OperationResult<List<SupplierBuyerGroupBuyerParticipationRemoteModel>>>(request);
+            var response = NewApiClient.Execute<OperationResult<List<SupplierBuyerGroupBuyerParticipationRemoteModel>>>(request);
             return response.Data.Success ? response.Data.Result : null;
         }
 
         public static string AddBuyerToGroup(int buyerId, int[] groupIds)
         {
-            var requestUrl = $"/api/Relationship/AddBuyerToGroups/{buyerId}";
+            var requestUrl = $"Relationship/AddBuyerToGroups/{buyerId}";
             var body = groupIds;
             var request = new RestRequest(requestUrl, Method.POST);
-            NewApiClient.AddDefaultHeader("Authorization", $"Bearer {Key}");
             request.AddJsonBody(body);
             var response = NewApiClient.Execute(request);
             if (response.StatusCode != HttpStatusCode.OK)
@@ -561,63 +378,73 @@ namespace LinkGreen.Applications.Common
             return response.Content;
         }
 
-        public static PrivateCategory PushCategory(PrivateCategory category)
+        public static PrivateCategory PushCategory(CreateCategoryRequest category)
         {
-            try
+            var requestUrl = "Category/Add";
+            var request = new RestRequest(requestUrl, Method.POST);
+            request.AddJsonBody(category);
+
+            var response = NewApiClient.Execute<int>(request);
+
+            return response?.Data == null ? null : new PrivateCategory
             {
-
-                var requestUrl = $"/CategoryService/rest/Add/{Key}";
-
-                var request = new RestRequest(requestUrl, Method.POST);
-
-                request.AddJsonBody(category);
-                var response = Client.Execute<ApiResult<PrivateCategory>>(request);
-
-                if (response.Data.Result == null)
-                    return null;
-
-                return response.Data.Item;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(JsonConvert.SerializeObject(category), ex);
-            }
-        }
-
-        public static void PostInventoryImport()
-        {
-            Client.Execute(new RestRequest($"/SupplierInventoryService/rest/PostInventoryImport/{Key}", Method.POST));
+                Id = response.Data,
+                Name = category.data,
+                Depth = category.Depth,
+                ParentCategoryId = category.ParentCategoryId
+            };
         }
 
         public static List<OrderStatus> GetAllOrderStatuses()
         {
-            var requestUrl = $"/OrderService/rest/Status/{Key}";
+            var requestUrl = "OrderStatus/ForSupplier";
             var request = new RestRequest(requestUrl, Method.GET);
+            var response = NewApiClient.Execute<ApiResult<List<OrderStatus>>>(request);
 
-            var response = Client.Execute<ApiResult<List<OrderStatus>>>(request);
-
-            if (response.Data?.Result == null) return null;
-
-            return response.Data.Item;
+            return response.Data?.Result == null ? null : response.Data.Item;
         }
 
         public static List<OrderFromLinkGreen> GetOrdersForStatus(int[] status)
         {
-            var requestUrl = $"/OrderService/rest/GetForSupplier/{Key}/50";
-            var request = new RestRequest(requestUrl, Method.POST);
-            var statuses = status;
-            var json = JsonConvert.SerializeObject(statuses);
-            request.AddParameter("application/json", json, ParameterType.RequestBody);
-            request.RequestFormat = DataFormat.Json;
+            var requestUrl = $"Order/GetByStatusForSeller?{string.Join("&", status.Select(statusItem => $"statusIds={statusItem}"))}";
 
-            var response = Client.Execute<ApiResult<List<OrderFromLinkGreen>>>(request);
+            var request = new RestRequest(requestUrl, Method.GET);
 
-            if (!response.IsSuccessful || response.Data?.Result == null)
+            var response = NewApiClient.Execute<List<OrderFromLinkGreen>>(request);
+
+            if (!response.IsSuccessful || response.Data == null)
             {
                 throw new Exception("Error retrieving orders: " + response.ErrorException?.Message);
             }
 
-            return response.Data.Item;
+            return response.Data;
         }
+
+        public static int ImportProducts(ProductImportRequest productImportRequest)
+        {
+            var requestUrl = "import/type/1";
+
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            request.AddJsonBody(productImportRequest);
+
+            var response = ClientIntegrationApiClient.Execute<int>(request);
+
+            return response.IsSuccessful ? response.Data : 0;
+        }
+
+        public static int ImportCustomers(CompanyImportRequest companyImportRequest)
+        {
+            var requestUrl = "import/type/0";
+
+            var request = new RestRequest(requestUrl, Method.POST);
+
+            request.AddJsonBody(companyImportRequest);
+
+            var response = ClientIntegrationApiClient.Execute<int>(request);
+
+            return response.IsSuccessful ? response.Data : 0;
+        }
+
     }
 }

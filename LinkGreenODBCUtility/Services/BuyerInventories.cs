@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Dynamic;
-using System.Linq;
-using DataTransfer.AccessDatabase;
+﻿using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
+using System.Linq;
 
 namespace LinkGreenODBCUtility
 {
@@ -81,7 +80,7 @@ namespace LinkGreenODBCUtility
                 var existingCategory = existingCategories.FirstOrDefault(c => c.Name == product.Category);
                 if (existingCategory == null)
                 {
-                    existingCategory = WebServiceHelper.PushCategory(new PrivateCategory { Name = product.Category });
+                    existingCategory = WebServiceHelper.PushCategory(new CreateCategoryRequest { data = product.Category });
                     existingCategories.Add(existingCategory);
                 }
 
