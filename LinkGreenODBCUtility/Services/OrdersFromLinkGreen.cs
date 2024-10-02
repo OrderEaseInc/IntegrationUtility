@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DataTransfer.AccessDatabase;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using DataTransfer.AccessDatabase;
 
 // ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
@@ -58,7 +58,7 @@ namespace LinkGreenODBCUtility
             }
 
             _repository.Download(status);
-            Logger.Instance.Debug($"Downloaded from LinkGreen to Transfer table {OrdersFromLinkGreenRepository.TableName}");
+            Logger.Instance.Debug($"Downloaded from OrderEase to Transfer table {OrdersFromLinkGreenRepository.TableName}");
             return true;
         }
 

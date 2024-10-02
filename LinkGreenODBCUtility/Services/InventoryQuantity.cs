@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using DataTransfer.AccessDatabase;
+﻿using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
 using LinkGreenODBCUtility.Utility;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
 using Mapper = AutoMapper.Mapper;
 
 // ReSharper disable once CheckNamespace
@@ -47,9 +47,6 @@ namespace LinkGreenODBCUtility
 
             try
             {
-                // clear out transfer table
-                Empty();
-
                 var mappedDsnName = new Mapping().GetDsnName("InventoryQuantities");
                 var newMapping = new Mapping(mappedDsnName);
                 if (newMapping.MigrateData("InventoryQuantities"))
@@ -68,8 +65,11 @@ namespace LinkGreenODBCUtility
                     Thread.Sleep(500); // TODO: Code Smell - Figure out the real problem here
                     var inventoryQuantityItems = repository.GetAll().ToList();
                     var existingInventory = WebServiceHelper.GetAllInventory();
-                    var items = 0;
 
+                    // clear out transfer table
+                    Empty();
+
+                    var items = 0;
                     var request = new List<IdSkuQuantity>();
 
                     foreach (var inventoryQuantityItem in inventoryQuantityItems)
@@ -88,21 +88,13 @@ namespace LinkGreenODBCUtility
                     }
 
 
-                    if (items > 0 && request.All(i => string.IsNullOrEmpty(i.CatalogName)))
+                    if (items > 0)
                     {
                         var chunks = request.ChunkBy(500);
                         foreach (var chunk in chunks)
                             WebServiceHelper.PushInventoryQuantity(chunk);
                     }
-                    else if (items > 0)
-                    {
-                        foreach (var item in request)
-                        {
-                            WebServiceHelper.UpdateInventoryItemQuantity(item.SKU, item.Quantity, item.CatalogName);
-                        }
-                    }
-
-                    if (items < 1)
+                    else
                     {
                         Logger.Instance.Warning("No inventory quantity items were published. Double check your skus.");
                         publishDetails.Insert(0, "No inventory quantity items were published. Double check your skus");

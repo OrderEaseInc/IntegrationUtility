@@ -1,13 +1,11 @@
-﻿using System;
-using System.CodeDom;
-using System.ComponentModel;
-using System.Data.OleDb;
-using System.Configuration;
-using System.Linq;
-using DataTransfer.AccessDatabase;
-
+﻿using DataTransfer.AccessDatabase;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using System;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data.OleDb;
+using System.Linq;
 
 namespace LinkGreenODBCUtility
 {
@@ -40,7 +38,8 @@ namespace LinkGreenODBCUtility
                 if (GetSandboxMode())
                 {
                     config.AppSettings.Settings[Keys.BaseUrl].Value = "https://dev.linkgreen.ca/";
-                    config.AppSettings.Settings[Keys.NewApiBaseUrl].Value = "https://linkgreen-coreapi-dev-coreapi.azurewebsites.net/";
+                    config.AppSettings.Settings[Keys.NewApiBaseUrl].Value = "https://stagingapi.orderease.com/api/";
+                    config.AppSettings.Settings[Keys.ClientIntegrationApiBaseUrl].Value = "https://clientintegration-staging.azurewebsites.net/api/";
                     config.Save(ConfigurationSaveMode.Modified);
                 }
             }
@@ -238,7 +237,7 @@ namespace LinkGreenODBCUtility
         public static int[] GetStatusIdForOrderDownload()
         {
             var val = GetSettingValue<string>(Keys.StatusIdForOrderDownload);
-            // ReSharper disable once ConvertIfStatementToReturnStatement
+
             if (string.IsNullOrWhiteSpace(val)) return null;
 
             return val.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
@@ -380,6 +379,7 @@ namespace LinkGreenODBCUtility
             internal const string ApiKey = nameof(ApiKey);
             internal const string BaseUrl = nameof(BaseUrl);
             internal const string NewApiBaseUrl = nameof(NewApiBaseUrl);
+            internal const string ClientIntegrationApiBaseUrl = nameof(ClientIntegrationApiBaseUrl);
             internal const string StatusIdForOrderDownload = nameof(StatusIdForOrderDownload);
             internal const string EncryptionKey = nameof(EncryptionKey);
             internal const string InstallationId = nameof(InstallationId);

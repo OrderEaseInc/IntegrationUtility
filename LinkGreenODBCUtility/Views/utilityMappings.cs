@@ -46,10 +46,6 @@ namespace LinkGreenODBCUtility
                     inventoryQuantityDataSource.Items.Add(sourceName);
                     priceLevelsDataSource.Items.Add(sourceName);
                     pricingDataSource.Items.Add(sourceName);
-                    suppliersDataSource.Items.Add(sourceName);
-                    supplierInventoryDataSource.Items.Add(sourceName);
-                    linkedSkusDataSource.Items.Add(sourceName);
-                    buyerInventoryDataSource.Items.Add(sourceName);
                     downloadOrdersDataSource.Items.Add(sourceName);
                     downloadOrderItemsDataSource.Items.Add(sourceName);
                 }
@@ -125,48 +121,18 @@ namespace LinkGreenODBCUtility
                     }
                     DisplayActivePricingTableMapping();
                     break;
-                case SettingsTab.Suppliers:
-                    cusIdx = suppliersDataSource.FindString(mapping.GetDsnName("Suppliers"));
-                    if (cusIdx != -1)
-                    {
-                        suppliersDataSource.SetSelected(cusIdx, true);
-                    }
-                    DisplayActiveSupplierTableMapping();
-                    break;
-                case SettingsTab.SupplierInventories:
-                    cusIdx = supplierInventoryDataSource.FindString(mapping.GetDsnName("SupplierInventories"));
-                    if (cusIdx != -1)
-                    {
-                        supplierInventoryDataSource.SetSelected(cusIdx, true);
-                    }
-                    DisplayActiveSupplierInventoryTableMapping();
-                    break;
-                case SettingsTab.LinkedSkus:
-                    cusIdx = supplierInventoryDataSource.FindString(mapping.GetDsnName("LinkedSkus"));
-                    if (cusIdx != -1)
-                    {
-                        linkedSkusDataSource.SetSelected(cusIdx, true);
-                    }
-                    DisplayActiveLinkedSkusTableMapping();
-                    break;
-                case SettingsTab.BuyerInventories:
-                    cusIdx = buyerInventoryDataSource.FindString(mapping.GetDsnName("BuyerInventories"));
-                    if (cusIdx != -1)
-                    {
-                        buyerInventoryDataSource.SetSelected(cusIdx, true);
-                    }
-                    DisplayActiveBuyerInventoryTableMapping();
-                    break;
                 case SettingsTab.DownloadOrders:
                     cusIdx = downloadOrdersDataSource.FindString(mapping.GetDsnName("Orders_FromLinkGreen"));
-                    if (cusIdx != -1) {
+                    if (cusIdx != -1)
+                    {
                         downloadOrdersDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveDownloadOrdersTableMapping();
                     break;
                 case SettingsTab.DownloadOrderItems:
                     cusIdx = downloadOrderItemsDataSource.FindString(mapping.GetDsnName("OrderItem_FromLinkGreen"));
-                    if (cusIdx != -1) {
+                    if (cusIdx != -1)
+                    {
                         downloadOrderItemsDataSource.SetSelected(cusIdx, true);
                     }
                     DisplayActiveDownloadOrderItemsTableMapping();
@@ -240,10 +206,6 @@ namespace LinkGreenODBCUtility
             DisplayTableMapping("Products", "Products",
                 activeProductTableMappingValue, mappedProductTableFieldsLabel);
 
-        private void DisplayActiveBuyerInventoryTableMapping() =>
-            DisplayTableMapping("BuyerInventories", "BuyerInventories",
-                activeBuyerInventoryFieldMappingValue, mappedBuyerInventoryTableFieldsLabel);
-
         private void DisplayActiveDownloadOrdersTableMapping() =>
             DisplayTableMapping("Orders_FromLinkGreen", "Orders_FromLinkGreen",
                 activeDownloadOrdersFieldMappingValue, mappedDownloadOrdersTableFieldsLabel,
@@ -261,20 +223,6 @@ namespace LinkGreenODBCUtility
         private void DisplayActivePriceLevelsTableMapping() =>
             DisplayTableMapping("PriceLevels", "PriceLevels",
                 activePriceLevelsTableMappingValue, mappedPriceLevelsTableFieldsLabel);
-
-        private void DisplayActiveSupplierTableMapping() =>
-            DisplayTableMapping("Suppliers", "Suppliers",
-                activeSupplierTableMappingValue, mappedSuppliersTableFieldsLabel, suppliersTableName);
-
-        private void DisplayActiveSupplierInventoryTableMapping() =>
-            DisplayTableMapping("SupplierInventories", "SupplierInventories",
-                activeSupplierInventoryTableMappingValue, mappedSupplierInventoryTableFieldsLabel,
-                supplierInventoryTableName);
-
-        private void DisplayActiveLinkedSkusTableMapping() =>
-            DisplayTableMapping("LinkedSkus", "LinkedSkus",
-                activeLinkedSkusTableMappingValue, mappedLinkedSkusTableFieldsLabel,
-                linkedSkusTableName);
 
         private void DisplayActiveInventoryQuantityTableMapping() =>
             DisplayTableMapping("InventoryQuantities", "InventoryQuantities",
@@ -298,10 +246,6 @@ namespace LinkGreenODBCUtility
             DisplayFieldMapping("Customers", displayName, fieldName,
                 activeCustomerFieldMappingLabel, activeCustomerFieldMappingValue);
 
-        private void DisplayActiveSupplierFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("Suppliers", displayName, fieldName,
-                activeSupplierFieldMappingLabel, activeSupplierFieldMappingValue);
-
         private void DisplayDownloadOrdersFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("Orders_FromLinkGreen", displayName, fieldName,
                 activeDownloadOrdersFieldMappingLabel, activeDownloadOrdersFieldMappingValue);
@@ -310,18 +254,9 @@ namespace LinkGreenODBCUtility
             DisplayFieldMapping("OrderItem_FromLinkGreen", displayName, fieldName,
                 activeDownloadOrderItemsFieldMappingLabel, activeDownloadOrderItemsFieldMappingValue);
 
-        private void DisplayActiveLinkedSkusFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("LinkedSkus", displayName, fieldName,
-                activeLinkedSkuFieldMappingLabel, activeLinkedSkuFieldMappingValue);
-
         private void DisplayActiveInventoryQuantityFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("InventoryQuantities", displayName, fieldName,
                 activeInventoryQuantityFieldMappingLabel, activeInventoryQuantityFieldMappingValue);
-
-
-        private void DisplayActiveSupplierInventoryFieldMapping(string displayName, string fieldName) =>
-            DisplayFieldMapping("SupplierInventories", displayName, fieldName,
-                activeSupplierInventoryFieldMappingLabel, activeSupplierInventoryFieldMappingValue);
 
         private void DisplayActiveProductFieldMapping(string displayName, string fieldName) =>
             DisplayFieldMapping("Products", displayName, fieldName,
@@ -355,26 +290,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void DisplaySupplierFieldDescription(string tableName, string fieldName)
-        {
-            string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
-            string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
-            if (!string.IsNullOrEmpty(description))
-            {
-                supplierFieldDescription.Text = description + " (" + dataType + ")";
-            }
-        }
-
-        private void DisplayLinkedSkusDescription(string tableName, string fieldName)
-        {
-            string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
-            string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
-            if (!string.IsNullOrEmpty(description))
-            {
-                linkedSkusFieldDescription.Text = description + " (" + dataType + ")";
-            }
-        }
-
         private void DisplayInventoryQuantityDescription(string tableName, string fieldName)
         {
             string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
@@ -382,16 +297,6 @@ namespace LinkGreenODBCUtility
             if (!string.IsNullOrEmpty(description))
             {
                 inventoryQuantityFieldDescriptionValue.Text = description + " (" + dataType + ")";
-            }
-        }
-
-        private void DisplaySupplierInventoryFieldDescription(string tableName, string fieldName)
-        {
-            string dataType = Mapping.GetFieldProperty(tableName, fieldName, "DataType");
-            string description = Mapping.GetFieldProperty(tableName, fieldName, "Description");
-            if (!string.IsNullOrEmpty(description))
-            {
-                supplierInventoryFieldDescription.Text = description + " (" + dataType + ")";
             }
         }
 
@@ -521,119 +426,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void SetupSupplierMappingFields()
-        {
-            //Set the required fields from access db
-            List<MappingField> tableFields = Mapping.GetTableFields("Suppliers");
-            supplierFields.Items.Clear();
-            foreach (MappingField tableField in tableFields)
-            {
-                ListItem item = new ListItem();
-                string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
-                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required)
-                {
-                    item.Text = "* " + item.Text;
-                }
-                item.Value = tableField.FieldName;
-                item.Display = nameToShow;
-                supplierFields.DisplayMember = "Text";
-                supplierFields.Items.Add(item);
-            }
-
-            //Set the available fields to map
-            if (suppliersDataSource.SelectedItem != null)
-            {
-                string mappedTableName = Mapping.GetTableMapping("Suppliers");
-                string mappedDsnName = Mapping.GetDsnName("Suppliers");
-
-                mappingSupplierFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName))
-                {
-                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns)
-                    {
-                        mappingSupplierFields.Items.Add(column);
-                    }
-                }
-            }
-        }
-
-        private void SetupSupplierInventoryMappingFields()
-        {
-            //Set the required fields from access db
-            List<MappingField> tableFields = Mapping.GetTableFields("SupplierInventories");
-            requiredSupplierInventoryFields.Items.Clear();
-            foreach (MappingField tableField in tableFields)
-            {
-                ListItem item = new ListItem();
-                string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
-                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required)
-                {
-                    item.Text = "* " + item.Text;
-                }
-                item.Value = tableField.FieldName;
-                item.Display = nameToShow;
-                requiredSupplierInventoryFields.DisplayMember = "Text";
-                requiredSupplierInventoryFields.Items.Add(item);
-            }
-
-            //Set the available fields to map
-            if (supplierInventoryDataSource.SelectedItem != null)
-            {
-                string mappedTableName = Mapping.GetTableMapping("SupplierInventories");
-                string mappedDsnName = Mapping.GetDsnName("SupplierInventories");
-
-                mappingSupplierInventoryFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName))
-                {
-                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns)
-                    {
-                        mappingSupplierInventoryFields.Items.Add(column);
-                    }
-                }
-            }
-        }
-
-        private void SetupLinkedSkusMappingFields()
-        {
-            //Set the required fields from access db
-            List<MappingField> tableFields = Mapping.GetTableFields("LinkedSkus");
-            linkedSkuFields.Items.Clear();
-            foreach (MappingField tableField in tableFields)
-            {
-                ListItem item = new ListItem();
-                string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
-                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required)
-                {
-                    item.Text = "* " + item.Text;
-                }
-                item.Value = tableField.FieldName;
-                item.Display = nameToShow;
-                linkedSkuFields.DisplayMember = "Text";
-                linkedSkuFields.Items.Add(item);
-            }
-
-            //Set the available fields to map
-            if (linkedSkusDataSource.SelectedItem != null)
-            {
-                string mappedTableName = Mapping.GetTableMapping("LinkedSkus");
-                string mappedDsnName = Mapping.GetDsnName("LinkedSkus");
-
-                mappingLinkedSkuFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName))
-                {
-                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns)
-                    {
-                        mappingLinkedSkuFields.Items.Add(column);
-                    }
-                }
-            }
-        }
 
         private void SetupInventoryQuantityMappingFields()
         {
@@ -711,43 +503,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void SetupBuyerInventoryMappingFields()
-        {
-            //Set the required fields from access db
-            List<MappingField> tableFields = Mapping.GetTableFields("BuyerInventories");
-            requiredBuyerInventoryFields.Items.Clear();
-            foreach (MappingField tableField in tableFields)
-            {
-                ListItem item = new ListItem();
-                string nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
-                item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required)
-                {
-                    item.Text = "* " + item.Text;
-                }
-                item.Value = tableField.FieldName;
-                item.Display = nameToShow;
-                requiredBuyerInventoryFields.DisplayMember = "Text";
-                requiredBuyerInventoryFields.Items.Add(item);
-            }
-
-            //Set the available fields to map
-            if (buyerInventoryDataSource.SelectedItem != null)
-            {
-                string mappedTableName = Mapping.GetTableMapping("BuyerInventories");
-                string mappedDsnName = Mapping.GetDsnName("BuyerInventories");
-
-                mappingBuyerInventoryFields.Items.Clear();
-                if (!string.IsNullOrEmpty(mappedTableName))
-                {
-                    List<string> columns = Mapping.GetColumns(mappedTableName, mappedDsnName);
-                    foreach (string column in columns)
-                    {
-                        mappingBuyerInventoryFields.Items.Add(column);
-                    }
-                }
-            }
-        }
 
         private void SetupDownloadOrdersMappingFields()
         {
@@ -797,7 +552,8 @@ namespace LinkGreenODBCUtility
                 var item = new ListItem();
                 var nameToShow = string.IsNullOrEmpty(tableField.DisplayName) ? tableField.FieldName : tableField.DisplayName;
                 item.Text = string.IsNullOrEmpty(tableField.MappingName) ? nameToShow + " : Not Mapped" : nameToShow + " : " + tableField.MappingName;
-                if (tableField.Required) {
+                if (tableField.Required)
+                {
                     item.Text = "* " + item.Text;
                 }
 
@@ -1050,44 +806,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void suppliersDataSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suppliersDataSource.SelectedItem != null)
-            {
-                string dsnName = suppliersDataSource.SelectedItem.ToString();
-                var mapping = new Mapping(dsnName);
-                List<string> tableNames = mapping.GetTableNames();
-
-                suppliersTableName.Items.Clear();
-                foreach (string tableName in tableNames)
-                {
-                    suppliersTableName.Items.Add(tableName);
-                }
-
-                DisplayActiveSupplierTableMapping();
-                SetupSupplierMappingFields();
-            }
-        }
-
-        private void supplierInventoryDataSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (supplierInventoryDataSource.SelectedItem != null)
-            {
-                string dsnName = supplierInventoryDataSource.SelectedItem.ToString();
-                var mapping = new Mapping(dsnName);
-                var tableNames = mapping.GetTableNames();
-
-                supplierInventoryTableName.Items.Clear();
-                foreach (string tableName in tableNames)
-                {
-                    supplierInventoryTableName.Items.Add(tableName);
-                }
-
-                DisplayActiveSupplierInventoryTableMapping();
-                SetupSupplierInventoryMappingFields();
-            }
-        }
-
         private void emptyCustomersTransferTable_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Are you sure?", "Confirm", MessageBoxButtons.YesNo);
@@ -1158,42 +876,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void suppliersTableName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var suppliers = new Suppliers();
-            if (suppliersTableName.SelectedItem != null)
-            {
-                string dsnName = suppliersDataSource.SelectedItem.ToString();
-                string tableName = suppliersTableName.SelectedItem.ToString();
-                suppliers.SaveTableMapping(dsnName, tableName);
-
-                DisplayActiveSupplierTableMapping();
-                SetupSupplierMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void supplierInventoryTableName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var supplierInventories = new SupplierInventories();
-            if (supplierInventoryTableName.SelectedItem != null)
-            {
-                string dsnName = supplierInventoryDataSource.SelectedItem.ToString();
-                string tableName = supplierInventoryTableName.SelectedItem.ToString();
-                supplierInventories.SaveTableMapping(dsnName, tableName);
-
-                DisplayActiveSupplierInventoryTableMapping();
-                SetupSupplierInventoryMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
         private void customerFields_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((customerFields.SelectedItem as ListItem).Value != null)
@@ -1201,26 +883,6 @@ namespace LinkGreenODBCUtility
                 DisplayActiveCustomerFieldMapping((customerFields.SelectedItem as ListItem).Display, (customerFields.SelectedItem as ListItem).Value);
 
                 DisplayCustomerFieldDescription("Customers", (customerFields.SelectedItem as ListItem).Value);
-            }
-        }
-
-        private void supplierFields_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((supplierFields.SelectedItem as ListItem).Value != null)
-            {
-                DisplayActiveSupplierFieldMapping((supplierFields.SelectedItem as ListItem).Display, (supplierFields.SelectedItem as ListItem).Value);
-
-                DisplaySupplierFieldDescription("Suppliers", (supplierFields.SelectedItem as ListItem).Value);
-            }
-        }
-
-        private void requiredSupplierInventoryFields_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((requiredSupplierInventoryFields.SelectedItem as ListItem).Value != null)
-            {
-                DisplayActiveSupplierFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Display, (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
-
-                DisplaySupplierInventoryFieldDescription("SupplierInventories", (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
             }
         }
 
@@ -1265,35 +927,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void mapSupplierFields_Click(object sender, EventArgs e)
-        {
-            if (supplierFields.SelectedItem != null && mappingSupplierFields.SelectedItem != null)
-            {
-                var suppliers = new Suppliers();
-                suppliers.SaveFieldMapping((supplierFields.SelectedItem as ListItem).Value, mappingSupplierFields.SelectedItem.ToString());
-                DisplayActiveSupplierFieldMapping((supplierFields.SelectedItem as ListItem).Display, (supplierFields.SelectedItem as ListItem).Value);
-                SetupSupplierMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void mapBuyerInventoryFields_Click(object sender, EventArgs e)
-        {
-            if (requiredBuyerInventoryFields.SelectedItem != null && mappingBuyerInventoryFields.SelectedItem != null)
-            {
-                var buyerInventories = new BuyerInventories();
-                buyerInventories.SaveFieldMapping((requiredBuyerInventoryFields.SelectedItem as ListItem).Value, mappingBuyerInventoryFields.SelectedItem.ToString());
-                DisplayActiveSupplierFieldMapping((requiredBuyerInventoryFields.SelectedItem as ListItem).Display, (requiredBuyerInventoryFields.SelectedItem as ListItem).Value);
-                SetupBuyerInventoryMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
 
         private void mapDownloadOrdersFields_Click(object sender, EventArgs e)
         {
@@ -1301,7 +934,8 @@ namespace LinkGreenODBCUtility
             {
                 var orders = new OrdersFromLinkGreen();
                 orders.SaveFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Value, mappingDownloadOrdersFields.SelectedItem.ToString());
-                DisplayActiveSupplierFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Display, (downloadOrdersFields.SelectedItem as ListItem).Value);
+                //DisplayActiveSupplierFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Display, (downloadOrdersFields.SelectedItem as ListItem).Value);
+                DisplayDownloadOrdersFieldMapping((downloadOrdersFields.SelectedItem as ListItem).Display, (downloadOrdersFields.SelectedItem as ListItem).Value);
                 SetupDownloadOrdersMappingFields();
             }
             else
@@ -1316,27 +950,13 @@ namespace LinkGreenODBCUtility
             {
                 var orders = new OrdersFromLinkGreen();
                 orders.SaveItemFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Value, mappingDownloadOrderItemsFields.SelectedItem.ToString());
-                DisplayActiveSupplierFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Display, (downloadOrderItemsFields.SelectedItem as ListItem).Value);
+                //DisplayActiveSupplierFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Display, (downloadOrderItemsFields.SelectedItem as ListItem).Value);
+                DisplayDownloadOrderItemsFieldMapping((downloadOrderItemsFields.SelectedItem as ListItem).Display, (downloadOrderItemsFields.SelectedItem as ListItem).Value);
                 SetupDownloadOrderItemsMappingFields();
             }
             else
             {
                 MessageBox.Show(@"Please select the Download Order Items DSN!", @"DSN missing");
-            }
-        }
-
-        private void mapSupplierInventoryFields_Click(object sender, EventArgs e)
-        {
-            if (requiredSupplierInventoryFields.SelectedItem != null && mappingSupplierInventoryFields.SelectedItem != null)
-            {
-                var supplierInventories = new SupplierInventories();
-                supplierInventories.SaveFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Value, mappingSupplierInventoryFields.SelectedItem.ToString());
-                DisplayActiveSupplierInventoryFieldMapping((requiredSupplierInventoryFields.SelectedItem as ListItem).Display, (requiredSupplierInventoryFields.SelectedItem as ListItem).Value);
-                SetupSupplierInventoryMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
         }
 
@@ -1566,25 +1186,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void buyerInventoryDataSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (buyerInventoryDataSource.SelectedItem != null)
-            {
-                string dsnName = buyerInventoryDataSource.SelectedItem.ToString();
-                var mapping = new Mapping(dsnName);
-                List<string> tableNames = mapping.GetTableNames();
-
-                buyerInventoryTableName.Items.Clear();
-                foreach (string tableName in tableNames)
-                {
-                    buyerInventoryTableName.Items.Add(tableName);
-                }
-
-                DisplayActiveBuyerInventoryTableMapping();
-                SetupBuyerInventoryMappingFields();
-            }
-        }
-
         private void downloadOrdersDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (downloadOrdersDataSource.SelectedItem != null)
@@ -1634,24 +1235,6 @@ namespace LinkGreenODBCUtility
 
                 DisplayActiveProductTableMapping();
                 SetupProductMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void buyerInventoryTableName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var buyerInventories = new BuyerInventories();
-            if (buyerInventoryTableName.SelectedItem != null)
-            {
-                string dsnName = buyerInventoryDataSource.SelectedItem.ToString();
-                string tableName = buyerInventoryTableName.SelectedItem.ToString();
-                buyerInventories.SaveTableMapping(dsnName, tableName);
-
-                DisplayActiveBuyerInventoryTableMapping();
-                SetupBuyerInventoryMappingFields();
             }
             else
             {
@@ -1808,7 +1391,8 @@ namespace LinkGreenODBCUtility
             {
                 MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
             }
-            else {
+            else
+            {
                 var message = "Please select your suppliers table!";
                 if (publishDetails != null && publishDetails.Count > 0)
                     message = publishDetails[0];
@@ -2152,45 +1736,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void setSuppliersUsernamePW_Click(object sender, EventArgs e)
-        {
-            if (suppliersDataSource.SelectedItem != null)
-            {
-                var DsnCredentials = new DsnCredentials(suppliersDataSource.SelectedItem.ToString());
-                DsnCredentials.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void setSupplierInventoryUsernamePW_Click(object sender, EventArgs e)
-        {
-            if (supplierInventoryDataSource.SelectedItem != null)
-            {
-                var DsnCredentials = new DsnCredentials(supplierInventoryDataSource.SelectedItem.ToString());
-                DsnCredentials.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void setBuyerInventoryUsernamePW_Click(object sender, EventArgs e)
-        {
-            if (buyerInventoryDataSource.SelectedItem != null)
-            {
-                var DsnCredentials = new DsnCredentials(buyerInventoryDataSource.SelectedItem.ToString());
-                DsnCredentials.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
         private void setOrderDownloadUsernamePW_Click(object sender, EventArgs e)
         {
             if (downloadOrdersDataSource.SelectedItem != null)
@@ -2204,66 +1749,6 @@ namespace LinkGreenODBCUtility
             }
         }
 
-        private void linkedSkusDataSource_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (linkedSkusDataSource.SelectedItem != null)
-            {
-                string dsnName = linkedSkusDataSource.SelectedItem.ToString();
-                var mapping = new Mapping(dsnName);
-                var tableNames = mapping.GetTableNames();
-
-                linkedSkusTableName.Items.Clear();
-                foreach (string tableName in tableNames)
-                {
-                    linkedSkusTableName.Items.Add(tableName);
-                }
-
-                DisplayActiveLinkedSkusTableMapping();
-                SetupLinkedSkusMappingFields();
-            }
-        }
-
-        private void linkedSkusTableName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var linkedSkus = new LinkedSkus();
-            if (linkedSkusTableName.SelectedItem != null)
-            {
-                string dsnName = linkedSkusDataSource.SelectedItem.ToString();
-                string tableName = linkedSkusTableName.SelectedItem.ToString();
-                linkedSkus.SaveTableMapping(dsnName, tableName);
-
-                DisplayActiveLinkedSkusTableMapping();
-                SetupLinkedSkusMappingFields();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void setLinkedSkusUsernamePW_Click(object sender, EventArgs e)
-        {
-            if (linkedSkusDataSource.SelectedItem != null)
-            {
-                var dsnCredentials = new DsnCredentials(linkedSkusDataSource.SelectedItem.ToString());
-                dsnCredentials.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void linkedSkuFields_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((linkedSkuFields.SelectedItem as ListItem).Value != null)
-            {
-                DisplayActiveLinkedSkusFieldMapping((linkedSkuFields.SelectedItem as ListItem).Display, (linkedSkuFields.SelectedItem as ListItem).Value);
-
-                DisplayLinkedSkusDescription("LinkedSkus", (linkedSkuFields.SelectedItem as ListItem).Value);
-            }
-        }
-
         private void previewLinkedSkusMappingOutput_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(Mapping.GetTableMapping("LinkedSkus")))
@@ -2271,21 +1756,6 @@ namespace LinkGreenODBCUtility
                 var mappedDsnName = Mapping.GetDsnName("LinkedSkus");
                 var mappingPreview = new MappingPreview("LinkedSkus", mappedDsnName);
                 mappingPreview.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show(@"Please select your suppliers table!", @"Emptied Successfully");
-            }
-        }
-
-        private void mapLinkedSkuFields_Click(object sender, EventArgs e)
-        {
-            if (linkedSkuFields.SelectedItem != null && mappingLinkedSkuFields.SelectedItem != null)
-            {
-                var linkedSkus = new LinkedSkus();
-                linkedSkus.SaveFieldMapping((linkedSkuFields.SelectedItem as ListItem).Value, mappingLinkedSkuFields.SelectedItem.ToString());
-                DisplayActiveLinkedSkusFieldMapping((linkedSkuFields.SelectedItem as ListItem).Display, (linkedSkuFields.SelectedItem as ListItem).Value);
-                SetupLinkedSkusMappingFields();
             }
             else
             {
@@ -2460,7 +1930,8 @@ namespace LinkGreenODBCUtility
             {
                 MessageBox.Show(publishDetails[0], @"Migrated Successfully");
             }
-            else {
+            else
+            {
                 var message = "Please select your suppliers table!";
                 if (publishDetails != null && publishDetails.Count > 0)
                     message = publishDetails[0];
@@ -2478,11 +1949,7 @@ namespace LinkGreenODBCUtility
                 new Tuple<ListBox, Action<object, EventArgs>>( mappingProductFields, mapProductFields_Click),
                 new Tuple<ListBox, Action<object, EventArgs>>( mappingInventoryQuantityFields, mapInventoryQuantityFields_Click),
                 new Tuple<ListBox, Action<object, EventArgs>>( mappingPriceLevelFields, mapPriceLevelsFields_Click),
-                new Tuple<ListBox, Action<object, EventArgs>>( mappingPricingFields, mapPricingFields_Click),
-                new Tuple<ListBox, Action<object, EventArgs>>( mappingSupplierFields, mapSupplierFields_Click),
-                new Tuple<ListBox, Action<object, EventArgs>>( mappingSupplierInventoryFields, mapSupplierInventoryFields_Click),
-                new Tuple<ListBox, Action<object, EventArgs>>( mappingLinkedSkuFields, mapLinkedSkuFields_Click),
-                new Tuple<ListBox, Action<object, EventArgs>>( mappingBuyerInventoryFields, mapBuyerInventoryFields_Click)
+                new Tuple<ListBox, Action<object, EventArgs>>( mappingPricingFields, mapPricingFields_Click)
             };
         }
 
@@ -2500,16 +1967,22 @@ namespace LinkGreenODBCUtility
 
         private void emptyDownloadOrdersTransferTable_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 var orders = new OrdersFromLinkGreen();
                 var emptied = orders.Empty();
-                if (emptied) {
+                if (emptied)
+                {
                     MessageBox.Show("Table was emptied successfully.", "Table emptied", MessageBoxButtons.OK);
-                } else {
+                }
+                else
+                {
                     MessageBox.Show("Table was not emptied. Check the log for details", "Table not emptied", MessageBoxButtons.OK);
                 }
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.Instance.Error($"Error emptying the Download Orders table: {ex.GetBaseException().Message}");
                 MessageBox.Show($"There was an error emptying the Download Orders table: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
             }
@@ -2517,21 +1990,28 @@ namespace LinkGreenODBCUtility
 
         private void downloadDownloadOrders_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 var orders = new OrdersFromLinkGreen();
                 var emptied = orders.Empty();
-                if (!emptied) {
+                if (!emptied)
+                {
                     MessageBox.Show("Table was not emptied. Check the log for details", "Table not emptied", MessageBoxButtons.OK);
                 }
 
                 var downloaded = orders.Download();
-                if (downloaded) {
+                if (downloaded)
+                {
                     MessageBox.Show("Orders downloaded successfully.", "Orders downloaded", MessageBoxButtons.OK);
-                } else {
+                }
+                else
+                {
                     MessageBox.Show("Orders were not downloaded. Check the log for details", "Download failed", MessageBoxButtons.OK);
                 }
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.Instance.Error($"Error Downloading the orders: {ex.GetBaseException().Message}");
                 MessageBox.Show($"There was an error downloading the orders: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
             }
@@ -2539,19 +2019,25 @@ namespace LinkGreenODBCUtility
 
         private void syncDownloadOrders_Click(object sender, EventArgs e)
         {
-            try {
+            try
+            {
 
                 var orders = new OrdersFromLinkGreen();
                 var published = orders.Publish(out var processDetails);
 
-                if (published) {
+                if (published)
+                {
                     MessageBox.Show("Orders synced successfully", "Success", MessageBoxButtons.OK);
-                } else {
+                }
+                else
+                {
                     var message = processDetails.FirstOrDefault() ?? "Check the log for details";
                     MessageBox.Show($"Orders were not synced: {message}");
                 }
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Logger.Instance.Error($"Error Syncing the orders: {ex.GetBaseException().Message}");
                 MessageBox.Show($"There was an error syncing the orders: {ex.GetBaseException().Message}", "Error", MessageBoxButtons.OK);
             }
