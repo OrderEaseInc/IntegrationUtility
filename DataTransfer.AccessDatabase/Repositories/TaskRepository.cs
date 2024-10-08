@@ -25,18 +25,10 @@ namespace DataTransfer.AccessDatabase
         {
             // DBAs across the country are having strokes 
             //  over this next command!
-            using (var command = new OleDbCommand($"SELECT " +
-                                                 $"TaskName, " +
-                                                 $"TaskDisplayName, " +
-                                                 $"StartDateTime, " +
-                                                 $"MinuteRepeatInterval, " +
-                                                 $"Status, " +
-                                                 $"ExecutionStartDateTime, " +
-                                                 $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration, " +
-                                                 $"JobParameters, " +
-                                                 $"ExternalExecutable " +
-                                                 $"FROM {TableName}"))
+            using (var command = new OleDbCommand("SELECT TaskName, TaskDisplayName, StartDateTime, MinuteRepeatInterval, " +
+                                                 "  Status, ExecutionStartDateTime, ExecutionEndDateTime, ExecutionDuration, " +
+                                                 "  JobParameters, ExternalExecutable " +
+                                                 $"  FROM {TableName}"))
             {
                 return GetRecords(command);
             }
@@ -44,17 +36,17 @@ namespace DataTransfer.AccessDatabase
 
         public Task GetTask(string taskName)
         {
-            using (var command = new OleDbCommand($"SELECT " +
-                                                 $"TaskName, " +
-                                                 $"TaskDisplayName, " +
-                                                 $"StartDateTime, " +
-                                                 $"MinuteRepeatInterval, " +
-                                                 $"Status, " +
-                                                 $"ExecutionStartDateTime, " +
-                                                 $"ExecutionEndDateTime, " +
-                                                 $"ExecutionDuration, " +
-                                                 $"JobParameters, " +
-                                                 $"ExternalExecutable " +
+            using (var command = new OleDbCommand("SELECT " +
+                                                 "TaskName, " +
+                                                 "TaskDisplayName, " +
+                                                 "StartDateTime, " +
+                                                 "MinuteRepeatInterval, " +
+                                                 "Status, " +
+                                                 "ExecutionStartDateTime, " +
+                                                 "ExecutionEndDateTime, " +
+                                                 "ExecutionDuration, " +
+                                                 "JobParameters, " +
+                                                 "ExternalExecutable " +
                                                  $"FROM {TableName} WHERE TaskName = '{taskName}'"))
             {
                 return GetRecord(command);

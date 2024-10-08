@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Objects;
 using System.Data.OleDb;
-using System.Dynamic;
 using System.IO;
 using Microsoft.CSharp.RuntimeBinder;
 
@@ -85,21 +84,27 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
+        /// <summary>
+        /// Try to get the RetailSell value from the reader - may not exist on reader. and will throw exception if it doesn't exist.  
+        /// So just catch and assign false if it doesn't exist
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         private static bool TryGetDropShipSell(dynamic reader)
         {
-	        try
-	        {
-		        return reader.DropShipSell != null &&
-		               (reader.DropShipSell.Equals(true) ||
-		                Convert.ToString(reader.DropShipSell).ToLower() == "true" ||
-		                Convert.ToString(reader.DropShipSell).ToLower() == "1" ||
-		                Convert.ToString(reader.RetailSell).ToLower() == "y" ||
-		                Convert.ToString(reader.DropShipSell).ToLower() == "yes");
-	        }
-	        catch
-	        {
-		        return false;
-	        }
+            try
+            {
+                return reader.DropShipSell != null &&
+                       (reader.DropShipSell.Equals(true) ||
+                        Convert.ToString(reader.DropShipSell).ToLower() == "true" ||
+                        Convert.ToString(reader.DropShipSell).ToLower() == "1" ||
+                        Convert.ToString(reader.DropShipSell).ToLower() == "y" ||
+                        Convert.ToString(reader.DropShipSell).ToLower() == "yes");
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 		// NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db

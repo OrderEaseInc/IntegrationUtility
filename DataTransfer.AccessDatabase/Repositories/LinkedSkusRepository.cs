@@ -17,7 +17,7 @@ namespace DataTransfer.AccessDatabase
 
         public override void SaveFieldMapping(string fieldName, string mappingName)
         {
-            using (OleDbCommand command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
+            using (var command = new OleDbCommand($"UPDATE `FieldMappings` SET `MappingName` = '{mappingName}' WHERE `FieldName` = '{fieldName}' AND `TableName` = '{TableName}'")) {
                 ExecuteCommand(command);
             }
         }

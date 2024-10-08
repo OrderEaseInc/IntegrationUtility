@@ -82,7 +82,7 @@ namespace DataTransfer.AccessDatabase
                 foreach (var inventory in updatedSupplierInventories.Where(i => !string.IsNullOrEmpty(i.BuyerLinkedSku) && lgSupplierInventories.ContainsKey(i.ItemId)))
                 {
                     var lgSupplierInventory = lgSupplierInventories[inventory.ItemId];
-                    if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || !lgSupplierInventory.BuyerLinkedSkus.Any(sku => sku == inventory.BuyerLinkedSku)))
+                    if (!string.IsNullOrEmpty(inventory.BuyerLinkedSku) && (lgSupplierInventory.BuyerLinkedSkus == null || lgSupplierInventory.BuyerLinkedSkus.All(sku => sku != inventory.BuyerLinkedSku)))
                     {
                         // this didn't come in from the web service
                         lgSupplierInventory.SupplierId = supplier.Id;

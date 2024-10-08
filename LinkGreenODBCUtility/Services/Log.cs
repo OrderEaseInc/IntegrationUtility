@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataTransfer.AccessDatabase;
 
 namespace LinkGreenODBCUtility
 {
     class Log
     {
-        private static string LogTable = "Log";
-        private static string DsnName = Logger._loggerDsnName;
-        private static DateTime DeadDate = DateTime.Now.AddDays(-30);
+        private static readonly string LogTable = "Log";
+        private static readonly string DsnName = Logger._loggerDsnName;
+        private static DateTime _deadDate = DateTime.Now.AddDays(-15);
 
         public Log()
         {
@@ -22,67 +18,70 @@ namespace LinkGreenODBCUtility
 
         public static void PurgeLog()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            var command = new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {DeadDate.ToOADate()}")
+            var connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
+            using (var command =
+                   new OdbcCommand($"DELETE * FROM `{LogTable}` WHERE `Timestamp` < {_deadDate.ToOADate()}")
+                   { Connection = connection })
             {
-                Connection = _connection
-            };
-
-            _connection.Open();
-            try
-            {
-                int affectedRows = command.ExecuteNonQuery();
-
-                if (affectedRows > 0)
+                connection.Open();
+                try
                 {
-                    Logger.Instance.Debug($"Purged {affectedRows} log entries that had timestamps before {DeadDate}.");
+                    var affectedRows = command.ExecuteNonQuery();
+
+                    if (affectedRows > 0)
+                    {
+                        Logger.Instance.Debug(
+                            $"Purged {affectedRows} log entries that had timestamps before {_deadDate}.");
+                    }
                 }
-            }
-            catch (OdbcException e)
-            {
-                Logger.Instance.Error($"An error occured while purging log entries with timestamps before {DeadDate}: {e.Message}");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                catch (OdbcException e)
+                {
+                    Logger.Instance.Error(
+                        $"An error occurred while purging log entries with timestamps before {_deadDate}: {e.Message}");
+                }
+                finally
+                {
+                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                }
             }
         }
 
         public DataTable LoadLog()
         {
-            var _connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
-            string query = $"SELECT `Timestamp`, `Level`, `Message` FROM `{LogTable}` WHERE `Level` NOT LIKE 'DEBUG' ORDER BY `Timestamp` DESC";
+            var connection = ConnectionInstance.Instance.GetConnection($"DSN={DsnName}");
+            var query = $"SELECT `Timestamp`, `Level`, `Message` FROM `{LogTable}` WHERE `Level` NOT LIKE 'DEBUG' ORDER BY `Timestamp` DESC";
             if (Settings.DebugMode)
             {
                 query = $"SELECT `Timestamp`, `Level`, `Message` FROM `{LogTable}` ORDER BY `Timestamp` DESC";
             }
-            _connection.Open();
-            OdbcDataAdapter adapter = new OdbcDataAdapter(query, _connection);
-            DataTable table = new DataTable();
+            connection.Open();
+            using (var adapter = new OdbcDataAdapter(query, connection))
+            {
+                var table = new DataTable();
+                try
+                {
+                    adapter.Fill(table);
+                    table.DefaultView.AllowDelete = false;
+                    table.DefaultView.AllowEdit = false;
+                    table.DefaultView.AllowNew = false;
 
-            try
-            {
-                adapter.Fill(table);
-                table.DefaultView.AllowDelete = false;
-                table.DefaultView.AllowEdit = false;
-                table.DefaultView.AllowNew = false;
-
-                return table;
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error($"An error occured while retrieving the log: {e.Message}");
-            }
-            finally
-            {
-                ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                    return table;
+                }
+                catch (Exception e)
+                {
+                    Logger.Instance.Error($"An error occurred while retrieving the log: {e.Message}");
+                }
+                finally
+                {
+                    ConnectionInstance.CloseConnection($"DSN={DsnName}");
+                }
             }
 
             var mapping = new Mapping();
-            List<string> logColumns = mapping.GetColumns(LogTable, DsnName);
-            DataTable logTable = new DataTable();
+            var logColumns = mapping.GetColumns(LogTable, DsnName);
+            var logTable = new DataTable();
 
-            foreach (string logColumn in logColumns)
+            foreach (var logColumn in logColumns)
             {
                 logTable.Columns.Add(logColumn);
             }

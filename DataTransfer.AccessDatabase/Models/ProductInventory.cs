@@ -1,9 +1,4 @@
-﻿using LinkGreen.Applications.Common.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DataTransfer.AccessDatabase
 {
@@ -34,8 +29,7 @@ namespace DataTransfer.AccessDatabase
         public bool IsDirectDelivery { get; set; }
         public bool RetailSell { get; set; }
         public bool DropShipSell { get; set; }
-
-		public List<KeyValuePair<string, object>> ProductFeatures { get; set; }
+        public List<KeyValuePair<string, object>> ProductFeatures { get; set; }
     }
 
 }

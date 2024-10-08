@@ -1,6 +1,8 @@
 ﻿using System.Data.OleDb;
 using LinkGreen.Applications.Common;
 using LinkGreen.Applications.Common.Model;
+using LinkGreenODBCUtility;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
 
 namespace DataTransfer.AccessDatabase
 {
@@ -26,11 +28,18 @@ namespace DataTransfer.AccessDatabase
 
         public void Download(int[] status)
         {
+            Logger.Instance.Debug("Starting GetOrdersForStatus: " + Newtonsoft.Json.JsonConvert.SerializeObject(status));
             var orders = WebServiceHelper.GetOrdersForStatus(status);
+            Logger.Instance.Debug("GetOrdersForStatus: " + Newtonsoft.Json.JsonConvert.SerializeObject(orders));
 
             foreach (var order in orders)
             {
+                Logger.Instance.Debug("Starting Download for Order: " + Newtonsoft.Json.JsonConvert.SerializeObject(order));
+
                 var detail = WebServiceHelper.DownloadOrderDetails(order.Id);
+
+                Logger.Instance.Debug("Downloaded Order: " + Newtonsoft.Json.JsonConvert.SerializeObject(detail));
+
                 if (detail.BuyerCompany != null)
                 {
                     order.OurCompanyNumber = detail.BuyerCompany.OurCompanyNumber;
@@ -40,11 +49,15 @@ namespace DataTransfer.AccessDatabase
                 if (!string.IsNullOrWhiteSpace(detail.ConsolidatedNote))
                     order.ConsolidatedNote = detail.ConsolidatedNote;
 
+                Logger.Instance.Debug("Inserting Order: " + order.Id);
                 Insert(order);
+                Logger.Instance.Debug("Inserted Order: " + order.Id);
 
                 foreach (var item in detail.Details)
                 {
+                    Logger.Instance.Debug($"Inserting Item: {order.Id} / {detail.Id}");
                     InsertItem(item);
+                    Logger.Instance.Debug($"Inserted Item: {order.Id} / {detail.Id}");
                 }
             }
         }

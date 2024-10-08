@@ -2323,7 +2323,7 @@ namespace LinkGreenODBCUtility
                 }
                 else
                 {
-                    MessageBox.Show(@"An unexpected error has occured, please view your logs or contact support", @"Publish Failed");
+                    MessageBox.Show(@"An unexpected error has occurred, please view your logs or contact support", @"Publish Failed");
                 }
             }
         }

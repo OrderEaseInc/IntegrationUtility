@@ -9,6 +9,7 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 
+// ReSharper disable once CheckNamespace
 namespace LinkGreenODBCUtility
 {
     public static class JobManager
@@ -97,6 +98,11 @@ namespace LinkGreenODBCUtility
                                     .WithIdentity(jobName, DefaultGroup)
                                     .Build();
                                 break;
+                            case "PurgeLog":
+                                job = JobBuilder.Create<PurgeLogJob>()
+                                    .WithIdentity(jobName, DefaultGroup)
+                                    .Build();
+                                break;
                             default:
                                 job = JobBuilder.Create<CategoriesSyncJob>()
                                     .WithIdentity(jobName, DefaultGroup)
@@ -116,8 +122,8 @@ namespace LinkGreenODBCUtility
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.Error($"An error occured while creating task {jobName}: {ex}");
-                    MessageBox.Show($@"An error occured while creating task {jobName}. Does the task already exist?", @"Emptied Successfully");
+                    Logger.Instance.Error($"An error occurred while creating task {jobName}: {ex}");
+                    MessageBox.Show($@"An error occurred while creating task {jobName}. Does the task already exist?", @"Emptied Successfully");
                 }
             }
 

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.OleDb;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace DataTransfer.AccessDatabase
 {
@@ -19,8 +13,8 @@ namespace DataTransfer.AccessDatabase
             _connectionString = connectionString;
         }
 
-        private OleDbConnection _connection = null;
-        private string _connectionString = String.Empty;
+        private OleDbConnection _connection;
+        private readonly string _connectionString;
         public OleDbConnection GetConnection()
         {
             _connection = new OleDbConnection(_connectionString);

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace DataTransfer.AccessDatabase
@@ -66,9 +64,9 @@ namespace DataTransfer.AccessDatabase
                 connection = _connectionContainer[connectionString];
             }
             
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
             sw.Start();
-            bool keepTrying = true;
+            var keepTrying = true;
 
             while (keepTrying)
             {
@@ -104,6 +102,7 @@ namespace DataTransfer.AccessDatabase
             {
                 var connection = _connectionContainer[connectionString];
                 connection.Close();
+                connection.Dispose();
                 _connectionContainer.TryRemove(connectionString, out connection);
             }
         }

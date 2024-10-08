@@ -149,6 +149,7 @@
     <Compile Include="Services\Jobs\InventoryQuantitiesSyncJob.cs" />
     <Compile Include="Services\Jobs\LinkedSkusSyncJob.cs" />
     <Compile Include="Services\Jobs\OrderDownloadJob.cs" />
+    <Compile Include="Services\Jobs\PurgeLogJob.cs" />
     <Compile Include="Services\Jobs\SupplierInventorySyncJob.cs" />
     <Compile Include="Services\Jobs\SuppliersSyncJob.cs" />
     <Compile Include="Services\InventoryQuantity.cs" />
@@ -181,7 +182,6 @@
     <Compile Include="Services\Jobs\JobManager.cs" />
     <Compile Include="Utility\ListItem.cs" />
     <Compile Include="Services\Log.cs" />
-    <Compile Include="Models\LoggerModel.cs" />
     <Compile Include="Services\Mapping.cs" />
     <Compile Include="Models\MappingField.cs" />
     <Compile Include="Services\LinkedSkus.cs" />
@@ -198,8 +198,6 @@
     <Compile Include="Services\Jobs\PricingSyncJob.cs" />
     <Compile Include="Services\Products.cs" />
     <Compile Include="Services\Jobs\ProductsSyncJob.cs" />
-    <Compile Include="Services\Settings.cs" />
-    <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\SupplierInventories.cs" />
     <Compile Include="Services\Suppliers.cs" />
     <Compile Include="Services\Batch\BatchTaskManager.cs" />
