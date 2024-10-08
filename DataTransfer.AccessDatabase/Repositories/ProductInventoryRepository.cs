@@ -107,8 +107,8 @@ namespace DataTransfer.AccessDatabase
             }
         }
 
-        // NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
-        protected override ProductInventory PopulateRecord(dynamic reader)
+		// NOTE : this is the wire-up of the local odbc table to strongly typed object to be sent via api to LG db
+		protected override ProductInventory PopulateRecord(dynamic reader)
         {
             try
             {
